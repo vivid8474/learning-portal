@@ -1,0 +1,2092 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>S1 Science · 2.1 Change in states of water · Notes</title>
+<style>
+
+  :root{
+    --bg:#f4f7fc;
+    --card:#ffffff;
+    --ink:#16202e;
+    --ink-2:#404f63;
+    --muted:#77879c;
+    --line:#e6ecf5;
+    --brand:#2f6bff;
+    --brand-ink:#1f4fd8;
+    --brand-soft:#eaf0ff;
+    --teal:#00a896;
+    --amber:#f59f0b;
+    --radius:16px;
+    --shadow:0 6px 20px rgba(22,32,46,.06);
+    --shadow-hover:0 10px 28px rgba(22,32,46,.10);
+    --sidebar-w:268px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    font-family:"PingFang SC","PingFang HK","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC",system-ui,-apple-system,"Segoe UI",sans-serif;
+    background:
+      radial-gradient(1200px 500px at 10% -10%, #e8f0ff 0%, rgba(232,240,255,0) 60%),
+      radial-gradient(900px 420px at 100% 0%, #e6fbf7 0%, rgba(230,251,247,0) 55%),
+      var(--bg);
+    color:var(--ink);
+    font-size:15px;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+  }
+  a{color:inherit}
+  button{font-family:inherit}
+
+  /* ---------- 顶部导航栏 ---------- */
+  .topbar{
+    position:sticky;top:0;z-index:60;
+    background:rgba(255,255,255,.88);
+    backdrop-filter:saturate(180%) blur(14px);
+    -webkit-backdrop-filter:saturate(180%) blur(14px);
+    border-bottom:1px solid var(--line);
+  }
+  .topbar__inner{
+    max-width:1280px;margin:0 auto;
+    padding:12px 24px;
+    display:flex;align-items:center;gap:16px;flex-wrap:wrap;
+  }
+  .hamburger{
+    display:none;
+    width:40px;height:40px;flex:0 0 auto;
+    border:1px solid var(--line);border-radius:12px;
+    background:#fff;color:var(--ink-2);
+    font-size:18px;line-height:1;cursor:pointer;
+    align-items:center;justify-content:center;
+    transition:background .18s,border-color .18s;
+  }
+  .hamburger:hover{background:#f5f8ff;border-color:#cddcff}
+  .brand{display:flex;align-items:center;gap:11px;min-width:0}
+  .brand__logo{
+    width:38px;height:38px;flex:0 0 auto;border-radius:11px;
+    background:linear-gradient(140deg,#2f6bff,#5b8dff 55%,#00b8a9);
+    color:#fff;font-weight:700;font-size:17px;
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 6px 14px rgba(47,107,255,.28);
+    letter-spacing:.5px;
+  }
+  .brand__text{min-width:0}
+  .brand__title{font-weight:700;font-size:16.5px;letter-spacing:.2px;white-space:nowrap}
+  .brand__sub{font-size:12px;color:var(--muted);white-space:nowrap;margin-top:-1px}
+
+  .grade-box{margin-left:auto;display:flex;align-items:center;gap:10px}
+  .grade-box__label{font-size:12.5px;color:var(--muted);white-space:nowrap}
+  .grade-switch{
+    display:flex;gap:4px;padding:4px;border-radius:999px;
+    background:#eef2f9;border:1px solid #e7edf8;
+    overflow-x:auto;scrollbar-width:none;
+  }
+  .grade-switch::-webkit-scrollbar{display:none}
+  .grade-btn{
+    border:0;background:transparent;color:var(--ink-2);
+    padding:7px 15px;border-radius:999px;
+    font-size:13.5px;font-weight:600;cursor:pointer;white-space:nowrap;
+    transition:background .18s,color .18s,box-shadow .18s;
+  }
+  .grade-btn:hover{color:var(--brand-ink)}
+  .grade-btn[aria-current="true"]{
+    background:#fff;color:var(--brand-ink);
+    box-shadow:0 2px 8px rgba(31,79,216,.16);
+  }
+
+  /* ---------- 布局 ---------- */
+  .layout{
+    max-width:1280px;margin:0 auto;
+    padding:22px 24px 56px;
+    display:grid;grid-template-columns:var(--sidebar-w) minmax(0,1fr);
+    gap:22px;align-items:start;
+  }
+
+  /* ---------- 左侧边栏 ---------- */
+  .sidebar{
+    position:sticky;top:78px;
+    background:var(--card);border:1px solid var(--line);
+    border-radius:var(--radius);box-shadow:var(--shadow);
+    padding:16px 12px 14px;
+    max-height:calc(100vh - 100px);overflow-y:auto;
+  }
+  .sidebar__head{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:0 6px 10px;
+  }
+  .sidebar__title{font-size:12px;font-weight:700;color:var(--muted);letter-spacing:1.2px}
+  .sidebar__close{
+    display:none;border:0;background:#f1f5fd;color:var(--ink-2);
+    width:30px;height:30px;border-radius:9px;cursor:pointer;font-size:15px;
+  }
+  .nav-group{margin-bottom:12px}
+  .nav-group:last-child{margin-bottom:0}
+  .nav-group__label{
+    font-size:11.5px;font-weight:700;color:#9aa8bc;
+    letter-spacing:1.4px;padding:8px 10px 6px;
+    display:flex;align-items:center;gap:7px;
+  }
+  .nav-group__label::after{
+    content:"";flex:1;height:1px;background:linear-gradient(90deg,#eef2f9,rgba(238,242,249,0));
+  }
+  .nav-item{
+    width:100%;display:flex;align-items:center;gap:10px;
+    padding:9px 11px;margin-bottom:2px;
+    border:1px solid transparent;border-radius:11px;
+    background:transparent;color:var(--ink-2);
+    font-size:14.5px;font-weight:500;text-align:left;cursor:pointer;
+    transition:background .16s,color .16s,border-color .16s,transform .16s;
+  }
+  .nav-item__icon{
+    width:24px;height:24px;flex:0 0 auto;border-radius:8px;
+    display:flex;align-items:center;justify-content:center;
+    font-size:13.5px;background:#f2f6ff;
+  }
+  .nav-item__name{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .nav-item__dot{
+    width:6px;height:6px;border-radius:50%;background:var(--brand);opacity:0;flex:0 0 auto;
+  }
+  .nav-item:hover{background:#f5f8ff;color:var(--brand-ink)}
+  .nav-item[aria-current="true"]{
+    background:linear-gradient(96deg,#eef4ff,#f4f9ff);
+    border-color:#d5e2ff;color:var(--brand-ink);font-weight:700;
+    box-shadow:inset 0 0 0 1px rgba(47,107,255,.04);
+  }
+  .nav-item[aria-current="true"] .nav-item__icon{background:#dfeaff}
+  .nav-item[aria-current="true"] .nav-item__dot{opacity:1}
+
+  /* ---------- 主内容区 ---------- */
+  .main{min-width:0}
+  .page-head{margin-bottom:16px}
+  .crumb{font-size:12.5px;color:var(--muted);margin-bottom:6px}
+  .crumb b{color:var(--ink-2);font-weight:600}
+  .page-title{
+    margin:0;font-size:23px;font-weight:800;letter-spacing:.2px;
+    display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+  }
+  .pill{
+    font-size:11.5px;font-weight:700;letter-spacing:.4px;
+    padding:3px 9px;border-radius:999px;
+    background:var(--brand-soft);color:var(--brand-ink);
+  }
+  .pill--green{background:#e6f8f4;color:#00877a}
+  .page-desc{color:var(--muted);font-size:13.5px;margin-top:6px}
+  .page-actions{margin-top:14px;display:flex;flex-wrap:wrap;gap:10px}
+  .page-actions .btn{white-space:normal;text-align:center}
+
+  .cards{
+    display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:18px;
+  }
+  .card{
+    background:var(--card);border:1px solid var(--line);
+    border-radius:var(--radius);box-shadow:var(--shadow);
+    padding:20px;position:relative;
+    transition:box-shadow .22s,transform .22s,border-color .22s;
+  }
+  .card:hover{box-shadow:var(--shadow-hover);border-color:#dbe6f8}
+  .card--wide{grid-column:1 / -1}
+  .card__head{display:flex;align-items:flex-start;gap:12px;margin-bottom:4px}
+  .card__icon{
+    width:40px;height:40px;flex:0 0 auto;border-radius:12px;
+    display:flex;align-items:center;justify-content:center;font-size:19px;
+    background:linear-gradient(140deg,#eef4ff,#e7f7f4);
+  }
+  .card__titles{min-width:0}
+  .card__title{margin:0;font-size:16.5px;font-weight:750}
+  .card__sub{margin:2px 0 0;font-size:12.5px;color:var(--muted)}
+  .card__body{margin-top:14px}
+
+  /* 课文条目 */
+  .lessons{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+  .lesson{
+    border:1px solid var(--line);border-radius:14px;
+    background:linear-gradient(180deg,#fbfdff,#f7fbff);
+    padding:14px;
+    display:flex;flex-direction:column;gap:12px;
+    transition:border-color .2s,box-shadow .2s;
+  }
+  .lesson:hover{border-color:#cfdffb;box-shadow:0 4px 14px rgba(47,107,255,.07)}
+  .lesson__head{display:flex;align-items:flex-start;gap:10px;min-width:0}
+  .lesson__no{
+    width:26px;height:26px;flex:0 0 auto;border-radius:9px;
+    background:#e8f0ff;color:var(--brand-ink);
+    font-size:12.5px;font-weight:800;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .lesson__title{font-size:16px;font-weight:750;letter-spacing:.2px;line-height:1.4}
+  .lesson__meta{font-size:12px;color:var(--muted);margin-top:1px}
+  .lesson__actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .lesson__actions .btn--primary{flex:1 1 150px}
+
+  /* 每篇课文的长题目挑战区 */
+  .challenge{
+    border:1px solid #e3ecf9;border-left:3px solid #7aa7ff;
+    border-radius:11px;background:#fff;
+    padding:11px 13px;
+    display:flex;flex-direction:column;gap:9px;
+  }
+  .challenge__label{
+    font-size:11px;font-weight:800;letter-spacing:1.1px;color:#4176d4;
+    display:inline-flex;align-items:center;gap:5px;
+  }
+  .challenge__label::before{content:"✎";font-size:12.5px}
+  .challenge__q{
+    margin:0;font-size:13.5px;line-height:1.6;font-weight:600;color:var(--ink-2);
+    background:#f8fbff;border-radius:8px;padding:8px 10px;
+  }
+  .challenge__q b{color:var(--brand-ink);font-weight:800;margin-right:4px}
+  .challenge .btn{align-self:flex-start}
+
+  /* 文言助读专项训练板块 */
+  .practice{
+    border:1px solid #e9e2f8;border-left:3px solid #9b7fe8;
+    border-radius:11px;background:#fff;
+    padding:11px 13px;
+    display:flex;flex-direction:column;gap:9px;
+  }
+  .practice__label{
+    font-size:11px;font-weight:800;letter-spacing:1.1px;color:#6a4fd0;
+    display:inline-flex;align-items:center;gap:6px;
+  }
+  .practice__label::before{content:"📘";font-size:12.5px}
+  .practice .btn{align-self:flex-start}
+
+  /* ICT 章节卡片 */
+  .chapters{display:flex;flex-direction:column;gap:14px}
+  .chapter-card{
+    border:1px solid var(--line);border-radius:14px;
+    background:linear-gradient(180deg,#fbfdff,#f7fbff);
+    padding:16px;
+    display:flex;flex-direction:column;gap:12px;
+  }
+  .chapter-head{display:flex;align-items:center;gap:10px}
+  .chapter-num{
+    width:28px;height:28px;flex:0 0 auto;border-radius:9px;
+    background:#e8f0ff;color:var(--brand-ink);
+    font-size:13px;font-weight:800;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .chapter-title{font-size:19px;font-weight:800;margin:0;letter-spacing:.2px;color:#1e3a8a}
+  .chapter-empty{
+    margin:0;font-size:13.5px;color:var(--muted);
+    text-align:center;padding:18px 10px;
+    border:1px dashed #dde6f5;border-radius:10px;
+  }
+
+  /* 折叠课文原文 */
+  .btn--toggle-text{align-self:flex-start}
+  .text-body{
+    border:1px solid #e6ecf5;border-radius:12px;
+    background:#fbfcff;padding:14px 16px;
+    max-height:520px;overflow-y:auto;
+    scrollbar-width:thin;
+  }
+  .text-h{
+    font-size:16.5px;font-weight:800;color:#1e3a8a;
+    margin:16px 0 10px;padding-bottom:7px;border-bottom:2px solid #dbe4f5;
+  }
+  .text-h:first-child{margin-top:0}
+  .text-unit{
+    font-size:13px;font-weight:700;color:#5b6f88;
+    margin:0 0 8px;letter-spacing:.4px;
+  }
+  .text-para{
+    margin:0 0 12px;font-size:14px;line-height:2.05;color:#1f2937;
+  }
+  .text-sub{
+    font-size:15px;font-weight:800;color:#374151;
+    margin:15px 0 7px;
+  }
+  .text-sub::before{content:"🔹 ";font-size:.85em}
+  .text-sub3{
+    font-size:14px;font-weight:800;color:#374151;
+    margin:13px 0 5px;
+  }
+  .text-sub3::before{content:"🔹 ";font-size:.85em}
+  .term{
+    background:#fff3c4;color:#7c4a03;font-weight:750;
+    padding:1px 4px;border-radius:4px;
+    box-shadow:inset 0 -1px 0 #f1d06e;
+  }
+
+  /* Science 页码徽章 */
+  .pg{
+    display:inline-flex;align-items:center;
+    margin-left:8px;padding:1px 9px;border-radius:999px;
+    background:#eef4ff;border:1px solid #d7e4fb;color:#2f6bff;
+    font-size:11.5px;font-weight:800;letter-spacing:.3px;
+    white-space:nowrap;vertical-align:middle;
+  }
+  .sci-sec-head .pg{margin-left:0}
+
+  /* Science 小节块 */
+  .sci-section{
+    border:1px solid #e3ecf9;border-radius:12px;background:#fff;overflow:hidden;
+  }
+  .sci-section+.sci-section{margin-top:12px}
+  .sci-sec-head{
+    display:flex;align-items:center;gap:10px;width:100%;
+    padding:13px 15px;background:linear-gradient(180deg,#f7faff,#f2f7ff);
+    border:0;cursor:pointer;text-align:left;
+  }
+  .sci-sec-num{
+    flex:0 0 auto;min-width:34px;height:26px;padding:0 8px;border-radius:8px;
+    background:#2f6bff;color:#fff;font-size:13px;font-weight:800;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .sci-sec-title{flex:1;font-size:15px;font-weight:800;color:#1e3a8a}
+  .sci-sec-caret{flex:0 0 auto;color:#7b8ba6;transition:transform .2s;font-size:13px}
+  .sci-sec-head[aria-expanded="true"] .sci-sec-caret{transform:rotate(180deg)}
+  .sci-sec-body{padding:14px 16px 16px;border-top:1px solid #edf2fb}
+
+  /* Science 关键点框 */
+  .kp{
+    border:1px solid #f3e2b0;border-left:3px solid #f0b429;
+    background:#fffaf0;border-radius:10px;padding:10px 13px;
+    margin:12px 0;font-size:13.5px;line-height:1.9;color:#5b4a16;
+  }
+  .kp b{color:#a16207}
+
+  /* Science 课本原页对照 */
+  .fig-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;margin-top:8px}
+  .fig{
+    margin:0;border:1px solid #e3ecf9;border-radius:11px;overflow:hidden;
+    background:#fbfcff;cursor:zoom-in;
+  }
+  .fig img{display:block;width:100%;height:150px;object-fit:cover;object-position:top}
+  .fig figcaption{
+    padding:7px 9px;font-size:11.5px;color:#4b5b73;line-height:1.5;
+    display:flex;align-items:center;gap:6px;justify-content:space-between;background:#fff;
+  }
+  .fig figcaption .pg{margin-left:0}
+
+  /* Science 内嵌图（插入文字旁） */
+  .fig-inline{
+    margin:13px 0;border:1px solid #e3ecf9;border-radius:12px;
+    background:#fbfcff;overflow:hidden;cursor:zoom-in;
+  }
+  .fig-inline img{display:block;width:100%;max-width:520px;margin:0 auto;height:auto}
+  .fig-inline figcaption{
+    padding:8px 11px;font-size:11.5px;color:#4b5b73;line-height:1.5;
+    display:flex;align-items:center;gap:6px;justify-content:center;background:#fff;
+    border-top:1px solid #eef3fb;
+  }
+  .fig-inline figcaption .pg{margin-left:0}
+
+  /* Science 温度滑块 */
+  .temp-slider{
+    border:1px solid #dbe6f8;border-radius:14px;
+    background:linear-gradient(180deg,#f7faff,#edf4ff);
+    padding:16px;margin:15px 0;
+  }
+  .temp-head{
+    display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:10px;
+  }
+  .temp-state{
+    display:flex;align-items:center;gap:11px;
+  }
+  .temp-state-icon{
+    width:46px;height:46px;flex:0 0 auto;border-radius:12px;
+    background:#fff;border:1px solid #dbe6f8;
+    display:flex;align-items:center;justify-content:center;font-size:24px;
+    box-shadow:0 2px 8px rgba(47,107,255,.08);
+  }
+  .temp-state-name{font-size:18px;font-weight:800;color:#1e3a8a;line-height:1.1}
+  .temp-state-sub{font-size:12px;color:#64748b}
+  .temp-val{
+    margin-left:auto;font-size:22px;font-weight:800;color:#0e7fc2;
+    font-variant-numeric:tabular-nums;white-space:nowrap;
+  }
+  .temp-energy{
+    display:inline-flex;align-items:center;gap:6px;
+    border-radius:999px;padding:5px 12px;font-size:12.5px;font-weight:700;
+  }
+  .temp-energy.is-absorbed{background:#fff1e6;color:#c05621;border:1px solid #fed7aa}
+  .temp-energy.is-released{background:#e6f4ff;color:#0e7fc2;border:1px solid #bae6fd}
+  .temp-energy.is-idle{background:#eef2f8;color:#64748b;border:1px solid #dde3ec}
+  .temp-particles{
+    position:relative;height:72px;margin:6px 0 12px;
+    border:1px dashed #d5e2f6;border-radius:10px;background:#fff;
+    overflow:hidden;
+  }
+  .temp-particles i{
+    position:absolute;width:11px;height:11px;border-radius:50%;
+    background:#2f6bff;opacity:.9;
+    transform:translate(-50%,-50%);
+    transition:left .35s cubic-bezier(.4,0,.2,1),top .35s cubic-bezier(.4,0,.2,1);
+    box-shadow:0 1px 3px rgba(47,107,255,.35);
+  }
+  .temp-particles i.is-gas{width:8px;height:8px;opacity:.65}
+  .temp-scale{
+    display:flex;justify-content:space-between;font-size:11px;color:#64748b;
+    margin:6px 2px 0;font-variant-numeric:tabular-nums;
+  }
+  .temp-slider input[type=range]{
+    width:100%;height:24px;margin:4px 0 0;accent-color:#2f6bff;cursor:pointer;
+  }
+  .temp-hint{font-size:12px;color:#64748b;margin:8px 0 0;line-height:1.5}
+
+  /* Science 拖拽匹配游戏 */
+  .match-game{
+    border:1px solid #dbe6f8;border-radius:14px;
+    background:linear-gradient(180deg,#f7faff,#eef5ff);
+    padding:16px;margin:15px 0;
+  }
+  .match-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+  .match-title{font-size:15px;font-weight:800;color:#1e3a8a}
+  .match-count{
+    margin-left:auto;font-size:12.5px;font-weight:700;color:#64748b;
+    background:#fff;border:1px solid #dbe6f8;border-radius:999px;padding:4px 12px;
+  }
+  .match-reset{
+    border:1px solid #dbe6f8;background:#fff;color:#2f6bff;font-weight:700;
+    font-size:12.5px;border-radius:999px;padding:5px 12px;cursor:pointer;
+  }
+  .match-reset:hover{background:#2f6bff;color:#fff;border-color:#2f6bff}
+  .match-board{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  @media(max-width:560px){.match-board{grid-template-columns:1fr}}
+  .match-col{display:flex;flex-direction:column;gap:9px}
+  .match-col__label{font-size:11.5px;font-weight:800;letter-spacing:.5px;color:#64748b;text-transform:uppercase}
+  .match-term{
+    border:1.5px solid #2f6bff;background:#fff;color:#1e3a8a;
+    border-radius:10px;padding:10px 12px;font-weight:800;font-size:14px;
+    cursor:grab;text-align:center;user-select:none;
+    transition:transform .15s, box-shadow .15s, opacity .2s, background .15s;
+    box-shadow:0 2px 6px rgba(47,107,255,.08);
+  }
+  .match-term:active{cursor:grabbing}
+  .match-term.is-selected{transform:scale(1.04);box-shadow:0 6px 16px rgba(47,107,255,.28);background:#eaf1ff}
+  .match-term.is-dragging{opacity:.45}
+  .match-term.is-matched{background:#e6f6ec;border-color:#22a06b;color:#14683f;cursor:default;opacity:.95;pointer-events:none;box-shadow:none}
+  .match-slot{
+    border:1.5px dashed #c3d4f0;background:#fff;border-radius:10px;
+    min-height:44px;padding:9px 12px;display:flex;align-items:center;gap:8px;
+    transition:border-color .15s, background .15s, transform .15s;
+    cursor:pointer;
+  }
+  .match-slot__desc{font-size:13.5px;color:#33415c;font-weight:600;line-height:1.35}
+  .match-slot.is-over{border-color:#2f6bff;background:#eaf1ff;transform:scale(1.02)}
+  .match-slot.is-matched{border-style:solid;border-color:#22a06b;background:#e6f6ec;cursor:default;pointer-events:none}
+  .match-slot.is-wrong{animation:shake .4s;border-color:#e11d48;background:#fff1f2}
+  @keyframes shake{
+    0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-5px)}40%,80%{transform:translateX(5px)}
+  }
+  .match-done{
+    display:none;margin-top:12px;border-radius:10px;background:#e6f6ec;
+    color:#14683f;font-weight:800;font-size:14px;padding:11px 14px;text-align:center;
+    border:1px solid #b9e6cc;
+  }
+  .match-done.is-show{display:block}
+
+  /* Science 折叠面板（Accordion） */
+  .acc{
+    border:1px solid #dbe6f8;border-radius:13px;background:#fff;
+    margin:12px 0;overflow:hidden;
+  }
+  .acc-head{
+    width:100%;display:flex;align-items:center;gap:10px;
+    padding:13px 15px;border:0;background:#f7faff;cursor:pointer;
+    text-align:left;transition:background .15s;
+  }
+  .acc-head:hover{background:#eef4ff}
+  .acc-icon{font-size:20px;line-height:1;flex:0 0 auto}
+  .acc-title{font-size:15px;font-weight:800;color:#1e3a8a;flex:0 1 auto}
+  .acc-hint{
+    margin-left:auto;font-size:11.5px;color:#64748b;font-weight:600;
+    background:#fff;border:1px solid #dbe6f8;border-radius:999px;padding:3px 10px;
+    white-space:nowrap;
+  }
+  .acc-caret{
+    flex:0 0 auto;font-size:13px;color:#64748b;
+    transition:transform .25s;line-height:1;
+  }
+  .acc-head[aria-expanded="true"] .acc-caret{transform:rotate(180deg)}
+  .acc-body{
+    padding:14px;border-top:1px solid #eef3fb;background:#fff;
+  }
+  .acc-body[hidden]{display:none}
+
+  /* Science 互动实验区分栏（桌面左右、移动单列） */
+  .lab-grid{
+    display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start;margin:14px 0;
+  }
+  @media(max-width:720px){
+    .lab-grid{grid-template-columns:1fr;gap:12px}
+  }
+  .lab-grid .acc{margin:0}
+  .lab-grid > .acc{height:fit-content}
+
+  /* Science 课本原页查看按钮 */
+  .gallery-btn{
+    display:inline-flex;align-items:center;gap:10px;
+    border:1px solid #2f6bff;background:#fff;color:#2f6bff;
+    border-radius:11px;padding:11px 16px;font-weight:800;font-size:14px;
+    cursor:pointer;transition:background .15s,color .15s;margin-top:4px;
+  }
+  .gallery-btn:hover{background:#2f6bff;color:#fff}
+  .gallery-btn__count{
+    font-size:11.5px;font-weight:700;background:#eaf1ff;border-radius:999px;
+    padding:2px 9px;
+  }
+  .gallery-btn:hover .gallery-btn__count{background:rgba(255,255,255,.22)}
+
+  /* Science 折线图动画（加热曲线） */
+  .chart-block{
+    border:1px solid #e3ecf9;border-radius:11px;background:#fff;padding:10px 8px 6px;
+  }
+  .chart-svg{display:block;width:100%;height:auto}
+  .chart-cap{
+    font-size:12px;color:#64748b;text-align:center;margin:4px 0 2px;line-height:1.5;
+  }
+  .chart-legend{
+    display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:8px 0 2px;
+  }
+  .chart-legend span{
+    display:inline-flex;align-items:center;gap:5px;
+    font-size:11.5px;color:#33415c;font-weight:600;
+    background:#f7faff;border:1px solid #e3ecf9;border-radius:999px;padding:3px 10px;
+  }
+  .chart-legend i{width:10px;height:10px;border-radius:50%;display:inline-block}
+  .chart-legend .leg-melt i{background:#22a06b}
+  .chart-legend .leg-heat i{background:#2f6bff}
+  .chart-legend .leg-boil i{background:#f59e0b}
+  .chart-seg{fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:100;stroke-dashoffset:100}
+  .chart-note{opacity:0}
+  .chart-block.is-anim .chart-seg{animation:chartdraw .9s ease forwards}
+  .chart-block.is-anim .chart-seg--2{animation-delay:.9s}
+  .chart-block.is-anim .chart-seg--3{animation-delay:1.8s}
+  .chart-block.is-anim .chart-seg--4{animation-delay:2.7s}
+  .chart-block.is-anim .chart-seg--5{animation-delay:3.6s}
+  .chart-block.is-anim .chart-note--melt{animation:chartfade .45s ease 1.75s forwards}
+  .chart-block.is-anim .chart-note--boil{animation:chartfade .45s ease 3.55s forwards}
+  @keyframes chartdraw{to{stroke-dashoffset:0}}
+  @keyframes chartfade{to{opacity:1}}
+  .chart-replay{
+    display:block;margin:6px auto 2px;border:1px solid #dbe6f8;background:#f7faff;
+    color:#2f6bff;font-weight:700;font-size:12px;border-radius:999px;padding:4px 12px;cursor:pointer;
+  }
+  .chart-replay:hover{background:#2f6bff;color:#fff;border-color:#2f6bff}
+
+  /* Science 标签页（Tabs） */
+  .sci-tabs{margin-top:2px}
+  .sci-tabbar{
+    display:flex;gap:6px;border-bottom:2px solid #e3ecf9;
+    overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;
+  }
+  .sci-tabbar::-webkit-scrollbar{display:none}
+  .sci-tab{
+    display:inline-flex;align-items:center;gap:7px;white-space:nowrap;
+    padding:11px 16px;border:0;background:transparent;cursor:pointer;
+    font-size:14px;font-weight:700;color:#64748b;
+    border-bottom:3px solid transparent;margin-bottom:-2px;
+    transition:color .15s, border-color .15s;
+  }
+  .sci-tab:hover{color:#1e3a8a}
+  .sci-tab[aria-selected="true"]{color:#2f6bff;border-bottom-color:#2f6bff}
+  .sci-tab__icon{font-size:16px;line-height:1}
+  .sci-tabpanel{padding-top:12px}
+  .sci-tabpanel[hidden]{display:none}
+
+  /* Science 交互式总结表格 */
+  .summary-table{
+    border:1px solid #e3ecf9;border-radius:12px;background:#fff;
+    padding:14px;margin:12px 0;
+  }
+  .st-title{font-size:14.5px;font-weight:800;color:#1e3a8a;margin-bottom:10px}
+  .st-wrap{overflow-x:auto}
+  .st-table{width:100%;border-collapse:collapse;font-size:13px;min-width:520px}
+  .st-table th,.st-table td{
+    border:1px solid #e3ecf9;padding:8px 10px;text-align:left;vertical-align:middle;
+  }
+  .st-table th{background:#f7faff;color:#1e3a8a;font-weight:800;font-size:12px}
+  .st-table td{color:#33415c;line-height:1.4}
+  .st-process{font-weight:800;color:#1e3a8a;white-space:nowrap}
+  .st-energy{white-space:nowrap}
+  .st-select{
+    border:1.5px solid #c3d4f0;border-radius:8px;background:#fff;
+    padding:5px 8px;font-size:12.5px;font-weight:700;color:#33415c;cursor:pointer;
+  }
+  .st-select.is-correct{border-color:#22a06b;background:#e6f6ec;color:#14683f}
+  .st-select.is-wrong{border-color:#e11d48;background:#fff1f2;color:#be123c}
+  .st-actions{display:flex;align-items:center;gap:12px;margin-top:12px;flex-wrap:wrap}
+  .st-check{
+    border:1px solid #2f6bff;background:#2f6bff;color:#fff;font-weight:800;
+    font-size:13px;border-radius:9px;padding:8px 16px;cursor:pointer;
+  }
+  .st-check:hover{background:#1e57d8;border-color:#1e57d8}
+  .st-result{font-size:13.5px;font-weight:800;color:#33415c}
+  .st-result.is-all{color:#14683f}
+
+  /* Science 章节测验 */
+  .chapter-quiz{
+    border:1px solid #e3ecf9;border-radius:13px;background:#fff;
+    padding:16px;margin:4px 0;
+  }
+  .cq-title{font-size:16px;font-weight:800;color:#1e3a8a;margin-bottom:4px}
+  .cq-intro{font-size:13px;color:#64748b;margin-bottom:14px}
+  .qq{border:1px solid #e8eff9;border-radius:11px;padding:13px 14px;margin-bottom:12px;background:#fbfcff}
+  .qq-head{display:flex;align-items:center;gap:8px;margin-bottom:7px}
+  .qq-num{
+    display:inline-flex;align-items:center;justify-content:center;
+    width:26px;height:26px;border-radius:50%;background:#2f6bff;color:#fff;
+    font-size:12.5px;font-weight:800;flex:0 0 auto;
+  }
+  .qq-level{
+    font-size:11px;font-weight:800;letter-spacing:.5px;color:#f59e0b;
+    background:#fff7e6;border:1px solid #fde68a;border-radius:999px;padding:2px 9px;
+  }
+  .qq-text{font-size:14px;color:#1e293b;font-weight:600;line-height:1.5;margin-bottom:9px}
+  .qq-options{display:flex;flex-direction:column;gap:7px}
+  .qq-opt{
+    display:flex;align-items:center;gap:9px;cursor:pointer;
+    border:1.5px solid #e3ecf9;border-radius:9px;padding:8px 11px;
+    transition:border-color .12s, background .12s;
+  }
+  .qq-opt:hover{border-color:#bcd0f2;background:#f5f9ff}
+  .qq-opt input{accent-color:#2f6bff;margin:0}
+  .qq-opt__label{font-size:13.5px;color:#33415c;font-weight:600}
+  .qq-opt.is-correct{border-color:#22a06b;background:#e6f6ec}
+  .qq-opt.is-correct .qq-opt__label{color:#14683f}
+  .qq-opt.is-wrong{border-color:#e11d48;background:#fff1f2}
+  .qq-opt.is-wrong .qq-opt__label{color:#be123c}
+  .qq-feedback{font-size:12.5px;font-weight:700;margin-top:8px}
+  .qq-feedback.is-ok{color:#14683f}
+  .qq-feedback.is-bad{color:#be123c}
+  .qq-graph-block{
+    border:1px solid #e8eff9;border-radius:11px;background:#fbfcff;
+    padding:10px;margin-bottom:14px;text-align:center;
+  }
+  .qq-graph{display:block;width:100%;max-width:340px;height:auto;margin:0 auto}
+  .qq-graph-cap{font-size:12.5px;color:#64748b;line-height:1.5;margin-top:6px;text-align:left}
+  .qq-drag{border-top:1px dashed #e3ecf9;margin-top:14px;padding-top:14px}
+  .qq-drag-title{font-size:14.5px;font-weight:800;color:#1e3a8a;margin-bottom:8px}
+  .cq-actions{margin-top:14px}
+  .cq-submit{
+    border:1px solid #22a06b;background:#22a06b;color:#fff;font-weight:800;
+    font-size:14.5px;border-radius:10px;padding:11px 24px;cursor:pointer;
+    width:100%;
+  }
+  .cq-submit:hover{background:#1a865a;border-color:#1a865a}
+  .cq-submit:disabled{background:#94a3b8;border-color:#94a3b8;cursor:default}
+  .cq-result{
+    margin-top:14px;border:1px solid #e3ecf9;border-radius:12px;background:#f7faff;
+    padding:16px;text-align:center;
+  }
+  .cq-score{font-size:34px;font-weight:900;color:#1e3a8a;line-height:1.1}
+  .cq-score-sub{font-size:13px;color:#64748b;margin-top:6px}
+  .cq-score-msg{font-size:14px;font-weight:700;color:#1e3a8a;margin-top:10px}
+
+  /* Science 章节测验 · 分节客观题 */
+  .qz-set{border:1px solid #e3ecf9;border-radius:13px;background:#fff;padding:16px;margin:4px 0}
+  .qz-title{font-size:16px;font-weight:800;color:#1e3a8a;margin-bottom:4px}
+  .qz-intro{font-size:13px;color:#64748b;margin-bottom:14px}
+  .qz-section{border:1px solid #e8eff9;border-radius:12px;margin-bottom:14px;overflow:hidden}
+  .qz-section:last-child{margin-bottom:0}
+  .qz-sec-head{display:flex;align-items:center;gap:9px;padding:12px 14px;background:#f5f9ff;border-bottom:1px solid #e8eff9}
+  .qz-sec-icon{font-size:18px;line-height:1}
+  .qz-sec-title{font-size:14.5px;font-weight:800;color:#1e3a8a}
+  .qz-sec-sub{font-size:11.5px;font-weight:700;color:#64748b;background:#eef2f9;border-radius:999px;padding:2px 9px;margin-left:auto;white-space:nowrap}
+  .qz-block{padding:14px}
+  .qz-block + .qz-block{border-top:1px dashed #e8eff9}
+  .qz-block-title{font-size:14px;font-weight:800;color:#1e293b;margin-bottom:6px}
+  .qz-block-intro{font-size:12.5px;color:#64748b;line-height:1.55;margin-bottom:10px}
+  .qz-level{display:inline-block;font-size:11px;font-weight:800;letter-spacing:.5px;color:#2f6bff;background:#eef4ff;border:1px solid #d5e2fb;border-radius:999px;padding:3px 11px}
+  /* 照片下拉匹配 */
+  .qz-photo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+  .qz-photo{border:1px solid #e3ecf9;border-radius:11px;padding:10px;background:#fbfcff;display:flex;flex-direction:column;gap:8px}
+  .qz-photo img{width:100%;height:110px;object-fit:cover;border-radius:8px;border:1px solid #eef2f9;background:#fff}
+  .qz-photo-cap{font-size:12px;color:#33415c;font-weight:600;line-height:1.4}
+  /* 下拉 */
+  .qz-sel{width:100%;border:1.5px solid #d5e0f0;border-radius:8px;padding:7px 9px;font-size:13px;color:#1e293b;background:#fff;font-weight:600;cursor:pointer;transition:border-color .12s,background .12s}
+  .qz-sel:focus{outline:none;border-color:#2f6bff}
+  .qz-sel.is-correct{border-color:#22a06b;background:#e6f6ec;color:#14683f}
+  .qz-sel.is-wrong{border-color:#e11d48;background:#fff1f2;color:#be123c}
+  /* 单选题 */
+  .qz-mc{margin-bottom:12px}
+  .qz-mc:last-child{margin-bottom:0}
+  .qz-mc-text{font-size:13.5px;color:#1e293b;font-weight:600;line-height:1.5;margin-bottom:8px}
+  .qz-mark{color:#e11d48;font-weight:800;text-decoration:underline}
+  .qz-hint{font-size:12px;color:#b45309;background:#fff7e6;border:1px solid #fde68a;border-radius:8px;padding:7px 10px;line-height:1.45;margin-bottom:9px}
+  .qz-options{display:flex;flex-direction:column;gap:6px}
+  .qz-opt{display:flex;align-items:center;gap:9px;cursor:pointer;border:1.5px solid #e3ecf9;border-radius:9px;padding:8px 11px;transition:border-color .12s,background .12s}
+  .qz-opt:hover{border-color:#bcd0f2;background:#f5f9ff}
+  .qz-opt input{accent-color:#2f6bff;margin:0}
+  .qz-opt__label{font-size:13px;color:#33415c;font-weight:600;line-height:1.4}
+  .qz-opt.is-correct{border-color:#22a06b;background:#e6f6ec}
+  .qz-opt.is-correct .qz-opt__label{color:#14683f}
+  .qz-opt.is-wrong{border-color:#e11d48;background:#fff1f2}
+  .qz-opt.is-wrong .qz-opt__label{color:#be123c}
+  .qz-fb{font-size:12.5px;font-weight:700;margin-top:6px}
+  .qz-fb.is-ok{color:#14683f}
+  .qz-fb.is-bad{color:#be123c}
+  /* 选词填空 */
+  .qz-wordbank{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+  .qz-word{font-size:12px;font-weight:700;color:#1e3a8a;background:#eef4ff;border:1px solid #d5e2fb;border-radius:999px;padding:3px 10px}
+  .qz-fill-item{margin-bottom:12px;line-height:2}
+  .qz-fill-item:last-child{margin-bottom:0}
+  .qz-fill-label{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:#2f6bff;color:#fff;font-size:11px;font-weight:800;margin-right:6px;vertical-align:middle}
+  .qz-fill-text{font-size:13.5px;color:#1e293b;font-weight:600}
+  .qz-fill-item .qz-sel{display:inline-block;width:auto;min-width:112px;padding:4px 8px;font-size:12.5px;margin:0 2px;vertical-align:middle}
+  /* 判断 T/F */
+  .qz-tf-item{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid #f1f5fb}
+  .qz-tf-item:last-child{border-bottom:0}
+  .qz-tf-q{flex:1;font-size:13px;color:#1e293b;font-weight:600;line-height:1.45}
+  .qz-tf-btns{display:flex;gap:6px;flex:0 0 auto}
+  .qz-tf-btn{width:42px;height:34px;border-radius:8px;border:1.5px solid #d5e0f0;background:#fff;color:#33415c;font-weight:800;font-size:14px;cursor:pointer;transition:all .12s}
+  .qz-tf-btn:hover{border-color:#bcd0f2}
+  .qz-tf-btn.is-on{border-color:#2f6bff;background:#2f6bff;color:#fff}
+  .qz-tf-btn.is-correct{border-color:#22a06b;background:#e6f6ec;color:#14683f}
+  .qz-tf-btn.is-wrong{border-color:#e11d48;background:#fff1f2;color:#be123c}
+  .qz-tf-btn:disabled{cursor:default}
+  /* 粒子图选择题 */
+  .qz-particle-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .qz-particle-opt{position:relative;border:1.5px solid #e3ecf9;border-radius:11px;padding:10px;cursor:pointer;transition:border-color .12s,background .12s;background:#fff}
+  .qz-particle-opt:hover{border-color:#bcd0f2;background:#f5f9ff}
+  .qz-particle-opt input{position:absolute;left:10px;top:10px;margin:0;accent-color:#2f6bff}
+  .qz-particle-opt .qz-opt-label{position:absolute;left:32px;top:8px;font-size:12px;font-weight:800;color:#33415c}
+  .qz-particle-pair{display:flex;align-items:center;gap:8px;margin-top:22px;justify-content:center}
+  .qz-pbox{position:relative;width:74px;height:74px;border:1px solid #dbe6f5;border-radius:8px;background:#fbfdff;flex:0 0 auto}
+  .qz-pdot{position:absolute;width:9px;height:9px;border-radius:50%;background:#2f6bff;transform:translate(-50%,-50%)}
+  .qz-arrow{font-size:20px;color:#94a3b8;font-weight:800}
+  .qz-particle-opt.is-correct{border-color:#22a06b;background:#e6f6ec}
+  .qz-particle-opt.is-wrong{border-color:#e11d48;background:#fff1f2}
+  /* 状态变化填图 */
+  .qz-diagram-wrap{text-align:center}
+  .qz-diagram{width:100%;max-width:460px;height:auto}
+  .qz-diagram-labels{margin-top:10px;display:flex;flex-direction:column;gap:8px}
+  .qz-diag-label{display:flex;align-items:center;gap:8px;font-size:12.5px;font-weight:700;color:#33415c}
+  .qz-diag-num{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:#2f6bff;color:#fff;font-size:11px;font-weight:800;flex:0 0 auto}
+  .qz-diag-label .qz-sel{flex:1;max-width:220px}
+  /* 状态变化填表 */
+  .qz-table-wrap{overflow-x:auto}
+  .qz-table{width:100%;border-collapse:collapse;font-size:12.5px}
+  .qz-table th,.qz-table td{border:1px solid #dbe6f5;padding:8px 7px;text-align:left;vertical-align:middle}
+  .qz-table th{background:#f0f6ff;color:#1e3a8a;font-weight:800;font-size:11.5px}
+  .qz-table td{color:#33415c;font-weight:600;line-height:1.5}
+  .qz-table .qz-sel{width:100%;min-width:96px;padding:5px 6px;font-size:12px}
+  .qz-table td .qz-sel{display:inline-block;width:auto;min-width:96px;margin:1px 2px;vertical-align:middle}
+  /* 提交与结果 */
+  .qz-actions{margin-top:14px}
+  .qz-submit{border:1px solid #22a06b;background:#22a06b;color:#fff;font-weight:800;font-size:15px;border-radius:10px;padding:12px 24px;cursor:pointer;width:100%}
+  .qz-submit:hover{background:#1a865a;border-color:#1a865a}
+  .qz-submit:disabled{background:#94a3b8;border-color:#94a3b8;cursor:default}
+  .qz-result{margin-top:14px;border:1px solid #e3ecf9;border-radius:12px;background:#f7faff;padding:16px;text-align:center}
+  .qz-score{font-size:34px;font-weight:900;color:#1e3a8a;line-height:1.1}
+  .qz-score-sub{font-size:13px;color:#64748b;margin-top:6px}
+  .qz-score-msg{font-size:14px;font-weight:700;color:#1e3a8a;margin-top:10px}
+  @media(max-width:560px){
+    .qz-photo-grid{grid-template-columns:1fr}
+    .qz-particle-grid{grid-template-columns:1fr}
+    .qz-photo img{height:auto;max-height:170px}
+    .qz-tf-item{flex-direction:column;align-items:flex-start}
+    .qz-tf-btns{align-self:flex-end}
+  }
+
+  /* 图片灯箱 */
+  .lightbox{
+    position:fixed;inset:0;z-index:200;background:rgba(10,16,26,.88);
+    display:flex;align-items:center;justify-content:center;
+    padding:24px;opacity:0;pointer-events:none;transition:opacity .22s;cursor:zoom-out;
+  }
+  .lightbox.is-show{opacity:1;pointer-events:auto}
+  .lightbox img{
+    max-width:100%;max-height:100%;border-radius:8px;
+    box-shadow:0 24px 70px rgba(0,0,0,.5);background:#fff;
+  }
+  .lightbox__close{
+    position:absolute;top:18px;right:20px;width:40px;height:40px;border-radius:50%;
+    background:rgba(255,255,255,.14);color:#fff;border:0;font-size:22px;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;line-height:1;
+  }
+  .lightbox__caption{
+    position:absolute;left:50%;bottom:22px;transform:translateX(-50%);
+    color:#fff;font-size:13px;background:rgba(0,0,0,.45);padding:6px 14px;border-radius:999px;
+    max-width:calc(100vw - 40px);text-align:center;
+  }
+  .lightbox__nav{
+    position:absolute;top:50%;transform:translateY(-50%);
+    width:46px;height:46px;border-radius:50%;border:0;cursor:pointer;
+    background:rgba(255,255,255,.14);color:#fff;font-size:30px;line-height:1;
+    display:flex;align-items:center;justify-content:center;
+    transition:background .15s;
+  }
+  .lightbox__nav:hover{background:rgba(255,255,255,.28)}
+  .lightbox__prev{left:14px}
+  .lightbox__next{right:14px}
+  .lightbox__count{
+    position:absolute;top:22px;left:50%;transform:translateX(-50%);
+    color:#fff;font-size:13px;background:rgba(0,0,0,.45);padding:5px 13px;border-radius:999px;
+    font-variant-numeric:tabular-nums;
+  }
+  @media(max-width:560px){
+    .lightbox__nav{width:38px;height:38px;font-size:24px}
+    .lightbox__prev{left:6px}
+    .lightbox__next{right:6px}
+  }
+
+  /* 概念全景图（Mermaid 思维导图） */
+  .mindmap-block{display:flex;flex-direction:column;gap:10px;margin-top:2px}
+  .btn--mindmap{align-self:flex-start}
+  .mindmap-wrap{
+    border:1px solid var(--line);border-radius:12px;background:#fff;
+    padding:10px;max-height:72vh;overflow:auto;
+  }
+  .mindmap-wrap svg{max-width:none;height:auto}
+  .mindmap-loading,.mindmap-error{color:var(--muted);font-size:14px;text-align:center;padding:22px 10px}
+  .mindmap-error{color:#d64545}
+
+  /* ICT 练习区 */
+  .quiz{
+    border:1px solid #dbe6f8;border-left:3px solid #2f6bff;
+    border-radius:11px;background:#fff;
+    padding:13px 14px;
+    display:flex;flex-direction:column;gap:11px;
+  }
+  .quiz__label{
+    font-size:12px;font-weight:800;letter-spacing:1px;color:#2f6bff;
+    display:inline-flex;align-items:center;gap:6px;
+  }
+  .quiz__label::before{content:"✏️";font-size:13px}
+  .quiz__note{font-size:12px;color:var(--muted);margin:0}
+  .quiz__divider{
+    font-size:11.5px;font-weight:800;letter-spacing:1px;color:#a6791a;
+    text-transform:uppercase;margin-top:4px;
+  }
+  .quiz__q{display:flex;flex-direction:column;gap:5px}
+  .quiz__stem{font-size:13.5px;font-weight:700;color:var(--ink);line-height:1.55}
+  .quiz__opt{font-size:13px;color:var(--ink-2);line-height:1.55;padding-left:14px}
+
+  /* 按钮 */
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:7px;
+    border-radius:11px;border:1px solid transparent;
+    font-size:13.5px;font-weight:650;cursor:pointer;
+    padding:9px 14px;text-decoration:none;white-space:nowrap;
+    transition:transform .16s,box-shadow .18s,background .18s,border-color .18s,color .18s;
+  }
+  .btn:active{transform:translateY(1px) scale(.995)}
+  .btn--primary{
+    background:linear-gradient(140deg,#2f6bff,#3f7bff 60%,#2b93ff);
+    color:#fff;box-shadow:0 6px 16px rgba(47,107,255,.26);
+  }
+  .btn--primary:hover{box-shadow:0 9px 22px rgba(47,107,255,.34)}
+  .btn--primary .btn__arrow{font-size:12px;opacity:.9}
+  .btn--copy{
+    background:#fff;border-color:#dbe4f3;color:var(--ink-2);
+    font-size:12.5px;font-weight:600;padding:8px 11px;
+  }
+  .btn--copy:hover{background:#f4f8ff;border-color:#c6d9fb;color:var(--brand-ink)}
+  .btn--copy.is-done{
+    background:#e9f9f4;border-color:#b8ecd7;color:#00877a;
+  }
+  .btn--ghost{
+    background:#f5f8ff;border-color:#dde7fa;color:var(--brand-ink);
+    font-size:13.5px;
+  }
+  .btn--ghost:hover{background:#eaf2ff;border-color:#c9dcfb}
+  .btn--block{width:100%}
+
+  /* 批改区 */
+  /* 成语卡 */
+  .feature{
+    display:flex;flex-direction:column;gap:14px;height:100%;
+  }
+  .feature__thumb{
+    border-radius:13px;border:1px solid #e3ecfa;
+    background:
+      radial-gradient(120px 80px at 20% 20%,#e7f0ff,rgba(231,240,255,0)),
+      radial-gradient(160px 100px at 85% 80%,#e6fbf6,rgba(230,251,246,0)),
+      #f9fbff;
+    padding:16px;
+    display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+  }
+  .feature__chip{
+    background:#fff;border:1px solid #dbe6f8;border-radius:10px;
+    padding:7px 11px;font-size:15px;font-weight:700;color:var(--ink);
+    box-shadow:0 2px 6px rgba(22,32,46,.05);
+  }
+  .feature__chip small{display:block;font-size:11px;color:var(--muted);font-weight:500;letter-spacing:.4px}
+  .feature__list{margin:0;padding-left:0;list-style:none;font-size:13px;color:var(--ink-2)}
+  .feature__list li{display:flex;gap:8px;padding:3px 0}
+  .feature__list li::before{content:"•";color:var(--brand);font-weight:800}
+
+  /* 占位卡 */
+  .card--placeholder{
+    background:linear-gradient(180deg,#fff,#fcfdff);
+    border-style:dashed;border-color:#dde7f5;
+    box-shadow:none;
+  }
+  .card--placeholder:hover{box-shadow:none;border-color:#c9d9ef;transform:none}
+  .ph-box{
+    margin-top:14px;border-radius:12px;
+    background:repeating-linear-gradient(135deg,#f8fbff,#f8fbff 10px,#f4f8ff 10px,#f4f8ff 20px);
+    border:1px solid #e7eefb;
+    padding:22px 16px;text-align:center;color:var(--muted);font-size:13px;
+  }
+  .ph-box span{display:block;font-size:20px;margin-bottom:6px;opacity:.65}
+
+  /* 建设中 */
+  .empty{
+    text-align:center;padding:52px 26px;
+    background:linear-gradient(180deg,#fff,#fbfdff);
+  }
+  .empty__icon{font-size:40px;line-height:1;margin-bottom:14px}
+  .empty h2{margin:0 0 8px;font-size:19px;font-weight:800}
+  .empty p{margin:0;color:var(--muted);font-size:13.5px}
+  .empty__note{
+    display:inline-block;margin-top:18px;
+    background:#f2f7ff;border:1px solid #e0eafb;border-radius:12px;
+    padding:11px 16px;font-size:13px;color:var(--brand-ink);
+  }
+
+  /* 遮罩 & toast */
+  .backdrop{
+    position:fixed;inset:0;background:rgba(16,26,40,.42);
+    opacity:0;pointer-events:none;transition:opacity .22s;z-index:70;
+    backdrop-filter:blur(1.5px);
+  }
+  .toast{
+    position:fixed;left:50%;bottom:34px;transform:translate(-50%,14px);
+    background:#16202e;color:#fff;font-size:13.5px;font-weight:600;
+    padding:11px 18px;border-radius:12px;z-index:120;
+    box-shadow:0 12px 30px rgba(16,26,40,.28);
+    opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;
+    max-width:calc(100vw - 40px);text-align:center;
+  }
+  .toast.is-show{opacity:1;transform:translate(-50%,0)}
+
+  /* ---------- 响应式 ---------- */
+  @media (max-width:1024px){
+    :root{--sidebar-w:232px}
+    .layout{padding:18px 18px 48px;gap:18px}
+    .topbar__inner{padding:10px 18px}
+    .page-title{font-size:21px}
+  }
+  @media (max-width:900px){
+    .hamburger{display:flex}
+    .topbar__inner{gap:10px 12px}
+    .grade-box{width:100%;margin-left:0;justify-content:space-between;gap:8px}
+    .grade-switch{flex:1}
+    .layout{grid-template-columns:minmax(0,1fr);padding:16px 14px 44px;gap:14px}
+    .sidebar{
+      position:fixed;top:0;left:0;bottom:0;z-index:80;
+      width:284px;max-width:86vw;max-height:none;height:100%;
+      border-radius:0 18px 18px 0;border-left:0;
+      padding:16px 12px 24px;
+      transform:translateX(-104%);
+      transition:transform .26s cubic-bezier(.32,.72,.28,1);
+      box-shadow:0 20px 60px rgba(16,26,40,.24);
+      overflow-y:auto;
+    }
+    .sidebar__close{display:flex;align-items:center;justify-content:center}
+    body.drawer-open .sidebar{transform:translateX(0)}
+    body.drawer-open .backdrop{opacity:1;pointer-events:auto}
+    body.drawer-open{overflow:hidden}
+    .cards{grid-template-columns:minmax(0,1fr)}
+    .card--wide{grid-column:auto}
+    .card{padding:16px}
+    .card__title{font-size:16px}
+    .page-title{font-size:20px}
+    .brand__sub{display:none}
+    .lessons{grid-template-columns:minmax(0,1fr)}
+    .lesson{padding:13px;gap:11px}
+    .lesson__actions{
+      width:100%;gap:9px;
+      flex-direction:column;align-items:stretch;
+    }
+    .lesson__actions .btn{
+      width:100%;min-width:0;flex:0 0 auto;
+      padding:12px 16px;
+      white-space:normal;line-height:1.4;
+      font-size:14px;font-weight:700;
+      letter-spacing:.2px;
+    }
+    .lesson__actions .btn--copy{
+      font-weight:600;font-size:13px;padding:11px 16px;
+      background:#fbfdff;border-style:dashed;border-color:#d7e2f5;
+    }
+    .challenge{padding:11px 12px}
+    .challenge .btn{
+      width:100%;align-self:stretch;
+      padding:11px 14px;white-space:normal;line-height:1.4;
+      font-size:13.5px;text-align:center;
+    }
+    .practice{padding:11px 12px}
+    .practice .btn{
+      width:100%;align-self:stretch;
+      padding:11px 14px;white-space:normal;line-height:1.4;
+      font-size:13.5px;text-align:center;
+    }
+    .btn--toggle-text{
+      width:100%;align-self:stretch;
+      padding:11px 14px;white-space:normal;line-height:1.4;
+      font-size:14px;text-align:center;
+    }
+    .text-body{padding:12px 13px;max-height:440px}
+    .text-para{font-size:13.5px;line-height:1.85}
+  }
+  @media (max-width:420px){
+    .brand__logo{width:34px;height:34px;font-size:15px}
+    .brand__title{font-size:15px}
+    .grade-btn{padding:7px 11px;font-size:13px}
+    .lesson__actions .btn--primary,
+    .lesson__actions .btn--copy,
+    .challenge .btn,
+    .practice .btn{font-size:13.5px;padding:11px 14px}
+  }
+  html{overflow-x:clip}
+
+
+  .wrap{max-width:880px;margin:0 auto;padding:24px 16px 60px}
+  .notes-head{text-align:center;padding:8px 0 6px}
+  .notes-head h1{font-size:26px;font-weight:800;margin:0;color:var(--ink)}
+  .notes-head p{margin:8px auto 0;color:var(--muted);font-size:14px;max-width:560px}
+  .notes-head .badge{display:inline-block;margin-top:10px;font-size:12.5px;font-weight:700;color:#1e3a8a;background:#eef4ff;border:1px solid #d5e2fb;border-radius:999px;padding:4px 14px}
+  .notes-nav{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:14px}
+  .notes-nav a{display:inline-flex;align-items:center;gap:5px;font-size:13px;font-weight:700;color:#1e3a8a;background:#eef4ff;border:1px solid #d5e2fb;border-radius:999px;padding:6px 14px;text-decoration:none;transition:.15s}
+  .notes-nav a:hover{background:#dbe7ff;border-color:#bcd0f2}
+  .notes-nav a.go-quiz{color:#fff;background:#2f6bff;border-color:#2f6bff}
+  .notes-nav a.go-quiz:hover{background:#1f4fd8;border-color:#1f4fd8}
+  #notes-root{margin-top:6px}
+
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="notes-head">
+    <h1>2.1 Change in states of water</h1>
+    <p>Chapter 2 · Water · S1 Science · Structured revision notes with textbook page references</p>
+    <span class="badge">🔬 S1 Science · 📖 p.80–91</span>
+    <nav class="notes-nav">
+      <a href="index.html" data-keep-share>🏠 Home</a>
+      <a class="go-quiz" href="s1-science-quiz-2-1.html" data-keep-share>✍️ Take Quiz</a>
+    </nav>
+  </header>
+  <div id="notes-root"></div>
+</div>
+
+<div class="lightbox" id="lightbox" aria-hidden="true">
+  <button class="lightbox__close" type="button" aria-label="Close">×</button>
+  <button class="lightbox__nav lightbox__prev" type="button" aria-label="Previous">‹</button>
+  <img alt="Enlarged page or figure">
+  <button class="lightbox__nav lightbox__next" type="button" aria-label="Next">›</button>
+  <div class="lightbox__caption"></div>
+  <div class="lightbox__count"></div>
+</div>
+
+<script>
+const escapeHTML = (str) =>
+  String(str).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+function escapeRegExp(s) {
+  return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+function attachShareCode() {
+  const sc = new URLSearchParams(location.search).get("sharecode");
+  if (!sc) return;
+  document.querySelectorAll("a[data-keep-share]").forEach((a) => {
+    const base = a.getAttribute("href");
+    if (!base) return;
+    try {
+      const url = new URL(base, location.href);
+      url.searchParams.set("sharecode", sc);
+      a.setAttribute("href", url.pathname + url.search + url.hash);
+    } catch (e) {}
+  });
+}
+
+/* ---------- Science 笔记核心术语高亮 ---------- */
+const SCIENCE_TERMS = [
+  "physical state", "water vapour", "water particle",
+  "melting point", "freezing point", "boiling point",
+  "liquid state", "solid state", "gas state",
+  "melting", "freezing", "boiling", "evaporation", "condensation",
+  "steam", "solid", "liquid", "gas", "particles", "particle",
+  "energy", "temperature"
+];
+
+let SCIENCE_TERM_RE = null;
+function highlightScienceTerms(text) {
+  if (!SCIENCE_TERM_RE) {
+    const joined = SCIENCE_TERMS
+      .map(escapeRegExp)
+      .sort((a, b) => b.length - a.length)
+      .join("|");
+    SCIENCE_TERM_RE = new RegExp("\\b(" + joined + ")\\b", "gi");
+  }
+  return text.replace(SCIENCE_TERM_RE, '<mark class="term">$1</mark>');
+}
+
+/* Science 页码徽章 */
+function sciPg(pg) {
+  return pg ? `<span class="pg">p.${escapeHTML(String(pg))}</span>` : "";
+}
+
+/* ---------- Science 章节测验 · 分节客观题 ---------- */
+// 粒子图坐标（百分比）
+const QZ_PARTICLES = {
+  solid:  [[20,20],[40,20],[60,20],[80,20],[20,45],[40,45],[60,45],[80,45],[20,70],[40,70],[60,70],[80,70]],
+  liquid: [[25,25],[50,18],[72,28],[30,45],[55,45],[80,42],[20,68],[45,65],[70,70],[85,60],[60,35],[15,50]],
+  gas:    [[15,15],[45,8],[75,15],[20,45],[55,40],[85,45],[15,75],[50,72],[80,75]],
+  gasFew: [[25,20],[65,25],[20,60],[70,65],[45,80]]
+};
+function qzParticles(kind) {
+  const pts = QZ_PARTICLES[kind] || QZ_PARTICLES.solid;
+  return pts.map((p) => `<span class="qz-pdot" style="left:${p[0]}%;top:${p[1]}%"></span>`).join("");
+}
+function qzDiagramSvg() {
+  return `<svg class="qz-diagram" viewBox="0 0 520 210" role="img" aria-label="Changes in states of water">
+    <defs>
+      <marker id="qzArrA" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+        <path d="M0,0 L8,4 L0,8 z" fill="#2f6bff"/>
+      </marker>
+    </defs>
+    <rect x="20" y="70" width="90" height="60" rx="10" fill="#eef4ff" stroke="#bcd0f2" stroke-width="1.5"/>
+    <text x="65" y="96" text-anchor="middle" font-size="13" font-weight="700" fill="#1e3a8a">ice</text>
+    <text x="65" y="114" text-anchor="middle" font-size="10" fill="#64748b">solid</text>
+    <rect x="215" y="70" width="90" height="60" rx="10" fill="#eef4ff" stroke="#bcd0f2" stroke-width="1.5"/>
+    <text x="260" y="96" text-anchor="middle" font-size="13" font-weight="700" fill="#1e3a8a">water</text>
+    <text x="260" y="114" text-anchor="middle" font-size="10" fill="#64748b">liquid</text>
+    <rect x="415" y="18" width="95" height="55" rx="10" fill="#fff7e6" stroke="#f0c060" stroke-width="1.5"/>
+    <text x="462" y="42" text-anchor="middle" font-size="13" font-weight="700" fill="#b45309">steam</text>
+    <text x="462" y="60" text-anchor="middle" font-size="10" fill="#a16207">gas</text>
+    <rect x="415" y="137" width="95" height="55" rx="10" fill="#fff7e6" stroke="#f0c060" stroke-width="1.5"/>
+    <text x="462" y="160" text-anchor="middle" font-size="12" font-weight="700" fill="#b45309">water</text>
+    <text x="462" y="178" text-anchor="middle" font-size="12" font-weight="700" fill="#b45309">vapour</text>
+    <line x1="112" y1="88" x2="212" y2="88" stroke="#2f6bff" stroke-width="2" marker-end="url(#qzArrA)"/>
+    <circle cx="162" cy="82" r="11" fill="#2f6bff"/><text x="162" y="86" text-anchor="middle" font-size="11" font-weight="800" fill="#fff">1</text>
+    <line x1="212" y1="112" x2="112" y2="112" stroke="#2f6bff" stroke-width="2" marker-end="url(#qzArrA)"/>
+    <circle cx="162" cy="122" r="11" fill="#2f6bff"/><text x="162" y="126" text-anchor="middle" font-size="11" font-weight="800" fill="#fff">2</text>
+    <line x1="285" y1="70" x2="410" y2="38" stroke="#2f6bff" stroke-width="2" marker-end="url(#qzArrA)"/>
+    <circle cx="348" cy="46" r="11" fill="#2f6bff"/><text x="348" y="50" text-anchor="middle" font-size="11" font-weight="800" fill="#fff">3</text>
+    <line x1="410" y1="150" x2="285" y2="115" stroke="#2f6bff" stroke-width="2" marker-end="url(#qzArrA)"/>
+    <circle cx="348" cy="142" r="11" fill="#2f6bff"/><text x="348" y="146" text-anchor="middle" font-size="11" font-weight="800" fill="#fff">4</text>
+    <line x1="285" y1="130" x2="410" y2="162" stroke="#2f6bff" stroke-width="2" marker-end="url(#qzArrA)"/>
+    <circle cx="348" cy="158" r="11" fill="#2f6bff"/><text x="348" y="162" text-anchor="middle" font-size="11" font-weight="800" fill="#fff">5</text>
+  </svg>`;
+}
+function renderQzText(text, mark) {
+  if (!mark) return escapeHTML(text);
+  const idx = text.toUpperCase().indexOf(String(mark).toUpperCase());
+  if (idx < 0) return escapeHTML(text);
+  return escapeHTML(text.slice(0, idx)) +
+    `<span class="qz-mark">${escapeHTML(text.slice(idx, idx + mark.length))}</span>` +
+    escapeHTML(text.slice(idx + mark.length));
+}
+function qzSelect(answer, opts, placeholder) {
+  const options = (opts || []).map((o) => `<option value="${escapeHTML(o)}">${escapeHTML(o)}</option>`).join("");
+  return `<select class="qz-sel" data-answer="${escapeHTML(answer)}"><option value="">${escapeHTML(placeholder || "—")}</option>${options}</select>`;
+}
+function renderQuizBlock(block, secIdx, blockIdx) {
+  const esc = escapeHTML;
+  if (!block || !block.kind) return "";
+  if (block.kind === "level") {
+    return `<div class="qz-block"><span class="qz-level">${esc(block.text)}</span></div>`;
+  }
+  if (block.kind === "note") {
+    return `<div class="qz-block"><div class="qz-block-intro">${esc(block.text)}</div></div>`;
+  }
+  if (block.kind === "graph") {
+    return `<div class="qz-block">
+      <div class="qq-graph-block">
+        <svg class="qq-graph" viewBox="0 0 320 200" role="img" aria-label="Heating curve of water">
+          <line x1="45" y1="20" x2="45" y2="165" stroke="#a9b8cc" stroke-width="1.5"/>
+          <line x1="45" y1="165" x2="300" y2="165" stroke="#a9b8cc" stroke-width="1.5"/>
+          <path d="M45,150 L150,60 L270,60" fill="none" stroke="#2f6bff" stroke-width="3" stroke-linejoin="round"/>
+          <line x1="45" y1="60" x2="270" y2="60" stroke="#f59e0b" stroke-dasharray="5 4" stroke-width="1.2"/>
+          <text x="36" y="64" text-anchor="end" font-size="11" fill="#b45309" font-weight="700">T</text>
+          <circle cx="45" cy="150" r="3" fill="#2f6bff"/>
+          <circle cx="150" cy="60" r="3" fill="#2f6bff"/>
+          <circle cx="270" cy="60" r="3" fill="#2f6bff"/>
+          <text x="45" y="180" text-anchor="middle" font-size="10" fill="#64748b">0</text>
+          <text x="150" y="180" text-anchor="middle" font-size="10" fill="#64748b">2</text>
+          <text x="270" y="180" text-anchor="middle" font-size="10" fill="#64748b">4</text>
+          <text x="172" y="194" text-anchor="middle" font-size="10" fill="#64748b">time (min)</text>
+          <text x="16" y="95" text-anchor="middle" font-size="10" fill="#64748b" transform="rotate(-90 16 95)">water temperature (°C)</text>
+        </svg>
+        <div class="qq-graph-cap">${esc(block.caption)}</div>
+      </div>
+    </div>`;
+  }
+  if (block.kind === "photomatch") {
+    const opts = block.options || [];
+    const items = (block.items || []).map((it) => `
+      <div class="qz-photo">
+        <img src="${esc(it.img)}" alt="${esc(it.cap)}" loading="lazy">
+        <div class="qz-photo-cap">${esc(it.cap)}</div>
+        ${qzSelect(it.answer, opts, "Choose a process")}
+      </div>`).join("");
+    return `<div class="qz-block">
+      ${block.title ? `<div class="qz-block-title">${esc(block.title)}</div>` : ""}
+      ${block.intro ? `<div class="qz-block-intro">${esc(block.intro)}</div>` : ""}
+      <div class="qz-photo-grid">${items}</div>
+    </div>`;
+  }
+  if (block.kind === "mc") {
+    const items = (block.items || []).map((q, qi) => `
+      <div class="qz-mc" data-answer="${q.answer}">
+        ${q.hint ? `<div class="qz-hint">${esc(q.hint)}</div>` : ""}
+        <div class="qz-mc-text">${renderQzText(q.q, q.mark)}</div>
+        <div class="qz-options">
+          ${(q.options || []).map((o, oi) => `
+            <label class="qz-opt">
+              <input type="radio" name="qz-mc-${secIdx}-${blockIdx}-${qi}" value="${oi}">
+              <span class="qz-opt__label">${String.fromCharCode(65 + oi)}. ${esc(o)}</span>
+            </label>`).join("")}
+        </div>
+        <div class="qz-fb" hidden></div>
+      </div>`).join("");
+    return `<div class="qz-block">
+      ${block.title ? `<div class="qz-block-title">${esc(block.title)}</div>` : ""}
+      ${items}
+    </div>`;
+  }
+  if (block.kind === "fill") {
+    const bank = (block.wordbank || []).map((w) => `<span class="qz-word">${esc(w)}</span>`).join("");
+    const opts = block.wordbank || [];
+    const items = (block.items || []).map((it) => {
+      const inner = it.parts.map((p) => p.blank
+        ? qzSelect(p.blank, opts, "—")
+        : `<span class="qz-fill-text">${esc(p.text)}</span>`).join("");
+      return `<div class="qz-fill-item"><span class="qz-fill-label">${esc(it.label)}</span>${inner}</div>`;
+    }).join("");
+    return `<div class="qz-block">
+      ${block.title ? `<div class="qz-block-title">${esc(block.title)}</div>` : ""}
+      ${block.intro ? `<div class="qz-block-intro">${esc(block.intro)}</div>` : ""}
+      <div class="qz-wordbank">${bank}</div>
+      ${items}
+    </div>`;
+  }
+  if (block.kind === "tf") {
+    const items = (block.items || []).map((it) => `
+      <div class="qz-tf-item">
+        <div class="qz-tf-q">${esc(it.q)}</div>
+        <div class="qz-tf-btns" data-answer="${esc(it.answer)}">
+          <button type="button" class="qz-tf-btn" data-val="T">T</button>
+          <button type="button" class="qz-tf-btn" data-val="F">F</button>
+        </div>
+      </div>`).join("");
+    return `<div class="qz-block">
+      ${block.title ? `<div class="qz-block-title">${esc(block.title)}</div>` : ""}
+      ${block.intro ? `<div class="qz-block-intro">${esc(block.intro)}</div>` : ""}
+      ${items}
+    </div>`;
+  }
+  if (block.kind === "particle") {
+    const options = (block.options || []).map((o, oi) => `
+      <label class="qz-particle-opt">
+        <input type="radio" name="qz-p-${secIdx}-${blockIdx}" value="${oi}">
+        <span class="qz-opt-label">${String.fromCharCode(65 + oi)}</span>
+        <div class="qz-particle-pair">
+          <div class="qz-pbox">${qzParticles(o.from)}</div>
+          <span class="qz-arrow">→</span>
+          <div class="qz-pbox">${qzParticles(o.to)}</div>
+        </div>
+      </label>`).join("");
+    return `<div class="qz-block">
+      ${block.title ? `<div class="qz-block-title">${esc(block.title)}</div>` : ""}
+      <div class="qz-mc" data-answer="${block.answer}">
+        <div class="qz-mc-text">${esc(block.stem)}</div>
+        <div class="qz-particle-grid">${options}</div>
+        <div class="qz-fb" hidden></div>
+      </div>
+    </div>`;
+  }
+  if (block.kind === "diagram") {
+    const opts = block.options || ["melting", "freezing", "boiling", "condensation", "evaporation"];
+    const labels = (block.answers || []).map((a, i) => `
+      <div class="qz-diag-label">
+        <span class="qz-diag-num">${i + 1}</span>
+        ${qzSelect(a, opts, "Choose a process")}
+      </div>`).join("");
+    return `<div class="qz-block">
+      ${block.title ? `<div class="qz-block-title">${esc(block.title)}</div>` : ""}
+      ${block.intro ? `<div class="qz-block-intro">${esc(block.intro)}</div>` : ""}
+      <div class="qz-diagram-wrap">${qzDiagramSvg()}</div>
+      <div class="qz-diagram-labels">${labels}</div>
+    </div>`;
+  }
+  if (block.kind === "statetable") {
+    const rows = (block.rows || []).map((row) => {
+      const cells = row.cells.map((c) => {
+        if (typeof c === "string") return `<td>${esc(c)}</td>`;
+        if (c.parts) {
+          const inner = c.parts.map((p) => {
+            if (typeof p === "string") return `<span>${esc(p)}</span>`;
+            if (p.blank) return qzSelect(p.blank, p.opts, "—");
+            return `<span>${esc(p.text)}</span>`;
+          }).join("");
+          return `<td>${inner}</td>`;
+        }
+        if (c.blank) return `<td>${qzSelect(c.blank, c.opts, "—")}</td>`;
+        return `<td>${esc(c.text || "")}</td>`;
+      }).join("");
+      return `<tr>${cells}</tr>`;
+    }).join("");
+    return `<div class="qz-block">
+      ${block.title ? `<div class="qz-block-title">${esc(block.title)}</div>` : ""}
+      ${block.intro ? `<div class="qz-block-intro">${esc(block.intro)}</div>` : ""}
+      <div class="qz-table-wrap">
+        <table class="qz-table">
+          <thead><tr>${(block.cols || []).map((c) => `<th>${esc(c)}</th>`).join("")}</tr></thead>
+          <tbody>${rows}</tbody>
+        </table>
+      </div>
+    </div>`;
+  }
+  return "";
+}
+function renderQuizSet(qz) {
+  const esc = escapeHTML;
+  const sections = (qz.sections || []).map((sec, si) => {
+    const blocks = (sec.blocks || []).map((b, bi) => renderQuizBlock(b, si, bi)).join("");
+    return `
+      <div class="qz-section">
+        <div class="qz-sec-head">
+          <span class="qz-sec-icon">${esc(sec.icon || "📋")}</span>
+          <span class="qz-sec-title">${esc(sec.title || "")}</span>
+          ${sec.sub ? `<span class="qz-sec-sub">${esc(sec.sub)}</span>` : ""}
+        </div>
+        ${blocks}
+      </div>`;
+  }).join("");
+  return `
+    <div class="qz-set" data-quizset>
+      <div class="qz-title">${esc(qz.title || "Chapter Quiz")}</div>
+      <div class="qz-intro">${esc(qz.intro || "")}</div>
+      ${sections}
+      <div class="qz-actions">
+        <button class="qz-submit" type="button">✍️ Submit &amp; mark</button>
+      </div>
+      <div class="qz-result" hidden></div>
+    </div>`;
+}
+
+/* Science 笔记条目（支持 { t, h, pg, kp, figrow, fig, slider, match, acc, gallery, chart }） */
+function renderScienceNote(item) {
+  if (typeof item === "string") {
+    return `<p class="text-para">${highlightScienceTerms(escapeHTML(item))}</p>`;
+  }
+  if (item.quizset) {
+    return renderQuizSet(item.quizset);
+  }
+  if (item.kp) {
+    return `<div class="kp"><b>Key point</b><br>${highlightScienceTerms(escapeHTML(item.kp))}${sciPg(item.pg)}</div>`;
+  }
+  if (item.figrow) {
+    const figs = (item.figrow || []).map((f) => `
+      <figure class="fig" data-lightbox="${escapeHTML(f.src)}" data-cap="${escapeHTML(f.caption)}">
+        <img src="${escapeHTML(f.src)}" alt="${escapeHTML(f.caption)}" loading="lazy">
+        <figcaption><span>${escapeHTML(f.caption)}</span>${sciPg(f.pg)}</figcaption>
+      </figure>`).join("");
+    return `<div class="fig-grid">${figs}</div>`;
+  }
+  if (item.fig) {
+    const f = item.fig;
+    return `
+      <figure class="fig-inline" data-lightbox="${escapeHTML(f.src)}" data-cap="${escapeHTML(f.caption)}">
+        <img src="${escapeHTML(f.src)}" alt="${escapeHTML(f.caption)}" loading="lazy">
+        <figcaption><span>${escapeHTML(f.caption)}</span>${sciPg(f.pg)}</figcaption>
+      </figure>`;
+  }
+  if (item.slider) {
+    return `
+      <div class="temp-slider" data-temp-min="${escapeHTML(String(item.slider.min ?? -30))}"
+           data-temp-max="${escapeHTML(String(item.slider.max ?? 130))}"
+           data-temp-init="${escapeHTML(String(item.slider.init ?? 20))}">
+        <div class="temp-head">
+          <div class="temp-state">
+            <div class="temp-state-icon" id="temp-icon">💧</div>
+            <div>
+              <div class="temp-state-name" id="temp-name">Water</div>
+              <div class="temp-state-sub" id="temp-sub">liquid state</div>
+            </div>
+          </div>
+          <div class="temp-val" id="temp-val">20 °C</div>
+          <div class="temp-energy is-idle" id="temp-energy">Energy: —</div>
+        </div>
+        <div class="temp-particles" id="temp-particles"></div>
+        <input type="range" id="temp-range" min="${escapeHTML(String(item.slider.min ?? -30))}"
+               max="${escapeHTML(String(item.slider.max ?? 130))}"
+               value="${escapeHTML(String(item.slider.init ?? 20))}" step="1"
+               aria-label="Water temperature">
+        <div class="temp-scale">
+          <span>−30 °C</span><span>0 °C</span><span>100 °C</span><span>130 °C</span>
+        </div>
+        <p class="temp-hint">Drag the slider to change the temperature and watch how the state of water and the energy change.</p>
+      </div>`;
+  }
+  if (item.match) {
+    const m = item.match;
+    const pairs = m.pairs || [];
+    const terms = pairs.map((p, i) =>
+      `<div class="match-term" draggable="true" data-match-term="${i}" data-term="${escapeHTML(p.term)}">${escapeHTML(p.term)}</div>`
+    ).join("");
+    const slots = pairs.map((p, i) =>
+      `<div class="match-slot" data-match-slot="${i}" data-slot="${escapeHTML(p.desc)}"><span class="match-slot__desc">${escapeHTML(p.desc)}</span></div>`
+    ).join("");
+    return `
+      <div class="match-game" data-match>
+        <div class="match-head">
+          <div class="match-title">${escapeHTML(m.title || "Match the terms")}</div>
+          <div class="match-count">Matched <b>0</b> / ${pairs.length}</div>
+          <button class="match-reset" type="button">↺ Reset</button>
+        </div>
+        <div class="match-board">
+          <div class="match-col">
+            <div class="match-col__label">Processes</div>
+            ${terms}
+          </div>
+          <div class="match-col">
+            <div class="match-col__label">Change of state</div>
+            ${slots}
+          </div>
+        </div>
+        <div class="match-done">🎉 Well done! All processes matched correctly.</div>
+      </div>`;
+  }
+  if (item.acc) {
+    const a = item.acc;
+    const inner = (a.blocks || []).map(renderScienceNote).join("");
+    return `
+      <div class="acc" data-acc>
+        <button class="acc-head" type="button" data-acc-toggle aria-expanded="${a.open ? "true" : "false"}">
+          <span class="acc-icon">${escapeHTML(a.icon || "🧩")}</span>
+          <span class="acc-title">${escapeHTML(a.title || "")}</span>
+          ${a.hint ? `<span class="acc-hint">${escapeHTML(a.hint)}</span>` : ""}
+          <span class="acc-caret">▼</span>
+        </button>
+        <div class="acc-body" ${a.open ? "" : "hidden"}>${inner}</div>
+      </div>`;
+  }
+  if (item.lab) {
+    const inner = (item.lab.blocks || []).map(renderScienceNote).join("");
+    return `<div class="lab-grid">${inner}</div>`;
+  }
+  if (item.gallery) {
+    const g = item.gallery;
+    const items = g.items || [];
+    const json = JSON.stringify(items.map((f) => ({ src: f.src, cap: f.caption })));
+    return `
+      <button class="gallery-btn" type="button" data-gallery="${escapeHTML(json)}">
+        📖 ${escapeHTML(g.label || "View textbook pages")}
+        <span class="gallery-btn__count">${items.length} pages</span>
+      </button>`;
+  }
+  if (item.chart) {
+    const c = item.chart;
+    return `
+      <div class="chart-block" data-chart>
+        <svg class="chart-svg" viewBox="0 0 360 230" role="img" aria-label="${escapeHTML(c.title || "Heating curve of water")}">
+          <line x1="40" y1="152" x2="340" y2="152" stroke="#e8f0fa" stroke-dasharray="4 4"/>
+          <line x1="40" y1="38" x2="340" y2="38" stroke="#e8f0fa" stroke-dasharray="4 4"/>
+          <line x1="40" y1="15" x2="40" y2="175" stroke="#a9b8cc" stroke-width="1.5"/>
+          <line x1="40" y1="175" x2="340" y2="175" stroke="#a9b8cc" stroke-width="1.5"/>
+          <text x="34" y="179" text-anchor="end" font-size="9" fill="#64748b">−20</text>
+          <text x="34" y="156" text-anchor="end" font-size="9" fill="#64748b">0</text>
+          <text x="34" y="42" text-anchor="end" font-size="9" fill="#64748b">100</text>
+          <text x="34" y="19" text-anchor="end" font-size="9" fill="#64748b">120</text>
+          <text x="16" y="95" text-anchor="middle" font-size="9" fill="#64748b" transform="rotate(-90 16 95)">Temperature (°C)</text>
+          <text x="40" y="190" text-anchor="middle" font-size="9" fill="#64748b">0</text>
+          <text x="340" y="190" text-anchor="middle" font-size="9" fill="#64748b">10</text>
+          <text x="190" y="203" text-anchor="middle" font-size="9" fill="#64748b">Time / energy absorbed (min)</text>
+          <path class="chart-seg chart-seg--1" d="M40,175 L100,152" stroke="#2f6bff" pathLength="100"/>
+          <path class="chart-seg chart-seg--2" d="M100,152 L160,152" stroke="#22a06b" pathLength="100"/>
+          <path class="chart-seg chart-seg--3" d="M160,152 L220,38" stroke="#2f6bff" pathLength="100"/>
+          <path class="chart-seg chart-seg--4" d="M220,38 L280,38" stroke="#f59e0b" pathLength="100"/>
+          <path class="chart-seg chart-seg--5" d="M280,38 L340,15" stroke="#2f6bff" pathLength="100"/>
+          <circle cx="40" cy="175" r="2.6" fill="#2f6bff"/>
+          <circle cx="100" cy="152" r="2.6" fill="#22a06b"/>
+          <circle cx="160" cy="152" r="2.6" fill="#22a06b"/>
+          <circle cx="220" cy="38" r="2.6" fill="#f59e0b"/>
+          <circle cx="280" cy="38" r="2.6" fill="#f59e0b"/>
+          <circle cx="340" cy="15" r="2.6" fill="#2f6bff"/>
+          <g class="chart-note chart-note--melt">
+            <text x="130" y="168" text-anchor="middle" font-size="9.5" font-weight="700" fill="#14683f">melting</text>
+            <text x="130" y="144" text-anchor="middle" font-size="8.5" fill="#22a06b">0 °C · solid → liquid</text>
+          </g>
+          <g class="chart-note chart-note--boil">
+            <text x="250" y="54" text-anchor="middle" font-size="9.5" font-weight="700" fill="#b45309">boiling</text>
+            <text x="250" y="30" text-anchor="middle" font-size="8.5" fill="#f59e0b">100 °C · liquid → gas</text>
+          </g>
+        </svg>
+        <div class="chart-cap">${escapeHTML(c.caption || "Heating curve of water: temperature stays the same during melting and boiling.")}</div>
+        <div class="chart-legend">
+          <span class="leg-heat"><i></i>heating (temp rises)</span>
+          <span class="leg-melt"><i></i>melting (0 °C)</span>
+          <span class="leg-boil"><i></i>boiling (100 °C)</span>
+        </div>
+        <button class="chart-replay" type="button">↺ Replay animation</button>
+      </div>`;
+  }
+  if (item.summaryTable) {
+    const st = item.summaryTable;
+    const rows = (st.rows || []).map((r) => `
+      <tr>
+        <td class="st-process">${escapeHTML(r.process)}</td>
+        <td>${escapeHTML(r.change)}</td>
+        <td>${escapeHTML(r.temp)}</td>
+        <td class="st-energy">
+          <select class="st-select" data-answer="${escapeHTML(r.answer)}" aria-label="Energy for ${escapeHTML(r.process)}">
+            <option value="">Choose…</option>
+            <option value="absorbed">Absorbed</option>
+            <option value="released">Released</option>
+          </select>
+        </td>
+      </tr>`).join("");
+    return `
+      <div class="summary-table" data-summary>
+        <div class="st-title">${escapeHTML(st.title || "Complete the summary table")}</div>
+        <div class="st-wrap">
+          <table class="st-table">
+            <thead>
+              <tr>
+                <th>Process</th>
+                <th>Change in states</th>
+                <th>Temperature</th>
+                <th>Energy absorbed or released?</th>
+              </tr>
+            </thead>
+            <tbody>${rows}</tbody>
+          </table>
+        </div>
+        <div class="st-actions">
+          <button class="st-check" type="button">✓ Check answers</button>
+          <span class="st-result" hidden></span>
+        </div>
+      </div>`;
+  }
+  if (item.quiz) {
+    const qz = item.quiz;
+    const graph = qz.graph ? `
+      <div class="qq-graph-block">
+        <svg class="qq-graph" viewBox="0 0 320 200" role="img" aria-label="Heating curve of water">
+          <line x1="45" y1="20" x2="45" y2="165" stroke="#a9b8cc" stroke-width="1.5"/>
+          <line x1="45" y1="165" x2="300" y2="165" stroke="#a9b8cc" stroke-width="1.5"/>
+          <path d="M45,150 L150,60 L270,60" fill="none" stroke="#2f6bff" stroke-width="3" stroke-linejoin="round"/>
+          <line x1="45" y1="60" x2="270" y2="60" stroke="#f59e0b" stroke-dasharray="5 4" stroke-width="1.2"/>
+          <text x="36" y="64" text-anchor="end" font-size="11" fill="#b45309" font-weight="700">T</text>
+          <circle cx="45" cy="150" r="3" fill="#2f6bff"/>
+          <circle cx="150" cy="60" r="3" fill="#2f6bff"/>
+          <circle cx="270" cy="60" r="3" fill="#2f6bff"/>
+          <text x="45" y="180" text-anchor="middle" font-size="10" fill="#64748b">0</text>
+          <text x="150" y="180" text-anchor="middle" font-size="10" fill="#64748b">2</text>
+          <text x="270" y="180" text-anchor="middle" font-size="10" fill="#64748b">4</text>
+          <text x="172" y="194" text-anchor="middle" font-size="10" fill="#64748b">time (min)</text>
+          <text x="16" y="95" text-anchor="middle" font-size="10" fill="#64748b" transform="rotate(-90 16 95)">water temperature (°C)</text>
+        </svg>
+        <div class="qq-graph-cap">${escapeHTML(qz.graph.caption)}</div>
+      </div>` : "";
+
+    const questions = (qz.questions || []).map((q, i) => `
+      <div class="qq" data-qq data-answer="${q.answer}">
+        <div class="qq-head">
+          <span class="qq-num">Q${i + 1}</span>
+          ${q.level ? `<span class="qq-level">${escapeHTML(q.level)}</span>` : ""}
+        </div>
+        <div class="qq-text">${escapeHTML(q.q)}</div>
+        <div class="qq-options">
+          ${(q.options || []).map((opt, oi) => `
+            <label class="qq-opt">
+              <input type="radio" name="qq-${i}" value="${oi}">
+              <span class="qq-opt__label">${String.fromCharCode(65 + oi)}. ${escapeHTML(opt)}</span>
+            </label>`).join("")}
+        </div>
+        <div class="qq-feedback" hidden></div>
+      </div>`).join("");
+
+    const dragPart = qz.drag ? `
+      <div class="qq-drag">
+        <div class="qq-drag-title">🧩 Drag &amp; drop question</div>
+        ${renderScienceNote({ match: { title: qz.drag.title || "Match the terms", pairs: qz.drag.pairs } })}
+      </div>` : "";
+
+    return `
+      <div class="chapter-quiz" data-quiz>
+        <div class="cq-title">${escapeHTML(qz.title || "Chapter quiz")}</div>
+        <div class="cq-intro">${escapeHTML(qz.intro || "")}</div>
+        ${graph}
+        ${questions}
+        ${dragPart}
+        <div class="cq-actions">
+          <button class="cq-submit" type="button">✍️ Submit</button>
+        </div>
+        <div class="cq-result" hidden></div>
+      </div>`;
+  }
+  const t = (item.t || "").trim();
+  const html = highlightScienceTerms(escapeHTML(t));
+  if (item.h === 1) return `<div class="text-h">${html}${sciPg(item.pg)}</div>`;
+  if (item.h === 2) return `<div class="text-sub">${html}${sciPg(item.pg)}</div>`;
+  if (item.h === 3) return `<div class="text-sub3">${html}${sciPg(item.pg)}</div>`;
+  return `<p class="text-para">${html}${sciPg(item.pg)}</p>`;
+}
+
+/* ---------- Science 标签页（Tabs） ---------- */
+function renderScienceTabs(tabs, key) {
+  const bar = tabs.map((t, i) => `
+    <button class="sci-tab" type="button" data-tab-target="${key}-${t.id}" role="tab" aria-selected="${i === 0 ? "true" : "false"}">
+      <span class="sci-tab__icon">${escapeHTML(t.icon || "")}</span>
+      <span class="sci-tab__label">${escapeHTML(t.title)}</span>
+    </button>`).join("");
+  const panels = tabs.map((t, i) => `
+    <div class="sci-tabpanel" id="${key}-${t.id}" role="tabpanel" ${i === 0 ? "" : "hidden"}>
+      ${(t.blocks || []).map(renderScienceNote).join("")}
+    </div>`).join("");
+  return `
+    <div class="sci-tabs" data-tabs="${key}">
+      <div class="sci-tabbar" role="tablist">${bar}</div>
+      <div class="sci-tabpanels">${panels}</div>
+    </div>`;
+}
+
+
+/* ---------- 温度滑块交互 ---------- */
+// 状态配置：冰（solid）/ 水（liquid）/ 水蒸气（gas）
+const TEMP_STATES = [
+  { max: 0,  name: "Ice",         sub: "solid state",        icon: "🧊", key: "solid" },
+  { max: 100, name: "Water",      sub: "liquid state",       icon: "💧", key: "liquid" },
+  { max: Infinity, name: "Steam", sub: "gas state (water vapour)", icon: "💨", key: "gas" }
+];
+
+// 粒子排列坐标（百分比位置，12 颗粒子）
+const PARTICLE_POS = {
+  solid:  [[15,22],[35,18],[55,22],[75,18],[18,45],[38,45],[58,45],[78,45],[22,70],[42,70],[62,70],[82,70]],
+  liquid: [[20,25],[42,20],[65,28],[80,22],[25,48],[48,45],[70,50],[88,44],[30,70],[55,72],[75,68],[15,55]],
+  gas:    [[8,15],[28,8],[52,12],[74,7],[88,18],[15,40],[40,35],[60,42],[82,38],[25,68],[55,72],[80,66]]
+};
+
+function tempStateFor(t) {
+  return TEMP_STATES.find((s) => t <= s.max) || TEMP_STATES[TEMP_STATES.length - 1];
+}
+
+function initTempSlider(root) {
+  const range = root.querySelector("input[type=range]");
+  const icon = root.querySelector(".temp-state-icon");
+  const nameEl = root.querySelector(".temp-state-name");
+  const subEl = root.querySelector(".temp-state-sub");
+  const valEl = root.querySelector(".temp-val");
+  const energyEl = root.querySelector(".temp-energy");
+  const particles = root.querySelector(".temp-particles");
+  if (!range) return;
+
+  let lastT = Number(range.value);
+
+  function render() {
+    const t = Number(range.value);
+    const st = tempStateFor(t);
+
+    icon.textContent = st.icon;
+    nameEl.textContent = st.name;
+    subEl.textContent = st.sub;
+    valEl.textContent = `${t} °C`;
+
+    // 能量：温度升高 = absorbed，降低 = released
+    if (t > lastT) {
+      energyEl.textContent = "Energy: absorbed 🔥";
+      energyEl.className = "temp-energy is-absorbed";
+    } else if (t < lastT) {
+      energyEl.textContent = "Energy: released ❄️";
+      energyEl.className = "temp-energy is-released";
+    } else {
+      energyEl.textContent = "Energy: drag to explore";
+      energyEl.className = "temp-energy is-idle";
+    }
+    lastT = t;
+
+    // 粒子排列
+    const pos = PARTICLE_POS[st.key];
+    particles.innerHTML = pos.map((p) =>
+      `<i class="${st.key === "gas" ? "is-gas" : ""}" style="left:${p[0]}%;top:${p[1]}%"></i>`
+    ).join("");
+  }
+
+  range.addEventListener("input", render);
+  render();
+}
+
+/* ---------- 拖拽匹配游戏 ---------- */
+function initMatchGame(root) {
+  const terms = Array.from(root.querySelectorAll(".match-term"));
+  const slots = Array.from(root.querySelectorAll(".match-slot"));
+  const termCol = root.querySelector(".match-col");
+  const countEl = root.querySelector(".match-count b");
+  const doneEl = root.querySelector(".match-done");
+  const resetBtn = root.querySelector(".match-reset");
+  if (!terms.length || !slots.length) return;
+
+  let matched = 0;
+  let selectedTerm = null;
+  let draggingId = null;
+
+  const shuffleTerms = () => {
+    const order = [...terms].sort(() => Math.random() - 0.5);
+    order.forEach((t) => termCol.appendChild(t));
+  };
+
+  const refreshCount = () => {
+    countEl.textContent = String(matched);
+    if (matched >= slots.length) doneEl.classList.add("is-show");
+  };
+
+  const setMatched = (term, slot) => {
+    const text = term.getAttribute("data-term");
+    const desc = slot.getAttribute("data-slot");
+    term.classList.remove("is-selected");
+    term.classList.add("is-matched");
+    term.setAttribute("draggable", "false");
+    slot.classList.remove("is-over");
+    slot.classList.add("is-matched");
+    slot.innerHTML = `<span class="match-slot__desc">✔ ${escapeHTML(text)} · ${escapeHTML(desc)}</span>`;
+    matched += 1;
+    refreshCount();
+  };
+
+  const tryMatch = (term, slot) => {
+    if (!term || term.classList.contains("is-matched")) return;
+    if (slot.classList.contains("is-matched")) return;
+    if (term.getAttribute("data-match-term") === slot.getAttribute("data-match-slot")) {
+      setMatched(term, slot);
+    } else {
+      slot.classList.add("is-wrong");
+      setTimeout(() => slot.classList.remove("is-wrong"), 450);
+    }
+  };
+
+  terms.forEach((term) => {
+    term.addEventListener("dragstart", (e) => {
+      draggingId = term.getAttribute("data-match-term");
+      e.dataTransfer.effectAllowed = "move";
+      try { e.dataTransfer.setData("text/plain", draggingId); } catch (err) { /* 忽略 */ }
+      term.classList.add("is-dragging");
+    });
+    term.addEventListener("dragend", () => {
+      term.classList.remove("is-dragging");
+      draggingId = null;
+    });
+    term.addEventListener("click", () => {
+      if (term.classList.contains("is-matched")) return;
+      if (selectedTerm === term) {
+        term.classList.remove("is-selected");
+        selectedTerm = null;
+      } else {
+        if (selectedTerm) selectedTerm.classList.remove("is-selected");
+        selectedTerm = term;
+        term.classList.add("is-selected");
+      }
+    });
+  });
+
+  slots.forEach((slot) => {
+    slot.addEventListener("dragover", (e) => {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = "move";
+      slot.classList.add("is-over");
+    });
+    slot.addEventListener("dragleave", () => slot.classList.remove("is-over"));
+    slot.addEventListener("drop", (e) => {
+      e.preventDefault();
+      slot.classList.remove("is-over");
+      const id = e.dataTransfer.getData("text/plain") || draggingId;
+      const term = terms.find((t) => t.getAttribute("data-match-term") === id);
+      tryMatch(term, slot);
+    });
+    slot.addEventListener("click", () => {
+      if (slot.classList.contains("is-matched")) return;
+      if (selectedTerm) {
+        tryMatch(selectedTerm, slot);
+        selectedTerm.classList.remove("is-selected");
+        selectedTerm = null;
+      }
+    });
+  });
+
+  resetBtn.addEventListener("click", () => {
+    matched = 0;
+    selectedTerm = null;
+    draggingId = null;
+    doneEl.classList.remove("is-show");
+    countEl.textContent = "0";
+    terms.forEach((t) => {
+      t.classList.remove("is-matched", "is-selected", "is-dragging");
+      t.setAttribute("draggable", "true");
+    });
+    slots.forEach((s) => {
+      s.classList.remove("is-matched", "is-over", "is-wrong");
+      s.innerHTML = `<span class="match-slot__desc">${escapeHTML(s.getAttribute("data-slot"))}</span>`;
+    });
+    shuffleTerms();
+  });
+
+  shuffleTerms();
+}
+
+/* ---------- Science 折叠面板 ---------- */
+function initAcc(root) {
+  const head = root.querySelector(".acc-head");
+  const body = root.querySelector(".acc-body");
+  if (!head || !body) return;
+  head.addEventListener("click", () => {
+    const open = head.getAttribute("aria-expanded") === "true";
+    head.setAttribute("aria-expanded", String(!open));
+    body.hidden = open;
+  });
+}
+
+/* ---------- Science 折线图动画 ---------- */
+function initChart(root) {
+  const replay = root.querySelector(".chart-replay");
+  let played = false;
+  const play = () => {
+    root.classList.remove("is-anim");
+    void root.offsetWidth; // 强制重排以重启动画
+    root.classList.add("is-anim");
+  };
+  if (replay) replay.addEventListener("click", play);
+  if ("IntersectionObserver" in window) {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((en) => {
+        if (en.isIntersecting && !played) { played = true; play(); }
+      });
+    }, { threshold: 0.4 });
+    io.observe(root);
+  } else {
+    play();
+  }
+}
+
+/* ---------- Science 标签页切换 ---------- */
+function initTabs(root) {
+  const buttons = root.querySelectorAll(".sci-tab");
+  const panels = root.querySelectorAll(".sci-tabpanel");
+  if (!buttons.length) return;
+  buttons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const targetId = btn.getAttribute("data-tab-target");
+      panels.forEach((p) => { p.hidden = true; });
+      const target = document.getElementById(targetId);
+      if (target) target.hidden = false;
+      buttons.forEach((b) => b.setAttribute("aria-selected", String(b === btn)));
+    });
+  });
+}
+
+/* ---------- Science 交互式总结表格 ---------- */
+function initSummaryTable(root) {
+  const selects = root.querySelectorAll(".st-select");
+  const checkBtn = root.querySelector(".st-check");
+  const result = root.querySelector(".st-result");
+  if (!checkBtn || !selects.length) return;
+  checkBtn.addEventListener("click", () => {
+    let correct = 0;
+    selects.forEach((sel) => {
+      const answer = sel.getAttribute("data-answer");
+      const val = sel.value;
+      const ok = val === answer;
+      if (ok) correct++;
+      sel.classList.toggle("is-correct", ok);
+      sel.classList.toggle("is-wrong", val !== "" && !ok);
+    });
+    result.hidden = false;
+    result.textContent = `${correct} / ${selects.length} correct`;
+    result.classList.toggle("is-all", correct === selects.length);
+  });
+}
+
+
+(function initLightbox() {
+  const lb = document.getElementById("lightbox");
+  if (!lb) return;
+  const img = lb.querySelector("img");
+  const cap = lb.querySelector(".lightbox__caption");
+  const countEl = lb.querySelector(".lightbox__count");
+  const prevBtn = lb.querySelector(".lightbox__prev");
+  const nextBtn = lb.querySelector(".lightbox__next");
+
+  let gallery = [];
+  let index = 0;
+
+  const renderItem = () => {
+    const it = gallery[index];
+    if (!it) return;
+    img.src = it.src;
+    cap.textContent = it.cap || "";
+    const multi = gallery.length > 1;
+    countEl.textContent = multi ? `${index + 1} / ${gallery.length}` : "";
+    countEl.hidden = !multi;
+    prevBtn.hidden = !multi;
+    nextBtn.hidden = !multi;
+  };
+
+  const open = (items, startIndex) => {
+    gallery = Array.isArray(items) && items.length ? items : [];
+    if (!gallery.length) return;
+    index = Math.max(0, Math.min(startIndex || 0, gallery.length - 1));
+    renderItem();
+    lb.classList.add("is-show");
+    lb.setAttribute("aria-hidden", "false");
+    document.body.style.overflow = "hidden";
+  };
+
+  const close = () => {
+    lb.classList.remove("is-show");
+    lb.setAttribute("aria-hidden", "true");
+    document.body.style.overflow = "";
+    img.removeAttribute("src");
+    cap.textContent = "";
+    countEl.textContent = "";
+    gallery = [];
+    index = 0;
+  };
+
+  const step = (d) => {
+    if (gallery.length <= 1) return;
+    index = (index + d + gallery.length) % gallery.length;
+    renderItem();
+  };
+
+  document.addEventListener("click", (e) => {
+    const fig = e.target.closest("[data-lightbox]");
+    if (fig) {
+      open([{ src: fig.getAttribute("data-lightbox"), cap: fig.getAttribute("data-cap") || "" }], 0);
+      return;
+    }
+    const gal = e.target.closest("[data-gallery]");
+    if (gal) {
+      let items = [];
+      try { items = JSON.parse(gal.getAttribute("data-gallery") || "[]"); } catch (err) { items = []; }
+      open(items, 0);
+      return;
+    }
+    if (e.target.closest(".lightbox__close")) { close(); return; }
+    if (e.target.closest(".lightbox__prev")) { step(-1); return; }
+    if (e.target.closest(".lightbox__next")) { step(1); return; }
+    if (e.target === lb) close();
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (!lb.classList.contains("is-show")) return;
+    if (e.key === "Escape") { close(); return; }
+    if (e.key === "ArrowLeft") step(-1);
+    if (e.key === "ArrowRight") step(1);
+  });
+})();
+
+const NOTES = { tabs: [
+                {
+                  id: "notes",
+                  icon: "📖",
+                  title: "Notes",
+                  blocks: [
+                    { t: `Part A · Processes of change in states of water`, h: 1 },
+
+                    { t: `Three physical states of water`, h: 2, pg: 80 },
+                    { t: `Water exists in three physical states:` },
+                    { t: `Liquid state — we commonly call it water.`, h: 3 },
+                    { t: `Solid state — we call it ice.`, h: 3 },
+                    { t: `Gas state — we call it water vapour (invisible in air).`, h: 3 },
+                    { slider: { min: -30, max: 130, init: 20 } },
+                    { kp: `Water exists in three physical states. Ice is in the solid state, water is in the liquid state, and water vapour is in the gas state.`, pg: 80 },
+
+                    { t: `Let's begin — mist-spraying machine`, h: 2, pg: 80 },
+                    { t: `On hot summer days, the mist-spraying machine in the Avenue of Stars sprays mist into the air to lower the surrounding temperature. This cooling effect is related to evaporation, one of the processes of change in states of water.` },
+
+                    { t: `1. Melting`, h: 2, pg: 81 },
+                    { t: `Melting is the change in state from a solid to a liquid.` },
+                    { t: `When ice is heated to 0 °C, it melts and changes into water. This temperature (0 °C) is called the melting point of ice.` },
+                    { fig: { src: "images/science/ch2/fig2-3.jpg", caption: "Fig 2.3 Ice melts and changes into water", pg: 81 } },
+
+                    { t: `2. Freezing`, h: 2, pg: 81 },
+                    { t: `Freezing is the change in state from a liquid to a solid.` },
+                    { t: `When water is cooled to 0 °C, it freezes and changes into ice. This temperature (0 °C) is called the freezing point of water.` },
+
+                    { t: `3. Boiling`, h: 2, pg: 82 },
+                    { t: `Boiling is the change in state from a liquid to a gas.` },
+                    { t: `When water is heated to 100 °C, it boils and changes into steam. Steam is the gas state of water at or above 100 °C. This temperature (100 °C) is called the boiling point of water.` },
+
+                    { t: `4. Evaporation`, h: 2, pg: 82 },
+                    { t: `Evaporation is also a change in state from a liquid to a gas. Unlike boiling, evaporation of water takes place at temperatures below its boiling point (i.e. below 100 °C). When water evaporates, it changes into water vapour.` },
+                    { t: `Example: after raining, the water particles in the rainwater on the road absorb energy from the sun and move more quickly. They finally escape from the water surface to become water vapour, so the wet ground gradually becomes dry.` },
+
+                    { t: `5. Condensation`, h: 2, pg: 83 },
+                    { t: `Condensation is the change in state from a gas to a liquid.` },
+                    { t: `When steam or water vapour cools to or below its boiling point (i.e. at or below 100 °C), it condenses and changes into water.` },
+
+                    { t: `Summary of changes in states`, h: 2, pg: 83 },
+                    { kp: `ice ⇄ water ⇄ steam / water vapour — melting, freezing, boiling, evaporation and condensation are reversible changes of state.`, pg: 83 },
+
+                    { t: `STEM · Anti-fog spray for glasses`, h: 2, pg: 83 },
+                    { t: `Our glasses fog up when we go into the street from an air-conditioned place. This is because water vapour in the air condenses to form tiny water droplets on the cold glasses. The droplets form the 'fog' that blurs our vision.` },
+                    { t: `Some anti-fog sprays contain chemicals that prevent water droplets from forming. Instead, the water vapour condenses to form a thin water film that does not blur our vision.` },
+                    { fig: { src: "images/science/ch2/fig2-9.jpg", caption: "Fig 2.9 How anti-fog spray prevents glasses from fogging up", pg: 83 } },
+
+                    { t: `Textbook pages`, h: 2, pg: "80–83" },
+                    { gallery: {
+                        label: "View textbook pages",
+                        items: [
+                          { src: "images/science/ch2/sci-ch2-p80.jpg", caption: "Textbook p.80" },
+                          { src: "images/science/ch2/sci-ch2-p81.jpg", caption: "Textbook p.81" },
+                          { src: "images/science/ch2/sci-ch2-p82.jpg", caption: "Textbook p.82" },
+                          { src: "images/science/ch2/sci-ch2-p83.jpg", caption: "Textbook p.83" }
+                        ]
+                    } }
+                  ]
+                },
+                {
+                  id: "experiment",
+                  icon: "🧪",
+                  title: "Experiment & Summary",
+                  blocks: [
+                    { t: `Heating curve of water`, h: 2 },
+                    { chart: {
+                        title: "Heating curve of water",
+                        caption: "As ice is heated, the temperature rises — except at 0 °C (melting) and 100 °C (boiling), where it stays the same."
+                    } },
+
+                    { t: `Energy absorbed or released during changes of state`, h: 2, pg: 89 },
+                    { t: `Water may change from one state to another upon heating or cooling. At the moment when water changes states, it either absorbs energy from the surroundings, or releases energy to the surroundings. However, its temperature remains unchanged.` },
+                    { fig: { src: "images/science/ch2/sci-ch2-p89.jpg", caption: "Fig 2.10 Energy is absorbed or released during changes of state (p.89)", pg: 89 } },
+                    { kp: `At the moment when water changes from one state to another: its temperature remains unchanged; it either absorbs energy from, or releases energy to, the surroundings.`, pg: 89 },
+
+                    { t: `Did you know? — rubbing with alcohol`, h: 2, pg: 90 },
+                    { t: `When we rub our hands with alcohol, our hands feel particularly cool. Alcohol has a lower boiling point (82 °C) than water, so when it is applied on our hands, it evaporates more quickly and more energy is absorbed from the skin. Thus our hands feel cooler.` },
+                    { t: `Back to 'Let's begin': the mist-spraying machine sprays mist that evaporates quickly to form water vapour. During this process, the mist absorbs energy from the air, which lowers the surrounding temperature.` },
+
+                    { t: `Section summary 2.1`, h: 2, pg: 90 },
+                    { summaryTable: {
+                        title: "Complete the summary table below",
+                        rows: [
+                          { process: "Melting", change: "solid (ice) → liquid (water)", temp: "0 °C (melting point)", answer: "absorbed" },
+                          { process: "Boiling", change: "liquid (water) → gas (steam)", temp: "100 °C (boiling point)", answer: "absorbed" },
+                          { process: "Evaporation", change: "liquid (water) → gas (water vapour)", temp: "below the boiling point", answer: "absorbed" },
+                          { process: "Freezing", change: "liquid (water) → solid (ice)", temp: "0 °C (freezing point)", answer: "released" },
+                          { process: "Condensation", change: "gas (water vapour / steam) → liquid (water)", temp: "at or below the boiling point", answer: "released" }
+                        ]
+                    } },
+
+                    { t: `Textbook pages`, h: 2, pg: "89–90" },
+                    { gallery: {
+                        label: "View textbook pages",
+                        items: [
+                          { src: "images/science/ch2/sci-ch2-p89.jpg", caption: "Textbook p.89" },
+                          { src: "images/science/ch2/sci-ch2-p90.jpg", caption: "Textbook p.90" }
+                        ]
+                    } }
+                  ]
+                },
+                ] };
+
+document.getElementById("notes-root").innerHTML = renderScienceTabs(NOTES.tabs, "ch2-2.1");
+document.querySelectorAll(".sci-tabs").forEach(initTabs);
+document.querySelectorAll(".temp-slider").forEach(initTempSlider);
+document.querySelectorAll(".chart-block").forEach(initChart);
+document.querySelectorAll(".summary-table").forEach(initSummaryTable);
+document.querySelectorAll(".acc").forEach(initAcc);
+attachShareCode();
+
+</script>
+</body>
+</html>
