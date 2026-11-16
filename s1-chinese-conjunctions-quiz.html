@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>语法连词 · 闯关测验</title>
+<style>
+:root{
+  --brand:#2563eb;
+  --brand-ink:#1d4ed8;
+  --ink:#1e293b;
+  --ink-2:#475569;
+  --muted:#94a3b8;
+  --line:#e2e8f0;
+  --bg:#f5f7fb;
+  --card:#ffffff;
+  --ok:#16a34a;
+  --bad:#e11d48;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",sans-serif;
+  background:var(--bg);color:var(--ink);line-height:1.6;
+}
+.wrap{max-width:720px;margin:0 auto;padding:24px 16px 60px}
+
+/* 顶部 */
+.topbar{text-align:center;padding:8px 0 20px}
+.topbar h1{font-size:24px;font-weight:800;margin:0;color:var(--ink)}
+.topbar p{margin:8px auto 0;color:var(--muted);font-size:13.5px;max-width:520px}
+.topbar .badge{display:inline-block;margin-top:10px;font-size:12.5px;font-weight:700;color:#1e3a8a;background:#eef4ff;border:1px solid #d5e2fb;border-radius:999px;padding:4px 14px}
+.topbar-nav{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:14px}
+.topbar-nav a{display:inline-flex;align-items:center;gap:5px;font-size:13px;font-weight:700;color:#1e3a8a;background:#eef4ff;border:1px solid #d5e2fb;border-radius:999px;padding:6px 14px;text-decoration:none;transition:.15s}
+.topbar-nav a:hover{background:#dbe7ff;border-color:#bcd0f2}
+
+/* 题目卡片 */
+.q-card{background:#fff;border:1px solid #e3ecf9;border-radius:16px;padding:22px 20px;box-shadow:0 4px 16px rgba(15,23,42,.05)}
+.q-progress{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;gap:10px}
+.q-count{font-size:14px;font-weight:900;color:#1e3a8a}
+.q-progress-bar{flex:1;height:8px;background:#eef2f9;border-radius:999px;overflow:hidden}
+.q-progress-fill{height:100%;background:linear-gradient(90deg,#2f6bff,#1f4fd8);border-radius:999px;transition:width .3s}
+.q-score-live{font-size:12.5px;font-weight:700;color:#64748b;white-space:nowrap}
+.q-tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.q-tag{font-size:11.5px;font-weight:800;padding:3px 11px;border-radius:999px}
+.q-tag--cat{background:#fff7e0;color:#a16207;border:1px solid #fde68a}
+.q-tag--type{background:#eef4ff;color:#1e3a8a;border:1px solid #d5e2fb}
+.q-stem{font-size:17px;font-weight:700;color:#1e293b;line-height:1.8;margin-bottom:10px}
+.q-stem .blank{display:inline-block;min-width:72px;border-bottom:2px solid #2f6bff;color:#2f6bff;text-align:center;font-weight:900;padding:0 4px}
+.q-parts{display:flex;flex-direction:column;gap:8px;margin:10px 0 16px;padding:12px 14px;background:#f8fafc;border:1px solid #eef1f5;border-radius:10px}
+.q-part{display:flex;gap:8px;align-items:baseline;font-size:15px;color:#33415c;font-weight:600}
+.q-part b{color:#2f6bff;font-weight:800;flex:0 0 auto}
+.q-label{font-size:12.5px;font-weight:700;color:#64748b;margin-bottom:6px}
+.q-input{
+  width:100%;font-size:16px;padding:13px 14px;border:1.5px solid #d5e0f0;border-radius:10px;
+  color:#1e293b;background:#fff;font-weight:600;outline:none;transition:border-color .12s,background .12s;
+}
+.q-input:focus{border-color:#2f6bff;background:#f8fbff}
+.q-input:disabled{background:#f1f5f9;color:#64748b}
+.q-input.is-correct{border-color:#22a06b;background:#e6f6ec;color:#14683f}
+.q-input.is-wrong{border-color:#e11d48;background:#fff1f2;color:#be123c}
+
+/* 选择题 */
+.q-options{display:flex;flex-direction:column;gap:10px;margin-top:14px}
+.q-choice{
+  display:flex;align-items:flex-start;gap:10px;text-align:left;
+  width:100%;border:1.5px solid #d5e0f0;border-radius:12px;padding:12px 14px;
+  background:#fff;font-size:15px;line-height:1.7;color:#1e293b;cursor:pointer;transition:.15s;
+}
+.q-choice:hover{border-color:#2f6bff;background:#f8fbff}
+.q-choice:disabled{cursor:default;opacity:1}
+.q-choice-letter{
+  flex:0 0 auto;width:26px;height:26px;border-radius:50%;
+  background:#eef4ff;color:#1e3a8a;font-weight:900;font-size:13px;
+  display:flex;align-items:center;justify-content:center;
+}
+.q-choice-text{flex:1;word-break:break-word}
+.q-choice.is-correct{border-color:#22a06b;background:#e6f6ec;color:#14683f}
+.q-choice.is-correct .q-choice-letter{background:#22a06b;color:#fff}
+.q-choice.is-wrong{border-color:#e11d48;background:#fff1f2;color:#be123c}
+.q-choice.is-wrong .q-choice-letter{background:#e11d48;color:#fff}
+
+.q-btn{
+  width:100%;margin-top:14px;border:0;border-radius:10px;padding:13px 20px;
+  font-size:15px;font-weight:800;cursor:pointer;transition:.15s;
+}
+.q-btn--check{background:#2f6bff;color:#fff}
+.q-btn--check:hover{background:#1f4fd8}
+.q-btn--check:disabled{background:#94a3b8;cursor:default}
+.q-btn--next{background:#22a06b;color:#fff}
+.q-btn--next:hover{background:#1a865a}
+.q-btn--retry{background:#2f6bff;color:#fff;width:auto;margin:18px auto 0;display:block;padding:12px 30px}
+.q-btn--retry:hover{background:#1f4fd8}
+
+.q-feedback{margin-top:16px;border-radius:12px;padding:14px 16px;display:none}
+.q-feedback.show{display:block}
+.q-feedback--ok{background:#e6f6ec;border:1px solid #a7e3c0}
+.q-feedback--bad{background:#fff1f2;border:1px solid #fecdd3}
+.q-fb-head{font-size:15px;font-weight:900;margin-bottom:6px}
+.q-feedback--ok .q-fb-head{color:#14683f}
+.q-feedback--bad .q-fb-head{color:#be123c}
+.q-fb-answer{font-size:13.5px;color:#33415c;font-weight:700;margin-bottom:6px}
+.q-fb-answer b{color:#1e3a8a}
+.q-fb-explain{font-size:13px;color:#475569;line-height:1.7}
+
+/* 结果页 */
+.q-result{text-align:center;padding:34px 22px}
+.q-result-score{font-size:52px;font-weight:900;color:#1e3a8a;line-height:1}
+.q-result-sub{font-size:14px;color:#64748b;margin-top:8px}
+.q-result-msg{font-size:15px;font-weight:800;color:#1e3a8a;margin-top:14px}
+.q-result-detail{font-size:12.5px;color:#64748b;margin-top:8px;line-height:1.6}
+.q-star{font-size:40px;margin-bottom:8px}
+
+@media (max-width:560px){
+  .topbar h1{font-size:21px}
+  .q-card{padding:18px 16px}
+  .q-stem{font-size:16px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="topbar">
+    <h1>语法连词 · 闯关测验</h1>
+    <p>覆盖八大关系（并列、递进、选择、转折、因果、假设、条件、承接）及高阶选择题（句子辨析、排句成段）。每次随机抽取 10 题。</p>
+    <span class="badge">🔗 连词闯关 · 50 题题库（含高阶选择）</span>
+    <nav class="topbar-nav">
+      <a href="index.html" data-keep-share>🏠 返回主页</a>
+    </nav>
+  </header>
+
+  <div id="quiz-root"></div>
+</div>
+
+<script>
+const escapeHTML = (str) =>
+  String(str).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const esc = escapeHTML;
+
+/* ================= 题库（8 类 × 5 题 = 40 题，每类 3 fill + 2 join） ================= */
+const questionBank = [
+  /* ---------- 1. 并列 ---------- */
+  { type: "fill", category: "并列", prompt: "我喜欢吃苹果，____ 也喜欢吃香蕉。", answer: ["也"], explanation: "并列关系常用「也」表示同样的情况，说明两种喜好同时存在。" },
+  { type: "fill", category: "并列", prompt: "他既会唱歌，____ 会跳舞。", answer: ["又"], explanation: "「既…又…」是并列关系关联词，连接两个并列的能力。" },
+  { type: "fill", category: "并列", prompt: "春天的花开了，草____绿了。", answer: ["也"], explanation: "用「也」连接两个并列的自然现象。" },
+  { type: "join", category: "并列", prompt: "用「既…又…」把下面两个句子连成一句：", parts: ["这间餐厅的菜很好吃。", "这间餐厅的价钱很便宜。"], must: ["既", "又"], keywords: ["好吃", "便宜"], sample: "这间餐厅的菜既好吃，价钱又便宜。", explanation: "「既…又…」连接并列的两个优点，说明菜好吃而且价钱便宜。" },
+  { type: "join", category: "并列", prompt: "用「一边…一边…」把下面两个句子连成一句：", parts: ["小明听音乐。", "小明做功课。"], must: ["一边"], keywords: ["听音乐", "做功课"], sample: "小明一边听音乐，一边做功课。", explanation: "「一边…一边…」连接两个同时进行的动作。" },
+
+  /* ---------- 2. 递进 ---------- */
+  { type: "fill", category: "递进", prompt: "他不但成绩好，____ 人品也很好。", answer: ["而且"], explanation: "「不但…而且…」表示递进，后一分句比前一分句更进一步。" },
+  { type: "fill", category: "递进", prompt: "老师不但没有批评他，____ 还表扬了他。", answer: ["反而"], explanation: "「不但…反而…」表示递进，含有出乎意料的意味。" },
+  { type: "fill", category: "递进", prompt: "这座山不但高，____ 很陡。", answer: ["而且", "还"], explanation: "「不但…而且…」表示递进，山高之外还很陡。" },
+  { type: "join", category: "递进", prompt: "用「不但…而且…」把下面两个句子连成一句：", parts: ["这个方案能节省时间。", "这个方案能节省金钱。"], must: ["不但", "而且"], keywords: ["时间", "金钱"], sample: "这个方案不但能节省时间，而且能节省金钱。", explanation: "「不但…而且…」表示递进，方案既能省时间又能省钱。" },
+  { type: "join", category: "递进", prompt: "用「不仅…还…」把下面两个句子连成一句：", parts: ["她会弹钢琴。", "她会画画。"], must: ["不仅", "还"], keywords: ["钢琴", "画画"], sample: "她不仅会弹钢琴，还会画画。", explanation: "「不仅…还…」表示递进，说明她多才多艺。" },
+
+  /* ---------- 3. 选择 ---------- */
+  { type: "fill", category: "选择", prompt: "周末我们去公园，____ 去图书馆？", answer: ["还是"], explanation: "选择疑问句用「还是」表示在两者之间选择。" },
+  { type: "fill", category: "选择", prompt: "你要么现在出发，____ 明天早上再走。", answer: ["要么"], explanation: "「要么…要么…」表示二者选一的选择关系。" },
+  { type: "fill", category: "选择", prompt: "他不是忘了，____ 故意不来。", answer: ["就是"], explanation: "「不是…就是…」表示两种可能必居其一。" },
+  { type: "join", category: "选择", prompt: "用「要么…要么…」把下面两个句子连成一句：", parts: ["你留下来。", "你跟我们一起去。"], must: ["要么"], keywords: ["留下来", "一起"], sample: "你要么留下来，要么跟我们一起去。", explanation: "「要么…要么…」表示两者之中选一个。" },
+  { type: "join", category: "选择", prompt: "用「不是…就是…」把下面两个句子连成一句：", parts: ["这件事是他做的。", "这件事是小王做的。"], must: ["不是", "就是"], keywords: ["他", "小王"], sample: "这件事不是他做的，就是小王做的。", explanation: "「不是…就是…」表示两种情况必居其一。" },
+
+  /* ---------- 4. 转折 ---------- */
+  { type: "fill", category: "转折", prompt: "他学习很努力，____ 成绩一直不好。", answer: ["但是", "可是", "然而"], explanation: "前后分句意思相反，用转折连词「但是」连接。" },
+  { type: "fill", category: "转折", prompt: "虽然天气很冷，____ 他还是坚持晨跑。", answer: ["但是", "可是"], explanation: "「虽然…但是…」是转折关系，前后形成对比。" },
+  { type: "fill", category: "转折", prompt: "这间房子很小，____ 很温馨。", answer: ["但是", "不过"], explanation: "用转折连词连接两个相反的特点。" },
+  { type: "join", category: "转折", prompt: "用「虽然…但是…」把下面两个句子连成一句：", parts: ["他年纪小。", "他做事很认真。"], must: ["虽然", "但是"], keywords: ["年纪", "认真"], sample: "虽然他年纪小，但是他做事很认真。", explanation: "「虽然…但是…」表示转折，年纪小与做事认真形成对比。" },
+  { type: "join", category: "转折", prompt: "用「尽管…还是…」把下面两个句子连成一句：", parts: ["任务很艰巨。", "他按时完成了。"], must: ["尽管", "还是"], keywords: ["艰巨", "完成"], sample: "尽管任务很艰巨，他还是按时完成了。", explanation: "「尽管…还是…」表示转折，强调结果不受困难影响。" },
+
+  /* ---------- 5. 因果 ---------- */
+  { type: "fill", category: "因果", prompt: "因为下雨了，____ 运动会延期了。", answer: ["所以"], explanation: "「因为…所以…」表示因果关系，前者是原因，后者是结果。" },
+  { type: "fill", category: "因果", prompt: "____ 他迟到了，所以没赶上火车。", answer: ["因为", "由于"], explanation: "「因为…所以…」表示因果，迟到是原因。" },
+  { type: "fill", category: "因果", prompt: "他生病了，____ 没来上课。", answer: ["所以", "因此"], explanation: "生病是原因，没来上课是结果，用「所以」连接。" },
+  { type: "join", category: "因果", prompt: "用「因为…所以…」把下面两个句子连成一句：", parts: ["他努力复习。", "他考了第一名。"], must: ["因为", "所以"], keywords: ["复习", "第一"], sample: "因为他努力复习，所以他考了第一名。", explanation: "「因为…所以…」表示因果，努力复习是因，考第一是果。" },
+  { type: "join", category: "因果", prompt: "用「之所以…是因为…」把下面两个句子连成一句：", parts: ["他没有来。", "他生病了。"], must: ["之所以", "是因为"], keywords: ["没有来", "生病"], sample: "他之所以没有来，是因为他生病了。", explanation: "「之所以…是因为…」先果后因，强调原因。" },
+
+  /* ---------- 6. 假设 ---------- */
+  { type: "fill", category: "假设", prompt: "____ 明天下雨，我们就不去郊游了。", answer: ["如果", "假如", "要是"], explanation: "「如果…就…」表示假设，假设明天下雨。" },
+  { type: "fill", category: "假设", prompt: "即使遇到困难，我们____不能放弃。", answer: ["也"], explanation: "「即使…也…」表示假设让步，强调不放弃。" },
+  { type: "fill", category: "假设", prompt: "要是你早点告诉我，我____能帮你。", answer: ["就"], explanation: "「要是…就…」表示假设，早点告诉我就能帮。" },
+  { type: "join", category: "假设", prompt: "用「如果…就…」把下面两个句子连成一句：", parts: ["你认真复习。", "你能取得好成绩。"], must: ["如果", "就"], keywords: ["复习", "好成绩"], sample: "如果你认真复习，你就能取得好成绩。", explanation: "「如果…就…」表示假设条件与结果。" },
+  { type: "join", category: "假设", prompt: "用「即使…也…」把下面两个句子连成一句：", parts: ["任务再难。", "我们不能放弃。"], must: ["即使", "也"], keywords: ["难", "放弃"], sample: "即使任务再难，我们也不能放弃。", explanation: "「即使…也…」表示假设让步，强调决心。" },
+
+  /* ---------- 7. 条件 ---------- */
+  { type: "fill", category: "条件", prompt: "____ 多练习，就能提高水平。", answer: ["只要"], explanation: "「只要…就…」表示充分条件。" },
+  { type: "fill", category: "条件", prompt: "____ 努力学习，才能取得好成绩。", answer: ["只有"], explanation: "「只有…才…」表示必要条件。" },
+  { type: "fill", category: "条件", prompt: "无论刮风还是下雨，他____准时到校。", answer: ["都"], explanation: "「无论…都…」表示无条件，任何情况下都如此。" },
+  { type: "join", category: "条件", prompt: "用「只要…就…」把下面两个句子连成一句：", parts: ["你付出努力。", "你会有收获。"], must: ["只要", "就"], keywords: ["努力", "收获"], sample: "只要你付出努力，你就会有收获。", explanation: "「只要…就…」表示充分条件。" },
+  { type: "join", category: "条件", prompt: "用「只有…才…」把下面两个句子连成一句：", parts: ["你亲自尝试。", "你能体会其中的乐趣。"], must: ["只有", "才"], keywords: ["尝试", "乐趣"], sample: "只有你亲自尝试，你才能体会其中的乐趣。", explanation: "「只有…才…」表示必要条件。" },
+
+  /* ---------- 8. 承接 ---------- */
+  { type: "fill", category: "承接", prompt: "我们先做热身运动，____ 开始正式训练。", answer: ["然后", "接着"], explanation: "「然后」表示动作的先后承接。" },
+  { type: "fill", category: "承接", prompt: "他听到这个消息，____ 高兴得跳了起来。", answer: ["于是", "便", "就"], explanation: "「于是」承接上文，引出随后发生的动作。" },
+  { type: "fill", category: "承接", prompt: "首先把水烧开，____ 放入面条。", answer: ["然后", "接着", "再"], explanation: "按顺序承接，先烧水再放面条。" },
+  { type: "join", category: "承接", prompt: "用「首先…然后…」把下面两个句子连成一句：", parts: ["我们先做计划。", "我们再开始行动。"], must: ["首先", "然后"], keywords: ["计划", "行动"], sample: "我们首先做计划，然后再开始行动。", explanation: "「首先…然后…」表示按顺序承接的两个动作。" },
+  { type: "join", category: "承接", prompt: "用「于是」把下面两个句子连成一句：", parts: ["大家都同意这个提议。", "我们马上开始执行。"], must: ["于是"], keywords: ["同意", "执行"], sample: "大家都同意这个提议，于是我们马上开始执行。", explanation: "「于是」承接前因，引出后续动作。" },
+
+  /* ---------- 9. 高阶选择题（香港中文老师编写） ---------- */
+  { type: "choice", category: "句子辨析", question: "下列各句的連詞使用，哪一項正確？", options: ["A. 雖然天氣十分酷熱，可是同學們仍然堅持進行戶外考察。", "B. 只要好好溫習，才可以在考試中取得理想成績。", "C. 無論你願意與否，但是這項任務都必須完成。", "D. 既然路途遙遠，所以我們提早出發。"], answer: "A", explanation: "解析：A項「雖然……可是……」用於轉折關係，用法正確。B項條件連詞搭配錯誤，應是「只有……才……」或「只要……就……」。C項「無論」屬條件連詞，不可與轉折連詞「但是」並用。D項「既然」表推論，不能和表因果的「所以」搭配，應刪去「所以」。" },
+  { type: "choice", category: "句子辨析", question: "下列各句的連詞使用，哪一項錯誤？", options: ["A. 倘若持續浪費資源，生態環境便會受到嚴重破壞。", "B. 不論遇到多少困難，他都不會輕易放棄目標。", "C. 不但他擅長書法，而且精通國畫。", "D. 唯有尊重他人，才能贏得別人的尊重。"], answer: "C", explanation: "解析：C項錯誤。「不但……而且……」連接兩個分句時，若前後分句主語相同，主語應放在連詞前面，正確寫法是「他不但擅長書法，而且精通國畫」。A項「倘若……便……」表假設；B項「不論……都……」表無條件；D項「唯有……才……」表必要條件，三者用法均正確。" },
+  { type: "choice", category: "句子辨析", question: "下列各句的連詞使用，哪一項正確？", options: ["A. 就算所有人都反對，但是我也會堅持自己的決定。", "B. 由於大雨連綿不斷，故此郊遊活動需要延期。", "C. 即使勤加練習，就能逐步提升寫作能力。", "D. 只要細心觀察，才能發現日常當中的細微美好。"], answer: "B", explanation: "解析：B項「由於……故此……」表因果關係，用法正確。A項「就算」屬假設讓步連詞，不可搭配「但是」，應刪除。C項「即使」要搭配「也」，不是「就」。D項「只要」搭配「就」，「只有」才搭配「才」，連詞配對混亂。" },
+  { type: "choice", category: "句子辨析", question: "下列各句的連詞使用，哪一項錯誤？", options: ["A. 一方面要顧及學業，另一方面也要發展個人興趣。", "B. 與其空談理想，不如踏實地做好眼前每一件事。", "C. 縱使前路充滿挑戰，可是團隊成員依舊同心協力。", "D. 非但這本書內容豐富，而且插畫十分精美。"], answer: "D", explanation: "解析：D項錯誤。「非但……而且……」主語相同時，主語要放在連詞之前，改為「這本書非但內容豐富，而且插畫十分精美」。A項「一方面……另一方面……」表並列；B項「與其……不如……」表選擇；C項「縱使……可是……」表讓步轉折，用法恰當。" },
+  { type: "choice", category: "句子辨析", question: "下列各句的連詞使用，哪一項正確？", options: ["A. 既然事前沒有充分準備，因此這次展示效果未如理想。", "B. 哪怕力量微小，也能夠為身邊的人帶來溫暖。", "C. 除非獲得老師批准，否則就不能進入儲物室。", "D. 雖然方法正確，但是只要持之以恆，終會看見成果。"], answer: "B", explanation: "解析：B項「哪怕……也……」是讓步假設連詞，用法正確。A項「既然」不可以和「因此」共用以表因果，「既然」引推論，「因此」引結果。C項「除非……否則」本身已經完整，多餘加上「就」。D項邏輯混亂，前後不是轉折，應刪除「雖然……但是」。" },
+  { type: "choice", category: "排句成段", question: "請根據句子邏輯與連詞，為甲乙丙丁排序：甲：而且能培養我們的同理心；乙：閱讀文學作品有不少益處；丙：同時，閱讀亦可以擴闊我們的視野；丁：不但可以認識不同時代的人情風貌。", options: ["A. 乙丁甲丙", "B. 乙丁丙甲", "C. 丁甲丙乙", "D. 乙丙丁甲"], answer: "A", explanation: "解析：正確次序：乙（總起句，點出閱讀有益）→丁（「不但」，第一層好處）→甲（「而且」承接「不但」，遞進）→丙（「同時」補充另一項好處）。連詞「不但……而且……」是一組遞進連詞，須緊扣，之後再用「同時」追加並列論點。" },
+  { type: "choice", category: "排句成段", question: "請根據句子邏輯與連詞，為甲乙丙丁排序：甲：故此我們要好好珍惜寶貴的光陰；乙：時間不會因為任何人而停下腳步；丙：如果白白浪費，便沒有機會追回；丁：縱使我們十分惋惜。", options: ["A. 乙丁丙甲", "B. 丁乙丙甲", "C. 乙丙丁甲", "D. 乙丁甲丙"], answer: "A", explanation: "解析：正確次序：乙（總起，時間不會停）→丁（「縱使」讓步，就算惋惜）→丙（「如果……便……」假設，浪費就追不回）→甲（「故此」總結，要珍惜時間）。「縱使」引讓步分句，先承上文，再以假設推論，最後用因果連詞作結。" },
+  { type: "choice", category: "排句成段", question: "請根據句子邏輯與連詞，為甲乙丙丁排序：甲：而是要懂得反思失敗的原因；乙：遇到挫折時不必過分沮喪；丙：這樣才能累積經驗，繼續向前；丁：不是一味逃避或者自怨自艾。", options: ["A. 乙丁甲丙", "B. 乙甲丁丙", "C. 丁甲乙丙", "D. 乙丙丁甲"], answer: "A", explanation: "解析：正確次序：乙（總起，不用沮喪）→丁（「不是」）→甲（「而是」，「不是……而是……」對比選擇連詞，兩句必須相連）→丙（「這樣」承接上文做法，帶出結果）。「不是……而是」為配套連詞，是排序關鍵。" },
+  { type: "choice", category: "排句成段", question: "請根據句子邏輯與連詞，為甲乙丙丁排序：甲：所以我們要學會理性分辨資訊真偽；乙：網上資訊雖然十分豐富；丙：甚至有不少刻意捏造的假消息；丁：可是內容良莠不齊。", options: ["A. 乙丁丙甲", "B. 乙丙丁甲", "C. 丁乙丙甲", "D. 乙丁甲丙"], answer: "A", explanation: "解析：正確次序：乙（「雖然」）→丁（「可是」，「雖然……可是……」轉折配對）→丙（「甚至」進一步遞進，情況更差）→甲（「所以」總結，要分辨真偽）。轉折連詞先建立主邏輯，再用「甚至」加強語意，最後因果收束。" },
+  { type: "choice", category: "排句成段", question: "請根據句子邏輯與連詞，為甲乙丙丁排序：甲：只要持之以恆地練習；乙：能力並不是一朝一夕就能養成；丙：便能慢慢看見自己的進步；丁：無論是寫作還是演奏樂器。", options: ["A. 乙丁甲丙", "B. 丁乙甲丙", "C. 乙甲丁丙", "D. 丁甲丙乙"], answer: "A", explanation: "解析：正確次序：乙（總起，能力難速成）→丁（「無論是」舉例，補充範圍）→甲（「只要」提出條件）→丙（「便」承接「只要」，帶出結果）。「只要……便……」為條件連詞組，必須緊接，是解題重點。" }
+];
+
+/* ================= 工具 ================= */
+/* 繁体 → 简体 单字映射（覆盖本库所有连词与关键词，用于繁简通判） */
+const T2S_MAP = {
+  "還":"还","麼":"么","於":"于","為":"为","過":"过","後":"后","著":"着","盡":"尽","雖":"虽",
+  "邊":"边","僅":"仅","聽":"听","樂":"乐","課":"课","時":"时","間":"间","錢":"钱","鋼":"钢",
+  "畫":"画","來":"来","紀":"纪","認":"认","艱":"艰","鉅":"巨","複":"复","習":"习","績":"绩",
+  "難":"难","棄":"弃","穫":"获","獲":"获","嘗":"尝","試":"试","劃":"划","動":"动","執":"执",
+  "沒":"没"
+};
+function toSimplified(s) {
+  return String(s).split("").map((ch) => T2S_MAP[ch] || ch).join("");
+}
+function normalize(s) {
+  return String(toSimplified(s))
+    .replace(/[\s\u3000]/g, "")
+    .replace(/[，。、；：！？「」『』“”‘’（）()【】《》·—…,.;:!?"'\-]/g, "");
+}
+function shuffle(arr) {
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+const TYPE_LABEL = { fill: "✏️ 选词填空", join: "🔗 联结句子", choice: "🔘 选择题" };
+
+/* ================= 状态 ================= */
+let current = [];
+let idx = 0;
+let score = 0;
+let answered = false;
+
+const root = document.getElementById("quiz-root");
+
+function startQuiz() {
+  // 分层抽样：保证每轮 10 题中必含 3 道高阶选择题，其余从 fill/join 随机，实现混合
+  const choicePool = questionBank.filter((q) => q.type === "choice");
+  const otherPool = questionBank.filter((q) => q.type !== "choice");
+  const nChoice = Math.min(3, choicePool.length);
+  const nOther = 10 - nChoice;
+  const picked = shuffle(choicePool).slice(0, nChoice).concat(shuffle(otherPool).slice(0, nOther));
+  current = shuffle(picked);
+  idx = 0;
+  score = 0;
+  answered = false;
+  renderQuestion();
+}
+
+function renderQuestion() {
+  const q = current[idx];
+  if (q.type === "choice") {
+    renderChoice(q);
+    return;
+  }
+  const pct = Math.round(((idx) / current.length) * 100);
+  const isFill = q.type === "fill";
+  const partsHtml = isFill ? "" : `
+    <div class="q-parts">
+      ${q.parts.map((p, i) => `<div class="q-part"><b>${i + 1}.</b> ${esc(p)}</div>`).join("")}
+    </div>`;
+  const stemHtml = isFill
+    ? `<div class="q-stem">${esc(q.prompt).replace(/____/g, '<span class="blank">______</span>')}</div>`
+    : `<div class="q-stem">${esc(q.prompt)}</div>`;
+
+  root.innerHTML = `
+    <div class="q-card">
+      <div class="q-progress">
+        <span class="q-count">第 ${idx + 1} / ${current.length} 题</span>
+        <div class="q-progress-bar"><div class="q-progress-fill" style="width:${pct}%"></div></div>
+        <span class="q-score-live">已答对 ${score} 题</span>
+      </div>
+      <div class="q-tags">
+        <span class="q-tag q-tag--cat">${esc(q.category)}关系</span>
+        <span class="q-tag q-tag--type">${TYPE_LABEL[q.type]}</span>
+      </div>
+      ${stemHtml}
+      ${partsHtml}
+      <div class="q-label">${isFill ? "请在下方输入合适的连词：" : "请输入联结后的完整句子："}</div>
+      <input class="q-input" id="q-input" type="text" autocomplete="off" placeholder="${isFill ? "输入连词，如「但是」" : "输入完整句子"}">
+      <button class="q-btn q-btn--check" id="q-check" type="button">✅ 提交答案</button>
+      <div class="q-feedback" id="q-feedback"></div>
+      <button class="q-btn q-btn--next" id="q-next" type="button" style="display:none">下一题 ➜</button>
+    </div>`;
+
+  const input = document.getElementById("q-input");
+  const checkBtn = document.getElementById("q-check");
+  const nextBtn = document.getElementById("q-next");
+  answered = false;
+
+  input.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" && !answered) checkBtn.click();
+    if (e.key === "Enter" && answered) nextBtn.click();
+  });
+  checkBtn.addEventListener("click", () => checkAnswer(q, input));
+  nextBtn.addEventListener("click", nextQuestion);
+  input.focus();
+}
+
+function renderChoice(q) {
+  const pct = Math.round((idx / current.length) * 100);
+  const optionsHtml = q.options.map((opt) => {
+    const letter = opt.trim()[0];
+    const text = opt.replace(/^[A-D]\.\s*/, "").trim();
+    return `
+      <button class="q-choice" type="button" data-letter="${letter}">
+        <span class="q-choice-letter">${letter}</span>
+        <span class="q-choice-text">${esc(text)}</span>
+      </button>`;
+  }).join("");
+
+  root.innerHTML = `
+    <div class="q-card">
+      <div class="q-progress">
+        <span class="q-count">第 ${idx + 1} / ${current.length} 题</span>
+        <div class="q-progress-bar"><div class="q-progress-fill" style="width:${pct}%"></div></div>
+        <span class="q-score-live">已答对 ${score} 题</span>
+      </div>
+      <div class="q-tags">
+        <span class="q-tag q-tag--cat">${esc(q.category)}</span>
+        <span class="q-tag q-tag--type">${TYPE_LABEL.choice}</span>
+      </div>
+      <div class="q-stem">${esc(q.question)}</div>
+      <div class="q-options">${optionsHtml}</div>
+      <div class="q-feedback" id="q-feedback"></div>
+      <button class="q-btn q-btn--next" id="q-next" type="button" style="display:none">下一题 ➜</button>
+    </div>`;
+
+  answered = false;
+  root.querySelectorAll(".q-choice").forEach((btn) => {
+    btn.addEventListener("click", () => answerChoice(q, btn));
+  });
+  document.getElementById("q-next").addEventListener("click", nextQuestion);
+}
+
+function answerChoice(q, btn) {
+  if (answered) return;
+  answered = true;
+  const letter = btn.getAttribute("data-letter");
+  const ok = letter === q.answer;
+  if (ok) score++;
+
+  root.querySelectorAll(".q-choice").forEach((b) => {
+    b.disabled = true;
+    const l = b.getAttribute("data-letter");
+    if (l === q.answer) b.classList.add("is-correct");
+    else if (l === letter && !ok) b.classList.add("is-wrong");
+  });
+
+  const fb = document.getElementById("q-feedback");
+  fb.className = "q-feedback show " + (ok ? "q-feedback--ok" : "q-feedback--bad");
+  fb.innerHTML = `
+    <div class="q-fb-head">${ok ? "✓ 回答正确！" : "✗ 回答错误"}</div>
+    <div class="q-fb-answer">正确答案：<b>${esc(q.answer)}</b></div>
+    <div class="q-fb-explain">${esc(q.explanation)}</div>`;
+
+  const nextBtn = document.getElementById("q-next");
+  nextBtn.style.display = "block";
+  nextBtn.textContent = idx === current.length - 1 ? "查看成绩 ➜" : "下一题 ➜";
+}
+
+function checkAnswer(q, input) {
+  const val = input.value.trim();
+  if (!val) return;
+  const ok = judge(q, val);
+  if (ok) score++;
+
+  input.classList.add(ok ? "is-correct" : "is-wrong");
+  input.disabled = true;
+  answered = true;
+
+  const fb = document.getElementById("q-feedback");
+  const correctText = q.type === "fill" ? q.answer.join(" / ") : q.sample;
+  fb.className = "q-feedback show " + (ok ? "q-feedback--ok" : "q-feedback--bad");
+  fb.innerHTML = `
+    <div class="q-fb-head">${ok ? "✓ 回答正确！" : "✗ 回答错误"}</div>
+    <div class="q-fb-answer">正确答案：<b>${esc(correctText)}</b></div>
+    <div class="q-fb-explain">💡 解析：${esc(q.explanation)}</div>`;
+
+  document.getElementById("q-check").style.display = "none";
+  const nextBtn = document.getElementById("q-next");
+  nextBtn.style.display = "block";
+  nextBtn.textContent = idx === current.length - 1 ? "查看成绩 ➜" : "下一题 ➜";
+}
+
+function judge(q, val) {
+  const norm = normalize(val);
+  if (q.type === "fill") {
+    return q.answer.some((a) => normalize(a) === norm);
+  }
+  // join
+  const mustOk = q.must.every((m) => norm.includes(normalize(m)));
+  const keyOk = q.keywords.every((k) => norm.includes(normalize(k)));
+  return mustOk && keyOk;
+}
+
+function nextQuestion() {
+  idx++;
+  if (idx >= current.length) {
+    renderResult();
+  } else {
+    renderQuestion();
+  }
+}
+
+function renderResult() {
+  const pct = Math.round((score / current.length) * 100);
+  const msg = score === current.length ? "🎉 满分！连词掌握得非常扎实！"
+    : score >= 8 ? "👍 很棒！再巩固一下错题就更完美了。"
+    : score >= 6 ? "💪 还不错，建议回顾「连词八大关系」表格再挑战一次。"
+    : "📖 别灰心，先复习八大关系表格，再来挑战吧！";
+  root.innerHTML = `
+    <div class="q-card q-result">
+      <div class="q-star">${score >= 9 ? "🏆" : score >= 6 ? "🌟" : "📚"}</div>
+      <div class="q-result-score">${score} / ${current.length}</div>
+      <div class="q-result-sub">本次答对 ${score} 题（正确率 ${pct}%）</div>
+      <div class="q-result-msg">${msg}</div>
+      <div class="q-result-detail">本次从 ${questionBank.length} 题题库中随机抽取了 ${current.length} 题（含高阶选择题）。点击下方按钮重新抽题挑战。</div>
+      <button class="q-btn q-btn--retry" id="q-retry" type="button">🔄 重新挑战</button>
+    </div>`;
+  document.getElementById("q-retry").addEventListener("click", startQuiz);
+}
+
+/* ================= 分享码透传 ================= */
+function attachShareCode() {
+  const sc = new URLSearchParams(location.search).get("sharecode");
+  if (!sc) return;
+  document.querySelectorAll("a[data-keep-share]").forEach((a) => {
+    const base = a.getAttribute("href");
+    if (!base) return;
+    try {
+      const url = new URL(base, location.href);
+      url.searchParams.set("sharecode", sc);
+      a.setAttribute("href", url.pathname + url.search + url.hash);
+    } catch (e) {}
+  });
+}
+
+/* ================= 启动 ================= */
+startQuiz();
+attachShareCode();
+</script>
+</body>
+</html>
