@@ -1,0 +1,1269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>S1 ICT Interactive Quiz</title>
+<style>
+:root{
+  --brand:#2563eb;
+  --brand-ink:#1d4ed8;
+  --brand-bg:#eef4ff;
+  --ink:#1e293b;
+  --ink-2:#475569;
+  --muted:#94a3b8;
+  --line:#e2e8f0;
+  --bg:#f5f7fb;
+  --card:#ffffff;
+  --green:#16a34a;
+  --green-bg:#ecfdf5;
+  --green-line:#bbf7d0;
+  --red:#dc2626;
+  --red-bg:#fef2f2;
+  --red-line:#fecaca;
+  --amber:#b45309;
+  --amber-bg:#fffbeb;
+  --amber-line:#fde68a;
+  --shadow:0 4px 16px rgba(15,23,42,.06);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+html{scroll-padding-top:16px}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",sans-serif;
+  background:var(--bg);color:var(--ink);line-height:1.55;
+}
+.wrap{max-width:860px;margin:0 auto;padding:24px 16px 60px}
+
+/* 顶部标题 */
+.topbar{text-align:center;padding:8px 0 20px}
+.topbar h1{font-size:26px;font-weight:800;margin:0;letter-spacing:.2px;color:var(--ink)}
+.topbar p{margin:8px auto 0;color:var(--muted);font-size:14px;max-width:560px}
+
+/* 章节选择 */
+.chapters{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin:0 0 20px}
+.chapter-btn{
+  border:1.5px solid var(--line);background:#fff;color:var(--ink-2);
+  padding:10px 18px;border-radius:999px;cursor:pointer;font-size:14.5px;font-weight:650;
+  transition:.18s;
+}
+.chapter-btn:hover{border-color:var(--brand);color:var(--brand-ink)}
+.chapter-btn.active{background:var(--brand);border-color:var(--brand);color:#fff;box-shadow:0 4px 12px rgba(37,99,235,.25)}
+
+/* 状态条 */
+.statusbar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;
+  background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px 16px;margin-bottom:18px}
+.statusbar .range{font-size:13.5px;color:var(--ink-2);font-weight:600}
+.statusbar .score{font-size:14px;font-weight:800;color:var(--brand-ink)}
+.statusbar .score b{font-size:18px}
+
+/* 题目卡片 */
+.qcard{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;margin-bottom:14px;box-shadow:var(--shadow)}
+.qhead{display:flex;align-items:flex-start;gap:10px;margin-bottom:14px}
+.qnum{flex:0 0 auto;min-width:30px;height:30px;border-radius:9px;background:var(--brand-bg);color:var(--brand-ink);
+  font-size:14px;font-weight:800;display:flex;align-items:center;justify-content:center;padding:0 8px}
+.qchapter{font-size:12px;color:var(--muted);font-weight:700;letter-spacing:.3px;text-transform:uppercase;margin-bottom:2px}
+.qtext{font-size:16px;font-weight:700;color:var(--ink)}
+
+/* 选项 */
+.opts{display:flex;flex-direction:column;gap:9px}
+.opt{display:flex;align-items:flex-start;gap:10px;border:1.5px solid var(--line);border-radius:12px;padding:11px 13px;
+  cursor:pointer;transition:.15s;background:#fff;text-align:left;width:100%}
+.opt:hover{border-color:#bfdbfe;background:#f8fbff}
+.opt .letter{flex:0 0 auto;width:24px;height:24px;border-radius:7px;background:#f1f5f9;color:var(--ink-2);
+  font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.opt .text{font-size:14.5px;color:var(--ink-2);line-height:1.5}
+.opt.correct{border-color:var(--green);background:var(--green-bg)}
+.opt.correct .letter{background:var(--green);color:#fff}
+.opt.correct .text{color:var(--green)}
+.opt.wrong{border-color:var(--red);background:var(--red-bg)}
+.opt.wrong .letter{background:var(--red);color:#fff}
+.opt.wrong .text{color:var(--red)}
+.opt.disabled{pointer-events:none;opacity:.65}
+
+/* 判断题选项 */
+.opts.tf{flex-direction:row;flex-wrap:wrap}
+.opts.tf .opt{flex:1;min-width:120px;justify-content:center;align-items:center}
+.opts.tf .opt .text{text-align:center;font-weight:700}
+
+/* 填空题 */
+.blank{font-weight:800;color:var(--brand-ink);border-bottom:2px dashed var(--brand);padding:0 2px}
+.fill-row{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}
+.fill-input{flex:1;min-width:200px;border:1.5px solid var(--line);border-radius:12px;padding:11px 13px;
+  font-size:16px;color:var(--ink);background:#fff;transition:.15s}
+.fill-input:focus{outline:none;border-color:var(--brand);box-shadow:0 0 0 3px rgba(37,99,235,.12)}
+.fill-input.correct{border-color:var(--green);background:var(--green-bg);color:var(--green)}
+.fill-input.wrong{border-color:var(--red);background:var(--red-bg);color:var(--red)}
+.fill-input:disabled{opacity:.8}
+.fill-submit{border:0;border-radius:12px;padding:11px 20px;font-size:14.5px;font-weight:700;cursor:pointer;
+  background:var(--brand);color:#fff;transition:.18s;white-space:nowrap}
+.fill-submit:hover{background:var(--brand-ink)}
+.fill-submit:disabled{opacity:.55;cursor:not-allowed}
+
+/* 解析 */
+.explain{margin-top:12px;border-radius:12px;padding:12px 14px;font-size:13.5px;display:none}
+.explain.correct{display:block;background:var(--green-bg);border:1px solid var(--green-line);color:#166534}
+.explain.wrong{display:block;background:var(--red-bg);border:1px solid var(--red-line);color:#991b1b}
+.explain .tag{font-weight:800;margin-right:6px}
+
+/* 底部操作 */
+.actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:22px}
+.btn{border:0;border-radius:12px;padding:13px 24px;font-size:15px;font-weight:750;cursor:pointer;transition:.18s;letter-spacing:.2px}
+.btn-primary{background:var(--brand);color:#fff;box-shadow:0 4px 14px rgba(37,99,235,.28)}
+.btn-primary:hover{background:var(--brand-ink)}
+.btn-ghost{background:#fff;border:1.5px solid var(--line);color:var(--ink-2)}
+.btn-ghost:hover{border-color:var(--brand);color:var(--brand-ink)}
+
+/* 结果面板 */
+.result{display:none;background:#fff;border:1px solid var(--line);border-radius:16px;padding:24px;text-align:center;margin-top:22px;box-shadow:var(--shadow)}
+.result.show{display:block}
+.result .big{font-size:46px;font-weight:800;color:var(--brand-ink);line-height:1}
+.result .big small{font-size:18px;color:var(--muted);font-weight:700}
+.result .msg{font-size:15px;color:var(--ink-2);margin-top:10px}
+.result .stats{display:flex;gap:14px;justify-content:center;margin-top:16px;flex-wrap:wrap}
+.result .stat{background:#f8fafc;border:1px solid var(--line);border-radius:12px;padding:12px 18px;min-width:100px}
+.result .stat b{display:block;font-size:20px;color:var(--ink)}
+.result .stat span{font-size:12px;color:var(--muted)}
+
+/* 空状态 */
+.empty{background:#fff;border:1px dashed var(--line);border-radius:16px;padding:40px 20px;text-align:center;color:var(--muted)}
+
+/* 扫码分享卡片 */
+.share-card{
+  margin:30px auto 0;max-width:360px;padding:24px 20px;
+  background:var(--card);border:1px solid var(--line);border-radius:18px;
+  display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center;
+  box-shadow:var(--shadow);
+}
+.share-qr{
+  width:150px;height:150px;display:flex;align-items:center;justify-content:center;
+  border:1px solid #eef2f7;border-radius:12px;background:#fff;overflow:hidden;
+}
+.share-qr canvas,.share-qr img{display:block;width:150px;height:150px}
+.share-title{font-size:15px;font-weight:750;color:var(--ink);margin:0}
+.share-sub{font-size:12.5px;color:var(--muted);margin:0;letter-spacing:.2px}
+.share-qr-fallback{font-size:13px;color:var(--muted)}
+
+/* toast */
+.toast{position:fixed;left:50%;bottom:30px;transform:translateX(-50%) translateY(20px);background:#111827;color:#fff;
+  padding:11px 20px;border-radius:999px;font-size:14px;opacity:0;pointer-events:none;transition:.25s;z-index:50;max-width:90vw}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+@media (max-width:560px){
+  .topbar h1{font-size:21px}
+  .qcard{padding:14px}
+  .qtext{font-size:15px}
+  .btn{flex:1;min-width:140px}
+  .actions{gap:10px}
+  .fill-row{flex-direction:column}
+  .fill-submit{width:100%}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="topbar">
+    <h1>S1 ICT Interactive Quiz</h1>
+    <p>Pick a chapter and get a random set of multiple-choice, true/false and fill-in-the-blank questions with instant feedback.</p>
+  </header>
+
+  <div class="chapters" id="chapter-select">
+    <button class="chapter-btn active" data-chapter="all">All Chapters</button>
+    <button class="chapter-btn" data-chapter="Chapter 4">Chapter 4</button>
+    <button class="chapter-btn" data-chapter="Chapter 5">Chapter 5</button>
+    <button class="chapter-btn" data-chapter="Chapter 6">Chapter 6</button>
+    <button class="chapter-btn" data-chapter="Final Review">Final Review</button>
+  </div>
+
+  <div class="statusbar">
+    <span class="range" id="status-range">All Chapters</span>
+    <span class="score" id="status-score">Score: <b>0</b> / 0</span>
+  </div>
+
+  <main id="quiz-area"></main>
+
+  <div class="result" id="result-panel">
+    <div class="big"><span id="result-score">0</span><small> / <span id="result-total">0</span></small></div>
+    <div class="msg" id="result-msg"></div>
+    <div class="stats">
+      <div class="stat"><b id="stat-correct">0</b><span>Correct</span></div>
+      <div class="stat"><b id="stat-wrong">0</b><span>Wrong</span></div>
+      <div class="stat"><b id="stat-pct">0%</b><span>Score</span></div>
+    </div>
+  </div>
+
+  <div class="actions">
+    <button class="btn btn-primary" id="submit-btn">提交测验</button>
+    <button class="btn btn-ghost" id="retry-btn">再来一次</button>
+  </div>
+
+  <section class="share-card" aria-label="扫码分享">
+    <div class="share-qr" id="share-qr"></div>
+    <p class="share-title">📱 S1 ICT 在线测验练习（手机扫码即测）</p>
+    <p class="share-sub">纯英文题库 · 随机抽题 · 自动批改</p>
+  </section>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="vendor/qrcode.min.js"></script>
+<script>
+/* ============================================================
+   题库数据结构 questionBank
+   type: 'mc' (单选) | 'tf' (判断) | 'fill' (填空)
+   mc / tf: 用 options[] + answer(正确索引, 0起)
+   fill:    用 answer(标准答案) + accept[](可接受的其他答案, 可选)
+   ============================================================ */
+const questionBank = [
+  {
+    id: 1,
+    type: "mc",
+    chapter: "Chapter 4",
+    question: "Which of the following is a unit of clock rate?",
+    options: ["Gbps", "GB", "GHz", "kWh"],
+    answer: 2, // C. GHz
+    explanation: "Clock rate (the CPU's processing speed) is measured in megahertz (MHz) or gigahertz (GHz)."
+  },
+  {
+    id: 3,
+    type: "mc",
+    chapter: "Chapter 4",
+    question: "Which of the following statements is correct?",
+    options: ["CPU contains storage devices.", "The core of a CPU is a CU.", "A CPU has more cores than a GPU.", "A dual-core CPU must have greater processing power than a single-core CPU."],
+    answer: 3, // D
+    explanation: "A dual-core CPU can run more tasks at the same time, so it generally has greater processing power than a single-core CPU. A CPU does not contain storage devices, a core is not the CU, and a GPU typically has far more cores than a CPU."
+  },
+  {
+    id: 4,
+    type: "mc",
+    chapter: "Chapter 4",
+    question: "What is the function of the registers?",
+    options: ["To store the data values and data addresses used by the ALU and CU.", "To handle multitasking.", "To control how the device responds to instructions.", "To control how the device performs calculations."],
+    answer: 0, // A
+    explanation: "Registers store the data and addresses that the ALU and CU are currently processing. Controlling instructions is the job of the Control Unit (CU), and performing calculations is the job of the ALU."
+  },
+  {
+    id: 5,
+    type: "mc",
+    chapter: "Chapter 4",
+    question: "What is / are the function(s) of the ALU?\n(1) Perform arithmetic operations, e.g. addition and multiplication.\n(2) Control the flow of data between the CPU and other components.\n(3) Perform logical operations, such as comparisons and conjunction (AND).",
+    options: ["(1) only", "(2) only", "(1) and (3) only", "(2) and (3) only"],
+    answer: 2, // C
+    explanation: "The ALU performs arithmetic and logical operations. Controlling the flow of data is the function of the Control Unit (CU)."
+  },
+  {
+    id: 6,
+    type: "mc",
+    chapter: "Chapter 4",
+    question: "Which of the following factors affect a computer's performance?\n(1) Clock rate\n(2) Number of ports\n(3) Number of cores",
+    options: ["(1) and (2) only", "(1) and (3) only", "(2) and (3) only", "(1), (2) and (3)"],
+    answer: 1, // B
+    explanation: "Clock rate and the number of cores (together with word length) determine CPU processing power. The number of ports does not affect processing performance."
+  },
+  {
+    id: 7,
+    type: "mc",
+    chapter: "Chapter 4",
+    question: "Which of the following statements is/are correct?\n(1) A 64-bit CPU is twice as fast as a 32-bit CPU.\n(2) The more cores a CPU has, the faster it is at handling multitasking.\n(3) The higher the CPU clock rate, the greater the power consumption.",
+    options: ["(1) only", "(2) only", "(1) and (3) only", "(2) and (3) only"],
+    answer: 3, // D
+    explanation: "More cores improve multitasking, and a higher clock rate consumes more power. A 64-bit CPU is not necessarily twice as fast as a 32-bit one."
+  },
+  {
+    id: 22,
+    type: "mc",
+    chapter: "Chapter 4",
+    question: "Which of the following is an input device?",
+    options: ["Monitor", "Keyboard", "Speaker", "Printer"],
+    answer: 1, // B. Keyboard
+    explanation: "A keyboard sends data into the computer, so it is an input device. A monitor, speaker and printer are all output devices."
+  },
+  {
+    id: 23,
+    type: "mc",
+    chapter: "Chapter 4",
+    question: "Which of the following is an output device?",
+    options: ["Mouse", "Scanner", "Microphone", "Monitor"],
+    answer: 3, // D. Monitor
+    explanation: "A monitor displays information from the computer, so it is an output device. A mouse, scanner and microphone are all input devices."
+  },
+  {
+    id: 24,
+    type: "mc",
+    chapter: "Chapter 4",
+    question: "Which of the following devices can be used for both input and output?",
+    options: ["Touchscreen", "Keyboard", "Printer", "Scanner"],
+    answer: 0, // A. Touchscreen
+    explanation: "A touchscreen displays information (output) and accepts touches (input). A keyboard and scanner are input devices, and a printer is an output device."
+  },
+  {
+    id: 25,
+    type: "mc",
+    chapter: "Chapter 4",
+    question: "Which of the following is commonly used to connect a peripheral device to a computer?",
+    options: ["ALU", "USB port", "Register", "Clock rate"],
+    answer: 1, // B. USB port
+    explanation: "A USB port connects peripheral devices such as a mouse, keyboard or flash drive. The ALU, register and clock rate are parts or features of the CPU."
+  },
+  {
+    id: 26,
+    type: "mc",
+    chapter: "Chapter 4",
+    question: "What is the main function of the motherboard?",
+    options: ["To perform arithmetic and logical operations", "To store data permanently", "To connect and allow communication between the CPU, memory, storage and other components", "To supply power only to the monitor"],
+    answer: 2, // C
+    explanation: "The motherboard is the main circuit board that connects the CPU, memory, storage and other components so they can communicate. Arithmetic/logical operations are done by the ALU, and permanent storage is done by secondary storage."
+  },
+  {
+    id: 27,
+    type: "tf",
+    chapter: "Chapter 4",
+    question: "RAM is volatile memory, so its data is lost when the power is switched off.",
+    options: ["True", "False"],
+    answer: 0, // True
+    explanation: "RAM is volatile, so its contents are lost when the power is turned off. ROM, on the other hand, is non-volatile and keeps its data."
+  },
+  {
+    id: 28,
+    type: "tf",
+    chapter: "Chapter 4",
+    question: "ROM stores the BIOS, and its data can be easily rewritten by the user.",
+    options: ["True", "False"],
+    answer: 1, // False
+    explanation: "ROM stores the BIOS and is non-volatile, but its data cannot be easily rewritten by the user — ROM stands for Read-Only Memory."
+  },
+  {
+    id: 29,
+    type: "tf",
+    chapter: "Chapter 4",
+    question: "A hard disk has no moving parts, so it is more shock-resistant than an SSD.",
+    options: ["True", "False"],
+    answer: 1, // False
+    explanation: "It is the SSD that has no moving parts and is more shock-resistant. A hard disk contains spinning metal disks, so it is more easily damaged by impact."
+  },
+  {
+    id: 30,
+    type: "tf",
+    chapter: "Chapter 4",
+    question: "The ALU performs arithmetic operations and logical operations.",
+    options: ["True", "False"],
+    answer: 0, // True
+    explanation: "The Arithmetic Logic Unit (ALU) performs arithmetic operations (e.g. addition, multiplication) and logical operations (e.g. comparisons, AND)."
+  },
+  {
+    id: 31,
+    type: "tf",
+    chapter: "Chapter 4",
+    question: "A higher clock rate generally means the CPU can process instructions faster.",
+    options: ["True", "False"],
+    answer: 0, // True
+    explanation: "A higher clock rate means more cycles per second, so the CPU can generally process instructions faster."
+  },
+  {
+    id: 32,
+    type: "fill",
+    chapter: "Chapter 4",
+    question: "The part of the CPU that performs arithmetic and logical operations is called the _______.",
+    answer: "ALU",
+    accept: ["Arithmetic Logic Unit"],
+    explanation: "The Arithmetic Logic Unit (ALU) performs arithmetic and logical operations."
+  },
+  {
+    id: 33,
+    type: "fill",
+    chapter: "Chapter 4",
+    question: "The clock rate of a CPU is usually measured in _______ (write the unit symbol).",
+    answer: "GHz",
+    accept: ["Gigahertz"],
+    explanation: "Clock rate is usually measured in megahertz (MHz) or gigahertz (GHz)."
+  },
+  {
+    id: 34,
+    type: "fill",
+    chapter: "Chapter 4",
+    question: "_______ is a type of volatile memory that temporarily stores data for the CPU to process.",
+    answer: "RAM",
+    accept: ["Random Access Memory"],
+    explanation: "RAM (Random Access Memory) is volatile memory that temporarily stores data for the CPU."
+  },
+  {
+    id: 35,
+    type: "fill",
+    chapter: "Chapter 4",
+    question: "A common type of port used to connect keyboards, mice and flash drives is the _______ port.",
+    answer: "USB",
+    accept: ["Universal Serial Bus"],
+    explanation: "USB (Universal Serial Bus) ports connect devices such as keyboards, mice and flash drives."
+  },
+  {
+    id: 36,
+    type: "fill",
+    chapter: "Chapter 4",
+    question: "The component of the CPU that controls the flow of data and instructions is the _______.",
+    answer: "Control Unit",
+    accept: ["CU"],
+    explanation: "The Control Unit (CU) controls the flow of data and instructions between the CPU and other components."
+  },
+  {
+    id: 8,
+    type: "mc",
+    chapter: "Chapter 5",
+    question: "In which type of memory is data retained even after a power outage?",
+    options: ["Random Access Memory (RAM)", "Read-Only Memory (ROM)", "Main memory", "Registers"],
+    answer: 1, // B. ROM
+    explanation: "Read-Only Memory (ROM) is non-volatile, so its data is retained even after the power is switched off. RAM (and main memory, which includes RAM) and registers are volatile."
+  },
+  {
+    id: 9,
+    type: "mc",
+    chapter: "Chapter 5",
+    question: "Which of the following correctly describes the characteristics of RAM?",
+    options: ["It is used to store the BIOS.", "The data it stores is retained even after the power is turned off.", "It can temporarily store data for the computer to improve its processing performance.", "The data it stores cannot be rewritten."],
+    answer: 2, // C
+    explanation: "RAM temporarily stores data for the computer to process, which improves processing performance. The BIOS is stored in ROM, RAM is volatile, and its data is continuously rewritten."
+  },
+  {
+    id: 10,
+    type: "mc",
+    chapter: "Chapter 5",
+    question: "While editing a spreadsheet, May's laptop shuts down due to low battery power. After plugging the laptop back in, May finds that she can access some of the spreadsheet data that has not been saved yet. Why?",
+    options: ["The software regularly auto-saves data to non-volatile storage devices.", "When the computer is processing a file, it stores some of the data in the CPU's registers.", "When editing a file, some of the data is temporarily stored in RAM.", "When editing a file, some data is stored in ROM."],
+    answer: 0, // A
+    explanation: "The software regularly auto-saves the file to a non-volatile storage device (such as a hard disk or SSD), so the most recent auto-saved version can still be recovered. Data held only in RAM would be lost when the power is cut."
+  },
+  {
+    id: 11,
+    type: "mc",
+    chapter: "Chapter 5",
+    question: "Arrange the following secondary storage devices from smallest to largest in terms of storage capacity.\n(1) 240 GB SSD\n(2) 200,000 MB hard disk\n(3) 512,000 KB USB flash drive",
+    options: ["(1) < (2) < (3)", "(2) < (1) < (3)", "(3) < (1) < (2)", "(3) < (2) < (1)"],
+    answer: 3, // D
+    explanation: "Convert to the same unit: 240 GB = 245,760 MB; 200,000 MB; 512,000 KB = 500 MB. From smallest to largest: 512,000 KB < 200,000 MB < 240 GB, i.e. (3) < (2) < (1)."
+  },
+  {
+    id: 12,
+    type: "mc",
+    chapter: "Chapter 5",
+    question: "Which of the following secondary storage devices is/are flash memory?\n(1) SSD\n(2) Hard disk\n(3) SD card",
+    options: ["(1) only", "(2) only", "(1) and (3) only", "(2) and (3) only"],
+    answer: 2, // C
+    explanation: "Both SSDs and SD cards are made of flash memory. A hard disk uses a metal disk coated with a magnetic material instead."
+  },
+  {
+    id: 13,
+    type: "mc",
+    chapter: "Chapter 5",
+    question: "Which of the following is an advantage of using an SSD rather than a hard disk?",
+    options: ["SSD is non-volatile. Its data is retained after the computer is switched off.", "SSD usually has a greater storage capacity.", "SSD does not need power to operate.", "SSD is less likely to be damaged by impact while in use."],
+    answer: 3, // D
+    explanation: "An SSD has no moving parts, so it is more shock-resistant (less likely to be damaged by impact) than a hard disk. Both are non-volatile; a hard disk usually offers greater capacity, and an SSD is generally more expensive."
+  },
+  {
+    id: 14,
+    type: "mc",
+    chapter: "Chapter 5",
+    question: "Lily saves her homework files in her cloud storage rather than her desktop computer. What is/are the advantage(s) of her choice?\n(1) Files can be accessed as long as there is an internet connection.\n(2) Files can never be lost or corrupted.\n(3) Files can be accessed more quickly.",
+    options: ["(1) only", "(2) only", "(1) and (3) only", "(2) and (3) only"],
+    answer: 0, // A
+    explanation: "Cloud storage lets her access files from anywhere with an internet connection. However, files can still be lost or corrupted, and access may actually be slower when the shared server is busy."
+  },
+  {
+    id: 15,
+    type: "mc",
+    chapter: "Chapter 5",
+    question: "Rank the following types of memory in order of speed, from slowest to fastest.\n(1) RAM\n(2) Registers\n(3) SSD",
+    options: ["(1) < (2) < (3)", "(2) < (1) < (3)", "(3) < (2) < (1)", "(3) < (1) < (2)"],
+    answer: 3, // D
+    explanation: "Registers are fastest, then RAM, then SSD. From slowest to fastest: SSD < RAM < Registers, i.e. (3) < (1) < (2)."
+  },
+  {
+    id: 16,
+    type: "mc",
+    chapter: "Chapter 5",
+    question: "Why do mobile devices usually use SSDs rather than hard disks?\n(1) For the same storage capacity, SSDs are cheaper than hard disks.\n(2) For the same storage capacity, SSDs are smaller than hard disks.\n(3) Mobile devices cannot access hard disks.",
+    options: ["(1) only", "(2) only", "(1) and (3) only", "(2) and (3) only"],
+    answer: 1, // B
+    explanation: "SSDs are smaller and more shock-resistant than hard disks, which suits mobile devices. SSDs are actually more expensive than hard disks, and mobile devices can access hard disks (e.g. via external drives)."
+  },
+  {
+    id: 17,
+    type: "mc",
+    chapter: "Chapter 6",
+    question: "How many drivers do we need to control a printer, a scanner and a webcam?",
+    options: ["0", "1", "2", "3"],
+    answer: 3, // D
+    explanation: "A driver program controls a specific peripheral device, so each of the printer, scanner and webcam needs its own driver — three drivers in total."
+  },
+  {
+    id: 18,
+    type: "mc",
+    chapter: "Chapter 6",
+    question: "Which of the following statements is incorrect?",
+    options: ["Application software runs on an operating system.", "Software is the intangible component of a computer system.", "File management program is a type of operating system.", "Mobile devices require an operating system to function."],
+    answer: 2, // C
+    explanation: "A file management program (e.g. File Explorer) is a utility program, not an operating system. The other three statements are correct."
+  },
+  {
+    id: 19,
+    type: "mc",
+    chapter: "Chapter 6",
+    question: "Which of the following does an operating system do?\n(1) Managing databases\n(2) Managing peripheral device output\n(3) Managing system security",
+    options: ["(1) only", "(2) only", "(1) and (3) only", "(2) and (3) only"],
+    answer: 3, // D
+    explanation: "The operating system manages peripheral devices and system security. Managing databases is the function of application software (a database management system), not the operating system."
+  },
+  {
+    id: 20,
+    type: "mc",
+    chapter: "Chapter 6",
+    question: "What information does system monitoring software usually display?\n(1) Network traffic\n(2) Hard disk usage\n(3) Current processes",
+    options: ["(1) and (2) only", "(1) and (3) only", "(2) and (3) only", "(1), (2) and (3)"],
+    answer: 3, // D
+    explanation: "System monitoring software (e.g. Task Manager) monitors processes and displays system resource usage, including network traffic, hard disk usage and current processes."
+  },
+  {
+    id: 21,
+    type: "mc",
+    chapter: "Chapter 6",
+    question: "Lily is not planning to use system software to edit spreadsheets on her smartphone. Which of the following is/are the possible reason(s) for this?\n(1) System software cannot open spreadsheets directly.\n(2) System software does not run on smartphones.\n(3) System software requires an internet connection to operate.",
+    options: ["(1) only", "(2) only", "(1) and (3) only", "(2) and (3) only"],
+    answer: 0, // A
+    explanation: "System software (the operating system) cannot open spreadsheets directly — that requires application software such as a spreadsheet program. Smartphones do run system software (a mobile OS), and it does not need an internet connection to operate."
+  },
+  {
+    id: 40,
+    type: "mc",
+    chapter: "Chapter 5",
+    question: "How can a user increase the RAM capacity of a computer?",
+    options: ["Add or replace the RAM modules on the motherboard", "Install more application software", "Increase the clock rate of the CPU", "Replace the hard disk with a larger one"],
+    answer: 0, // A
+    explanation: "RAM capacity is increased by adding RAM modules (sticks) or replacing them with larger ones on the motherboard."
+  },
+  {
+    id: 41,
+    type: "mc",
+    chapter: "Chapter 5",
+    question: "Which USB version is usually identified by a blue connector and offers the fastest data transfer rate?",
+    options: ["USB 1.0", "USB 2.0", "USB 3.0", "USB Type-A"],
+    answer: 2, // C
+    explanation: "USB 3.0 is usually identified by a blue connector and is the fastest of the three versions (USB 1.0 is white/slow, USB 2.0 is black/normal, USB 3.0 is blue/fast)."
+  },
+  {
+    id: 42,
+    type: "mc",
+    chapter: "Chapter 5",
+    question: "Which of the following is a disadvantage of cloud storage?",
+    options: ["Data can be accessed from anywhere with an internet connection", "Users cannot access their data without an internet connection", "No hardware needs to be purchased", "Providers use data redundancy to prevent file loss"],
+    answer: 1, // B
+    explanation: "A key disadvantage is that users cannot access their cloud storage without an internet connection. The other three options are advantages."
+  },
+  {
+    id: 43,
+    type: "mc",
+    chapter: "Chapter 5",
+    question: "Which device enables multiple users on the same local area network (LAN) to read and write data at the same time?",
+    options: ["Cloud drive", "NAS (network-attached storage)", "USB flash drive", "Memory card"],
+    answer: 1, // B
+    explanation: "A NAS (network-attached storage) is a dedicated file server that lets multiple users on the same LAN read and write data at the same time."
+  },
+  {
+    id: 44,
+    type: "tf",
+    chapter: "Chapter 5",
+    question: "The BIOS is stored in ROM, which is non-volatile memory.",
+    options: ["True", "False"],
+    answer: 0, // True
+    explanation: "ROM is non-volatile and stores the firmware (BIOS) that contains the instructions to boot the computer."
+  },
+  {
+    id: 45,
+    type: "tf",
+    chapter: "Chapter 5",
+    question: "All forms of secondary storage are non-volatile.",
+    options: ["True", "False"],
+    answer: 0, // True
+    explanation: "Unlike main memory, all forms of secondary storage are non-volatile because they store data for future use."
+  },
+  {
+    id: 46,
+    type: "tf",
+    chapter: "Chapter 5",
+    question: "A hard disk contains moving parts, so it should not be moved while the computer is in use.",
+    options: ["True", "False"],
+    answer: 0, // True
+    explanation: "A hard disk has moving read/write heads and a spinning disk, so moving it while in use could damage the disk."
+  },
+  {
+    id: 47,
+    type: "tf",
+    chapter: "Chapter 5",
+    question: "An internal storage device is portable and removable, so it is usually used for data backup.",
+    options: ["True", "False"],
+    answer: 1, // False
+    explanation: "That description fits an external storage device. Internal storage devices are installed inside the system unit and usually store the OS and software."
+  },
+  {
+    id: 48,
+    type: "fill",
+    chapter: "Chapter 5",
+    question: "The most basic unit of data is the _______ (write the full word).",
+    answer: "bit",
+    explanation: "A bit is the most basic unit of data. One byte (B) equals 8 bits."
+  },
+  {
+    id: 49,
+    type: "fill",
+    chapter: "Chapter 5",
+    question: "1 GB is equal to _______ MB.",
+    answer: "1024",
+    explanation: "1 GB = 1024 MB, because 1 MB = 1024 KB and 1 GB = 1024 MB."
+  },
+  {
+    id: 50,
+    type: "fill",
+    chapter: "Chapter 5",
+    question: "The reversible USB connector that can be plugged in either way is called USB _______.",
+    answer: "Type-C",
+    accept: ["USB-C", "C"],
+    explanation: "USB Type-C (USB-C) is a reversible connector that can be plugged in either way. Other types include Type-A and Micro-B."
+  },
+  {
+    id: 51,
+    type: "fill",
+    chapter: "Chapter 5",
+    question: "_______ is a common format of memory card, available in sizes such as SD and microSD.",
+    answer: "Secure Digital",
+    accept: ["SD"],
+    explanation: "Secure Digital (SD) is a common memory card format available in various sizes such as SD and microSD."
+  },
+  {
+    id: 52,
+    type: "mc",
+    chapter: "Chapter 5",
+    question: "Rank the following secondary storage devices by data transfer rate, from fastest to slowest.\n(1) Hard disk\n(2) SD card\n(3) SSD",
+    options: ["(1) > (2) > (3)", "(3) > (1) > (2)", "(3) > (2) > (1)", "(2) > (1) > (3)"],
+    answer: 1, // B
+    explanation: "The SSD is the fastest (~500–14,000 MB/s), followed by a hard disk (~100–250 MB/s), then an SD card (~10–100 MB/s): SSD > Hard disk > SD card."
+  },
+  {
+    id: 53,
+    type: "mc",
+    chapter: "Chapter 6",
+    question: "Which of the following is an operating system?",
+    options: ["Microsoft Windows", "Google Chrome", "Microsoft Word", "Adobe Photoshop"],
+    answer: 0, // A
+    explanation: "Microsoft Windows is an operating system. Google Chrome is a web browser, and Word and Photoshop are application software."
+  },
+  {
+    id: 54,
+    type: "mc",
+    chapter: "Chapter 6",
+    question: "Which of the following is a utility program?",
+    options: ["Virus scanner", "Spreadsheet software", "Web browser", "Presentation software"],
+    answer: 0, // A
+    explanation: "A virus scanner is a utility program that maintains the computer system. Spreadsheet, browser and presentation software are application software."
+  },
+  {
+    id: 55,
+    type: "mc",
+    chapter: "Chapter 6",
+    question: "Which of the following is application software?",
+    options: ["Microsoft Windows", "Task Manager", "Audacity", "A printer driver"],
+    answer: 2, // C
+    explanation: "Audacity is multimedia development (application) software for editing audio. Windows is an operating system, Task Manager is a utility program, and a printer driver is system software."
+  },
+  {
+    id: 56,
+    type: "mc",
+    chapter: "Chapter 6",
+    question: "How does a mobile operating system help extend battery life?",
+    options: ["By closing apps running in the background and turning off the screen automatically", "By using a larger battery", "By removing the operating system", "By increasing the CPU clock rate"],
+    answer: 0, // A
+    explanation: "A mobile OS extends battery life by optimising hardware, such as closing apps running in the background and automatically turning off the screen."
+  },
+  {
+    id: 57,
+    type: "mc",
+    chapter: "Chapter 6",
+    question: "In the layered structure, application software runs on the platform provided by:",
+    options: ["the user", "the system software", "the hardware directly", "another application"],
+    answer: 1, // B
+    explanation: "Application software runs on the platform provided by the system software (the operating system), which in turn controls the hardware."
+  },
+  {
+    id: 58,
+    type: "tf",
+    chapter: "Chapter 6",
+    question: "Software is the intangible (non-physical) part of a computer system.",
+    options: ["True", "False"],
+    answer: 0, // True
+    explanation: "Software is the intangible part of a computer system, made up of data and instructions. Hardware is the physical part."
+  },
+  {
+    id: 59,
+    type: "tf",
+    chapter: "Chapter 6",
+    question: "A driver program controls a peripheral device such as a mouse or keyboard.",
+    options: ["True", "False"],
+    answer: 0, // True
+    explanation: "A driver program controls a peripheral device (e.g. mouse, keyboard or speakers) connected to the computer."
+  },
+  {
+    id: 60,
+    type: "tf",
+    chapter: "Chapter 6",
+    question: "A web browser is an example of system software.",
+    options: ["True", "False"],
+    answer: 1, // False
+    explanation: "A web browser is application software (communication software). System software includes the OS, utility programs and driver programs."
+  },
+  {
+    id: 61,
+    type: "tf",
+    chapter: "Chapter 6",
+    question: "An operating system is a type of application software.",
+    options: ["True", "False"],
+    answer: 1, // False
+    explanation: "An operating system is system software, not application software. Application software runs on top of the operating system."
+  },
+  {
+    id: 62,
+    type: "fill",
+    chapter: "Chapter 6",
+    question: "The system software that manages the computer's hardware and software resources is the _______.",
+    answer: "operating system",
+    accept: ["OS"],
+    explanation: "The operating system (OS) controls the operation of the hardware and software and manages computer resources."
+  },
+  {
+    id: 63,
+    type: "fill",
+    chapter: "Chapter 6",
+    question: "A program that controls a peripheral device connected to the computer is a _______ program.",
+    answer: "driver",
+    accept: ["driver program"],
+    explanation: "A driver program controls a peripheral device such as a mouse, keyboard or speakers."
+  },
+  {
+    id: 64,
+    type: "fill",
+    chapter: "Chapter 6",
+    question: "The utility program used to detect and remove computer viruses is a _______.",
+    answer: "virus scanner",
+    accept: ["antivirus", "antivirus software"],
+    explanation: "A virus scanner (antivirus) is a utility program that detects and removes computer viruses."
+  },
+  {
+    id: 65,
+    type: "fill",
+    chapter: "Chapter 6",
+    question: "Microsoft Word, Excel and PowerPoint belong to the category of software called _______ software (used to enhance work productivity).",
+    answer: "productivity",
+    accept: ["productivity software"],
+    explanation: "Word, Excel and PowerPoint are productivity software, which aims to enhance work productivity."
+  },
+  {
+    id: 66,
+    type: "mc",
+    chapter: "Final Review",
+    question: "The following explains the concept of the \"Input-Process-Output\" cycle. What could X and Y represent?",
+    options: ["Operating system; RAM", "Image editing software; ROM", "Driver program; Word processor", "Registers; Central processing unit"],
+    answer: 3, // D
+    explanation: "The CPU performs processing, and registers inside the CPU hold data for processing during the cycle."
+  },
+  {
+    id: 67,
+    type: "mc",
+    chapter: "Final Review",
+    question: "May downloaded a generative AI model, but it is slow on her laptop. What kind of computer should she use to run the model?",
+    options: ["Tablet", "Desktop computer", "Smartwatch", "Smartphone"],
+    answer: 1, // B
+    explanation: "Desktop computers usually have stronger CPU and GPU performance to handle heavy AI models."
+  },
+  {
+    id: 68,
+    type: "mc",
+    chapter: "Final Review",
+    question: "Which of the following is NOT a trend in the future development of smartphones?",
+    options: ["Better battery performance", "Higher camera resolution", "More USB ports", "Greater storage capacity"],
+    answer: 2, // C
+    explanation: "Smartphones are trending toward fewer physical ports, not more USB ports."
+  },
+  {
+    id: 69,
+    type: "mc",
+    chapter: "Final Review",
+    question: "What is the main reason Ken uses the built-in touchpad rather than connecting a mouse when working on his laptop in the countryside?",
+    options: ["Touchpad can be used by multiple users at the same time.", "Touchpad facilitates operations such as dragging and double-clicking.", "Poor internet conditions in the countryside can cause the mouse to lose connection.", "The countryside often lacks a flat surface necessary for using a mouse."],
+    answer: 3, // D
+    explanation: "A mouse requires a flat surface to work well, while a touchpad is built-in and does not need extra space."
+  },
+  {
+    id: 70,
+    type: "mc",
+    chapter: "Final Review",
+    question: "What is the main reason Eric uses a laser printer rather than an inkjet printer when printing over a hundred pages of greyscale study notes?",
+    options: ["Laser printers print faster.", "Laser printers produce better colour quality.", "Inkjet printers do not support greyscale printing.", "The thermal paper used by inkjet printers fades over time."],
+    answer: 0, // A
+    explanation: "Laser printers have a much faster printing speed for large volumes of black-and-white documents."
+  },
+  {
+    id: 71,
+    type: "mc",
+    chapter: "Final Review",
+    question: "Lily has replaced the 32-bit CPU in her computer with a 64-bit CPU. Which of the following statements is/are correct?\n(1) The new CPU has a higher clock rate than the old one.\n(2) The new CPU can address more memory locations.\n(3) The new CPU processes data twice as fast as the old one.",
+    options: ["(1) only", "(2) only", "(1) and (3) only", "(2) and (3) only"],
+    answer: 1, // B
+    explanation: "64-bit CPUs can access more memory addresses. Bit width does not guarantee higher clock speed or double processing speed."
+  },
+  {
+    id: 72,
+    type: "mc",
+    chapter: "Final Review",
+    question: "What is the most likely effect of increasing the clock rate of a smartphone's CPU?",
+    options: ["Lower processing power", "More accurate timekeeping", "Higher power consumption", "Increased number of processor cores"],
+    answer: 2, // C
+    explanation: "A higher clock rate means the CPU runs faster and consumes more electrical power."
+  },
+  {
+    id: 73,
+    type: "mc",
+    chapter: "Final Review",
+    question: "Which of the following components temporarily store data for the CPU to process?\n(1) ROM\n(2) RAM\n(3) Registers",
+    options: ["(1) only", "(2) only", "(1) and (3) only", "(2) and (3) only"],
+    answer: 3, // D
+    explanation: "RAM and registers hold temporary data for the CPU. ROM stores permanent startup data and cannot be written freely."
+  },
+  {
+    id: 74,
+    type: "mc",
+    chapter: "Final Review",
+    question: "Charlie wants to store 500 movies in several 32 GB memory cards. Given that each file is 3600 MB in size, and without splitting individual files or compressing them, how many memory cards will Charlie need at least?",
+    options: ["55", "56", "57", "63"],
+    answer: 1, // B
+    explanation: "32 GB = 32 × 1024 = 32768 MB. Each card holds 9 whole files (32768 ÷ 3600 ≈ 9.1). 500 ÷ 9 ≈ 55.6, so 56 cards are needed."
+  },
+  {
+    id: 75,
+    type: "mc",
+    chapter: "Final Review",
+    question: "What does ROM usually store?",
+    options: ["Operating system", "Driver programs", "Bootloader", "Applications"],
+    answer: 2, // C
+    explanation: "ROM stores the bootloader, the small program that starts up the computer before the OS loads."
+  },
+  {
+    id: 76,
+    type: "mc",
+    chapter: "Final Review",
+    question: "Which of the following is an advantage of using external hard disk drives rather than memory cards?",
+    options: ["More portable", "Lower price per unit of storage", "No moving parts, making it more impact-resistant", "Lower power consumption"],
+    answer: 1, // B
+    explanation: "External hard drives offer a cheaper cost per GB compared with memory cards for large storage."
+  },
+  {
+    id: 77,
+    type: "mc",
+    chapter: "Final Review",
+    question: "Which of the following is/are difference(s) between RAM and SSD?\n(1) RAM is cheaper for the same capacity.\n(2) RAM has higher data access speeds.\n(3) RAM is a form of volatile memory.",
+    options: ["(1) only", "(2) only", "(1) and (3) only", "(2) and (3) only"],
+    answer: 3, // D
+    explanation: "RAM is faster and volatile. RAM is more expensive than SSD for the same capacity."
+  },
+  {
+    id: 78,
+    type: "mc",
+    chapter: "Final Review",
+    question: "When using data compression software to compress backup files, which type(s) of storage is/are suitable for storing the compressed backups?\n(1) USB flash drive\n(2) Registers\n(3) RAM",
+    options: ["(1) only", "(2) only", "(1) and (3) only", "(2) and (3) only"],
+    answer: 0, // A
+    explanation: "USB flash drive is permanent secondary storage. Registers and RAM are temporary and lose data after power off."
+  },
+  {
+    id: 79,
+    type: "mc",
+    chapter: "Final Review",
+    question: "Paul wants to upload a 15 GB file to cloud storage. His computer can upload 12,000 KB of data per second. Assuming the upload speed remains constant, approximately how long will it take to complete the upload?",
+    options: ["77 seconds", "165 seconds", "22 minutes", "176 minutes"],
+    answer: 2, // C
+    explanation: "15 GB = 15 × 1024 × 1024 = 15728640 KB. 15728640 ÷ 12000 ≈ 1311 seconds ≈ 22 minutes."
+  },
+  {
+    id: 80,
+    type: "mc",
+    chapter: "Final Review",
+    question: "When making voice calls on a laptop, which of the following pieces of software or hardware is not essential?",
+    options: ["Microphone", "Operating system", "Driver program", "Utility program"],
+    answer: 3, // D
+    explanation: "Utility programs are for maintenance tasks and are not required for basic voice calls."
+  },
+  {
+    id: 81,
+    type: "mc",
+    chapter: "Final Review",
+    question: "John has a computer running operating system X. When he connects a games controller to the computer, the computer suggests installing driver program Y. Which of the following statements is correct?\n(1) X can interact with game controllers via Y.\n(2) X can interact with pointing devices such as a mouse via Y.\n(3) Y can run on operating systems other than X.",
+    options: ["(1) only", "(2) only", "(1) and (3) only", "(2) and (3) only"],
+    answer: 0, // A
+    explanation: "Driver Y is specially for this game controller. It cannot control a mouse, and drivers are usually OS-specific."
+  },
+  {
+    id: 82,
+    type: "tf",
+    chapter: "Final Review",
+    question: "The bootloader is stored in RAM so that it can be overwritten every time the computer starts up.",
+    options: ["True", "False"],
+    answer: 1, // False
+    explanation: "False. The bootloader is stored in ROM (permanent, read-only memory), not in RAM, so it is kept even after the computer is switched off. See Chapter 6, p. 158."
+  },
+  {
+    id: 83,
+    type: "tf",
+    chapter: "Final Review",
+    question: "A laser printer generally prints large volumes of black-and-white documents faster than an inkjet printer.",
+    options: ["True", "False"],
+    answer: 0, // True
+    explanation: "True. Laser printers print faster for high-volume documents, so they are preferred for printing many pages. See Chapter 4, p. 112."
+  },
+  {
+    id: 84,
+    type: "tf",
+    chapter: "Final Review",
+    question: "Increasing a CPU's word length from 32 bits to 64 bits always doubles its processing speed.",
+    options: ["True", "False"],
+    answer: 1, // False
+    explanation: "False. A 64-bit CPU is not necessarily twice as fast as a 32-bit CPU; word length is only one factor in processing power. See Chapter 4, p. 98."
+  },
+  {
+    id: 85,
+    type: "fill",
+    chapter: "Final Review",
+    question: "The volatile memory that temporarily stores data and instructions for the CPU to process is _______.",
+    answer: "RAM",
+    accept: ["random access memory"],
+    explanation: "RAM is volatile memory that temporarily holds data and instructions for the CPU while the computer is on. See Chapter 5, p. 128."
+  },
+  {
+    id: 86,
+    type: "fill",
+    chapter: "Final Review",
+    question: "The startup process in which a small program stored in ROM runs first, before the operating system loads, is called _______.",
+    answer: "booting",
+    accept: ["boot", "boot process"],
+    explanation: "Booting is the startup process; the bootloader stored in ROM runs first before the operating system loads. See Chapter 6, p. 158."
+  }
+];
+
+/* ============ 核心逻辑 ============ */
+const TYPE_LABELS = { mc: "Multiple Choice", tf: "True or False", fill: "Fill in the Blank" };
+const LETTERS = ["A", "B", "C", "D", "E", "F"];
+
+const state = {
+  chapter: "all",
+  questions: [],
+  answers: {},   // questionId -> 所选值 (mc/tf: 索引; fill: 输入的原始文本)
+  finished: false
+};
+
+function shuffle(arr) {
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+// 每次抽最多 10 道，并按题型轮转混合（单选/判断/填空交替出现）
+function pickQuestions(chapter) {
+  let pool = chapter === "all"
+    ? questionBank.slice()
+    : questionBank.filter(q => q.chapter === chapter);
+
+  const groups = { mc: [], tf: [], fill: [] };
+  pool.forEach(q => (groups[q.type] || groups.mc).push(q));
+  const queues = ["mc", "tf", "fill"].map(t => shuffle(groups[t]));
+
+  const n = Math.min(10, pool.length);
+  const picked = [];
+  while (picked.length < n) {
+    let added = false;
+    for (const queue of queues) {
+      if (picked.length >= n) break;
+      if (queue.length) { picked.push(queue.shift()); added = true; }
+    }
+    if (!added) break;
+  }
+  return picked;
+}
+
+function startQuiz(chapter) {
+  state.chapter = chapter;
+  state.questions = pickQuestions(chapter);
+  state.answers = {};
+  state.finished = false;
+  document.getElementById("result-panel").classList.remove("show");
+  renderChapterButtons();
+  renderStatus();
+  renderQuestions();
+}
+
+function renderChapterButtons() {
+  document.querySelectorAll("#chapter-select .chapter-btn").forEach(btn => {
+    btn.classList.toggle("active", btn.dataset.chapter === state.chapter);
+  });
+}
+
+function renderStatus() {
+  const rangeMap = { all: "All Chapters", "Chapter 4": "Chapter 4", "Chapter 5": "Chapter 5", "Chapter 6": "Chapter 6", "Final Review": "Final Review" };
+  document.getElementById("status-range").textContent = rangeMap[state.chapter] || state.chapter;
+  updateScore();
+}
+
+function isCorrect(q) {
+  const a = state.answers[q.id];
+  if (a === undefined) return false;
+  if (q.type === "fill") return isFillCorrect(q, a);
+  return a === q.answer;
+}
+
+function updateScore() {
+  const total = state.questions.length;
+  let correct = 0;
+  state.questions.forEach(q => { if (isCorrect(q)) correct++; });
+  document.getElementById("status-score").innerHTML = `Score: <b>${correct}</b> / ${total}`;
+}
+
+function renderQuestions() {
+  const area = document.getElementById("quiz-area");
+  if (state.questions.length === 0) {
+    area.innerHTML = `<div class="empty">No questions for this chapter yet. Please choose another chapter.</div>`;
+    return;
+  }
+  area.innerHTML = state.questions.map((q, idx) => {
+    const typeLabel = TYPE_LABELS[q.type] || "Question";
+    const qtext = escapeHtml(q.question)
+      .replace(/\n/g, "<br>")
+      .replace(/_{3,}/g, '<span class="blank">______</span>');
+    const body = q.type === "fill" ? renderFillBody(q) : renderChoices(q);
+    return `
+      <div class="qcard" data-card="${q.id}">
+        <div class="qhead">
+          <div class="qnum">${idx + 1}</div>
+          <div>
+            <div class="qchapter">${escapeHtml(q.chapter)} · ${typeLabel}</div>
+            <div class="qtext">${qtext}</div>
+          </div>
+        </div>
+        ${body}
+        <div class="explain" id="explain-${q.id}"></div>
+      </div>`;
+  }).join("");
+}
+
+function renderChoices(q) {
+  const tfClass = q.type === "tf" ? " tf" : "";
+  const opts = q.options.map((opt, oi) => {
+    const letter = q.type === "tf" ? "" : `<span class="letter">${LETTERS[oi]}</span>`;
+    return `<button class="opt" data-qid="${q.id}" data-opt="${oi}">${letter}<span class="text">${escapeHtml(opt)}</span></button>`;
+  }).join("");
+  return `<div class="opts${tfClass}">${opts}</div>`;
+}
+
+function renderFillBody(q) {
+  return `
+    <div class="fill-row">
+      <input class="fill-input" data-qid="${q.id}" type="text" placeholder="Type your answer..." autocomplete="off" autocapitalize="off" spellcheck="false">
+      <button class="fill-submit" data-qid="${q.id}">Submit</button>
+    </div>`;
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c => ({
+    "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+  }[c]));
+}
+
+function normalize(s) {
+  return String(s).trim().toLowerCase();
+}
+
+function isFillCorrect(q, raw) {
+  const n = normalize(raw);
+  if (n === normalize(q.answer)) return true;
+  return (q.accept || []).some(a => normalize(a) === n);
+}
+
+function answerChoice(qid, optIdx) {
+  if (state.finished) return;
+  if (state.answers[qid] !== undefined) return;
+  const q = state.questions.find(x => x.id === qid);
+  if (!q || q.type === "fill") return;
+  state.answers[qid] = optIdx;
+
+  const card = document.querySelector(`[data-card="${qid}"]`);
+  const opts = card.querySelectorAll(".opt");
+  opts.forEach((btn, i) => {
+    btn.classList.add("disabled");
+    if (i === q.answer) btn.classList.add("correct");
+    if (i === optIdx && optIdx !== q.answer) btn.classList.add("wrong");
+  });
+
+  const isRight = optIdx === q.answer;
+  const ex = card.querySelector(".explain");
+  ex.className = "explain " + (isRight ? "correct" : "wrong");
+  ex.innerHTML = `<span class="tag">${isRight ? "✓ Correct!" : "✗ Incorrect"}</span>${escapeHtml(q.explanation)}`;
+
+  updateScore();
+  checkFinished();
+}
+
+function submitFill(qid) {
+  if (state.finished) return;
+  if (state.answers[qid] !== undefined) return;
+  const q = state.questions.find(x => x.id === qid);
+  if (!q || q.type !== "fill") return;
+
+  const input = document.querySelector(`.fill-input[data-qid="${qid}"]`);
+  const btn = document.querySelector(`.fill-submit[data-qid="${qid}"]`);
+  const raw = input.value;
+  if (raw.trim() === "") {
+    toast("Please type an answer first.");
+    input.focus();
+    return;
+  }
+  state.answers[qid] = raw;
+
+  const isRight = isFillCorrect(q, raw);
+  input.disabled = true;
+  btn.disabled = true;
+  input.classList.add(isRight ? "correct" : "wrong");
+
+  const ansText = q.answer + (q.accept && q.accept.length ? " / " + q.accept.join(" / ") : "");
+  const ex = document.getElementById("explain-" + qid);
+  ex.className = "explain " + (isRight ? "correct" : "wrong");
+  ex.innerHTML = `<span class="tag">${isRight ? "✓ Correct!" : "✗ Incorrect"}</span>${isRight ? "" : `<b>Correct answer: ${escapeHtml(ansText)}.</b> `}${escapeHtml(q.explanation)}`;
+
+  updateScore();
+  checkFinished();
+}
+
+function checkFinished() {
+  const answeredCount = state.questions.filter(q => state.answers[q.id] !== undefined).length;
+  if (answeredCount === state.questions.length) {
+    state.finished = true;
+    showResult();
+  }
+}
+
+function showResult() {
+  const total = state.questions.length;
+  let correct = 0;
+  state.questions.forEach(q => { if (isCorrect(q)) correct++; });
+  const wrong = total - correct;
+  const pct = total ? Math.round(correct / total * 100) : 0;
+  document.getElementById("result-score").textContent = correct;
+  document.getElementById("result-total").textContent = total;
+  document.getElementById("stat-correct").textContent = correct;
+  document.getElementById("stat-wrong").textContent = wrong;
+  document.getElementById("stat-pct").textContent = pct + "%";
+  document.getElementById("result-msg").textContent = messageFor(pct);
+  document.getElementById("result-panel").classList.add("show");
+  document.getElementById("result-panel").scrollIntoView({ behavior: "smooth", block: "nearest" });
+}
+
+function messageFor(pct) {
+  if (pct === 100) return "Perfect! You've mastered this section. 🎉";
+  if (pct >= 80) return "Great job! You're nearly there.";
+  if (pct >= 60) return "Good effort. Review the explanations and try again.";
+  return "Keep practising — you'll improve with every attempt.";
+}
+
+function toast(msg) {
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => t.classList.remove("show"), 2200);
+}
+
+/* 事件绑定 */
+document.getElementById("chapter-select").addEventListener("click", (e) => {
+  const btn = e.target.closest(".chapter-btn");
+  if (!btn) return;
+  startQuiz(btn.dataset.chapter);
+  window.scrollTo({ top: 0, behavior: "smooth" });
+});
+
+document.getElementById("quiz-area").addEventListener("click", (e) => {
+  const opt = e.target.closest(".opt");
+  if (opt) {
+    answerChoice(Number(opt.dataset.qid), Number(opt.dataset.opt));
+    return;
+  }
+  const submit = e.target.closest(".fill-submit");
+  if (submit) {
+    submitFill(Number(submit.dataset.qid));
+  }
+});
+
+// 填空题支持回车提交
+document.getElementById("quiz-area").addEventListener("keydown", (e) => {
+  if (e.key === "Enter") {
+    const input = e.target.closest(".fill-input");
+    if (input) {
+      e.preventDefault();
+      submitFill(Number(input.dataset.qid));
+    }
+  }
+});
+
+// 移动端键盘弹出时，让输入框滚到可视区域中央，避免被键盘遮挡
+document.getElementById("quiz-area").addEventListener("focusin", (e) => {
+  if (e.target.classList && e.target.classList.contains("fill-input")) {
+    setTimeout(() => e.target.scrollIntoView({ block: "center", behavior: "smooth" }), 350);
+  }
+});
+
+document.getElementById("submit-btn").addEventListener("click", () => {
+  const unanswered = state.questions.filter(q => state.answers[q.id] === undefined).length;
+  if (unanswered > 0) {
+    toast(`还有 ${unanswered} 题未作答，请先完成所有题目。`);
+    return;
+  }
+  showResult();
+});
+
+document.getElementById("retry-btn").addEventListener("click", () => {
+  startQuiz(state.chapter);
+  window.scrollTo({ top: 0, behavior: "smooth" });
+});
+
+/* 扫码分享：生成当前页面二维码 */
+function initShareQr() {
+  const el = document.getElementById("share-qr");
+  if (!el) return;
+  const url = window.location.href;
+  try {
+    if (window.QRCode) {
+      new QRCode(el, {
+        text: url,
+        width: 150,
+        height: 150,
+        colorDark: "#111827",
+        colorLight: "#ffffff",
+        correctLevel: QRCode.CorrectLevel.M
+      });
+    } else {
+      el.innerHTML = '<div class="share-qr-fallback">二维码加载失败</div>';
+    }
+  } catch (e) {
+    el.innerHTML = '<div class="share-qr-fallback">二维码加载失败</div>';
+  }
+}
+
+/* 初始化 */
+startQuiz("all");
+initShareQr();
+</script>
+</body>
+</html>
