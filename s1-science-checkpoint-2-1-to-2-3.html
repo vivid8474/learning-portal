@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>S1 Science · Checkpoint 2.1–2.3</title>
+<style>
+:root{
+  --brand:#2563eb;
+  --brand-ink:#1d4ed8;
+  --ink:#1e293b;
+  --ink-2:#475569;
+  --muted:#94a3b8;
+  --line:#e2e8f0;
+  --bg:#f5f7fb;
+  --card:#ffffff;
+  --shadow:0 4px 16px rgba(15,23,42,.06);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+html{scroll-padding-top:16px}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",sans-serif;
+  background:var(--bg);color:var(--ink);line-height:1.55;
+}
+.wrap{max-width:860px;margin:0 auto;padding:24px 16px 60px}
+
+/* 顶部标题 */
+.topbar{text-align:center;padding:8px 0 20px}
+.topbar h1{font-size:26px;font-weight:800;margin:0;letter-spacing:.2px;color:var(--ink)}
+.topbar p{margin:8px auto 0;color:var(--muted);font-size:14px;max-width:560px}
+.topbar .badge{display:inline-block;margin-top:10px;font-size:12.5px;font-weight:700;color:#8a5a00;background:#fff7e0;border:1px solid #f5c518;border-radius:999px;padding:4px 14px}
+.topbar-nav{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:14px}
+.topbar-nav a{display:inline-flex;align-items:center;gap:5px;font-size:13px;font-weight:700;color:#1e3a8a;background:#eef4ff;border:1px solid #d5e2fb;border-radius:999px;padding:6px 14px;text-decoration:none;transition:.15s}
+.topbar-nav a:hover{background:#dbe7ff;border-color:#bcd0f2}
+.topbar-nav a.go-home{color:#fff;background:#2f6bff;border-color:#2f6bff}
+.topbar-nav a.go-home:hover{background:#1f4fd8;border-color:#1f4fd8}
+
+/* 分节客观题 */
+.qz-set{border:1px solid #e3ecf9;border-radius:16px;background:#fff;padding:16px;margin:4px 0}
+.qz-title{font-size:17px;font-weight:900;color:#1e3a8a;margin-bottom:4px}
+.qz-intro{font-size:13px;color:#64748b;margin-bottom:14px}
+.qz-section{border:1px solid #e8eff9;border-radius:14px;margin-bottom:0;overflow:hidden;background:#fff}
+.qz-divider{border-top:2px dashed #cbd5e1;margin:34px 0}
+.qz-sec-head{display:flex;align-items:center;gap:9px;padding:13px 16px;background:#f0f6ff;border-bottom:1px solid #e8eff9}
+.qz-sec-icon{font-size:19px;line-height:1}
+.qz-sec-title{font-size:15px;font-weight:900;color:#1e3a8a}
+.qz-sec-sub{font-size:11.5px;font-weight:700;color:#64748b;background:#eef2f9;border-radius:999px;padding:2px 9px;margin-left:auto;white-space:nowrap}
+.qz-block{background:#f8f9fa;border:1px solid #eef1f5;border-radius:12px;padding:20px;margin:16px 16px 24px}
+.qz-block:last-child{margin-bottom:16px}
+.qz-block--level,.qz-block--note{background:transparent;border:0;border-radius:0;padding:0;margin:6px 16px 18px}
+.qz-block--level:first-child,.qz-block--note:first-child{margin-top:16px}
+.qz-block-title{font-size:15.5px;font-weight:900;color:#1e3a8a;margin-bottom:10px}
+.qz-block-intro{font-size:12.5px;color:#64748b;line-height:1.55;margin-bottom:10px}
+.qz-level{display:inline-block;font-size:12px;font-weight:900;letter-spacing:.5px;color:#fff;background:#2f6bff;border:1px solid #2f6bff;border-radius:999px;padding:4px 14px;box-shadow:0 2px 8px rgba(47,107,255,.25)}
+.qz-note-text{font-size:13.5px;color:#33415c;line-height:1.6;font-weight:600}
+
+/* 下拉 */
+.qz-sel{width:100%;border:1.5px solid #d5e0f0;border-radius:8px;padding:7px 9px;font-size:13px;color:#1e293b;background:#fff;font-weight:600;cursor:pointer;transition:border-color .12s,background .12s}
+.qz-sel:focus{outline:none;border-color:#2f6bff}
+.qz-sel.is-correct{border-color:#22a06b;background:#e6f6ec;color:#14683f}
+.qz-sel.is-wrong{border-color:#e11d48;background:#fff1f2;color:#be123c}
+
+/* 单选题 */
+.qz-mc{margin-bottom:18px}
+.qz-mc:last-child{margin-bottom:0}
+.qz-mc-text{font-size:14px;color:#1e293b;font-weight:700;line-height:1.5;margin-bottom:10px}
+.qz-options{display:flex;flex-direction:column;gap:6px}
+.qz-opt{display:flex;align-items:center;gap:9px;cursor:pointer;border:1.5px solid #e3ecf9;border-radius:9px;padding:8px 11px;transition:border-color .12s,background .12s}
+.qz-opt:hover{border-color:#bcd0f2;background:#f5f9ff}
+.qz-opt input{accent-color:#2f6bff;margin:0}
+.qz-opt__label{font-size:13px;color:#33415c;font-weight:600;line-height:1.4}
+.qz-opt.is-correct{border-color:#22a06b;background:#e6f6ec}
+.qz-opt.is-correct .qz-opt__label{color:#14683f}
+.qz-opt.is-wrong{border-color:#e11d48;background:#fff1f2}
+.qz-opt.is-wrong .qz-opt__label{color:#be123c}
+.qz-fb{font-size:12.5px;font-weight:700;margin-top:6px}
+.qz-fb.is-ok{color:#14683f}
+.qz-fb.is-bad{color:#be123c}
+
+/* 选词填空 */
+.qz-wordbank{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.qz-word{font-size:12px;font-weight:700;color:#1e3a8a;background:#eef4ff;border:1px solid #d5e2fb;border-radius:999px;padding:3px 10px}
+.qz-fill-item{margin-bottom:12px;line-height:1.9}
+.qz-fill-item:last-child{margin-bottom:0}
+.qz-fill-label{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;background:#2f6bff;color:#fff;font-size:12px;font-weight:900;margin-right:8px;vertical-align:middle;flex:0 0 auto;box-shadow:0 2px 6px rgba(47,107,255,.3)}
+.qz-fill-text{font-size:13.5px;color:#1e293b;font-weight:600}
+.qz-fill-item .qz-sel{display:inline-block;width:auto;min-width:86px;padding:3px 6px;font-size:12.5px;margin:0 2px;vertical-align:middle}
+
+/* 判断 T/F */
+.qz-tf-item{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid #f1f5fb}
+.qz-tf-item:last-child{border-bottom:0}
+.qz-tf-q{flex:1;font-size:13.5px;color:#1e293b;font-weight:700;line-height:1.45}
+.qz-tf-btns{display:flex;gap:6px;flex:0 0 auto}
+.qz-tf-btn{width:42px;height:34px;border-radius:8px;border:1.5px solid #d5e0f0;background:#fff;color:#33415c;font-weight:800;font-size:14px;cursor:pointer;transition:all .12s}
+.qz-tf-btn:hover{border-color:#bcd0f2}
+.qz-tf-btn.is-on{border-color:#2f6bff;background:#2f6bff;color:#fff}
+.qz-tf-btn.is-correct{border-color:#22a06b;background:#e6f6ec;color:#14683f}
+.qz-tf-btn.is-wrong{border-color:#e11d48;background:#fff1f2;color:#be123c}
+.qz-tf-btn:disabled{cursor:default}
+
+/* 匹配题 */
+.qz-match{display:flex;flex-direction:column;gap:8px}
+.qz-match-item{display:flex;align-items:center;gap:10px;padding:8px 10px;background:#fff;border:1px solid #e8eff9;border-radius:9px}
+.qz-match-num{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;background:#2f6bff;color:#fff;font-size:12px;font-weight:900;flex:0 0 auto}
+.qz-match-term{flex:1;font-size:13.5px;font-weight:700;color:#1e293b}
+.qz-match-item .qz-sel{width:auto;min-width:80px;flex:0 0 auto}
+.qz-match-desc{display:grid;grid-template-columns:1fr 1fr;gap:6px 14px;margin:12px 0;padding:12px 14px;background:#f0f6ff;border:1px dashed #c7d6ee;border-radius:10px}
+.qz-match-desc-item{font-size:12px;color:#33415c;line-height:1.5}
+.qz-match-desc-item b{color:#1e3a8a}
+
+/* 句子混合填空（下拉 + 输入） */
+.qz-fillmix{font-size:14.5px;line-height:2.2;color:#1e293b;font-weight:600}
+.qz-fillmix .qz-sel{display:inline-block;width:auto;min-width:88px;padding:3px 8px;font-size:13px;margin:0 3px;vertical-align:middle}
+.qz-fillmix .qz-short{display:inline-block;width:auto;min-width:150px;padding:5px 8px;font-size:13px;margin:0 3px;vertical-align:middle}
+.qz-fillmix .qz-fb{display:block;margin:2px 0 0;font-size:11.5px}
+
+/* 短文本填空 */
+.qz-short-item{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid #f1f5fb}
+.qz-short-item:last-child{border-bottom:0}
+.qz-short-label{font-size:13px;font-weight:700;color:#33415c;flex:0 0 auto;min-width:160px}
+.qz-short-input{flex:1;min-width:0}
+.qz-short{width:100%;border:1.5px solid #d5e0f0;border-radius:8px;padding:8px 10px;font-size:13px;font-weight:600;color:#1e293b;background:#fff}
+.qz-short:focus{outline:none;border-color:#2f6bff}
+.qz-short.is-correct{border-color:#22a06b;background:#e6f6ec;color:#14683f}
+.qz-short.is-wrong{border-color:#e11d48;background:#fff1f2;color:#be123c}
+.qz-short-input .qz-fb{display:block;margin-top:4px}
+
+/* 高亮结论框 */
+.qz-block--highlight{background:transparent;border:0;padding:0;margin:16px 16px 24px}
+.qz-highlight{
+  border:1.5px solid #f59e0b;border-left:5px solid #e11d48;
+  background:linear-gradient(90deg,#fff7e6,#fff1f2);border-radius:10px;
+  padding:13px 15px;font-size:14px;font-weight:800;color:#9a3412;line-height:1.65;
+}
+.qz-highlight b{color:#e11d48}
+
+/* 交互表格 */
+.qz-table-wrap{overflow-x:auto;margin-top:4px}
+.qz-table{width:100%;border-collapse:collapse;font-size:13px;min-width:430px}
+.qz-table th,.qz-table td{border:1px solid #e3ecf9;padding:9px 10px;text-align:left;vertical-align:middle}
+.qz-table th{background:#eef4ff;color:#1e3a8a;font-weight:800;white-space:nowrap;font-size:12.5px}
+.qz-table td{color:#1e293b;font-weight:600;background:#fff}
+.qz-table td.qz-table-label{font-weight:800;color:#1e3a8a;white-space:nowrap}
+.qz-table .qz-sel{width:auto;min-width:118px;padding:6px 8px}
+.qz-table .qz-short{width:64px;text-align:center;padding:6px}
+.qz-table .qz-fb{display:block;font-size:11px;margin-top:3px}
+
+/* 排序题 */
+.qz-sort-list{display:flex;flex-direction:column;gap:8px}
+.qz-sort-item{
+  display:flex;align-items:center;gap:10px;padding:10px 12px;background:#fff;
+  border:1.5px solid #d5e0f0;border-radius:10px;cursor:grab;transition:border-color .12s,background .12s,opacity .12s;
+}
+.qz-sort-item:active{cursor:grabbing}
+.qz-sort-item.dragging{opacity:.5;border-style:dashed}
+.qz-sort-item.is-correct{border-color:#22a06b;background:#e6f6ec}
+.qz-sort-item.is-wrong{border-color:#e11d48;background:#fff1f2}
+.qz-sort-handle{font-size:15px;color:#94a3b8;flex:0 0 auto}
+.qz-sort-text{flex:1;font-size:13.5px;font-weight:700;color:#1e293b}
+.qz-sort-arrows{display:flex;flex-direction:column;gap:3px;flex:0 0 auto}
+.qz-sort-up,.qz-sort-down{
+  width:32px;height:23px;border:1px solid #d5e0f0;background:#f8fafc;color:#64748b;
+  border-radius:5px;font-size:9px;cursor:pointer;line-height:1;display:flex;align-items:center;justify-content:center;transition:.12s;
+}
+.qz-sort-up:hover,.qz-sort-down:hover{background:#eef4ff;border-color:#bcd0f2;color:#1e3a8a}
+.qz-sort-up:disabled,.qz-sort-down:disabled{opacity:.4;cursor:default}
+.qz-sort-fb{font-size:12.5px;font-weight:700;margin-top:8px;color:#1e3a8a}
+
+/* 分类题 */
+.qz-classify-pool{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+.qz-classify-chip{
+  display:inline-flex;align-items:center;gap:5px;padding:8px 14px;font-size:13px;font-weight:700;
+  color:#1e3a8a;background:#fff;border:1.5px solid #d5e0f0;border-radius:999px;cursor:pointer;transition:.12s;
+}
+.qz-classify-chip:hover{border-color:#2f6bff;background:#f5f9ff}
+.qz-classify-chip.is-selected{border-color:#2f6bff;background:#2f6bff;color:#fff;box-shadow:0 3px 10px rgba(47,107,255,.3)}
+.qz-classify-chip.is-placed{background:#eef4ff}
+.qz-classify-chip.is-correct{border-color:#22a06b;background:#e6f6ec;color:#14683f}
+.qz-classify-chip.is-wrong{border-color:#e11d48;background:#fff1f2;color:#be123c}
+.qz-classify-chip:disabled{cursor:default;opacity:.85}
+.qz-classify-boxes{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.qz-classify-box{border:2px dashed #c7d6ee;border-radius:12px;padding:10px;background:#f8fbff;min-height:140px;transition:.12s}
+.qz-classify-box.is-target{border-color:#2f6bff;background:#eef4ff}
+.qz-classify-box-title{font-size:13px;font-weight:900;color:#1e3a8a;margin-bottom:8px;text-align:center}
+.qz-classify-drop{display:flex;flex-wrap:wrap;gap:6px;min-height:46px;align-content:flex-start}
+.qz-classify-hint{font-size:11.5px;color:#64748b;margin-top:6px}
+
+/* 提交与结果 */
+.qz-actions{margin-top:26px}
+.qz-submit{border:1px solid #22a06b;background:#22a06b;color:#fff;font-weight:800;font-size:15px;border-radius:10px;padding:12px 24px;cursor:pointer;width:100%}
+.qz-submit:hover{background:#1a865a;border-color:#1a865a}
+.qz-submit:disabled{background:#94a3b8;border-color:#94a3b8;cursor:default}
+.qz-result{margin-top:14px;border:1px solid #e3ecf9;border-radius:12px;background:#f7faff;padding:16px;text-align:center}
+.qz-score{font-size:34px;font-weight:900;color:#1e3a8a;line-height:1.1}
+.qz-score-sub{font-size:13px;color:#64748b;margin-top:6px}
+.qz-score-msg{font-size:14px;font-weight:700;color:#1e3a8a;margin-top:10px}
+.qz-score-note{font-size:12px;color:#64748b;margin-top:9px;line-height:1.5}
+
+@media (max-width:560px){
+  .topbar h1{font-size:21px}
+  .qz-block{padding:16px;margin:12px 12px 20px}
+  .qz-block--level,.qz-block--note,.qz-block--highlight{margin:4px 12px 16px}
+  .qz-tf-item{flex-direction:column;align-items:flex-start}
+  .qz-tf-btns{align-self:flex-end}
+  .qz-short-item{flex-direction:column;align-items:stretch}
+  .qz-short-label{min-width:0}
+  .qz-match-desc{grid-template-columns:1fr}
+  .qz-fillmix .qz-short{min-width:120px}
+  .qz-classify-boxes{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="topbar">
+    <h1>S1 Science · Checkpoint 2.1–2.3</h1>
+    <p>Revision test covering States of Water, the Water Cycle and Dissolving. Answer every question, then press “Submit &amp; mark”.</p>
+    <span class="badge">🌟 Checkpoint · 2.1 - 2.3 Revision · 36 marks</span>
+    <nav class="topbar-nav">
+      <a class="go-home" href="index.html" data-keep-share>🏠 Home</a>
+    </nav>
+  </header>
+
+  <div id="quiz-root"></div>
+</div>
+
+<script>
+const escapeHTML = (str) =>
+  String(str).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const esc = escapeHTML;
+
+const extractInts = (s) => (String(s).match(/\d+/g) || []).map(Number);
+const extractSigned = (s) => (String(s).replace(/[\u2212\u2013\u2014]/g, "-").match(/-?\d+/g) || []).map(Number);
+
+/* ================= 测验数据 ================= */
+const QUIZSET = {
+  title: "Checkpoint · 2.1 - 2.3 Revision",
+  intro: "A mini revision test covering States of Water, the Water Cycle and Dissolving. Answer everything, then press “Submit & mark” for your score (36 marks).",
+  sections: [
+    {
+      id: "M1",
+      icon: "🧊",
+      title: "Module 1 · States of Water (2.1)",
+      sub: "11 marks",
+      blocks: [
+        { kind: "table",
+          title: "Interactive table — changes in state",
+          intro: "Choose the correct process and energy change for each change of state.",
+          head: ["Change of state", "Process", "Energy change"],
+          rows: [
+            [ { t: "Solid (ice) → Liquid (water)" }, { select: { answer: "Melting", opts: ["Melting", "Freezing", "Evaporation", "Condensation"] } }, { select: { answer: "absorbed", opts: ["absorbed", "released"] } } ],
+            [ { t: "Liquid (water) → Solid (ice)" }, { select: { answer: "Freezing", opts: ["Melting", "Freezing", "Evaporation", "Condensation"] } }, { select: { answer: "released", opts: ["absorbed", "released"] } } ],
+            [ { t: "Liquid (water) → Gas (steam)" }, { select: { answer: "Evaporation", opts: ["Melting", "Freezing", "Evaporation", "Condensation"] } }, { select: { answer: "absorbed", opts: ["absorbed", "released"] } } ],
+            [ { t: "Gas (steam) → Liquid (water)" }, { select: { answer: "Condensation", opts: ["Melting", "Freezing", "Evaporation", "Condensation"] } }, { select: { answer: "released", opts: ["absorbed", "released"] } } ]
+          ]
+        },
+        { kind: "shorttext",
+          title: "Key temperatures",
+          intro: "Type the temperature (a number only, in °C).",
+          items: [
+            { label: "Melting point of ice", type: "num", answer: 0, pretty: "0 °C" },
+            { label: "Freezing point of water", type: "num", answer: 0, pretty: "0 °C" },
+            { label: "Boiling point of water", type: "num", answer: 100, pretty: "100 °C" }
+          ]
+        },
+        { kind: "highlight",
+          text: "🌟 <b>Evaporation can take place at any temperatures</b>, including temperatures below its boiling point."
+        }
+      ]
+    },
+    {
+      id: "M2",
+      icon: "☁️",
+      title: "Module 2 · Water Cycle (2.2)",
+      sub: "16 marks",
+      blocks: [
+        { kind: "match",
+          title: "Match each part to its role",
+          intro: "Choose the correct role for each part of the water cycle.",
+          options: ["Provides energy", "Source of evaporation", "Formed by condensed droplets", "Water sinking into soil"],
+          descriptions: [
+            { key: "a", text: "Provides the energy for evaporation" },
+            { key: "b", text: "Source of evaporation" },
+            { key: "c", text: "Formed by condensed water droplets" },
+            { key: "d", text: "Water sinking into the soil" }
+          ],
+          items: [
+            { term: "Sun", answer: "Provides energy" },
+            { term: "Sea", answer: "Source of evaporation" },
+            { term: "Clouds", answer: "Formed by condensed droplets" },
+            { term: "Groundwater", answer: "Water sinking into soil" }
+          ]
+        },
+        { kind: "sort",
+          title: "Put the water cycle steps in order",
+          intro: "Drag the steps (or use the ▲ ▼ buttons) to arrange them in the correct order.",
+          answer: ["Evaporation", "Condensation", "Transportation", "Precipitation", "Water collects in rivers/sea"],
+          order: ["Precipitation", "Evaporation", "Water collects in rivers/sea", "Condensation", "Transportation"]
+        },
+        { kind: "fillmix",
+          title: "Complete the water cycle paragraph",
+          intro: "Choose the correct word for each blank.",
+          parts: [
+            { text: "The sun heats up water in the sea, rivers and on land, so some water " },
+            { select: { answer: "evaporates", opts: ["evaporates", "condenses", "freezes", "melts"] } },
+            { text: " and becomes water vapour. Water vapour cools down and " },
+            { select: { answer: "condenses", opts: ["evaporates", "condenses", "freezes", "melts"] } },
+            { text: " to form small water droplets, which join together to form " },
+            { select: { answer: "clouds", opts: ["clouds", "rain", "rivers", "ice"] } },
+            { text: ". Clouds may be carried to other places by the " },
+            { select: { answer: "wind", opts: ["wind", "sun", "sea", "rain"] } },
+            { text: ". When the water droplets gather and become heavier, they fall to the ground as " },
+            { select: { answer: "rain", opts: ["rain", "snow", "hail", "clouds"] } },
+            { text: "." }
+          ]
+        },
+        { kind: "tf",
+          title: "Check your understanding",
+          intro: "Decide whether each statement is true (T) or false (F).",
+          items: [
+            { q: "In the water cycle, the total amount of water on Earth remains constant (the same).", answer: "T" }
+          ]
+        },
+        { kind: "mc",
+          items: [
+            { q: "In the water cycle, the total amount of water on Earth…", options: [
+              "increases over time.",
+              "decreases over time.",
+              "remains constant.",
+              "keeps changing randomly."
+            ], answer: 2 }
+          ]
+        }
+      ]
+    },
+    {
+      id: "M3",
+      icon: "🧂",
+      title: "Module 3 · Dissolving (2.3)",
+      sub: "9 marks",
+      blocks: [
+        { kind: "match",
+          title: "Match each substance to its role",
+          intro: "Choose the correct scientific term for each substance.",
+          options: ["Solute", "Solvent", "Solution"],
+          descriptions: [
+            { key: "a", text: "The substance that dissolves" },
+            { key: "b", text: "The liquid that does the dissolving" },
+            { key: "c", text: "The mixture formed after dissolving" }
+          ],
+          items: [
+            { term: "Salt", answer: "Solute" },
+            { term: "Water", answer: "Solvent" },
+            { term: "Salt solution", answer: "Solution" }
+          ]
+        },
+        { kind: "classify",
+          title: "Sort the conditions",
+          intro: "Tap a condition to select it, then tap a box to place it. (On desktop you can also drag it.)",
+          bins: ["Faster", "Slower"],
+          items: [
+            { val: "Hot water", bin: "Faster" },
+            { val: "Cold water", bin: "Slower" },
+            { val: "Large pieces", bin: "Slower" },
+            { val: "Small pieces", bin: "Faster" },
+            { val: "Stirred", bin: "Faster" },
+            { val: "Unstirred", bin: "Slower" }
+          ]
+        }
+      ]
+    }
+  ]
+};
+
+/* ================= 渲染 ================= */
+function qzSelect(answer, opts, placeholder) {
+  const options = (opts || []).map((o) => `<option value="${esc(o)}">${esc(o)}</option>`).join("");
+  return `<select class="qz-sel" data-answer="${esc(answer)}"><option value="">${esc(placeholder || "—")}</option>${options}</select>`;
+}
+function qzNumBadge(n) {
+  return `<span class="qz-fill-label">${esc(String(n))}</span>`;
+}
+function renderQuizBlock(block, secIdx, blockIdx) {
+  if (!block || !block.kind) return "";
+  if (block.kind === "level") {
+    return `<div class="qz-block qz-block--level"><span class="qz-level">${esc(block.text)}</span></div>`;
+  }
+  if (block.kind === "note") {
+    return `<div class="qz-block qz-block--note"><div class="qz-note-text">${esc(block.text)}</div></div>`;
+  }
+  if (block.kind === "highlight") {
+    return `<div class="qz-block qz-block--highlight"><div class="qz-highlight">${block.text}</div></div>`;
+  }
+  if (block.kind === "table") {
+    const head = (block.head || []).map((h) => `<th>${esc(h)}</th>`).join("");
+    const rows = (block.rows || []).map((row) => {
+      const cells = row.map((cell) => {
+        if (cell.select) return `<td>${qzSelect(cell.select.answer, cell.select.opts, "—")}</td>`;
+        if (cell.input) return `<td><input class="qz-short" type="text" data-qtype="${esc(cell.input.qtype || "num")}" data-answer="${esc(cell.input.answer)}" data-pretty="${esc(cell.input.pretty || "")}" placeholder="…" autocomplete="off"><span class="qz-fb" hidden></span></td>`;
+        return `<td class="qz-table-label">${esc(cell.t || "")}</td>`;
+      }).join("");
+      return `<tr>${cells}</tr>`;
+    }).join("");
+    return `<div class="qz-block">
+      ${block.title ? `<div class="qz-block-title">${esc(block.title)}</div>` : ""}
+      ${block.intro ? `<div class="qz-block-intro">${esc(block.intro)}</div>` : ""}
+      <div class="qz-table-wrap"><table class="qz-table"><thead><tr>${head}</tr></thead><tbody>${rows}</tbody></table></div>
+    </div>`;
+  }
+  if (block.kind === "fill") {
+    const bank = (block.wordbank || []).map((w) => `<span class="qz-word">${esc(w)}</span>`).join("");
+    const opts = block.wordbank || [];
+    const items = (block.items || []).map((it) => {
+      const inner = it.parts.map((p) => p.blank
+        ? qzSelect(p.blank, opts, "—")
+        : `<span class="qz-fill-text">${esc(p.text)}</span>`).join("");
+      return `<div class="qz-fill-item"><span class="qz-fill-label">${esc(it.label)}</span>${inner}</div>`;
+    }).join("");
+    return `<div class="qz-block">
+      ${block.title ? `<div class="qz-block-title">${esc(block.title)}</div>` : ""}
+      ${block.intro ? `<div class="qz-block-intro">${esc(block.intro)}</div>` : ""}
+      <div class="qz-wordbank">${bank}</div>
+      ${items}
+    </div>`;
+  }
+  if (block.kind === "tf") {
+    const items = (block.items || []).map((it, i) => `
+      <div class="qz-tf-item">
+        ${qzNumBadge(i + 1)}
+        <div class="qz-tf-q">${esc(it.q)}</div>
+        <div class="qz-tf-btns" data-answer="${esc(it.answer)}">
+          <button type="button" class="qz-tf-btn" data-val="T">T</button>
+          <button type="button" class="qz-tf-btn" data-val="F">F</button>
+        </div>
+      </div>`).join("");
+    return `<div class="qz-block">
+      ${block.title ? `<div class="qz-block-title">${esc(block.title)}</div>` : ""}
+      ${block.intro ? `<div class="qz-block-intro">${esc(block.intro)}</div>` : ""}
+      ${items}
+    </div>`;
+  }
+  if (block.kind === "mc") {
+    const items = (block.items || []).map((q, qi) => `
+      <div class="qz-mc" data-answer="${q.answer}">
+        <div class="qz-mc-text">${qzNumBadge(qi + 1)}${esc(q.q)}</div>
+        <div class="qz-options">
+          ${(q.options || []).map((o, oi) => `
+            <label class="qz-opt">
+              <input type="radio" name="qz-mc-${secIdx}-${blockIdx}-${qi}" value="${oi}">
+              <span class="qz-opt__label">${String.fromCharCode(65 + oi)}. ${esc(o)}</span>
+            </label>`).join("")}
+        </div>
+        <div class="qz-fb" hidden></div>
+      </div>`).join("");
+    return `<div class="qz-block">
+      ${block.title ? `<div class="qz-block-title">${esc(block.title)}</div>` : ""}
+      ${block.intro ? `<div class="qz-block-intro">${esc(block.intro)}</div>` : ""}
+      ${items}
+    </div>`;
+  }
+  if (block.kind === "match") {
+    const opts = block.options || [];
+    const items = (block.items || []).map((it, i) => `
+      <div class="qz-match-item">
+        <span class="qz-match-num">${i + 1}</span>
+        <span class="qz-match-term">${esc(it.term)}</span>
+        ${qzSelect(it.answer, opts, "choose…")}
+      </div>`).join("");
+    const desc = (block.descriptions || []).map((d) => `<div class="qz-match-desc-item"><b>${esc(d.key)}.</b> ${esc(d.text)}</div>`).join("");
+    return `<div class="qz-block">
+      ${block.title ? `<div class="qz-block-title">${esc(block.title)}</div>` : ""}
+      ${block.intro ? `<div class="qz-block-intro">${esc(block.intro)}</div>` : ""}
+      <div class="qz-match-desc">${desc}</div>
+      <div class="qz-match">${items}</div>
+    </div>`;
+  }
+  if (block.kind === "fillmix") {
+    const parts = (block.parts || []).map((p) => {
+      if (p.text) return `<span>${esc(p.text)}</span>`;
+      if (p.select) return qzSelect(p.select.answer, p.select.opts, "—");
+      if (p.input) return `<input class="qz-short" type="text" data-qtype="${esc(p.input.qtype || "text")}" data-answer="${esc(JSON.stringify(p.input.answer))}" data-pretty="${esc(p.input.pretty || "")}" placeholder="…" autocomplete="off"><span class="qz-fb" hidden></span>`;
+      return "";
+    }).join("");
+    return `<div class="qz-block">
+      ${block.title ? `<div class="qz-block-title">${esc(block.title)}</div>` : ""}
+      ${block.intro ? `<div class="qz-block-intro">${esc(block.intro)}</div>` : ""}
+      <div class="qz-fillmix">${parts}</div>
+    </div>`;
+  }
+  if (block.kind === "shorttext") {
+    const items = (block.items || []).map((it) => `
+      <div class="qz-short-item">
+        <span class="qz-short-label">${esc(it.label)}</span>
+        <div class="qz-short-input">
+          <input class="qz-short" type="text" data-qtype="${esc(it.type)}" data-answer="${esc(JSON.stringify(it.answer))}" data-pretty="${esc(it.pretty || "")}" placeholder="Type here…" autocomplete="off">
+          <span class="qz-fb" hidden></span>
+        </div>
+      </div>`).join("");
+    return `<div class="qz-block">
+      ${block.title ? `<div class="qz-block-title">${esc(block.title)}</div>` : ""}
+      ${block.intro ? `<div class="qz-block-intro">${esc(block.intro)}</div>` : ""}
+      ${items}
+    </div>`;
+  }
+  if (block.kind === "sort") {
+    const items = (block.order || []).map((v) => `
+      <div class="qz-sort-item" draggable="true" data-val="${esc(v)}">
+        <span class="qz-sort-handle">☰</span>
+        <span class="qz-sort-text">${esc(v)}</span>
+        <span class="qz-sort-arrows">
+          <button type="button" class="qz-sort-up" aria-label="Move up">▲</button>
+          <button type="button" class="qz-sort-down" aria-label="Move down">▼</button>
+        </span>
+      </div>`).join("");
+    return `<div class="qz-block">
+      ${block.title ? `<div class="qz-block-title">${esc(block.title)}</div>` : ""}
+      ${block.intro ? `<div class="qz-block-intro">${esc(block.intro)}</div>` : ""}
+      <div class="qz-sort" data-answer='${esc(JSON.stringify(block.answer))}'>
+        <div class="qz-sort-list">${items}</div>
+        <div class="qz-sort-fb" hidden></div>
+      </div>
+    </div>`;
+  }
+  if (block.kind === "classify") {
+    const chips = (block.items || []).map((it) =>
+      `<button type="button" class="qz-classify-chip" data-val="${esc(it.val)}" draggable="true">${esc(it.val)}</button>`).join("");
+    const answer = {};
+    (block.items || []).forEach((it) => { (answer[it.bin] = answer[it.bin] || []).push(it.val); });
+    const boxes = (block.bins || []).map((b) => `
+      <div class="qz-classify-box" data-bin="${esc(b)}">
+        <div class="qz-classify-box-title">${b === "Faster" ? "⚡ Faster dissolving" : "🐢 Slower dissolving"}</div>
+        <div class="qz-classify-drop"></div>
+      </div>`).join("");
+    return `<div class="qz-block">
+      ${block.title ? `<div class="qz-block-title">${esc(block.title)}</div>` : ""}
+      ${block.intro ? `<div class="qz-block-intro">${esc(block.intro)}</div>` : ""}
+      <div class="qz-classify" data-answer='${esc(JSON.stringify(answer))}'>
+        <div class="qz-classify-pool">${chips}</div>
+        <div class="qz-classify-boxes">${boxes}</div>
+        <div class="qz-classify-hint">💡 Tap a condition once to select it, then tap a box. Tap a placed chip to send it back to the top.</div>
+      </div>
+    </div>`;
+  }
+  return "";
+}
+function renderQuizSet(qz) {
+  const sections = (qz.sections || []).map((sec, si) => {
+    const blocks = (sec.blocks || []).map((b, bi) => renderQuizBlock(b, si, bi)).join("");
+    return `
+      <div class="qz-section">
+        <div class="qz-sec-head">
+          <span class="qz-sec-icon">${esc(sec.icon || "📋")}</span>
+          <span class="qz-sec-title">${esc(sec.title || "")}</span>
+          ${sec.sub ? `<span class="qz-sec-sub">${esc(sec.sub)}</span>` : ""}
+        </div>
+        ${blocks}
+      </div>`;
+  }).join('<div class="qz-divider" role="separator" aria-hidden="true"></div>');
+  return `
+    <div class="qz-set" data-quizset>
+      <div class="qz-title">${esc(qz.title || "Checkpoint")}</div>
+      <div class="qz-intro">${esc(qz.intro || "")}</div>
+      ${sections}
+      <div class="qz-actions">
+        <button class="qz-submit" type="button">✍️ Submit &amp; mark</button>
+      </div>
+      <div class="qz-result" hidden></div>
+    </div>`;
+}
+
+/* ================= 排序交互 ================= */
+function initSort(root) {
+  root.querySelectorAll(".qz-sort").forEach((sortEl) => {
+    const list = sortEl.querySelector(".qz-sort-list");
+    let dragItem = null;
+    sortEl.querySelectorAll(".qz-sort-item").forEach((it) => {
+      it.addEventListener("dragstart", () => { dragItem = it; it.classList.add("dragging"); });
+      it.addEventListener("dragend", () => { it.classList.remove("dragging"); dragItem = null; });
+    });
+    list.addEventListener("dragover", (e) => {
+      e.preventDefault();
+      if (!dragItem) return;
+      const after = getDragAfterElement(list, e.clientY);
+      if (after == null) list.appendChild(dragItem);
+      else list.insertBefore(dragItem, after);
+    });
+    sortEl.querySelectorAll(".qz-sort-up").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const item = btn.closest(".qz-sort-item");
+        const prev = item.previousElementSibling;
+        if (prev) list.insertBefore(item, prev);
+      });
+    });
+    sortEl.querySelectorAll(".qz-sort-down").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const item = btn.closest(".qz-sort-item");
+        const next = item.nextElementSibling;
+        if (next) list.insertBefore(next, item);
+      });
+    });
+  });
+}
+function getDragAfterElement(list, y) {
+  const els = [...list.querySelectorAll(".qz-sort-item:not(.dragging)")];
+  return els.reduce((closest, child) => {
+    const box = child.getBoundingClientRect();
+    const offset = y - box.top - box.height / 2;
+    if (offset < 0 && offset > closest.offset) return { offset, element: child };
+    return closest;
+  }, { offset: -Infinity, element: null }).element;
+}
+
+/* ================= 分类交互 ================= */
+function initClassify(root) {
+  root.querySelectorAll(".qz-classify").forEach((clsEl) => {
+    const pool = clsEl.querySelector(".qz-classify-pool");
+    let selected = null;
+
+    clsEl.querySelectorAll(".qz-classify-chip").forEach((chip) => {
+      chip.addEventListener("click", (e) => {
+        e.stopPropagation();
+        if (chip.disabled) return;
+        if (chip.getAttribute("data-bin")) {
+          chip.removeAttribute("data-bin");
+          chip.classList.remove("is-placed");
+          pool.appendChild(chip);
+          selected = null;
+        } else {
+          if (selected === chip) { selected = null; chip.classList.remove("is-selected"); }
+          else {
+            if (selected) selected.classList.remove("is-selected");
+            selected = chip;
+            chip.classList.add("is-selected");
+          }
+        }
+      });
+      chip.addEventListener("dragstart", () => { if (!chip.disabled) selected = chip; });
+    });
+
+    clsEl.querySelectorAll(".qz-classify-box").forEach((box) => {
+      const bin = box.getAttribute("data-bin");
+      const drop = box.querySelector(".qz-classify-drop");
+      const place = () => {
+        if (selected && !selected.getAttribute("data-bin")) {
+          selected.setAttribute("data-bin", bin);
+          selected.classList.add("is-placed");
+          selected.classList.remove("is-selected");
+          drop.appendChild(selected);
+          selected = null;
+        }
+      };
+      box.addEventListener("click", place);
+      box.addEventListener("dragover", (e) => e.preventDefault());
+      box.addEventListener("drop", (e) => { e.preventDefault(); place(); });
+    });
+  });
+}
+
+/* ================= 判分 ================= */
+function initQuizSet(root) {
+  const submitBtn = root.querySelector(".qz-submit");
+  const result = root.querySelector(".qz-result");
+  if (!submitBtn) return;
+
+  root.querySelectorAll(".qz-tf-btns").forEach((group) => {
+    group.querySelectorAll(".qz-tf-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        if (btn.disabled) return;
+        group.querySelectorAll(".qz-tf-btn").forEach((b) => b.classList.remove("is-on"));
+        btn.classList.add("is-on");
+      });
+    });
+  });
+
+  submitBtn.addEventListener("click", () => {
+    let total = 0;
+    let correct = 0;
+
+    root.querySelectorAll("select.qz-sel[data-answer]").forEach((sel) => {
+      total++;
+      const ok = sel.value === sel.getAttribute("data-answer");
+      if (ok) correct++;
+      sel.classList.toggle("is-correct", ok);
+      sel.classList.toggle("is-wrong", !ok);
+      sel.disabled = true;
+    });
+
+    root.querySelectorAll(".qz-mc[data-answer]").forEach((q) => {
+      total++;
+      const ans = Number(q.getAttribute("data-answer"));
+      const checked = q.querySelector('input[type=radio]:checked');
+      const ok = checked ? Number(checked.value) === ans : false;
+      if (ok) correct++;
+      q.querySelectorAll(".qz-opt").forEach((opt, oi) => {
+        const inp = opt.querySelector("input");
+        const isCorrect = oi === ans;
+        opt.classList.toggle("is-correct", isCorrect);
+        opt.classList.toggle("is-wrong", !!inp && inp.checked && !isCorrect);
+        if (inp) inp.disabled = true;
+      });
+      const fb = q.querySelector(".qz-fb");
+      if (fb) {
+        fb.hidden = false;
+        fb.className = "qz-fb " + (ok ? "is-ok" : "is-bad");
+        fb.textContent = ok ? "✓ Correct" : `✗ Correct answer: ${String.fromCharCode(65 + ans)}`;
+      }
+    });
+
+    root.querySelectorAll(".qz-tf-btns[data-answer]").forEach((group) => {
+      total++;
+      const ans = group.getAttribute("data-answer");
+      const on = group.querySelector(".qz-tf-btn.is-on");
+      const ok = on ? on.getAttribute("data-val") === ans : false;
+      if (ok) correct++;
+      group.querySelectorAll(".qz-tf-btn").forEach((b) => {
+        const good = b.getAttribute("data-val") === ans;
+        b.classList.toggle("is-correct", good);
+        b.classList.toggle("is-wrong", b.classList.contains("is-on") && !good);
+        b.disabled = true;
+      });
+    });
+
+    root.querySelectorAll("input.qz-short[data-qtype]").forEach((inp) => {
+      total++;
+      const qtype = inp.getAttribute("data-qtype");
+      let ok = false;
+      if (qtype === "range") {
+        let expected = [];
+        try { expected = JSON.parse(inp.getAttribute("data-answer")).map(Number); } catch (e) {}
+        const nums = extractInts(inp.value);
+        ok = nums.length >= 2 && nums[0] === expected[0] && nums[1] === expected[1];
+      } else if (qtype === "num") {
+        const expected = Number(inp.getAttribute("data-answer"));
+        ok = extractSigned(inp.value).includes(expected);
+      } else if (qtype === "numrange") {
+        let r = [0, 0];
+        try { r = JSON.parse(inp.getAttribute("data-answer")).map(Number); } catch (e) {}
+        const nums = extractSigned(inp.value);
+        ok = nums.length >= 1 && nums[0] >= r[0] && nums[0] <= r[1];
+      } else if (qtype === "text") {
+        let spec = { need: [], any: [] };
+        try { spec = JSON.parse(inp.getAttribute("data-answer")); } catch (e) {}
+        const val = inp.value.toLowerCase();
+        const needOk = (spec.need || []).every((k) => val.includes(k));
+        const anyOk = !(spec.any || []).length || (spec.any || []).some((k) => val.includes(k));
+        ok = needOk && anyOk;
+      }
+      if (ok) correct++;
+      inp.classList.toggle("is-correct", ok);
+      inp.classList.toggle("is-wrong", !ok);
+      inp.disabled = true;
+      const fb = inp.nextElementSibling;
+      if (fb && fb.classList.contains("qz-fb")) {
+        fb.hidden = false;
+        fb.className = "qz-fb " + (ok ? "is-ok" : "is-bad");
+        fb.textContent = ok ? "✓ Correct" : "✗ Correct answer: " + (inp.getAttribute("data-pretty") || "");
+      }
+    });
+
+    root.querySelectorAll(".qz-sort").forEach((sortEl) => {
+      let expected = [];
+      try { expected = JSON.parse(sortEl.getAttribute("data-answer") || "[]"); } catch (e) {}
+      const items = Array.from(sortEl.querySelectorAll(".qz-sort-item"));
+      items.forEach((it, i) => {
+        total++;
+        const ok = it.getAttribute("data-val") === expected[i];
+        if (ok) correct++;
+        it.classList.toggle("is-correct", ok);
+        it.classList.toggle("is-wrong", !ok);
+        it.setAttribute("draggable", "false");
+      });
+      sortEl.querySelectorAll(".qz-sort-up,.qz-sort-down").forEach((b) => { b.disabled = true; });
+      const fb = sortEl.querySelector(".qz-sort-fb");
+      if (fb) {
+        fb.hidden = false;
+        fb.textContent = "Correct order: " + expected.join(" ➔ ");
+      }
+    });
+
+    root.querySelectorAll(".qz-classify").forEach((clsEl) => {
+      let expected = { Faster: [], Slower: [] };
+      try { expected = JSON.parse(clsEl.getAttribute("data-answer") || "{}"); } catch (e) {}
+      clsEl.querySelectorAll(".qz-classify-chip").forEach((chip) => {
+        total++;
+        const val = chip.getAttribute("data-val");
+        const bin = chip.getAttribute("data-bin") || "";
+        const ok = (expected.Faster || []).includes(val) ? bin === "Faster"
+                 : (expected.Slower || []).includes(val) ? bin === "Slower" : false;
+        if (ok) correct++;
+        chip.classList.toggle("is-correct", ok);
+        chip.classList.toggle("is-wrong", !ok);
+        chip.disabled = true;
+      });
+    });
+
+    const pct = total ? Math.round((correct / total) * 100) : 0;
+    result.hidden = false;
+    result.innerHTML = `
+      <div class="qz-score">${correct} / ${total}</div>
+      <div class="qz-score-sub">Marks earned out of ${total}</div>
+      <div class="qz-score-msg">${correct === total ? "🎉 Perfect! Excellent work!" : pct >= 60 ? "👍 Good job! Review the marked answers." : "💪 Keep practising — check the notes and try again."}</div>
+      <div class="qz-score-note">📝 Checkpoint 2.1–2.3 · 36 marks total. Review the marked answers above.</div>`;
+    submitBtn.disabled = true;
+    submitBtn.textContent = "✅ Submitted";
+    result.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  });
+}
+
+/* ================= 分享码透传 ================= */
+function attachShareCode() {
+  const sc = new URLSearchParams(location.search).get("sharecode");
+  if (!sc) return;
+  document.querySelectorAll("a[data-keep-share]").forEach((a) => {
+    const base = a.getAttribute("href");
+    if (!base) return;
+    try {
+      const url = new URL(base, location.href);
+      url.searchParams.set("sharecode", sc);
+      a.setAttribute("href", url.pathname + url.search + url.hash);
+    } catch (e) {}
+  });
+}
+
+/* ================= 初始化 ================= */
+document.getElementById("quiz-root").innerHTML = renderQuizSet(QUIZSET);
+const qzRoot = document.querySelector(".qz-set");
+initQuizSet(qzRoot);
+initSort(qzRoot);
+initClassify(qzRoot);
+attachShareCode();
+</script>
+</body>
+</html>
