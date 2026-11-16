@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>文言文客观题 · 专项测验</title>
+<style>
+:root{
+  --brand:#2563eb;
+  --brand-ink:#1d4ed8;
+  --ink:#1e293b;
+  --ink-2:#475569;
+  --muted:#94a3b8;
+  --line:#e2e8f0;
+  --bg:#f5f7fb;
+  --card:#ffffff;
+  --ok:#16a34a;
+  --bad:#e11d48;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",sans-serif;
+  background:var(--bg);color:var(--ink);line-height:1.7;
+}
+.wrap{max-width:720px;margin:0 auto;padding:24px 16px 60px}
+
+/* 顶部 */
+.topbar{text-align:center;padding:8px 0 20px}
+.topbar h1{font-size:24px;font-weight:800;margin:0;color:var(--ink)}
+.topbar p{margin:8px auto 0;color:var(--muted);font-size:13.5px;max-width:520px}
+.topbar .badge{display:inline-block;margin-top:10px;font-size:12.5px;font-weight:700;color:#7c2d12;background:#fff7ed;border:1px solid #fed7aa;border-radius:999px;padding:4px 14px}
+.topbar-nav{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:14px}
+.topbar-nav a{display:inline-flex;align-items:center;gap:5px;font-size:13px;font-weight:700;color:#1e3a8a;background:#eef4ff;border:1px solid #d5e2fb;border-radius:999px;padding:6px 14px;text-decoration:none;transition:.15s}
+.topbar-nav a:hover{background:#dbe7ff;border-color:#bcd0f2}
+
+/* 章节选择 */
+.ch-select{background:#fff;border:1px solid #e3ecf9;border-radius:16px;padding:26px 22px;box-shadow:0 4px 16px rgba(15,23,42,.05)}
+.ch-select-title{font-size:17px;font-weight:800;color:#1e293b;text-align:center}
+.ch-select-desc{font-size:13.5px;color:#64748b;text-align:center;margin:10px 0 20px}
+.ch-btn{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
+  width:100%;border:1.5px solid #d5e0f0;border-radius:14px;padding:18px 16px;
+  background:linear-gradient(135deg,#f8fbff,#eef4ff);color:#1e3a8a;cursor:pointer;
+  font-size:17px;font-weight:900;transition:.15s;margin-bottom:12px;
+}
+.ch-btn:last-child{margin-bottom:0}
+.ch-btn:hover{border-color:#2f6bff;background:linear-gradient(135deg,#e8f0ff,#dbe7ff);transform:translateY(-1px)}
+.ch-btn:active{transform:translateY(0)}
+.ch-btn-sub{font-size:12.5px;font-weight:600;color:#64748b}
+.ch-btn-sub b{color:#1e3a8a}
+
+/* 题目卡片 */
+.q-card{background:#fff;border:1px solid #e3ecf9;border-radius:16px;padding:22px 20px;box-shadow:0 4px 16px rgba(15,23,42,.05)}
+.q-progress{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;gap:10px}
+.q-count{font-size:14px;font-weight:900;color:#1e3a8a}
+.q-progress-bar{flex:1;height:8px;background:#eef2f9;border-radius:999px;overflow:hidden}
+.q-progress-fill{height:100%;background:linear-gradient(90deg,#2f6bff,#1f4fd8);border-radius:999px;transition:width .3s}
+.q-score-live{font-size:12.5px;font-weight:700;color:#64748b;white-space:nowrap}
+.q-tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.q-tag{font-size:11.5px;font-weight:800;padding:3px 11px;border-radius:999px}
+.q-tag--cat{background:#fff7e0;color:#a16207;border:1px solid #fde68a}
+.q-tag--type{background:#eef4ff;color:#1e3a8a;border:1px solid #d5e2fb}
+.q-stem{font-size:16.5px;font-weight:700;color:#1e293b;line-height:1.9;margin-bottom:8px}
+
+/* 选择题 */
+.q-options{display:flex;flex-direction:column;gap:10px;margin-top:14px}
+.q-choice{
+  display:flex;align-items:flex-start;gap:10px;text-align:left;
+  width:100%;border:1.5px solid #d5e0f0;border-radius:12px;padding:12px 14px;
+  background:#fff;font-size:15px;line-height:1.7;color:#1e293b;cursor:pointer;transition:.15s;
+}
+.q-choice:hover{border-color:#2f6bff;background:#f8fbff}
+.q-choice:disabled{cursor:default;opacity:1}
+.q-choice-letter{
+  flex:0 0 auto;width:26px;height:26px;border-radius:50%;
+  background:#eef4ff;color:#1e3a8a;font-weight:900;font-size:13px;
+  display:flex;align-items:center;justify-content:center;
+}
+.q-choice-text{flex:1;word-break:break-word}
+.q-choice.is-correct{border-color:#22a06b;background:#e6f6ec;color:#14683f}
+.q-choice.is-correct .q-choice-letter{background:#22a06b;color:#fff}
+.q-choice.is-wrong{border-color:#e11d48;background:#fff1f2;color:#be123c}
+.q-choice.is-wrong .q-choice-letter{background:#e11d48;color:#fff}
+
+.q-btn{
+  width:100%;margin-top:14px;border:0;border-radius:10px;padding:13px 20px;
+  font-size:15px;font-weight:800;cursor:pointer;transition:.15s;
+}
+.q-btn--next{background:#22a06b;color:#fff}
+.q-btn--next:hover{background:#1a865a}
+.q-btn--retry{background:#2f6bff;color:#fff;width:auto;margin:18px auto 0;display:block;padding:12px 30px}
+.q-btn--retry:hover{background:#1f4fd8}
+.q-btn--ghost{background:#fff;color:#1e3a8a;border:1.5px solid #d5e0f0;width:auto;margin:10px auto 0;display:block;padding:11px 26px}
+.q-btn--ghost:hover{background:#f1f5fb;border-color:#bcd0f2}
+
+.q-feedback{margin-top:16px;border-radius:12px;padding:14px 16px;display:none}
+.q-feedback.show{display:block}
+.q-feedback--ok{background:#e6f6ec;border:1px solid #a7e3c0}
+.q-feedback--bad{background:#fff1f2;border:1px solid #fecdd3}
+.q-fb-head{font-size:15px;font-weight:900;margin-bottom:6px}
+.q-feedback--ok .q-fb-head{color:#14683f}
+.q-feedback--bad .q-fb-head{color:#be123c}
+.q-fb-answer{font-size:13.5px;color:#33415c;font-weight:700;margin-bottom:6px}
+.q-fb-answer b{color:#1e3a8a}
+.q-fb-explain{font-size:13px;color:#475569;line-height:1.8}
+
+/* 结果页 */
+.q-result{text-align:center;padding:34px 22px}
+.q-result-score{font-size:52px;font-weight:900;color:#1e3a8a;line-height:1}
+.q-result-sub{font-size:14px;color:#64748b;margin-top:8px}
+.q-result-msg{font-size:15px;font-weight:800;color:#1e3a8a;margin-top:14px}
+.q-result-detail{font-size:12.5px;color:#64748b;margin-top:8px;line-height:1.6}
+.q-star{font-size:40px;margin-bottom:8px}
+
+@media (max-width:560px){
+  .topbar h1{font-size:21px}
+  .q-card{padding:18px 16px}
+  .q-stem{font-size:16px}
+  .ch-btn{font-size:16px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="topbar">
+    <h1>文言文客观题</h1>
+    <p>《楊修之死》《岳飛之少年時代》专项客观题测验。每篇随机抽 10 题，点击选项立即判分并显示解析。</p>
+    <span class="badge">📜 文言文 · 客观题闯关</span>
+    <nav class="topbar-nav">
+      <a href="index.html" data-keep-share>🏠 返回主页</a>
+    </nav>
+  </header>
+
+  <div id="quiz-root"></div>
+</div>
+
+<script>
+const escapeHTML = (str) =>
+  String(str).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const esc = escapeHTML;
+
+/* ================= 题库（《楊修之死》29 题 + 《岳飛之少年時代》20 题 = 49 题） ================= */
+const questionBank = [
+  /* ---------- 《楊修之死》 ---------- */
+  { type: "mc", chapter: "楊修", question: "「操嘗造花園，既成，操往觀之，不置褒貶，只取筆於門上書一『活』字而去。」句中「既成」的意思是？", options: ["A. 既然完工", "B. 已經完工", "C. 即將完工", "D. 尚未完工"], answer: "B", explanation: "「既」作副詞，表動作已經完成，相當於「已經」。「既成」即「已經完工」。此句寫曹操參觀新花園，不置可否，只在門上寫「活」字，為後來楊修解讀為「闊」字埋下伏筆。" },
+  { type: "mc", chapter: "楊修", question: "「人皆不曉其意」句中「曉」的意思是？", options: ["A. 天亮", "B. 告訴", "C. 明白、瞭解", "D. 清楚地"], answer: "C", explanation: "「曉」在此為動詞，「明白、瞭解」之意。「不曉其意」即「不明白曹操的用意」。此處以眾人之「不曉」反襯楊修之「獨曉」，突出楊修才智過人，亦為曹操「心甚忌之」的開端。" },
+  { type: "mc", chapter: "楊修", question: "「操雖稱美，心甚忌之」句中「忌」的意思是？", options: ["A. 禁忌", "B. 害怕", "C. 妒忌、忌恨", "D. 顧慮"], answer: "C", explanation: "「忌」在此作「妒忌、忌恨」解。曹操表面讚美楊修聰明，內心卻妒忌他能看穿自己的心思。這是七件事中曹操對楊修態度轉變的關鍵——由欣賞轉為忌恨，伏筆不斷加深。" },
+  { type: "mc", chapter: "楊修", question: "「操嘗賽酥一盒至，修見之，即取筆書『合』字於盒上，傳示眾人。」楊修解釋「一合酥」的含義是？", options: ["A. 一盒最好的酥餅", "B. 一人一口酥", "C. 合起來吃的酥餅", "D. 恰逢其時的酥餅"], answer: "B", explanation: "「合」字可拆為「人一囗」（一人一口）。楊修將「一合酥」解讀為「丞相叫我們每人吃一口酥」，於是與眾人分食。曹操雖喜愛楊修之才，但此事令他「惡之」——楊修不但看穿他的心思，還当众拆解，令曹操顏面盡失。" },
+  { type: "mc", chapter: "楊修", question: "「操恐人暗中謀害己身，常分付左右：『吾夢中殺人；凡吾睡覺，切不可近。』」下列對「夢中殺人」的解讀，何者正確？", options: ["A. 曹操真的有夢中殺人的習慣", "B. 曹操故意散布謠言，防止有人在他熟睡時行刺", "C. 曹操夢見自己殺了人，所以警告左右", "D. 曹操患有夢遊症，需要左右提防"], answer: "B", explanation: "「夢中殺人」是曹操的權術——他藉故殺了一個幫他蓋被子的近侍，然後佯作夢中醒來，痛哭厚葬，目的是讓左右相信他「夢中殺人」，從而不敢在他睡覺時靠近。楊修當眾點破：「丞相非在夢中，君乃在夢中耳。」此言戳破曹操心機，令曹操「愈惡之」。" },
+  { type: "mc", chapter: "楊修", question: "「庖官進雞湯，操見碗中有雞肋，方寻思間，夏侯惇入帳，稟請夜間口號。操隨口曰：『雞肋！雞肋！』」句中「庖官」是指？", options: ["A. 隨軍的文官", "B. 軍中的廚師", "C. 守門的官員", "D. 傳令的兵卒"], answer: "B", explanation: "「庖」即廚房、廚師。「庖官」就是軍中掌管膳食的廚師。這個細節看似閒筆，實則交代了「雞肋」口號的由來——曹操正在喝雞湯，見雞肋而有感，隨口以此為號，為楊修解讀「退兵」之意提供了情境依託。" },
+  { type: "mc", chapter: "楊修", question: "「修知操有退心，便教軍士收拾行裝，準備歸程。」下列何者最能解釋楊修從「雞肋」看出曹操退意的邏輯？", options: ["A. 雞肋代表曹操想喝雞湯，不想打仗", "B. 雞肋「食之則無肉，棄之則有味」，好比進攻無益、退捨不得，暗示曹操進退兩難、有意退兵", "C. 雞肋是曹操的家鄉特色菜，暗示他思鄉", "D. 雞肋象徵軍隊弱小，曹操想撤退"], answer: "B", explanation: "楊修的解讀：「雞肋者，食之則無肉，棄之則有味。今進不能勝，退則惹人笑，在此無益，不如早歸。」他以雞肋比喻曹操當前處境——進攻沒有把握，撤退又怕被恥笑，其實心中已有退意。這個解讀最終成為曹操殺他的直接藉口：「亂我軍心」。" },
+  { type: "mc", chapter: "楊修", question: "「操大怒，乃喚修當廳叱之曰：『汝怎敢造言，亂我軍心！』」句中「叱」的意思是？", options: ["A. 輕聲呼喚", "B. 大聲斥責", "C. 溫和提醒", "D. 暗中命令"], answer: "B", explanation: "「叱」即大聲斥責、呵斥。曹操藉「亂我軍心」之罪將楊修推出斬首。注意：楊修雖然確實解讀對了曹操的心思，但曹操殺他的真正原因不是「猜對了」，而是楊修屡次看穿他的權術、又捲入世子之爭，早已積怨已久，「雞肋」事件只是最後的藉口。" },
+  { type: "mc", chapter: "楊修", question: "「操既殺楊修，欲故意陷徐晃之罪，乃令徐晃出馬。」句中「乃」字的用法是？", options: ["A. 於是、就", "B. 你、你的", "C. 才", "D. 是"], answer: "A", explanation: "「乃」在此作連詞，相當於「於是、就」，表示順承關係。曹操殺了楊修之後，於是想藉故打擊徐晃。「乃」在文言中是多義虛詞：既可作「於是」（順承），也可作「才」（條件）、「竟然」（轉折）、「你」（代詞），需依上下文判斷。" },
+  { type: "mc", chapter: "楊修", question: "下列「以」字的用法，何者與「修以植才數奇，欲助植」中的「以」相同？", options: ["A. 以刀劈狼首（用）", "B. 以其境過清，不可久居（因為）", "C. 皆以美於徐公（認為）", "D. 不以物喜，不以己悲（憑藉）"], answer: "C", explanation: "題幹「修以植才數奇」中的「以」是「認為」之意——楊修認為曹植才華出眾、命運不尋常，所以想輔助他。C項「皆以美於徐公」出自《鄒忌諷齊王納諫》，「以」也是「認為」。A項「以」是「用」（介詞），B項是「因為」，D項是「因為」，均不同。" },
+  { type: "mc", chapter: "楊修", question: "「操即叱退吳質，深疑楊修。」及後「曹丕懼，遣人告楊修。修入告操。」下列「為」字，何者表示「被動」？", options: ["A. 為曹植謀劃（替、給）", "B. 為操所殺（被）", "C. 孰為汝多知乎（同「謂」，說）", "D. 為宮室之美（為了）"], answer: "B", explanation: "「為……所……」是文言被動句式，「為操所殺」即「被曹操殺害」。A項「為」是介詞「替、給」；C項「為」通「謂」，「說」之意；D項「為」是「為了」（表目的）。本課中楊修最終「為操所殺」，正是「為」字被動用法的典型例證。" },
+  { type: "mc", chapter: "楊修", question: "「匹夫安敢欺我耶！」句中「安」字的用法是？", options: ["A. 安心、安定", "B. 怎麼、哪裡（疑問副詞）", "C. 平安", "D. 安置"], answer: "B", explanation: "「安」在此為疑問副詞，相當於「怎麼、哪裡」，表示反問語氣。「匹夫安敢欺我耶」意即「這傢伙怎麼敢欺騙我！」「匹夫」是輕蔑語氣，相當於「傢伙、無知的人」。此句是曹操發現楊修為曹植作答教後的怒罵，表現曹操被蒙蔽後的憤怒。" },
+  { type: "mc", chapter: "楊修", question: "翻譯「公真知魏王肺腑也」，最恰當的是？", options: ["A. 公子真的知道魏王的肺在哪裡啊", "B. 您真是瞭解魏王內心深處的想法啊", "C. 您真的看過魏王的五臟六腑啊", "D. 公子真的知道魏王的身體狀況啊"], answer: "B", explanation: "「肺腑」比喻內心深處、真實想法。「公」是尊稱，相當於「您」。此句是楊修解讀「一合酥」後對眾人所說，表面是讚美曹操心思巧妙，實則誇耀自己能看穿曹操。這句話也埋下伏筆——楊修處處展現自己「知魏王肺腑」，最終招來殺身之禍。" },
+  { type: "mc", chapter: "楊修", question: "翻譯「今乃借惑亂軍心之罪殺之」，最恰當的是？", options: ["A. 今天就藉口擾亂軍心的罪名殺了他", "B. 現在終於用迷惑敵軍的罪名殺了他", "C. 今天於是借發送擾亂軍心的信來殺他", "D. 現在竟然因為他擾亂軍心而殺了他"], answer: "A", explanation: "「乃」此處解作「就、於是」，「借」是「藉口、藉著」，「惑亂軍心」即「擾亂軍心」。此句是故事結尾處作者（或曹操自白）的點題——曹操殺楊修不是真的因為「雞肋」事件，而是「借」這個事件作為藉口，清算長期以來的積怨。「借」字一針見血，道盡曹操的權詐。" },
+  { type: "mc", chapter: "楊修", question: "翻譯「匹夫安敢欺我耶」，最恰當的是？", options: ["A. 平民百姓怎麼敢欺負我呢", "B. 這傢伙怎麼敢欺騙我啊", "C. 大丈夫哪裡敢騙我啊", "D. 普通人怎麼敢藐視我啊"], answer: "B", explanation: "「匹夫」在此是曹操對楊修的輕蔑稱呼，非指普通平民，而是氣話中「這傢伙、無知小兒」之意。「安」是「怎麼」，「欺」是「欺騙、矇騙」。此句是曹操發現楊修暗中為曹植擬定「答教」、矇騙自己考問時的怒罵，充分表現被看穿後的惱怒。" },
+  { type: "mc", chapter: "楊修", question: "翻譯「丞相非在夢中，君乃在夢中耳」，最恰當的是？", options: ["A. 丞相不是在做夢，你才是在做夢吧", "B. 丞相並非真的在夢中殺人，您才是被矇在鼓裡啊", "C. 丞相沒有做夢，你做夢了", "D. 丞相不在夢裡，你在夢裡面"], answer: "B", explanation: "此句是楊修在被曹操「夢中殺死」的近侍靈前說的。「非在夢中」指曹操根本沒有夢中殺人之疾，他是故意演戲；「君乃在夢中耳」是說那個被殺的近侍才是真正被矇在鼓裡、死得糊塗的人。「耳」是語氣詞，相當於「罷了、啊」。這句話當眾戳破曹操的偽裝，是曹操「愈惡之」的關鍵事件。" },
+  { type: "mc", chapter: "楊修", question: "翻譯「修又嘗為曹植作答教十餘條」，最恰當的是？", options: ["A. 楊修又曾經替曹植寫了十多條回答的要點", "B. 楊修又嘗試給曹植寫了十多封信", "C. 楊修曾經教曹植答題十多次", "D. 楊修又為曹植製作了十幾件教案"], answer: "A", explanation: "「答教」指曹操考問曹植軍國大事時，楊修預先替他擬好的答案要點。「嘗」是「曾經」，「十餘條」即「十多條」。此事最為曹操忌恨——因為他發現自己每次提問，曹植都對答如流，後來查實是楊修預先寫好答案讓曹植背誦，覺得自己被當成傀儡玩弄，因此起了殺心。" },
+  { type: "mc", chapter: "楊修", question: "翻譯「操軍不能進，欲退兵，又恐蜀兵笑恥」，最恰當的是？", options: ["A. 曹操的軍隊不能前進，想退兵，又怕被蜀兵恥笑", "B. 操練軍隊不能前進，想撤退，又害怕蜀兵嘲笑", "C. 曹操的軍隊無法前進，想要退兵，又恐怕蜀兵認為可恥", "D. 曹操帶軍不能前進，想退回軍營，又怕蜀兵來追"], answer: "A", explanation: "「操」指曹操，「進」即進攻，「欲」是「想要」，「恐」是「害怕、擔心」，「笑恥」是「恥笑、嘲笑」。這句交代了曹操當時進退兩難的處境——正是這種進退維谷的心境，才讓他看到「雞肋」時觸景生情，隨口以「雞肋」為夜間口號。楊修正是從這個心理狀態解讀出曹操的退意。" },
+  { type: "mc", chapter: "楊修", question: "本文在記敘順序上採用了什麼手法？", options: ["A. 順敘——從楊修幼年聰慧說起，按時間先後敘述", "B. 倒敘——從漢水之戰楊修因「雞肋」被殺寫起，再回溯七件事的來龍去脈", "C. 插敘——在故事中間插入楊修的背景介紹", "D. 平敘——平行敘述曹操與楊修兩條線"], answer: "B", explanation: "本文開篇即寫曹操與劉備對峙漢水，進退兩難，楊修因「雞肋」事件被殺；然後以「後來老小曰：『丞相 dc...』」之類的回溯筆法，逐一補述楊修過去數次觸犯曹操的事件。這種先寫結果、再回溯原因的寫法就是「倒敘法」。倒敘的好處是設置懸念——讀者先知道楊修死了，再逐件了解他為何被殺。" },
+  { type: "mc", chapter: "楊修", question: "本文運用倒敘法，開頭寫「雞肋」事件，結尾又回到「雞肋」事件，這種首尾呼應的作用是？", options: ["A. 純粹為了湊字數", "B. 結構上形成封閉圓形，使讀者明白「雞肋」只是藉口，真正死因是七件事累積的結果", "C. 因為作者忘記了前面寫過", "D. 為了讓故事更長"], answer: "B", explanation: "本文開端以「雞肋」事件製造懸念——楊修為何因一個口號就被殺？中間倒敘七件事，層層揭示曹操對楊修由「喜」到「忌」到「惡」到「怒」的心理變化；結尾再回到「雞肋」，點明曹操是「借惑亂軍心之罪」殺之。首尾呼應使結構完整，也讓讀者恍然大悟：雞肋只是導火線，真正的死因是長期累積的矛盾。" },
+  { type: "mc", chapter: "楊修", question: "曹操在新建花園門上寫一「活」字，楊修解讀為「門內添活，乃『闊』字也」。曹操事後的反應是？", options: ["A. 大悅，重重賞賜楊修", "B. 雖稱美，心甚忌之", "C. 大怒，當場斥責楊修", "D. 若無其事，不以為意"], answer: "B", explanation: "改建花園門是七件事中的第一件。曹操表面很高興（「操大喜」），問左右是誰猜到的，得知是楊修後，「雖稱美，心甚忌之」——嘴上誇獎，心裡開始妒忌。這個「雖……甚……」的轉折句式，精準刻畫了曹操心口不一的性格，也是日後殺機的種子。" },
+  { type: "mc", chapter: "楊修", question: "下列關於「一合酥」事件的敘述，何者正確？", options: ["A. 曹操把一盒酥餅賞賜給楊修一人", "B. 楊修看見盒上寫「一合酥」，拆解為「一人一口酥」，與眾人分食", "C. 楊修認為曹操嫌酥餅不合口味，於是重做", "D. 曹操因為酥餅被分食而大賞楊修"], answer: "B", explanation: "「一合酥」事件中，楊修把「合」字拆為「人一囗」，解讀為曹操命令每人吃一口，於是與眾人分食。事後曹操問起，楊修理直氣壯地回答「丞相教令，安敢違？」曹操雖然「喜笑」，但「心惡之」——比起第一件事的「忌」，此事的「惡」程度更深，因為楊修當眾讓他無法反悔。" },
+  { type: "mc", chapter: "楊修", question: "楊修捲入曹丕與曹植的世子之爭。下列哪一件事直接導致曹操起了殺楊修之心？", options: ["A. 改建花園門", "B. 一合酥事件", "C. 楊修為曹植撰寫「答教」，讓曹植對答如流，曹操查實後發覺自己被矇騙", "D. 雞肋事件"], answer: "C", explanation: "七件事中，前三件（花園門、一合酥、夢殺）還只是曹操對楊修個人才華的忌憚；但自楊修捲入世子之爭後，性質就變了——這涉及權力核心。其中最致命的是「答教」事件：楊修預先替曹植寫好十多條答案，使曹植每次面對曹操提問都對答如流。曹操後來查實，大怒曰：「匹夫安敢欺我耶！」此事已讓曹操動了殺機，雞肋只是最後的藉口。" },
+  { type: "mc", chapter: "楊修", question: "「教曹植殺門者」一事中，楊修建議曹植在出城時若守門者不放行，就直接殺了他。曹操事後得知真相後的反應是？", options: ["A. 讚賞曹植果斷", "B. 大怒，認為曹植殘暴", "C. 愈疑，並且開始討厭楊修", "D. 無動於衷"], answer: "C", explanation: "曹操曾試探曹丕、曹植的才能，命令他們出城，卻暗中吩咐門者阻攔。曹丕被擋回，曹植聽從楊修之計，斬殺門者而出。曹操起初以為曹植有魄力，後來得知是楊修教的，「愈疑」且「愈惡」——這件事讓曹操意識到楊修不但參與世子之爭，還教導兒子用極端手段，政治上的威脅遠大於才智上的冒犯。" },
+  { type: "mc", chapter: "楊修", question: "楊修被殺的直接導火線是「雞肋」事件，但作者詳細倒敘七件事的真正用意是？", options: ["A. 為了湊夠故事篇幅", "B. 說明楊修之死是長期累積的結果，「雞肋」只是藉口，曹操早就想殺他", "C. 表揚楊修的聰明才智", "D. 批評曹操小題大作"], answer: "B", explanation: "七件事層層遞進：花園門（忌之）→一合酥（惡之）→夢殺（愈惡之）→吳質竹簏事件（疑修）→答教（大怒，起殺機）→殺門者（愈疑愈惡）→雞肋（藉口斬殺）。每一件事都加深一層曹操的不滿，最終匯成殺機。作者藉倒敘法告訴讀者：楊修之死不是偶然，而是性格悲劇——他恃才放曠，多次冒犯曹操的權威與心機。" },
+  { type: "mc", chapter: "楊修", question: "下列何者最能概括楊修的性格特徵？", options: ["A. 謙虛謹慎、深藏不露", "B. 恃才放曠、聰明鋒芒太露，卻不懂收斂", "C. 陰險狡诈、心狠手辣", "D. 忠厚老實、逆來順受"], answer: "B", explanation: "楊修才思敏捷，能看穿曹操的心思，但他的弱點在於「放曠」——才華外露，毫不收斂，每次都當眾點破曹操的隱私與權術，甚至捲入世子之爭。他的悲劇在於：他有「知人心」的聰明，卻沒有「知進退」的智慧。曹操殺他，表面是「亂軍心」，實則是他的鋒芒多次觸犯權威底線。" },
+  { type: "mc", chapter: "楊修", question: "下列何者最能概括曹操在本文中的形象？", options: ["A. 豁達大度、愛才如命", "B. 陰險多疑、心口不一、權詐深刻，對楊修由欣賞轉為忌恨必欲除之而後快", "C. 仁慈軟弱、優柔寡斷", "D. 直率天真、胸無城府"], answer: "B", explanation: "本文中的曹操：在花園門事件中「雖稱美，心甚忌之」；在「夢中殺人」事件中刻意演戲殺近侍以樹立威嚇；在發現答教後大怒曰「匹夫安敢欺我耶」；最後借「雞肋」事件殺楊修，還「借惑亂軍心之罪」——處處可見他心口不一、權術深沉、多疑忌才的性格。但值得注意的是，曹操並非單純的壞人：他確實欣賞楊修的才華，只是這份才華威脅到他的權威與安全感。" },
+  { type: "mc", chapter: "楊修", question: "本文的主旨啟示，下列何者最恰當？", options: ["A. 說明曹操是一個殘暴的暴君", "B. 告訴我們才華是好事，越多表現越好", "C. 藉楊修恃才放曠而招殺身之禍的故事，說明人應當懂得斂藏鋒芒、知進退，不可恃才傲物、過分外露", "D. 勸人不要當軍師"], answer: "C", explanation: "本文透過楊修的悲劇，揭示一個道理：才華本身不是罪，但恃才傲物、鋒芒太露、不懂收斂，尤其在上位者面前處處展露「我比你聰明」，只會招來忌恨。楊修的悲劇不在於他不聰明，而在於他只有「才」而沒有「智」——缺少對人性、對權力的深刻洞察。這也是為何文章結尾特別點出曹操是「借」罪殺之：楊修真正死於他的性格弱點。" },
+  { type: "mc", chapter: "楊修", question: "楊修死時年方三十四歲。後人有詩歎曰：「身死因才誤，非關欲退兵。」這句詩的含義是？", options: ["A. 楊修是因為想退兵而被殺", "B. 楊修的死是因為他的才華反誤了他，跟「雞肋」退兵之事無關", "C. 楊修因為身體不好而死", "D. 楊修不想退兵所以被殺"], answer: "B", explanation: "「身死因才誤，非關欲退兵」是對全文的最佳總結：楊修真正的死因是他過分展露才華、數次觸犯曹操，而不是表面上的「惑亂軍心」。「雞肋」只不過是曹操剛好藉機發作的藉口。這兩句詩與文章結尾「今乃借惑亂軍心之罪殺之」互相呼應，畫龍點睛地揭示了主旨——性格決定命運。" },
+
+  /* ---------- 《岳飛之少年時代》 ---------- */
+  { type: "mc", chapter: "岳飛", question: "「飛生時，有大鵬鳥自東南來，故名飛，字鵬舉。未彌月，河決內黃，水暴至。」句中「彌月」的意思是？", options: ["A. 滿一個月", "B. 滿一年", "C. 農曆月初", "D. 月圓之時"], answer: "A", explanation: "解析：「彌」有滿的意思，「彌月」即滿一個月。原句指岳飛出生還未滿一個月，黃河洪水突然湧至，為岳飛幼年險遭水患的情節背景。" },
+  { type: "mc", chapter: "岳飛", question: "「未彌月，河決內黃，水暴至。」句中「暴」的意思是？", options: ["A. 殘暴", "B. 突然、驟然", "C. 曝曬", "D. 猛烈地打擊"], answer: "B", explanation: "解析：「暴」在此作副詞，解作突然、驟然。「水暴至」就是洪水突然湧來，寫出水患來勢之急，襯托岳飛母子險境。" },
+  { type: "mc", chapter: "岳飛", question: "「家貧，拾薪為燭，誦書達旦。」句中「燭」的意思是？", options: ["A. 蠟燭", "B. 照亮（作動詞）", "C. 燈火", "D. 柴火"], answer: "A", explanation: "解析：「燭」在此為名詞，指蠟燭。岳飛家境貧窮，撿拾柴枝當作蠟燭照明讀書，此處體現岳飛年少勤奮向學的特質。" },
+  { type: "mc", chapter: "岳飛", question: "「同死，飛詣冢哭祭。」句中「詣」的意思是？", options: ["A. 離開", "B. 前往、到……去", "C. 拜託", "D. 看守"], answer: "B", explanation: "解析：「詣」是文言常用字，解作前往、到。「詣冢哭祭」即是到墓前哭拜祭奠，寫岳飛對師父周同的敬重。" },
+  { type: "mc", chapter: "岳飛", question: "「飛每朔望，必酹其墓。」句中「朔望」的意思是？", options: ["A. 清晨與黃昏", "B. 農曆初一與十五", "C. 春天與秋天", "D. 出發與歸來"], answer: "B", explanation: "解析：「朔」指農曆每月初一，「望」指農曆每月十五。這句是說岳飛每逢初一、十五，一定到周同墓前灑酒拜祭。" },
+  { type: "mc", chapter: "岳飛", question: "「飛每朔望，必酹其墓。」句中「酹」的意思是？", options: ["A. 跪拜叩頭", "B. 灑酒祭奠", "C. 掃墓除草", "D. 痛哭哀悼"], answer: "B", explanation: "解析：「酹」專指將酒灑在地上，作為祭奠的儀式。原句寫岳飛持續以酹酒的方式悼念師父周同，表現他不忘師恩。" },
+  { type: "mc", chapter: "岳飛", question: "「父知而義之。」句中「義」的用法是？", options: ["A. 名詞，道義", "B. 意動用法，以……為義、認為他有義氣", "C. 形容詞，正義的", "D. 動詞，講道理"], answer: "B", explanation: "解析：這是意動用法。「義之」即「以之為義」，岳飛的父親知道這件事之後，認為岳飛很有義氣，讚賞他重視師恩。" },
+  { type: "mc", chapter: "岳飛", question: "「飛少負氣節，未冠，能挽弓三百斤。」句中「未冠」的意思是？", options: ["A. 還沒有戴上帽子", "B. 尚未成年（古代男子二十歲行冠禮）", "C. 沒有官職", "D. 沒有盔甲護身"], answer: "B", explanation: "解析：古代男子二十歲行冠禮，表示成年；「未冠」指還未到二十歲，尚未成年，用以突出岳飛年少已經勇武過人。" },
+  { type: "mc", chapter: "岳飛", question: "下列「為」字，解作「成為、作為」的是哪一項？", options: ["A. 因以為名", "B. 得為時用", "C. 何事不可為", "D. 拾薪為燭"], answer: "D", explanation: "解析：D「拾薪為燭」：撿柴作為燭火，「為」解作作為、當作。A「以為名」的「為」是「作（名字）」；B「得為時用」的「為」表被動，被；C「何事不可為」的「為」是做。" },
+  { type: "mc", chapter: "岳飛", question: "「使汝異日得為時用，其殉國死義乎？」句中「為」的用法是？", options: ["A. 動詞，做", "B. 介詞，被", "C. 動詞，成為", "D. 介詞，替"], answer: "B", explanation: "解析：「得為時用」即能夠被朝廷任用，「為」表被動，解作「被」。這是父親看岳飛重義，因而對他寄予的期望。" },
+  { type: "mc", chapter: "岳飛", question: "「因以為名」句中「以」的用法是？", options: ["A. 介詞，把", "B. 連詞，因為", "C. 介詞，憑藉", "D. 連詞，來"], answer: "A", explanation: "解析：「以為」是「以之為」的省略，「以」解作把。句意：於是把這件事拿來作為命名的依據，替他取名飛，字鵬舉。" },
+  { type: "mc", chapter: "岳飛", question: "「飛由是益自練習，盡得同術。」句中「由是」的「以」（隱含邏輯），和哪一句的「以」邏輯相近？", options: ["A. 以薪為燭", "B. 以是知其能", "C. 以弓授飛", "D. 以殉國死義"], answer: "B", explanation: "解析：題幹「由是」即「因此」。B「以是知其能」的「以是」也是因此，「以」表原因。A是把；C是拿；D是而。原句意思：岳飛從此更加勤練，完全學會周同的箭術。" },
+  { type: "mc", chapter: "岳飛", question: "「使汝異日得為時用，其殉國死義乎？」最適切的翻譯是？", options: ["A. 假如你日後能夠被朝廷任用，大概會為國犧牲、堅守道義吧？", "B. 讓你日後成為有用的人，就一定要為國打仗嗎？", "C. 如果你日後做官，就要犧牲性命嗎？", "D. 希望你以後被任用，就可以為國取得勝利。"], answer: "A", explanation: "解析：「使」是假如；「異日」日後；「為時用」被朝廷任用；「其」表推測，大概；「殉國死義」為國犧牲、守義而死。這是岳飛父親對岳飛的評價與期盼。" },
+  { type: "mc", chapter: "岳飛", question: "「飛由是益自練習，盡得同術。」最適切的翻譯是？", options: ["A. 岳飛於是更加努力練習，完全學會周同的箭術。", "B. 岳飛因此得到周同傳授的所有技藝。", "C. 岳飛從這一天開始練習，和周同的本領一樣。", "D. 岳飛靠自己練習，才明白周同的道理。"], answer: "A", explanation: "解析：「由是」從此、因此；「益」更加；「盡得」全部學會；「同術」指周同的箭術。這句寫岳飛得到周同的箭術之後，持續勤練。" },
+  { type: "mc", chapter: "岳飛", question: "「家貧，拾薪為燭，誦書達旦。」最適切的翻譯是？", options: ["A. 家裡貧窮，撿柴枝當作燭火，讀書直到天亮。", "B. 家境不好，撿柴火煮飯，讀書到半夜。", "C. 家裡缺少蠟燭，所以點柴燒火，讀書到傍晚。", "D. 家中貧困，靠賣柴買燭，日夜讀書。"], answer: "A", explanation: "解析：「薪」柴枝；「為燭」當作燭火；「達旦」直到天亮。這句寫岳飛家境貧苦，卻仍然堅持讀書，突出勤奮。" },
+  { type: "mc", chapter: "岳飛", question: "「同死，飛詣冢哭祭，每朔望必酹其墓。」最適切的翻譯是？", options: ["A. 周同死了，岳飛到墓前哭拜祭奠，每逢初一、十五一定到墓前灑酒拜祭。", "B. 周同去世，岳飛為他守墓，早晚都會灑酒。", "C. 周同離世，岳飛埋葬他，之後常常去墓前說話。", "D. 周同死後，岳飛每年都會到墳墓拜祭。"], answer: "A", explanation: "解析：「詣冢」到墳墓；「朔望」農曆初一、十五；「酹」灑酒祭奠。這段是表現岳飛尊師重道的重點情節。" },
+  { type: "mc", chapter: "岳飛", question: "「拾薪為燭，誦書達旦」這個情節，主要表現岳飛哪一種特質？", options: ["A. 勇敢善戰", "B. 勤奮好學、不畏艱苦", "C. 重視師恩", "D. 胸懷大志"], answer: "B", explanation: "解析：岳飛家貧，沒有蠟燭，仍撿柴照明、讀書至天亮，重點刻畫他在惡劣環境之下，仍然堅持學習，勤奮刻苦。" },
+  { type: "mc", chapter: "岳飛", question: "岳飛在周同死後，朔望必酹其墓，父親因而「知而義之」，這情節表現岳飛？", options: ["A. 箭術高超", "B. 尊師重道、有情有義", "C. 年少氣盛", "D. 善於自省"], answer: "B", explanation: "解析：周同是岳飛的箭術老師，岳飛持續定期到墓前酹酒哭祭，不忘師恩，所以父親認為他有義氣，對他寄予殉國死義的期望。" },
+  { type: "mc", chapter: "岳飛", question: "「未冠，能挽弓三百斤」，這句主要寫岳飛哪方面特點？", options: ["A. 讀書聰敏", "B. 年少勇武、力氣驚人", "C. 為人講義", "D. 善於治國"], answer: "B", explanation: "解析：「未冠」未成年，「挽弓三百斤」指能拉開重達三百斤的強弓，突出岳飛年紀輕輕，體力強、武藝底子好。" },
+  { type: "mc", chapter: "岳飛", question: "綜合全文，岳飛少年時的形象，以下哪一項最完整？", options: ["A. 驕傲好勝，喜歡比試箭術", "B. 勤學刻苦、尊師重義、勇武有氣節", "C. 只懂習武，不愛讀書", "D. 貪圖功名，一心想做官"], answer: "B", explanation: "解析：拾薪為燭見勤學；酹祭周同見尊師重義；挽強弓、父預言殉國，見他負氣節、勇武。這是本文刻畫岳飛少年形象的重點，也是香港閱讀卷常考人物題。" }
+];
+
+/* ================= 章节定义 ================= */
+const CHAPTERS = [
+  { id: "yangxiu", chapter: "楊修", label: "📖 楊修之死 專項測驗", desc: "《楊修之死》客观题 · 随机抽 10 题" },
+  { id: "yuefei", chapter: "岳飛", label: "📖 岳飛之少年時代 專項測驗", desc: "《岳飛之少年時代》客观题 · 随机抽 10 题" }
+];
+
+/* ================= 工具 ================= */
+function shuffle(arr) {
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+/* ================= 状态 ================= */
+let current = [];
+let idx = 0;
+let score = 0;
+let answered = false;
+let currentChapterId = null;
+
+const root = document.getElementById("quiz-root");
+
+function getChapterDef(chapterId) {
+  return CHAPTERS.find((c) => c.id === chapterId);
+}
+
+/* ================= 章节选择 ================= */
+function renderChapterSelect() {
+  currentChapterId = null;
+  root.innerHTML = `
+    <div class="ch-select">
+      <div class="ch-select-title">选择专项测验</div>
+      <p class="ch-select-desc">点击下方按钮，从对应篇章随机抽取 10 题。点击选项立即判分并显示解析。</p>
+      ${CHAPTERS.map((c) => {
+        const count = questionBank.filter((q) => q.chapter === c.chapter).length;
+        return `
+        <button class="ch-btn" type="button" data-chapter="${c.id}">
+          ${c.label}
+          <span class="ch-btn-sub">题库 <b>${count}</b> 题 · 随机抽 <b>10</b> 题</span>
+        </button>`;
+      }).join("")}
+    </div>`;
+
+  root.querySelectorAll(".ch-btn").forEach((btn) => {
+    btn.addEventListener("click", () => startQuiz(btn.getAttribute("data-chapter")));
+  });
+}
+
+/* ================= 抽题 ================= */
+function startQuiz(chapterId) {
+  const def = getChapterDef(chapterId);
+  if (!def) { renderChapterSelect(); return; }
+  currentChapterId = chapterId;
+  const pool = questionBank.filter((q) => q.chapter === def.chapter);
+  current = shuffle(pool).slice(0, 10);
+  idx = 0;
+  score = 0;
+  answered = false;
+  renderQuestion();
+}
+
+/* ================= 渲染题目 ================= */
+function renderQuestion() {
+  const q = current[idx];
+  const def = getChapterDef(currentChapterId);
+  const pct = Math.round((idx / current.length) * 100);
+  const optionsHtml = q.options.map((opt) => {
+    const letter = opt.trim()[0];
+    const text = opt.replace(/^[A-D]\.\s*/, "").trim();
+    return `
+      <button class="q-choice" type="button" data-letter="${letter}">
+        <span class="q-choice-letter">${letter}</span>
+        <span class="q-choice-text">${esc(text)}</span>
+      </button>`;
+  }).join("");
+
+  root.innerHTML = `
+    <div class="q-card">
+      <div class="q-progress">
+        <span class="q-count">第 ${idx + 1} / ${current.length} 题</span>
+        <div class="q-progress-bar"><div class="q-progress-fill" style="width:${pct}%"></div></div>
+        <span class="q-score-live">已答对 ${score} 题</span>
+      </div>
+      <div class="q-tags">
+        <span class="q-tag q-tag--cat">${esc(def ? def.label.replace("📖 ", "").replace(" 專項測驗", "") : q.chapter)}</span>
+        <span class="q-tag q-tag--type">🔘 客观题</span>
+      </div>
+      <div class="q-stem">${esc(q.question)}</div>
+      <div class="q-options">${optionsHtml}</div>
+      <div class="q-feedback" id="q-feedback"></div>
+      <button class="q-btn q-btn--next" id="q-next" type="button" style="display:none">下一题 ➜</button>
+    </div>`;
+
+  answered = false;
+  root.querySelectorAll(".q-choice").forEach((btn) => {
+    btn.addEventListener("click", () => answerQuestion(q, btn));
+  });
+  document.getElementById("q-next").addEventListener("click", nextQuestion);
+}
+
+/* ================= 判分 ================= */
+function answerQuestion(q, btn) {
+  if (answered) return;
+  answered = true;
+  const letter = btn.getAttribute("data-letter");
+  const ok = letter === q.answer;
+  if (ok) score++;
+
+  root.querySelectorAll(".q-choice").forEach((b) => {
+    b.disabled = true;
+    const l = b.getAttribute("data-letter");
+    if (l === q.answer) b.classList.add("is-correct");
+    else if (l === letter && !ok) b.classList.add("is-wrong");
+  });
+
+  const fb = document.getElementById("q-feedback");
+  fb.className = "q-feedback show " + (ok ? "q-feedback--ok" : "q-feedback--bad");
+  fb.innerHTML = `
+    <div class="q-fb-head">${ok ? "✓ 回答正确！" : "✗ 回答错误"}</div>
+    <div class="q-fb-answer">正确答案：<b>${esc(q.answer)}</b></div>
+    <div class="q-fb-explain">${esc(q.explanation)}</div>`;
+
+  const nextBtn = document.getElementById("q-next");
+  nextBtn.style.display = "block";
+  nextBtn.textContent = idx === current.length - 1 ? "查看成绩 ➜" : "下一题 ➜";
+}
+
+function nextQuestion() {
+  idx++;
+  if (idx >= current.length) {
+    renderResult();
+  } else {
+    renderQuestion();
+  }
+}
+
+/* ================= 结果页 ================= */
+function renderResult() {
+  const def = getChapterDef(currentChapterId);
+  const pct = Math.round((score / current.length) * 100);
+  const msg = score === current.length ? "🎉 满分！文言字词掌握得非常扎实！"
+    : score >= 8 ? "👍 很棒！再巩固一下错题就更完美了。"
+    : score >= 6 ? "💪 还不错，建议回到课文复习字词后再挑战一次。"
+    : "📖 别灰心，先温习课文注释，再来挑战吧！";
+  root.innerHTML = `
+    <div class="q-card q-result">
+      <div class="q-star">${score >= 9 ? "🏆" : score >= 6 ? "🌟" : "📚"}</div>
+      <div class="q-result-score">${score} / ${current.length}</div>
+      <div class="q-result-sub">本次答对 ${score} 题（正确率 ${pct}%）</div>
+      <div class="q-result-msg">${msg}</div>
+      <div class="q-result-detail">本次从「${esc(def ? def.label.replace("📖 ", "").replace(" 專項測驗", "") : "")}」题库中随机抽取了 ${current.length} 题。点击下方按钮重新抽题，或返回章节选择。</div>
+      <button class="q-btn q-btn--retry" id="q-retry" type="button">🔄 重新挑战</button>
+      <button class="q-btn q-btn--ghost" id="q-back" type="button">📖 返回章节选择</button>
+    </div>`;
+  document.getElementById("q-retry").addEventListener("click", () => startQuiz(currentChapterId));
+  document.getElementById("q-back").addEventListener("click", renderChapterSelect);
+}
+
+/* ================= 分享码透传 ================= */
+function attachShareCode() {
+  const sc = new URLSearchParams(location.search).get("sharecode");
+  if (!sc) return;
+  document.querySelectorAll("a[data-keep-share]").forEach((a) => {
+    const base = a.getAttribute("href");
+    if (!base) return;
+    try {
+      const url = new URL(base, location.href);
+      url.searchParams.set("sharecode", sc);
+      a.setAttribute("href", url.pathname + url.search + url.hash);
+    } catch (e) {}
+  });
+}
+
+/* ================= 启动 ================= */
+(function init() {
+  const param = new URLSearchParams(location.search).get("chapter");
+  if (param && CHAPTERS.some((c) => c.id === param)) {
+    startQuiz(param);
+  } else {
+    renderChapterSelect();
+  }
+  attachShareCode();
+})();
+</script>
+</body>
+</html>
