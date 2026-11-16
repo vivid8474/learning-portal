@@ -1,0 +1,3795 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>学习门户 · 多学科分年级学习平台</title>
+<style>
+  :root{
+    --bg:#f4f7fc;
+    --card:#ffffff;
+    --ink:#16202e;
+    --ink-2:#404f63;
+    --muted:#77879c;
+    --line:#e6ecf5;
+    --brand:#2f6bff;
+    --brand-ink:#1f4fd8;
+    --brand-soft:#eaf0ff;
+    --teal:#00a896;
+    --amber:#f59f0b;
+    --radius:16px;
+    --shadow:0 6px 20px rgba(22,32,46,.06);
+    --shadow-hover:0 10px 28px rgba(22,32,46,.10);
+    --sidebar-w:268px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    font-family:"PingFang SC","PingFang HK","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC",system-ui,-apple-system,"Segoe UI",sans-serif;
+    background:
+      radial-gradient(1200px 500px at 10% -10%, #e8f0ff 0%, rgba(232,240,255,0) 60%),
+      radial-gradient(900px 420px at 100% 0%, #e6fbf7 0%, rgba(230,251,247,0) 55%),
+      var(--bg);
+    color:var(--ink);
+    font-size:15px;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+  }
+  a{color:inherit}
+  button{font-family:inherit}
+
+  /* ---------- 顶部导航栏 ---------- */
+  .topbar{
+    position:sticky;top:0;z-index:60;
+    background:rgba(255,255,255,.88);
+    backdrop-filter:saturate(180%) blur(14px);
+    -webkit-backdrop-filter:saturate(180%) blur(14px);
+    border-bottom:1px solid var(--line);
+  }
+  .topbar__inner{
+    max-width:1280px;margin:0 auto;
+    padding:12px 24px;
+    display:flex;align-items:center;gap:16px;flex-wrap:wrap;
+  }
+  .hamburger{
+    display:none;
+    width:40px;height:40px;flex:0 0 auto;
+    border:1px solid var(--line);border-radius:12px;
+    background:#fff;color:var(--ink-2);
+    font-size:18px;line-height:1;cursor:pointer;
+    align-items:center;justify-content:center;
+    transition:background .18s,border-color .18s;
+  }
+  .hamburger:hover{background:#f5f8ff;border-color:#cddcff}
+  .brand{display:flex;align-items:center;gap:11px;min-width:0}
+  .brand__logo{
+    width:38px;height:38px;flex:0 0 auto;border-radius:11px;
+    background:linear-gradient(140deg,#2f6bff,#5b8dff 55%,#00b8a9);
+    color:#fff;font-weight:700;font-size:17px;
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 6px 14px rgba(47,107,255,.28);
+    letter-spacing:.5px;
+  }
+  .brand__text{min-width:0}
+  .brand__title{font-weight:700;font-size:16.5px;letter-spacing:.2px;white-space:nowrap}
+  .brand__sub{font-size:12px;color:var(--muted);white-space:nowrap;margin-top:-1px}
+
+  .grade-box{margin-left:auto;display:flex;align-items:center;gap:10px}
+  .grade-box__label{font-size:12.5px;color:var(--muted);white-space:nowrap}
+  .grade-switch{
+    display:flex;gap:4px;padding:4px;border-radius:999px;
+    background:#eef2f9;border:1px solid #e7edf8;
+    overflow-x:auto;scrollbar-width:none;
+  }
+  .grade-switch::-webkit-scrollbar{display:none}
+  .grade-btn{
+    border:0;background:transparent;color:var(--ink-2);
+    padding:7px 15px;border-radius:999px;
+    font-size:13.5px;font-weight:600;cursor:pointer;white-space:nowrap;
+    transition:background .18s,color .18s,box-shadow .18s;
+  }
+  .grade-btn:hover{color:var(--brand-ink)}
+  .grade-btn[aria-current="true"]{
+    background:#fff;color:var(--brand-ink);
+    box-shadow:0 2px 8px rgba(31,79,216,.16);
+  }
+
+  /* ---------- 布局 ---------- */
+  .layout{
+    max-width:1280px;margin:0 auto;
+    padding:22px 24px 56px;
+    display:grid;grid-template-columns:var(--sidebar-w) minmax(0,1fr);
+    gap:22px;align-items:start;
+  }
+
+  /* ---------- 左侧边栏 ---------- */
+  .sidebar{
+    position:sticky;top:78px;
+    background:var(--card);border:1px solid var(--line);
+    border-radius:var(--radius);box-shadow:var(--shadow);
+    padding:16px 12px 14px;
+    max-height:calc(100vh - 100px);overflow-y:auto;
+  }
+  .sidebar__head{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:0 6px 10px;
+  }
+  .sidebar__title{font-size:12px;font-weight:700;color:var(--muted);letter-spacing:1.2px}
+  .sidebar__close{
+    display:none;border:0;background:#f1f5fd;color:var(--ink-2);
+    width:30px;height:30px;border-radius:9px;cursor:pointer;font-size:15px;
+  }
+  .nav-group{margin-bottom:12px}
+  .nav-group:last-child{margin-bottom:0}
+  .nav-group__label{
+    font-size:11.5px;font-weight:700;color:#9aa8bc;
+    letter-spacing:1.4px;padding:8px 10px 6px;
+    display:flex;align-items:center;gap:7px;
+  }
+  .nav-group__label::after{
+    content:"";flex:1;height:1px;background:linear-gradient(90deg,#eef2f9,rgba(238,242,249,0));
+  }
+  .nav-item{
+    width:100%;display:flex;align-items:center;gap:10px;
+    padding:9px 11px;margin-bottom:2px;
+    border:1px solid transparent;border-radius:11px;
+    background:transparent;color:var(--ink-2);
+    font-size:14.5px;font-weight:500;text-align:left;cursor:pointer;
+    transition:background .16s,color .16s,border-color .16s,transform .16s;
+  }
+  .nav-item__icon{
+    width:24px;height:24px;flex:0 0 auto;border-radius:8px;
+    display:flex;align-items:center;justify-content:center;
+    font-size:13.5px;background:#f2f6ff;
+  }
+  .nav-item__name{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .nav-item__dot{
+    width:6px;height:6px;border-radius:50%;background:var(--brand);opacity:0;flex:0 0 auto;
+  }
+  .nav-item:hover{background:#f5f8ff;color:var(--brand-ink)}
+  .nav-item[aria-current="true"]{
+    background:linear-gradient(96deg,#eef4ff,#f4f9ff);
+    border-color:#d5e2ff;color:var(--brand-ink);font-weight:700;
+    box-shadow:inset 0 0 0 1px rgba(47,107,255,.04);
+  }
+  .nav-item[aria-current="true"] .nav-item__icon{background:#dfeaff}
+  .nav-item[aria-current="true"] .nav-item__dot{opacity:1}
+
+  /* Science 章节跳转卡片（指向独立笔记/测验页） */
+
+  /* ---------- 主内容区 ---------- */
+  .main{min-width:0}
+  .page-head{margin-bottom:16px}
+  .crumb{font-size:12.5px;color:var(--muted);margin-bottom:6px}
+  .crumb b{color:var(--ink-2);font-weight:600}
+  .page-title{
+    margin:0;font-size:23px;font-weight:800;letter-spacing:.2px;
+    display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+  }
+  .pill{
+    font-size:11.5px;font-weight:700;letter-spacing:.4px;
+    padding:3px 9px;border-radius:999px;
+    background:var(--brand-soft);color:var(--brand-ink);
+  }
+  .pill--green{background:#e6f8f4;color:#00877a}
+  .page-desc{color:var(--muted);font-size:13.5px;margin-top:6px}
+  .page-actions{margin-top:14px;display:flex;flex-wrap:wrap;gap:10px}
+  .page-actions .btn{white-space:normal;text-align:center}
+
+  .cards{
+    display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:18px;
+  }
+  .card{
+    background:var(--card);border:1px solid var(--line);
+    border-radius:var(--radius);box-shadow:var(--shadow);
+    padding:20px;position:relative;
+    transition:box-shadow .22s,transform .22s,border-color .22s;
+  }
+  .card:hover{box-shadow:var(--shadow-hover);border-color:#dbe6f8}
+  .card--wide{grid-column:1 / -1}
+  .card__head{display:flex;align-items:flex-start;gap:12px;margin-bottom:4px}
+  .card__icon{
+    width:40px;height:40px;flex:0 0 auto;border-radius:12px;
+    display:flex;align-items:center;justify-content:center;font-size:19px;
+    background:linear-gradient(140deg,#eef4ff,#e7f7f4);
+  }
+  .card__titles{min-width:0}
+  .card__title{margin:0;font-size:16.5px;font-weight:750}
+  .card__sub{margin:2px 0 0;font-size:12.5px;color:var(--muted)}
+  .card__body{margin-top:14px}
+
+  /* 课文条目 */
+  .lessons{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+  .lesson{
+    border:1px solid var(--line);border-radius:14px;
+    background:linear-gradient(180deg,#fbfdff,#f7fbff);
+    padding:14px;
+    display:flex;flex-direction:column;gap:12px;
+    transition:border-color .2s,box-shadow .2s;
+  }
+  .lesson:hover{border-color:#cfdffb;box-shadow:0 4px 14px rgba(47,107,255,.07)}
+  .lesson__head{display:flex;align-items:flex-start;gap:10px;min-width:0}
+  .lesson__no{
+    width:26px;height:26px;flex:0 0 auto;border-radius:9px;
+    background:#e8f0ff;color:var(--brand-ink);
+    font-size:12.5px;font-weight:800;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .lesson__title{font-size:16px;font-weight:750;letter-spacing:.2px;line-height:1.4}
+  .lesson__meta{font-size:12px;color:var(--muted);margin-top:1px}
+  .lesson__actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .lesson__actions .btn--primary{flex:1 1 150px}
+
+  /* 每篇课文的长题目挑战区 */
+  .challenge{
+    border:1px solid #e3ecf9;border-left:3px solid #7aa7ff;
+    border-radius:11px;background:#fff;
+    padding:11px 13px;
+    display:flex;flex-direction:column;gap:9px;
+  }
+  .challenge__label{
+    font-size:11px;font-weight:800;letter-spacing:1.1px;color:#4176d4;
+    display:inline-flex;align-items:center;gap:5px;
+  }
+  .challenge__label::before{content:"✎";font-size:12.5px}
+  .challenge__q{
+    margin:0;font-size:13.5px;line-height:1.6;font-weight:600;color:var(--ink-2);
+    background:#f8fbff;border-radius:8px;padding:8px 10px;
+  }
+  .challenge__q b{color:var(--brand-ink);font-weight:800;margin-right:4px}
+  .challenge .btn{align-self:flex-start}
+
+  /* 文言助读专项训练板块 */
+  .practice{
+    border:1px solid #e9e2f8;border-left:3px solid #9b7fe8;
+    border-radius:11px;background:#fff;
+    padding:11px 13px;
+    display:flex;flex-direction:column;gap:9px;
+  }
+  .practice__label{
+    font-size:11px;font-weight:800;letter-spacing:1.1px;color:#6a4fd0;
+    display:inline-flex;align-items:center;gap:6px;
+  }
+  .practice__label::before{content:"📘";font-size:12.5px}
+  .practice .btn{align-self:flex-start}
+
+  /* ICT 章节卡片 */
+  .chapters{display:flex;flex-direction:column;gap:14px}
+  .chapter-card{
+    border:1px solid var(--line);border-radius:14px;
+    background:linear-gradient(180deg,#fbfdff,#f7fbff);
+    padding:16px;
+    display:flex;flex-direction:column;gap:12px;
+  }
+  .chapter-head{display:flex;align-items:center;gap:10px}
+  .chapter-num{
+    width:28px;height:28px;flex:0 0 auto;border-radius:9px;
+    background:#e8f0ff;color:var(--brand-ink);
+    font-size:13px;font-weight:800;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .chapter-title{font-size:19px;font-weight:800;margin:0;letter-spacing:.2px;color:#1e3a8a}
+  .chapter-empty{
+    margin:0;font-size:13.5px;color:var(--muted);
+    text-align:center;padding:18px 10px;
+    border:1px dashed #dde6f5;border-radius:10px;
+  }
+
+  /* 折叠课文原文 */
+  .btn--toggle-text{align-self:flex-start}
+  .text-body{
+    border:1px solid #e6ecf5;border-radius:12px;
+    background:#fbfcff;padding:14px 16px;
+    max-height:520px;overflow-y:auto;
+    scrollbar-width:thin;
+  }
+  .text-h{
+    font-size:16.5px;font-weight:800;color:#1e3a8a;
+    margin:16px 0 10px;padding-bottom:7px;border-bottom:2px solid #dbe4f5;
+  }
+  .text-h:first-child{margin-top:0}
+  .text-unit{
+    font-size:13px;font-weight:700;color:#5b6f88;
+    margin:0 0 8px;letter-spacing:.4px;
+  }
+  .text-para{
+    margin:0 0 12px;font-size:14px;line-height:2.05;color:#1f2937;
+  }
+  .text-sub{
+    font-size:15px;font-weight:800;color:#374151;
+    margin:15px 0 7px;
+  }
+  .text-sub::before{content:"🔹 ";font-size:.85em}
+  .text-sub3{
+    font-size:14px;font-weight:800;color:#374151;
+    margin:13px 0 5px;
+  }
+  .text-sub3::before{content:"🔹 ";font-size:.85em}
+  .term{
+    background:#fff3c4;color:#7c4a03;font-weight:750;
+    padding:1px 4px;border-radius:4px;
+    box-shadow:inset 0 -1px 0 #f1d06e;
+  }
+
+  /* Science 页码徽章 */
+  .pg{
+    display:inline-flex;align-items:center;
+    margin-left:8px;padding:1px 9px;border-radius:999px;
+    background:#eef4ff;border:1px solid #d7e4fb;color:#2f6bff;
+    font-size:11.5px;font-weight:800;letter-spacing:.3px;
+    white-space:nowrap;vertical-align:middle;
+  }
+  .sci-sec-head .pg{margin-left:0}
+
+  /* Science 小节块 */
+  .sci-section{
+    border:1px solid #e3ecf9;border-radius:12px;background:#fff;overflow:hidden;
+  }
+  .sci-section+.sci-section{margin-top:12px}
+  .sci-sec-head{
+    display:flex;align-items:center;gap:10px;width:100%;
+    padding:13px 15px;background:linear-gradient(180deg,#f7faff,#f2f7ff);
+    border:0;cursor:pointer;text-align:left;
+  }
+  .sci-sec-num{
+    flex:0 0 auto;min-width:34px;height:26px;padding:0 8px;border-radius:8px;
+    background:#2f6bff;color:#fff;font-size:13px;font-weight:800;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .sci-sec-title{flex:1;font-size:15px;font-weight:800;color:#1e3a8a}
+  .sci-sec-caret{flex:0 0 auto;color:#7b8ba6;transition:transform .2s;font-size:13px}
+  .sci-sec-head[aria-expanded="true"] .sci-sec-caret{transform:rotate(180deg)}
+  .sci-sec-body{padding:14px 16px 16px;border-top:1px solid #edf2fb}
+
+  /* Science 章节跳转卡片（指向独立笔记/测验页） */
+  .sci-link-row{
+    display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+    padding:13px 15px;background:linear-gradient(180deg,#f7faff,#f2f7ff);
+  }
+  .sci-link-main{display:flex;align-items:center;gap:10px;flex:1;min-width:200px}
+  .sci-link-actions{display:flex;gap:8px;flex-wrap:wrap;flex:0 0 auto}
+  .sci-link-btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:6px;text-decoration:none;
+    font-size:13px;font-weight:800;color:#1e3a8a;background:#eef4ff;
+    border:1px solid #d5e2fb;border-radius:10px;padding:10px 17px;transition:.15s;
+    min-height:40px;line-height:1;
+  }
+  .sci-link-btn:hover{background:#dbe7ff;border-color:#bcd0f2}
+  .sci-link-btn--quiz{color:#fff;background:#2f6bff;border-color:#2f6bff}
+  .sci-link-btn--quiz:hover{background:#1f4fd8;border-color:#1f4fd8}
+
+  /* Science Checkpoint 醒目卡片 */
+  .sci-section--checkpoint{margin:8px 0}
+  .sci-checkpoint-card{
+    display:flex;align-items:center;gap:14px;padding:16px 18px;text-decoration:none;
+    background:linear-gradient(120deg,#fff7e0,#fff0c2);border:1.5px solid #f5c518;
+    border-radius:14px;box-shadow:0 4px 14px rgba(245,197,24,.18);transition:.15s;
+  }
+  .sci-checkpoint-card:hover{border-color:#e0a800;box-shadow:0 6px 18px rgba(245,197,24,.3);transform:translateY(-1px)}
+  .sci-checkpoint-icon{font-size:26px;line-height:1;flex:0 0 auto}
+  .sci-checkpoint-text{display:flex;flex-direction:column;gap:3px;flex:1;min-width:0}
+  .sci-checkpoint-title{font-size:15.5px;font-weight:900;color:#8a5a00;letter-spacing:.2px}
+  .sci-checkpoint-desc{font-size:12px;color:#a16207;font-weight:600}
+  .sci-checkpoint-arrow{font-size:20px;color:#c8920a;font-weight:900;flex:0 0 auto}
+
+  /* Science 关键点框 */
+  .kp{
+    border:1px solid #f3e2b0;border-left:3px solid #f0b429;
+    background:#fffaf0;border-radius:10px;padding:10px 13px;
+    margin:12px 0;font-size:13.5px;line-height:1.9;color:#5b4a16;
+  }
+  .kp b{color:#a16207}
+
+  /* Science 课本原页对照 */
+  .fig-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;margin-top:8px}
+  .fig{
+    margin:0;border:1px solid #e3ecf9;border-radius:11px;overflow:hidden;
+    background:#fbfcff;cursor:zoom-in;
+  }
+  .fig img{display:block;width:100%;height:150px;object-fit:cover;object-position:top}
+  .fig figcaption{
+    padding:7px 9px;font-size:11.5px;color:#4b5b73;line-height:1.5;
+    display:flex;align-items:center;gap:6px;justify-content:space-between;background:#fff;
+  }
+  .fig figcaption .pg{margin-left:0}
+
+  /* Science 内嵌图（插入文字旁） */
+  .fig-inline{
+    margin:13px 0;border:1px solid #e3ecf9;border-radius:12px;
+    background:#fbfcff;overflow:hidden;cursor:zoom-in;
+  }
+  .fig-inline img{display:block;width:100%;max-width:520px;margin:0 auto;height:auto}
+  .fig-inline figcaption{
+    padding:8px 11px;font-size:11.5px;color:#4b5b73;line-height:1.5;
+    display:flex;align-items:center;gap:6px;justify-content:center;background:#fff;
+    border-top:1px solid #eef3fb;
+  }
+  .fig-inline figcaption .pg{margin-left:0}
+
+  /* Science 温度滑块 */
+  .temp-slider{
+    border:1px solid #dbe6f8;border-radius:14px;
+    background:linear-gradient(180deg,#f7faff,#edf4ff);
+    padding:16px;margin:15px 0;
+  }
+  .temp-head{
+    display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:10px;
+  }
+  .temp-state{
+    display:flex;align-items:center;gap:11px;
+  }
+  .temp-state-icon{
+    width:46px;height:46px;flex:0 0 auto;border-radius:12px;
+    background:#fff;border:1px solid #dbe6f8;
+    display:flex;align-items:center;justify-content:center;font-size:24px;
+    box-shadow:0 2px 8px rgba(47,107,255,.08);
+  }
+  .temp-state-name{font-size:18px;font-weight:800;color:#1e3a8a;line-height:1.1}
+  .temp-state-sub{font-size:12px;color:#64748b}
+  .temp-val{
+    margin-left:auto;font-size:22px;font-weight:800;color:#0e7fc2;
+    font-variant-numeric:tabular-nums;white-space:nowrap;
+  }
+  .temp-energy{
+    display:inline-flex;align-items:center;gap:6px;
+    border-radius:999px;padding:5px 12px;font-size:12.5px;font-weight:700;
+  }
+  .temp-energy.is-absorbed{background:#fff1e6;color:#c05621;border:1px solid #fed7aa}
+  .temp-energy.is-released{background:#e6f4ff;color:#0e7fc2;border:1px solid #bae6fd}
+  .temp-energy.is-idle{background:#eef2f8;color:#64748b;border:1px solid #dde3ec}
+  .temp-particles{
+    position:relative;height:72px;margin:6px 0 12px;
+    border:1px dashed #d5e2f6;border-radius:10px;background:#fff;
+    overflow:hidden;
+  }
+  .temp-particles i{
+    position:absolute;width:11px;height:11px;border-radius:50%;
+    background:#2f6bff;opacity:.9;
+    transform:translate(-50%,-50%);
+    transition:left .35s cubic-bezier(.4,0,.2,1),top .35s cubic-bezier(.4,0,.2,1);
+    box-shadow:0 1px 3px rgba(47,107,255,.35);
+  }
+  .temp-particles i.is-gas{width:8px;height:8px;opacity:.65}
+  .temp-scale{
+    display:flex;justify-content:space-between;font-size:11px;color:#64748b;
+    margin:6px 2px 0;font-variant-numeric:tabular-nums;
+  }
+  .temp-slider input[type=range]{
+    width:100%;height:24px;margin:4px 0 0;accent-color:#2f6bff;cursor:pointer;
+  }
+  .temp-hint{font-size:12px;color:#64748b;margin:8px 0 0;line-height:1.5}
+
+  /* Science 拖拽匹配游戏 */
+  .match-game{
+    border:1px solid #dbe6f8;border-radius:14px;
+    background:linear-gradient(180deg,#f7faff,#eef5ff);
+    padding:16px;margin:15px 0;
+  }
+  .match-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+  .match-title{font-size:15px;font-weight:800;color:#1e3a8a}
+  .match-count{
+    margin-left:auto;font-size:12.5px;font-weight:700;color:#64748b;
+    background:#fff;border:1px solid #dbe6f8;border-radius:999px;padding:4px 12px;
+  }
+  .match-reset{
+    border:1px solid #dbe6f8;background:#fff;color:#2f6bff;font-weight:700;
+    font-size:12.5px;border-radius:999px;padding:5px 12px;cursor:pointer;
+  }
+  .match-reset:hover{background:#2f6bff;color:#fff;border-color:#2f6bff}
+  .match-board{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  @media(max-width:560px){.match-board{grid-template-columns:1fr}}
+  .match-col{display:flex;flex-direction:column;gap:9px}
+  .match-col__label{font-size:11.5px;font-weight:800;letter-spacing:.5px;color:#64748b;text-transform:uppercase}
+  .match-term{
+    border:1.5px solid #2f6bff;background:#fff;color:#1e3a8a;
+    border-radius:10px;padding:10px 12px;font-weight:800;font-size:14px;
+    cursor:grab;text-align:center;user-select:none;
+    transition:transform .15s, box-shadow .15s, opacity .2s, background .15s;
+    box-shadow:0 2px 6px rgba(47,107,255,.08);
+  }
+  .match-term:active{cursor:grabbing}
+  .match-term.is-selected{transform:scale(1.04);box-shadow:0 6px 16px rgba(47,107,255,.28);background:#eaf1ff}
+  .match-term.is-dragging{opacity:.45}
+  .match-term.is-matched{background:#e6f6ec;border-color:#22a06b;color:#14683f;cursor:default;opacity:.95;pointer-events:none;box-shadow:none}
+  .match-slot{
+    border:1.5px dashed #c3d4f0;background:#fff;border-radius:10px;
+    min-height:44px;padding:9px 12px;display:flex;align-items:center;gap:8px;
+    transition:border-color .15s, background .15s, transform .15s;
+    cursor:pointer;
+  }
+  .match-slot__desc{font-size:13.5px;color:#33415c;font-weight:600;line-height:1.35}
+  .match-slot.is-over{border-color:#2f6bff;background:#eaf1ff;transform:scale(1.02)}
+  .match-slot.is-matched{border-style:solid;border-color:#22a06b;background:#e6f6ec;cursor:default;pointer-events:none}
+  .match-slot.is-wrong{animation:shake .4s;border-color:#e11d48;background:#fff1f2}
+  @keyframes shake{
+    0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-5px)}40%,80%{transform:translateX(5px)}
+  }
+  .match-done{
+    display:none;margin-top:12px;border-radius:10px;background:#e6f6ec;
+    color:#14683f;font-weight:800;font-size:14px;padding:11px 14px;text-align:center;
+    border:1px solid #b9e6cc;
+  }
+  .match-done.is-show{display:block}
+
+  /* Science 折叠面板（Accordion） */
+  .acc{
+    border:1px solid #dbe6f8;border-radius:13px;background:#fff;
+    margin:12px 0;overflow:hidden;
+  }
+  .acc-head{
+    width:100%;display:flex;align-items:center;gap:10px;
+    padding:13px 15px;border:0;background:#f7faff;cursor:pointer;
+    text-align:left;transition:background .15s;
+  }
+  .acc-head:hover{background:#eef4ff}
+  .acc-icon{font-size:20px;line-height:1;flex:0 0 auto}
+  .acc-title{font-size:15px;font-weight:800;color:#1e3a8a;flex:0 1 auto}
+  .acc-hint{
+    margin-left:auto;font-size:11.5px;color:#64748b;font-weight:600;
+    background:#fff;border:1px solid #dbe6f8;border-radius:999px;padding:3px 10px;
+    white-space:nowrap;
+  }
+  .acc-caret{
+    flex:0 0 auto;font-size:13px;color:#64748b;
+    transition:transform .25s;line-height:1;
+  }
+  .acc-head[aria-expanded="true"] .acc-caret{transform:rotate(180deg)}
+  .acc-body{
+    padding:14px;border-top:1px solid #eef3fb;background:#fff;
+  }
+  .acc-body[hidden]{display:none}
+
+  /* Science 互动实验区分栏（桌面左右、移动单列） */
+  .lab-grid{
+    display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start;margin:14px 0;
+  }
+  @media(max-width:720px){
+    .lab-grid{grid-template-columns:1fr;gap:12px}
+  }
+  .lab-grid .acc{margin:0}
+  .lab-grid > .acc{height:fit-content}
+
+  /* Science 课本原页查看按钮 */
+  .gallery-btn{
+    display:inline-flex;align-items:center;gap:10px;
+    border:1px solid #2f6bff;background:#fff;color:#2f6bff;
+    border-radius:11px;padding:11px 16px;font-weight:800;font-size:14px;
+    cursor:pointer;transition:background .15s,color .15s;margin-top:4px;
+  }
+  .gallery-btn:hover{background:#2f6bff;color:#fff}
+  .gallery-btn__count{
+    font-size:11.5px;font-weight:700;background:#eaf1ff;border-radius:999px;
+    padding:2px 9px;
+  }
+  .gallery-btn:hover .gallery-btn__count{background:rgba(255,255,255,.22)}
+
+  /* Science 折线图动画（加热曲线） */
+  .chart-block{
+    border:1px solid #e3ecf9;border-radius:11px;background:#fff;padding:10px 8px 6px;
+  }
+  .chart-svg{display:block;width:100%;height:auto}
+  .chart-cap{
+    font-size:12px;color:#64748b;text-align:center;margin:4px 0 2px;line-height:1.5;
+  }
+  .chart-legend{
+    display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:8px 0 2px;
+  }
+  .chart-legend span{
+    display:inline-flex;align-items:center;gap:5px;
+    font-size:11.5px;color:#33415c;font-weight:600;
+    background:#f7faff;border:1px solid #e3ecf9;border-radius:999px;padding:3px 10px;
+  }
+  .chart-legend i{width:10px;height:10px;border-radius:50%;display:inline-block}
+  .chart-legend .leg-melt i{background:#22a06b}
+  .chart-legend .leg-heat i{background:#2f6bff}
+  .chart-legend .leg-boil i{background:#f59e0b}
+  .chart-seg{fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:100;stroke-dashoffset:100}
+  .chart-note{opacity:0}
+  .chart-block.is-anim .chart-seg{animation:chartdraw .9s ease forwards}
+  .chart-block.is-anim .chart-seg--2{animation-delay:.9s}
+  .chart-block.is-anim .chart-seg--3{animation-delay:1.8s}
+  .chart-block.is-anim .chart-seg--4{animation-delay:2.7s}
+  .chart-block.is-anim .chart-seg--5{animation-delay:3.6s}
+  .chart-block.is-anim .chart-note--melt{animation:chartfade .45s ease 1.75s forwards}
+  .chart-block.is-anim .chart-note--boil{animation:chartfade .45s ease 3.55s forwards}
+  @keyframes chartdraw{to{stroke-dashoffset:0}}
+  @keyframes chartfade{to{opacity:1}}
+  .chart-replay{
+    display:block;margin:6px auto 2px;border:1px solid #dbe6f8;background:#f7faff;
+    color:#2f6bff;font-weight:700;font-size:12px;border-radius:999px;padding:4px 12px;cursor:pointer;
+  }
+  .chart-replay:hover{background:#2f6bff;color:#fff;border-color:#2f6bff}
+
+  /* Science 标签页（Tabs） */
+  .sci-tabs{margin-top:2px}
+  .sci-tabbar{
+    display:flex;gap:6px;border-bottom:2px solid #e3ecf9;
+    overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;
+  }
+  .sci-tabbar::-webkit-scrollbar{display:none}
+  .sci-tab{
+    display:inline-flex;align-items:center;gap:7px;white-space:nowrap;
+    padding:11px 16px;border:0;background:transparent;cursor:pointer;
+    font-size:14px;font-weight:700;color:#64748b;
+    border-bottom:3px solid transparent;margin-bottom:-2px;
+    transition:color .15s, border-color .15s;
+  }
+  .sci-tab:hover{color:#1e3a8a}
+  .sci-tab[aria-selected="true"]{color:#2f6bff;border-bottom-color:#2f6bff}
+  .sci-tab__icon{font-size:16px;line-height:1}
+  .sci-tabpanel{padding-top:12px}
+  .sci-tabpanel[hidden]{display:none}
+
+  /* Science 交互式总结表格 */
+  .summary-table{
+    border:1px solid #e3ecf9;border-radius:12px;background:#fff;
+    padding:14px;margin:12px 0;
+  }
+  .st-title{font-size:14.5px;font-weight:800;color:#1e3a8a;margin-bottom:10px}
+  .st-wrap{overflow-x:auto}
+  .st-table{width:100%;border-collapse:collapse;font-size:13px;min-width:520px}
+  .st-table th,.st-table td{
+    border:1px solid #e3ecf9;padding:8px 10px;text-align:left;vertical-align:middle;
+  }
+  .st-table th{background:#f7faff;color:#1e3a8a;font-weight:800;font-size:12px}
+  .st-table td{color:#33415c;line-height:1.4}
+  .st-process{font-weight:800;color:#1e3a8a;white-space:nowrap}
+  .st-energy{white-space:nowrap}
+  .st-select{
+    border:1.5px solid #c3d4f0;border-radius:8px;background:#fff;
+    padding:5px 8px;font-size:12.5px;font-weight:700;color:#33415c;cursor:pointer;
+  }
+  .st-select.is-correct{border-color:#22a06b;background:#e6f6ec;color:#14683f}
+  .st-select.is-wrong{border-color:#e11d48;background:#fff1f2;color:#be123c}
+  .st-actions{display:flex;align-items:center;gap:12px;margin-top:12px;flex-wrap:wrap}
+  .st-check{
+    border:1px solid #2f6bff;background:#2f6bff;color:#fff;font-weight:800;
+    font-size:13px;border-radius:9px;padding:8px 16px;cursor:pointer;
+  }
+  .st-check:hover{background:#1e57d8;border-color:#1e57d8}
+  .st-result{font-size:13.5px;font-weight:800;color:#33415c}
+  .st-result.is-all{color:#14683f}
+
+  /* Science 章节测验 */
+  .chapter-quiz{
+    border:1px solid #e3ecf9;border-radius:13px;background:#fff;
+    padding:16px;margin:4px 0;
+  }
+  .cq-title{font-size:16px;font-weight:800;color:#1e3a8a;margin-bottom:4px}
+  .cq-intro{font-size:13px;color:#64748b;margin-bottom:14px}
+  .qq{border:1px solid #e8eff9;border-radius:11px;padding:13px 14px;margin-bottom:12px;background:#fbfcff}
+  .qq-head{display:flex;align-items:center;gap:8px;margin-bottom:7px}
+  .qq-num{
+    display:inline-flex;align-items:center;justify-content:center;
+    width:26px;height:26px;border-radius:50%;background:#2f6bff;color:#fff;
+    font-size:12.5px;font-weight:800;flex:0 0 auto;
+  }
+  .qq-level{
+    font-size:11px;font-weight:800;letter-spacing:.5px;color:#f59e0b;
+    background:#fff7e6;border:1px solid #fde68a;border-radius:999px;padding:2px 9px;
+  }
+  .qq-text{font-size:14px;color:#1e293b;font-weight:600;line-height:1.5;margin-bottom:9px}
+  .qq-options{display:flex;flex-direction:column;gap:7px}
+  .qq-opt{
+    display:flex;align-items:center;gap:9px;cursor:pointer;
+    border:1.5px solid #e3ecf9;border-radius:9px;padding:8px 11px;
+    transition:border-color .12s, background .12s;
+  }
+  .qq-opt:hover{border-color:#bcd0f2;background:#f5f9ff}
+  .qq-opt input{accent-color:#2f6bff;margin:0}
+  .qq-opt__label{font-size:13.5px;color:#33415c;font-weight:600}
+  .qq-opt.is-correct{border-color:#22a06b;background:#e6f6ec}
+  .qq-opt.is-correct .qq-opt__label{color:#14683f}
+  .qq-opt.is-wrong{border-color:#e11d48;background:#fff1f2}
+  .qq-opt.is-wrong .qq-opt__label{color:#be123c}
+  .qq-feedback{font-size:12.5px;font-weight:700;margin-top:8px}
+  .qq-feedback.is-ok{color:#14683f}
+  .qq-feedback.is-bad{color:#be123c}
+  .qq-graph-block{
+    border:1px solid #e8eff9;border-radius:11px;background:#fbfcff;
+    padding:10px;margin-bottom:14px;text-align:center;
+  }
+  .qq-graph{display:block;width:100%;max-width:340px;height:auto;margin:0 auto}
+  .qq-graph-cap{font-size:12.5px;color:#64748b;line-height:1.5;margin-top:6px;text-align:left}
+  .qq-drag{border-top:1px dashed #e3ecf9;margin-top:14px;padding-top:14px}
+  .qq-drag-title{font-size:14.5px;font-weight:800;color:#1e3a8a;margin-bottom:8px}
+  .cq-actions{margin-top:14px}
+  .cq-submit{
+    border:1px solid #22a06b;background:#22a06b;color:#fff;font-weight:800;
+    font-size:14.5px;border-radius:10px;padding:11px 24px;cursor:pointer;
+    width:100%;
+  }
+  .cq-submit:hover{background:#1a865a;border-color:#1a865a}
+  .cq-submit:disabled{background:#94a3b8;border-color:#94a3b8;cursor:default}
+  .cq-result{
+    margin-top:14px;border:1px solid #e3ecf9;border-radius:12px;background:#f7faff;
+    padding:16px;text-align:center;
+  }
+  .cq-score{font-size:34px;font-weight:900;color:#1e3a8a;line-height:1.1}
+  .cq-score-sub{font-size:13px;color:#64748b;margin-top:6px}
+  .cq-score-msg{font-size:14px;font-weight:700;color:#1e3a8a;margin-top:10px}
+
+  /* Science 章节测验 · 分节客观题 */
+  .qz-set{border:1px solid #e3ecf9;border-radius:13px;background:#fff;padding:16px;margin:4px 0}
+  .qz-title{font-size:16px;font-weight:800;color:#1e3a8a;margin-bottom:4px}
+  .qz-intro{font-size:13px;color:#64748b;margin-bottom:14px}
+  .qz-section{border:1px solid #e8eff9;border-radius:12px;margin-bottom:14px;overflow:hidden}
+  .qz-section:last-child{margin-bottom:0}
+  .qz-sec-head{display:flex;align-items:center;gap:9px;padding:12px 14px;background:#f5f9ff;border-bottom:1px solid #e8eff9}
+  .qz-sec-icon{font-size:18px;line-height:1}
+  .qz-sec-title{font-size:14.5px;font-weight:800;color:#1e3a8a}
+  .qz-sec-sub{font-size:11.5px;font-weight:700;color:#64748b;background:#eef2f9;border-radius:999px;padding:2px 9px;margin-left:auto;white-space:nowrap}
+  .qz-block{padding:14px}
+  .qz-block + .qz-block{border-top:1px dashed #e8eff9}
+  .qz-block-title{font-size:14px;font-weight:800;color:#1e293b;margin-bottom:6px}
+  .qz-block-intro{font-size:12.5px;color:#64748b;line-height:1.55;margin-bottom:10px}
+  .qz-level{display:inline-block;font-size:11px;font-weight:800;letter-spacing:.5px;color:#2f6bff;background:#eef4ff;border:1px solid #d5e2fb;border-radius:999px;padding:3px 11px}
+  /* 照片下拉匹配 */
+  .qz-photo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+  .qz-photo{border:1px solid #e3ecf9;border-radius:11px;padding:10px;background:#fbfcff;display:flex;flex-direction:column;gap:8px}
+  .qz-photo img{width:100%;height:110px;object-fit:cover;border-radius:8px;border:1px solid #eef2f9;background:#fff}
+  .qz-photo-cap{font-size:12px;color:#33415c;font-weight:600;line-height:1.4}
+  /* 下拉 */
+  .qz-sel{width:100%;border:1.5px solid #d5e0f0;border-radius:8px;padding:7px 9px;font-size:13px;color:#1e293b;background:#fff;font-weight:600;cursor:pointer;transition:border-color .12s,background .12s}
+  .qz-sel:focus{outline:none;border-color:#2f6bff}
+  .qz-sel.is-correct{border-color:#22a06b;background:#e6f6ec;color:#14683f}
+  .qz-sel.is-wrong{border-color:#e11d48;background:#fff1f2;color:#be123c}
+  /* 单选题 */
+  .qz-mc{margin-bottom:12px}
+  .qz-mc:last-child{margin-bottom:0}
+  .qz-mc-text{font-size:13.5px;color:#1e293b;font-weight:600;line-height:1.5;margin-bottom:8px}
+  .qz-mark{color:#e11d48;font-weight:800;text-decoration:underline}
+  .qz-hint{font-size:12px;color:#b45309;background:#fff7e6;border:1px solid #fde68a;border-radius:8px;padding:7px 10px;line-height:1.45;margin-bottom:9px}
+  .qz-options{display:flex;flex-direction:column;gap:6px}
+  .qz-opt{display:flex;align-items:center;gap:9px;cursor:pointer;border:1.5px solid #e3ecf9;border-radius:9px;padding:8px 11px;transition:border-color .12s,background .12s}
+  .qz-opt:hover{border-color:#bcd0f2;background:#f5f9ff}
+  .qz-opt input{accent-color:#2f6bff;margin:0}
+  .qz-opt__label{font-size:13px;color:#33415c;font-weight:600;line-height:1.4}
+  .qz-opt.is-correct{border-color:#22a06b;background:#e6f6ec}
+  .qz-opt.is-correct .qz-opt__label{color:#14683f}
+  .qz-opt.is-wrong{border-color:#e11d48;background:#fff1f2}
+  .qz-opt.is-wrong .qz-opt__label{color:#be123c}
+  .qz-fb{font-size:12.5px;font-weight:700;margin-top:6px}
+  .qz-fb.is-ok{color:#14683f}
+  .qz-fb.is-bad{color:#be123c}
+  /* 选词填空 */
+  .qz-wordbank{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+  .qz-word{font-size:12px;font-weight:700;color:#1e3a8a;background:#eef4ff;border:1px solid #d5e2fb;border-radius:999px;padding:3px 10px}
+  .qz-fill-item{margin-bottom:12px;line-height:2}
+  .qz-fill-item:last-child{margin-bottom:0}
+  .qz-fill-label{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:#2f6bff;color:#fff;font-size:11px;font-weight:800;margin-right:6px;vertical-align:middle}
+  .qz-fill-text{font-size:13.5px;color:#1e293b;font-weight:600}
+  .qz-fill-item .qz-sel{display:inline-block;width:auto;min-width:112px;padding:4px 8px;font-size:12.5px;margin:0 2px;vertical-align:middle}
+  /* 判断 T/F */
+  .qz-tf-item{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid #f1f5fb}
+  .qz-tf-item:last-child{border-bottom:0}
+  .qz-tf-q{flex:1;font-size:13px;color:#1e293b;font-weight:600;line-height:1.45}
+  .qz-tf-btns{display:flex;gap:6px;flex:0 0 auto}
+  .qz-tf-btn{width:42px;height:34px;border-radius:8px;border:1.5px solid #d5e0f0;background:#fff;color:#33415c;font-weight:800;font-size:14px;cursor:pointer;transition:all .12s}
+  .qz-tf-btn:hover{border-color:#bcd0f2}
+  .qz-tf-btn.is-on{border-color:#2f6bff;background:#2f6bff;color:#fff}
+  .qz-tf-btn.is-correct{border-color:#22a06b;background:#e6f6ec;color:#14683f}
+  .qz-tf-btn.is-wrong{border-color:#e11d48;background:#fff1f2;color:#be123c}
+  .qz-tf-btn:disabled{cursor:default}
+  /* 粒子图选择题 */
+  .qz-particle-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .qz-particle-opt{position:relative;border:1.5px solid #e3ecf9;border-radius:11px;padding:10px;cursor:pointer;transition:border-color .12s,background .12s;background:#fff}
+  .qz-particle-opt:hover{border-color:#bcd0f2;background:#f5f9ff}
+  .qz-particle-opt input{position:absolute;left:10px;top:10px;margin:0;accent-color:#2f6bff}
+  .qz-particle-opt .qz-opt-label{position:absolute;left:32px;top:8px;font-size:12px;font-weight:800;color:#33415c}
+  .qz-particle-pair{display:flex;align-items:center;gap:8px;margin-top:22px;justify-content:center}
+  .qz-pbox{position:relative;width:74px;height:74px;border:1px solid #dbe6f5;border-radius:8px;background:#fbfdff;flex:0 0 auto}
+  .qz-pdot{position:absolute;width:9px;height:9px;border-radius:50%;background:#2f6bff;transform:translate(-50%,-50%)}
+  .qz-arrow{font-size:20px;color:#94a3b8;font-weight:800}
+  .qz-particle-opt.is-correct{border-color:#22a06b;background:#e6f6ec}
+  .qz-particle-opt.is-wrong{border-color:#e11d48;background:#fff1f2}
+  /* 状态变化填图 */
+  .qz-diagram-wrap{text-align:center}
+  .qz-diagram{width:100%;max-width:460px;height:auto}
+  .qz-diagram-labels{margin-top:10px;display:flex;flex-direction:column;gap:8px}
+  .qz-diag-label{display:flex;align-items:center;gap:8px;font-size:12.5px;font-weight:700;color:#33415c}
+  .qz-diag-num{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:#2f6bff;color:#fff;font-size:11px;font-weight:800;flex:0 0 auto}
+  .qz-diag-label .qz-sel{flex:1;max-width:220px}
+  /* 状态变化填表 */
+  .qz-table-wrap{overflow-x:auto}
+  .qz-table{width:100%;border-collapse:collapse;font-size:12.5px}
+  .qz-table th,.qz-table td{border:1px solid #dbe6f5;padding:8px 7px;text-align:left;vertical-align:middle}
+  .qz-table th{background:#f0f6ff;color:#1e3a8a;font-weight:800;font-size:11.5px}
+  .qz-table td{color:#33415c;font-weight:600;line-height:1.5}
+  .qz-table .qz-sel{width:100%;min-width:96px;padding:5px 6px;font-size:12px}
+  .qz-table td .qz-sel{display:inline-block;width:auto;min-width:96px;margin:1px 2px;vertical-align:middle}
+  /* 提交与结果 */
+  .qz-actions{margin-top:14px}
+  .qz-submit{border:1px solid #22a06b;background:#22a06b;color:#fff;font-weight:800;font-size:15px;border-radius:10px;padding:12px 24px;cursor:pointer;width:100%}
+  .qz-submit:hover{background:#1a865a;border-color:#1a865a}
+  .qz-submit:disabled{background:#94a3b8;border-color:#94a3b8;cursor:default}
+  .qz-result{margin-top:14px;border:1px solid #e3ecf9;border-radius:12px;background:#f7faff;padding:16px;text-align:center}
+  .qz-score{font-size:34px;font-weight:900;color:#1e3a8a;line-height:1.1}
+  .qz-score-sub{font-size:13px;color:#64748b;margin-top:6px}
+  .qz-score-msg{font-size:14px;font-weight:700;color:#1e3a8a;margin-top:10px}
+  @media(max-width:560px){
+    .qz-photo-grid{grid-template-columns:1fr}
+    .qz-particle-grid{grid-template-columns:1fr}
+    .qz-photo img{height:auto;max-height:170px}
+    .qz-tf-item{flex-direction:column;align-items:flex-start}
+    .qz-tf-btns{align-self:flex-end}
+  }
+
+  /* 图片灯箱 */
+  .lightbox{
+    position:fixed;inset:0;z-index:200;background:rgba(10,16,26,.88);
+    display:flex;align-items:center;justify-content:center;
+    padding:24px;opacity:0;pointer-events:none;transition:opacity .22s;cursor:zoom-out;
+  }
+  .lightbox.is-show{opacity:1;pointer-events:auto}
+  .lightbox img{
+    max-width:100%;max-height:100%;border-radius:8px;
+    box-shadow:0 24px 70px rgba(0,0,0,.5);background:#fff;
+  }
+  .lightbox__close{
+    position:absolute;top:18px;right:20px;width:40px;height:40px;border-radius:50%;
+    background:rgba(255,255,255,.14);color:#fff;border:0;font-size:22px;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;line-height:1;
+  }
+  .lightbox__caption{
+    position:absolute;left:50%;bottom:22px;transform:translateX(-50%);
+    color:#fff;font-size:13px;background:rgba(0,0,0,.45);padding:6px 14px;border-radius:999px;
+    max-width:calc(100vw - 40px);text-align:center;
+  }
+  .lightbox__nav{
+    position:absolute;top:50%;transform:translateY(-50%);
+    width:46px;height:46px;border-radius:50%;border:0;cursor:pointer;
+    background:rgba(255,255,255,.14);color:#fff;font-size:30px;line-height:1;
+    display:flex;align-items:center;justify-content:center;
+    transition:background .15s;
+  }
+  .lightbox__nav:hover{background:rgba(255,255,255,.28)}
+  .lightbox__prev{left:14px}
+  .lightbox__next{right:14px}
+  .lightbox__count{
+    position:absolute;top:22px;left:50%;transform:translateX(-50%);
+    color:#fff;font-size:13px;background:rgba(0,0,0,.45);padding:5px 13px;border-radius:999px;
+    font-variant-numeric:tabular-nums;
+  }
+  @media(max-width:560px){
+    .lightbox__nav{width:38px;height:38px;font-size:24px}
+    .lightbox__prev{left:6px}
+    .lightbox__next{right:6px}
+  }
+
+  /* 概念全景图（Mermaid 思维导图） */
+  .mindmap-block{display:flex;flex-direction:column;gap:10px;margin-top:2px}
+  .btn--mindmap{align-self:flex-start}
+  .mindmap-wrap{
+    border:1px solid var(--line);border-radius:12px;background:#fff;
+    padding:10px;max-height:72vh;overflow:auto;
+  }
+  .mindmap-wrap svg{max-width:none;height:auto}
+  .mindmap-loading,.mindmap-error{color:var(--muted);font-size:14px;text-align:center;padding:22px 10px}
+  .mindmap-error{color:#d64545}
+
+  /* ICT 练习区 */
+  .quiz{
+    border:1px solid #dbe6f8;border-left:3px solid #2f6bff;
+    border-radius:11px;background:#fff;
+    padding:13px 14px;
+    display:flex;flex-direction:column;gap:11px;
+  }
+  .quiz__label{
+    font-size:12px;font-weight:800;letter-spacing:1px;color:#2f6bff;
+    display:inline-flex;align-items:center;gap:6px;
+  }
+  .quiz__label::before{content:"✏️";font-size:13px}
+  .quiz__note{font-size:12px;color:var(--muted);margin:0}
+  .quiz__divider{
+    font-size:11.5px;font-weight:800;letter-spacing:1px;color:#a6791a;
+    text-transform:uppercase;margin-top:4px;
+  }
+  .quiz__q{display:flex;flex-direction:column;gap:5px}
+  .quiz__stem{font-size:13.5px;font-weight:700;color:var(--ink);line-height:1.55}
+  .quiz__opt{font-size:13px;color:var(--ink-2);line-height:1.55;padding-left:14px}
+
+  /* 按钮 */
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:7px;
+    border-radius:11px;border:1px solid transparent;
+    font-size:13.5px;font-weight:650;cursor:pointer;
+    padding:9px 14px;text-decoration:none;white-space:nowrap;
+    transition:transform .16s,box-shadow .18s,background .18s,border-color .18s,color .18s;
+  }
+  .btn:active{transform:translateY(1px) scale(.995)}
+  .btn--primary{
+    background:linear-gradient(140deg,#2f6bff,#3f7bff 60%,#2b93ff);
+    color:#fff;box-shadow:0 6px 16px rgba(47,107,255,.26);
+  }
+  .btn--primary:hover{box-shadow:0 9px 22px rgba(47,107,255,.34)}
+  .btn--primary .btn__arrow{font-size:12px;opacity:.9}
+  .btn--copy{
+    background:#fff;border-color:#dbe4f3;color:var(--ink-2);
+    font-size:12.5px;font-weight:600;padding:8px 11px;
+  }
+  .btn--copy:hover{background:#f4f8ff;border-color:#c6d9fb;color:var(--brand-ink)}
+  .btn--copy.is-done{
+    background:#e9f9f4;border-color:#b8ecd7;color:#00877a;
+  }
+  .btn--ghost{
+    background:#f5f8ff;border-color:#dde7fa;color:var(--brand-ink);
+    font-size:13.5px;
+  }
+  .btn--ghost:hover{background:#eaf2ff;border-color:#c9dcfb}
+  .btn--block{width:100%}
+
+  /* 批改区 */
+  /* 成语卡 */
+  .feature{
+    display:flex;flex-direction:column;gap:14px;height:100%;
+  }
+  .feature__thumb{
+    border-radius:13px;border:1px solid #e3ecfa;
+    background:
+      radial-gradient(120px 80px at 20% 20%,#e7f0ff,rgba(231,240,255,0)),
+      radial-gradient(160px 100px at 85% 80%,#e6fbf6,rgba(230,251,246,0)),
+      #f9fbff;
+    padding:16px;
+    display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+  }
+  .feature__chip{
+    background:#fff;border:1px solid #dbe6f8;border-radius:10px;
+    padding:7px 11px;font-size:15px;font-weight:700;color:var(--ink);
+    box-shadow:0 2px 6px rgba(22,32,46,.05);
+  }
+  .feature__chip small{display:block;font-size:11px;color:var(--muted);font-weight:500;letter-spacing:.4px}
+  .feature__list{margin:0;padding-left:0;list-style:none;font-size:13px;color:var(--ink-2)}
+  .feature__list li{display:flex;gap:8px;padding:3px 0}
+  .feature__list li::before{content:"•";color:var(--brand);font-weight:800}
+
+  /* 占位卡 */
+  .card--placeholder{
+    background:linear-gradient(180deg,#fff,#fcfdff);
+    border-style:dashed;border-color:#dde7f5;
+    box-shadow:none;
+  }
+  .card--placeholder:hover{box-shadow:none;border-color:#c9d9ef;transform:none}
+  .ph-box{
+    margin-top:14px;border-radius:12px;
+    background:repeating-linear-gradient(135deg,#f8fbff,#f8fbff 10px,#f4f8ff 10px,#f4f8ff 20px);
+    border:1px solid #e7eefb;
+    padding:22px 16px;text-align:center;color:var(--muted);font-size:13px;
+  }
+  .ph-box span{display:block;font-size:20px;margin-bottom:6px;opacity:.65}
+
+  /* 连词八大关系表格 */
+  .conj-table-wrap{overflow-x:auto;margin:14px 0 4px}
+  .conj-table{width:100%;border-collapse:collapse;font-size:13px;min-width:340px}
+  .conj-table th,.conj-table td{border:1px solid #e3ecf9;padding:8px 10px;text-align:left;vertical-align:top}
+  .conj-table th{background:#eef4ff;color:#1e3a8a;font-weight:800;white-space:nowrap}
+  .conj-table td{color:#33415c;line-height:1.6}
+  .conj-table td:first-child{font-weight:800;color:#1e3a8a;white-space:nowrap;width:70px}
+
+  /* 建设中 */
+  .empty{
+    text-align:center;padding:52px 26px;
+    background:linear-gradient(180deg,#fff,#fbfdff);
+  }
+  .empty__icon{font-size:40px;line-height:1;margin-bottom:14px}
+  .empty h2{margin:0 0 8px;font-size:19px;font-weight:800}
+  .empty p{margin:0;color:var(--muted);font-size:13.5px}
+  .empty__note{
+    display:inline-block;margin-top:18px;
+    background:#f2f7ff;border:1px solid #e0eafb;border-radius:12px;
+    padding:11px 16px;font-size:13px;color:var(--brand-ink);
+  }
+
+  /* 遮罩 & toast */
+  .backdrop{
+    position:fixed;inset:0;background:rgba(16,26,40,.42);
+    opacity:0;pointer-events:none;transition:opacity .22s;z-index:70;
+    backdrop-filter:blur(1.5px);
+  }
+  .toast{
+    position:fixed;left:50%;bottom:34px;transform:translate(-50%,14px);
+    background:#16202e;color:#fff;font-size:13.5px;font-weight:600;
+    padding:11px 18px;border-radius:12px;z-index:120;
+    box-shadow:0 12px 30px rgba(16,26,40,.28);
+    opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;
+    max-width:calc(100vw - 40px);text-align:center;
+  }
+  .toast.is-show{opacity:1;transform:translate(-50%,0)}
+
+  /* ---------- 响应式 ---------- */
+  @media (max-width:1024px){
+    :root{--sidebar-w:232px}
+    .layout{padding:18px 18px 48px;gap:18px}
+    .topbar__inner{padding:10px 18px}
+    .page-title{font-size:21px}
+  }
+  @media (max-width:900px){
+    .hamburger{display:flex}
+    .topbar__inner{gap:10px 12px}
+    .grade-box{width:100%;margin-left:0;justify-content:space-between;gap:8px}
+    .grade-switch{flex:1}
+    .layout{grid-template-columns:minmax(0,1fr);padding:16px 14px 44px;gap:14px}
+    .sidebar{
+      position:fixed;top:0;left:0;bottom:0;z-index:80;
+      width:284px;max-width:86vw;max-height:none;height:100%;
+      border-radius:0 18px 18px 0;border-left:0;
+      padding:16px 12px 24px;
+      transform:translateX(-104%);
+      transition:transform .26s cubic-bezier(.32,.72,.28,1);
+      box-shadow:0 20px 60px rgba(16,26,40,.24);
+      overflow-y:auto;
+    }
+    .sidebar__close{display:flex;align-items:center;justify-content:center}
+    body.drawer-open .sidebar{transform:translateX(0)}
+    body.drawer-open .backdrop{opacity:1;pointer-events:auto}
+    body.drawer-open{overflow:hidden}
+    .cards{grid-template-columns:minmax(0,1fr)}
+    .card--wide{grid-column:auto}
+    .card{padding:16px}
+    .card__title{font-size:16px}
+    .page-title{font-size:20px}
+    .brand__sub{display:none}
+    .lessons{grid-template-columns:minmax(0,1fr)}
+    .lesson{padding:13px;gap:11px}
+    .lesson__actions{
+      width:100%;gap:9px;
+      flex-direction:column;align-items:stretch;
+    }
+    .lesson__actions .btn{
+      width:100%;min-width:0;flex:0 0 auto;
+      padding:12px 16px;
+      white-space:normal;line-height:1.4;
+      font-size:14px;font-weight:700;
+      letter-spacing:.2px;
+    }
+    .lesson__actions .btn--copy{
+      font-weight:600;font-size:13px;padding:11px 16px;
+      background:#fbfdff;border-style:dashed;border-color:#d7e2f5;
+    }
+    .challenge{padding:11px 12px}
+    .challenge .btn{
+      width:100%;align-self:stretch;
+      padding:11px 14px;white-space:normal;line-height:1.4;
+      font-size:13.5px;text-align:center;
+    }
+    .practice{padding:11px 12px}
+    .practice .btn{
+      width:100%;align-self:stretch;
+      padding:11px 14px;white-space:normal;line-height:1.4;
+      font-size:13.5px;text-align:center;
+    }
+    .btn--toggle-text{
+      width:100%;align-self:stretch;
+      padding:11px 14px;white-space:normal;line-height:1.4;
+      font-size:14px;text-align:center;
+    }
+    .text-body{padding:12px 13px;max-height:440px}
+    .text-para{font-size:13.5px;line-height:1.85}
+    .sci-link-btn{padding:11px 18px;font-size:13.5px;min-height:44px}
+  }
+  @media (max-width:420px){
+    .brand__logo{width:34px;height:34px;font-size:15px}
+    .brand__title{font-size:15px}
+    .grade-btn{padding:7px 11px;font-size:13px}
+    .lesson__actions .btn--primary,
+    .lesson__actions .btn--copy,
+    .challenge .btn,
+    .practice .btn{font-size:13.5px;padding:11px 14px}
+  }
+  html{overflow-x:clip}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar__inner">
+    <button class="hamburger" id="hamburger" aria-label="打开科目菜单" aria-expanded="false" aria-controls="sidebar">☰</button>
+
+    <div class="brand">
+      <div class="brand__logo">学</div>
+      <div class="brand__text">
+        <div class="brand__title">多学科学习门户</div>
+        <div class="brand__sub">AI 陪你逐课精进</div>
+      </div>
+    </div>
+
+    <div class="grade-box">
+      <span class="grade-box__label">年级</span>
+      <div class="grade-switch" id="gradeSwitch" role="tablist" aria-label="年级切换"></div>
+    </div>
+  </div>
+</header>
+
+<div class="layout">
+  <aside class="sidebar" id="sidebar" aria-label="科目菜单">
+    <div class="sidebar__head">
+      <span class="sidebar__title">科目菜单</span>
+      <button class="sidebar__close" id="sidebarClose" aria-label="关闭菜单">✕</button>
+    </div>
+    <div id="navRoot"></div>
+  </aside>
+
+  <main class="main" id="main" tabindex="-1"></main>
+</div>
+
+<div class="backdrop" id="backdrop" hidden></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<div class="lightbox" id="lightbox" aria-hidden="true">
+  <button class="lightbox__close" type="button" aria-label="Close">×</button>
+  <button class="lightbox__nav lightbox__prev" type="button" aria-label="Previous">‹</button>
+  <img alt="Enlarged textbook page">
+  <button class="lightbox__nav lightbox__next" type="button" aria-label="Next">›</button>
+  <div class="lightbox__caption"></div>
+  <div class="lightbox__count"></div>
+</div>
+
+<script>
+/* =========================================================================
+   1. 站点配置（科目菜单、年级、内容注册表均独立配置，改这里即可扩展）
+   ========================================================================= */
+const CONFIG = {
+  defaultGrade: "S1",
+  grades: ["S1", "S2", "S3", "S4", "S5", "S6"],
+
+  // —— 科目菜单数据（分组 + 顺序 + 图标）——
+  subjectGroups: [
+    {
+      id: "core",
+      label: "核心科目",
+      items: [
+        { id: "chinese", name: "中文",     icon: "📖" },
+        { id: "english", name: "English",  icon: "🔤" },
+        { id: "maths",   name: "Maths",    icon: "📐" },
+        { id: "science", name: "Science",  icon: "🔬" }
+      ]
+    },
+    {
+      id: "humanities",
+      label: "人文学科",
+      items: [
+        { id: "chist",  name: "中史", icon: "🏯" },
+        { id: "whist",  name: "Western History", icon: "🏛️" },
+        { id: "geog",   name: "GEO", icon: "🌏" },
+        { id: "ces",    name: "CES",  icon: "🌱" }
+      ]
+    },
+    {
+      id: "skills",
+      label: "技能与艺术",
+      items: [
+        { id: "ict",     name: "ICT",     icon: "💻" },
+        { id: "ite",     name: "ITE",     icon: "🛠️" },
+        { id: "isc",     name: "ISC",     icon: "🧩" },
+        { id: "spanish", name: "Spanish", icon: "🇪🇸" },
+        { id: "music",   name: "Music",   icon: "🎵" },
+        { id: "vsa",     name: "VSA",     icon: "🎨" }
+      ]
+    }
+  ],
+
+  // 各年级可单独覆盖科目菜单（留空则使用上面的通用菜单）
+  gradeSubjectOverride: {
+    // S2: [ { id:"core", label:"核心科目", items:[...] } ]
+  },
+
+  // —— 外部链接 ——
+  links: {
+    doubao: "https://www.doubao.com/chat",
+    chengyu: "https://chengyu-flashcards-66310.app.workbuddy.host/?sharecode=UNN4227NAC"
+  },
+
+  // —— 中文科内容（按年级区分）——
+  chineseByGrade: {
+    S1: {
+      classics: [
+        {
+          slug: "yangxiu",
+          title: "《杨修之死》",
+          meta: "人物形象 · 情节推进 · 阅读卷考点",
+          question: "结合《杨修之死》中“鸡肋事件”及杨修之前的数次犯忌，分析曹操杀杨修的根本原因。",
+          review:
+            "请扮演香港中一中文科阅卷老师。题目是：结合“鸡肋事件”及之前的数次犯忌，分析曹操杀杨修的根本原因。我的答案是：[请在此处粘贴你的答案]。请严格按以下标准批改：①给分（4分制）：观点明确1分，结合课文事件印证2分，逻辑分析1分。②点评：指出亮点，挑出漏掉的踩分点。③引导：不要直接给答案，用提问引导我补充。请用繁体字回复。",
+          text: [
+            "第一部分：課文原文",
+            "單元一 細說今昔事",
+            "① 操屯兵日久，欲要進兵，又被馬超拒守；欲收兵回，又恐被蜀兵恥笑，心中猶豫不決。適庖官進雞湯，操見碗中有雞肋，因而有感於懷。正沉吟間，夏侯惇入帳，稟請夜間口號，操隨口曰：「雞肋，雞肋。」惇傳令眾官，都稱「雞肋」。【進退兩難】",
+            "② 行軍主簿楊修見傳「雞肋」二字，便教隨行軍士，各收拾行裝，準備歸程。有人報知夏侯惇，惇大驚，遂請楊修至帳中，問曰：「公何收拾行裝？」修曰：「以今夜號令，便知魏王不日將退兵歸也。雞肋者，【雞肋特點】食之無肉，棄之有味。今進不能勝，退恐人笑，在此無益，不如早歸。來日魏王必班師矣，故先收拾行裝，免得臨時慌亂。」夏侯惇曰：「公真知魏王肺腑也。」遂亦收拾行裝，於是寨中諸將，無不準備歸計。",
+            "③ 當夜曹操心亂，不能穩睡，遂手提鋼斧，遶寨私行。只見夏侯惇寨內軍士，各準備行裝。操大驚，急回帳召惇問其故。惇曰：「主簿楊德祖，先知大王欲歸之意。」操喚楊修問之，修以雞肋之意對。操大怒曰：「汝怎敢造言亂我軍心！」喝刀斧手推出斬之，將首級號令於轅門外。",
+            "④ 原來楊修為人，恃才放曠，數犯曹操之忌。操嘗造花園一所，造成，操往觀之，不置褒貶，只取筆於門上書一「活」字而去，人皆不曉其意。修曰：「門內添『活』字，乃『闊』字也，丞相嫌園門闊耳。」於是再築牆圍，改造停當，又請操觀之。操大喜，問曰：「誰知吾意？」左右曰：「楊修也。」操雖稱美，心甚忌之。",
+            "⑤ 又一日，塞北送酥一盒至，操自寫「一合酥」三字於盒上，置之案頭。修入見之，竟取匙與眾分食訖。操問其故，修答曰：「盒上明書『一人一口酥』，豈敢違丞相之命乎？」操雖喜而笑，心惡之。",
+            "⑥ 操恐人暗中謀害己身，常吩咐左右：「吾夢中好殺人，凡吾睡著，汝等切勿近前。」一日，晝寢帳中，落被於地，一近侍慌取覆蓋，操躍起拔劍斬之，復上牀睡，半晌而起，佯驚問：「何人殺吾近侍？」眾以實對，操痛哭，命厚葬之。人皆以為操果夢中殺人，惟修知其意，臨葬時指而歎曰：「丞相非在夢中，君乃在夢中耳。」操聞而愈惡之。",
+            "⑦ 操第三子曹植，愛修之才，常邀修談論，終夜不息。操與眾商議，欲立植為世子，曹丕知之，密請朝歌長吳質入內府商議。因恐有人知覺，乃用大簏藏吳質於中，只說是絹疋在內，載入府中。修知其事，逕來告操，操令人於丕府門伺察之。丕慌告吳質，質曰：「無憂也，明日用大簏裝絹，再入以惑之。」丕如其言，以大簏載絹入，使者搜看簏中，果絹也，回報曹操，操因疑修譖害曹丕，愈惡之。",
+            "⑧ 操欲試曹丕、曹植之才幹，一日令各出鄴城門，卻密使人吩咐門吏，令勿放出。曹丕先至，門吏阻之，丕只得退回。植聞之，問計於修，修曰：「君奉王命而出，如有阻當者，竟斬之可也。」植然其言。及至門，門吏阻住。植叱曰：「吾奉王命，誰敢阻當！」立斬之。於是曹操以植為能。後有人告操曰：「此乃楊修之所教也。」操大怒，因此亦不喜植。",
+            "⑨ 修又嘗為曹植作答教十餘條，但操有問，植即依條答之。操每以軍國之事問植，植對答如流，操心中甚疑。後曹丕暗買植左右，偷答教來告操，操見了，大怒曰：「匹夫安敢欺我耶！」此時已有殺修之心，今乃借惑亂軍心之罪殺之。",
+            "第二部分：課文註釋",
+            "1. 操：曹操（155–220），字孟德，小名阿瞞。東漢末年任丞相，曾挾天子以令諸侯，後封魏王。其子曹丕稱帝，建立魏國後，追尊曹操為魏武帝。【cāo，粵音 tsou³】",
+            "2. 屯兵：駐兵。",
+            "3. 馬超：字孟起，劉備部下勇將。",
+            "4. 蜀兵：劉備的軍隊。東漢末年，群雄並起，劉備在四川建立蜀漢。",
+            "5. 庖官：掌管膳食的官員。【páo，粵音 paau⁴】",
+            "6. 雞肋：雞胸兩側長形的骨。",
+            "7. 夏侯惇：複姓夏侯，字元讓，曹操部下大將。【dūn，粵音 dæn¹】",
+            "8. 夜間口號：夜間在軍營之中守衛或巡邏時，用來分辨敵我的暗號。",
+            "9. 行軍主簿：軍中掌管文書的官員。【bù，粵音 bou⁶】",
+            "10. 教：使、令、讓。【jiāo，粵音 gaau¹】",
+            "11. 不日：未來幾天之內。",
+            "12. 班師：師，軍隊。調回出征的軍隊。",
+            "13. 肺腑：一般指人的內臟。這裏運用了比喻，指內心的想法。",
+            "14. 遶寨私行：遶，同「繞」。環繞營寨，暗中巡視。",
+            "15. 首級：被斬下的人頭。戰國時，商鞅變法，規定兵將斬下敵人一個人頭，便賜爵一級，所以稱所斬的人頭為首級。",
+            "16. 號令：軍隊中用言語或軍號等傳達命令。這裏指示眾的意思。",
+            "17. 轅門：轅，和車軸相連、伸向前邊的兩條駕車用的長木。古代帝王巡狩田獵，在住宿的地方把車子圍在四周作為屏障，在出口翻起兩車的轅作門，所以稱為轅門。後指軍營門。",
+            "18. 放曠：放恣，不守法度。【kuàng，粵音 kwɔːŋ³】",
+            "19. 數：屢次。【shuò，粵音 sok⁸】",
+            "20. 嘗：曾經。",
+            "21. 不置褒貶：褒，讚美。貶，給予不好的評價。不說好，也不說壞。",
+            "22. 停當：完畢、妥當。",
+            "23. 塞北：中國古代稱長城以北的地區為塞北。【sài，粵音 tsɔi³】",
+            "24. 訖：完畢。【qì，粵音 nget⁹】",
+            "25. 半晌：半天，好久。【shǎng，粵音 hœŋ²】",
+            "26. 佯：假裝。【yáng，粵音 jœŋ⁴】",
+            "27. 曹植：曹植（192–232），字子建，曹操第四子。擅長詩賦，詞彩富麗，是當時的大文學家，著作有《曹子建集》。",
+            "28. 世子：諸侯王的繼承人。",
+            "29. 曹丕：曹丕（187–226），字子桓，曹操第二子。愛好文學，有文章和詩賦等傳世。曹操死後，他篡漢自立，是為魏文帝。",
+            "30. 朝歌長吳質：朝歌，今河南淇縣。長，官名，相當於「令」。吳質，字季重，才識通博，是曹丕的親信。",
+            "31. 大簏：大竹筐。【lù，粵音 luk⁷】",
+            "32. 逕：直接。",
+            "33. 伺察：暗中守候、觀察。【sì，粵音 dzi⁶】",
+            "34. 譖：說壞話誣陷別人。【zèn，粵音 dzem³】",
+            "35. 鄴：今河北臨漳，當時曹操的封地。【yè，粵音 jip⁹】",
+            "36. 阻當：同「阻擋」。",
+            "37. 竟：這裏解作「逕」，直接。",
+            "38. 然：表示同意、贊同。這裏作動詞用。",
+            "39. 叱：大聲責罵。【chì，粵音 tsik⁷】",
+            "40. 答教：一種預先擬定問題，作好答案，以便應對的文件。",
+            "41. 但：只要。",
+            "42. 匹夫：原意是平常人，後又指無常識、無智謀的人，有輕蔑之意。",
+            "43. 安：怎麼、哪裏，表示反問。"
+          ],
+          practice: {
+            title: "课后练习",
+            button: "📋 复制字词闯关指令",
+            prompt:
+              "你是一位香港中一中文老师。请出10道《杨修之死》的字词解释填空题考我，每次只问一题，我回答后你判断对错并解析。重点考查：庖官、惇、讬、不日、班师、肺腑、簏、谮、邺、竟、然、叱、答教、匹夫、安。"
+          }
+        },
+        {
+          slug: "yuefei",
+          title: "《岳飞之少年时代》",
+          meta: "叙事线索 · 文言词句 · 阅读卷考点",
+          question: "根据《岳飞之少年时代》，岳飞年少时有哪些值得学习的品质？请结合文中具体事例说明。",
+          review:
+            "请扮演香港中一中文科阅卷老师。题目是：岳飞年少时有哪些值得学习的品质？请结合文中具体事例说明。我的答案是：[请在此处粘贴你的答案]。请严格按以下标准批改：①给分（4分制）：观点明确1分，结合课文事件印证2分，逻辑分析1分。②点评：指出亮点，挑出漏掉的踩分点。③引导：不要直接给答案，用提问引导我补充。请用繁体字回复。",
+          text: [
+            "第一部分：課文原文",
+            "單元二 家喻戶曉的人物",
+            "① 岳飛，字鵬舉，相州湯陰人也。生時，有大禽若鵠，飛鳴室上，因以為名。未彌月，河決內黃，水暴至，母姚氏抱飛坐巨甕中，衝濤乘流而下，及岸，得不死。",
+            "② 飛少負氣節，沉厚寡言，【少／形象】天資敏悟，強記書傳，尤好《左氏春秋》及孫吳兵法【勤奮好學】。家貧，拾薪為燭，誦習達旦，不寐。生有神力，未冠，能挽弓三百斤。學射於周同。同射三矢，皆中的，以示飛；飛引弓一發，破其筈；再發，又中。同大驚，以所愛良弓贈之。飛由是益自練習，盡得同術。【驚訝】",
+            "③ 未幾，同死，飛悲慟不已。每值朔望，必具酒肉，詣同墓，奠而泣；又引同所贈弓，發三矢，乃酹。父知而義之，撫其背曰：【使汝異日得為時用，其殉國死義乎？】飛應曰：「惟大人許兒以身報國家，何事不可為？」【父親】",
+            "第二部分：課文註釋",
+            "1. 佚：佚，散失。【yì，粵音 jet⁹】佚名即散失了姓名。本文根據元人托克托編的《宋史・岳飛傳》和南宋人章穎的《南渡十將傳》改寫而成，改寫的人姓名不詳。",
+            "2. 字：又叫「表字」，在本名外所取的，與本名意義相關的另一名字。",
+            "3. 相州湯陰：今河南湯陰。（見圖一）",
+            "4. 鵠：即天鵝。【hú，粵音 huk⁹】",
+            "5. 河：河，黃河。",
+            "6. 內黃：內黃，今河南內黃。（見圖一）",
+            "7. 甕：本指口小腹大的陶器，用以盛酒或水，這裏應解作大水缸。【wèng，粵音 ung³】",
+            "8. 《左氏春秋》：是一本記錄由魯隱公元年至魯哀公 27 年的歷史的史書，書中記載了春秋時代各國政治、經濟、社會、文化等方面的事件，亦記述了很多忠臣義士的故事，有肯定賢士的特點。",
+            "9. 孫吳兵法：春秋名將孫武所著的《孫子》和戰國名將吳起所著的《吳子》兩本兵法書。",
+            "10. 未冠：指年齡未到二十歲。古代男子二十歲舉行冠禮，把帽子戴在頭上，表示已成年。",
+            "11. 三百斤：斤，重量單位，古時也用這單位來表示拉弓所需的力度。",
+            "12. 筈：箭的尾部。【kuò，粵音 kut⁸】",
+            "13. 每值朔望：值，當，遇到。朔望，農曆每月的初一日叫朔，十五日叫望。【shuò，粵音 sok⁸】",
+            "14. 詣：前往。【yì，粵音 ngei⁶】",
+            "15. 奠：祭祀時陳列酒肉等祭品。【diàn，粵音 din⁶】",
+            "16. 酹：祭祀時把酒灑在地上，向祭祀的對象致敬。【lèi，粵音 leoi⁶，又音 lai⁶】",
+            "17. 義：用作動詞，有認為適宜、正確、合理等的意思。",
+            "18. 汝：你。",
+            "19. 異日：將來。"
+          ],
+          practice: {
+            title: "课后练习",
+            button: "📋 复制文言助读闯关指令",
+            prompt:
+              "你是一位香港中一中文老师。请带我完成《岳飞之少年时代》的课后练习，一次只出一题，等我作答后解析再出下一题。题目包括：1.推测“决”和“暴”的意思。2.“好”字的读音和意思。3.解释两个“以”字。4.解释“之”字。5.解释四个“为”字。"
+          }
+        }
+      ],
+      idioms: {
+        title: "成语学习",
+        subtitle: "闪卡 · 自测 · 反复记忆",
+        samples: ["胸有成竹", "画蛇添足", "守株待兔"]
+      },
+      grammar: {
+        title: "语法连词",
+        subtitle: "并列 · 转折 · 因果 · 递进",
+        relations: [
+          { name: "并列", words: "和、与、跟、同、及、以及、又、也、既…又…、一边…一边…" },
+          { name: "递进", words: "不但…而且…、不仅…还…、甚至、何况、况且" },
+          { name: "选择", words: "或者、或是、要么…要么…、不是…就是…、宁可…也不…" },
+          { name: "转折", words: "但是、可是、然而、不过、却、虽然…但是…、尽管…还是…" },
+          { name: "因果", words: "因为…所以…、由于、因此、因而、之所以…是因为…" },
+          { name: "假设", words: "如果…就…、假如、倘若、要是、即使…也…、就算…也…" },
+          { name: "条件", words: "只要…就…、只有…才…、除非…才…、无论…都…、不管…都…" },
+          { name: "承接", words: "然后、接着、于是、便、就、首先…然后…、随后" }
+        ]
+      }
+    }
+  },
+
+  // —— ICT 科内容（按年级区分）——
+  ictByGrade: {
+    S1: {
+      title: "ICT Exam Revision (S1)",
+      chapters: [
+        {
+          id: "ch4",
+          title: "Chapter 4",
+          expand: "📖 Expand Chapter 4 Notes",
+          collapse: "📖 Collapse Chapter 4 Notes",
+          notes: [
+            { t: `Part 1 · Knowledge Notes`, h: 1 },
+
+            { t: `Learning Objectives`, h: 2 },
+            { t: `Understand the functions of the central processing unit.` },
+            { t: `Understand how central processing units work.` },
+            { t: `Identify the functions of different components of the central processing unit.` },
+            { t: `Compare the processing capabilities of different central processing units.` },
+
+            { t: `Activity 4.1 — Why is Ken's computer slow?`, h: 2 },
+            { t: `Ken's computer runs slowly. Even after he replaced the monitor and keyboard, it did not speed up.` },
+            { t: `Reason: The monitor and keyboard are input/output devices, not processing components. The CPU is responsible for processing data inside the computer.` },
+
+            { t: `4.1 Components of the Central Processing Unit`, h: 2 },
+            { t: `The Central Processing Unit (CPU) is the computer's main processor. It processes data inside a computer.` },
+            { t: `Data flow: Input (Keyboard) → Processing (CPU) → Output (Monitor).` },
+            { t: `The CPU has three main internal components:` },
+
+            { t: `Arithmetic and Logic Unit (ALU)`, h: 3 },
+            { t: `Carries out arithmetic operations: addition (+), subtraction (−), multiplication (×), division (÷).` },
+            { t: `Carries out logical operations: comparison (=, ≠, <, >, ≤, ≥), AND, OR, NOT.` },
+
+            { t: `Control Unit (CU)`, h: 3 },
+            { t: `Controls how the ALU and other hardware respond to instructions.` },
+            { t: `Controls the flow of data between the CPU, other components and devices.` },
+
+            { t: `Registers`, h: 3 },
+            { t: `Stores data and addresses that the ALU or CU is currently processing.` },
+            { t: `Data can be read very quickly.` },
+            { t: `Has a small storage capacity.` },
+
+            { t: `4.2 Processing Power`, h: 2 },
+            { t: `Three factors decide CPU processing power:` },
+
+            { t: `1. Number of cores`, h: 3 },
+            { t: `A CPU core is an independent processing unit inside the CPU.` },
+            { t: `More cores allow more tasks to run at the same time.` },
+            { t: `Multi-core CPUs are generally better at handling parallel processing.` },
+
+            { t: `2. Clock rate`, h: 3 },
+            { t: `Clock rate describes the processing speed of the CPU.` },
+            { t: `Units: megahertz (MHz) or gigahertz (GHz).` },
+            { t: `A higher clock rate means faster processing, but it also consumes more power.` },
+
+            { t: `3. Word length`, h: 3 },
+            { t: `Word length is the amount of data the CPU can process in one operation, measured in bits.` },
+            { t: `Common for personal computers: 32 bits or 64 bits.` },
+            { t: `A longer word length generally means faster processing.` },
+            { t: `A 64-bit computer is not necessarily twice as fast as a 32-bit computer.` },
+            { t: `A bit is the smallest unit of data. It can only be "0" or "1". Computers use binary numbers to store data.` },
+
+            { t: `Activity 4.2 — How fast is your computer?`, h: 2 },
+            { t: `Steps to check CPU information on Windows:` },
+            { t: `Press the Windows key + Pause/Break key together on the keyboard.` },
+            { t: `The Settings "About" page opens. Check the CPU details: number of cores, clock rate and word length.` },
+
+            { t: `Summary`, h: 2 },
+            { t: `The CPU consists of the ALU, CU and Registers.` },
+            { t: `Three factors affect CPU performance:` },
+            { t: `More cores → higher processing speed.` },
+            { t: `Higher clock rate → higher processing speed.` },
+            { t: `Longer word length → higher processing speed.` },
+
+            { t: `Broader Perspective — Cloud Computing`, h: 2 },
+            { t: `Cloud computing allows users to access servers, and the software and databases they contain, via the internet.` },
+            { t: `Users can easily run applications in the cloud without having to own or manage servers themselves.` },
+            { t: `Cloud computing plays an important role in generative AI by providing high-performance GPUs, vast amounts of storage space and computing power to run and train generative AI models.` }
+          ]
+        },
+        {
+          id: "ch5",
+          title: "Chapter 5",
+          expand: "📖 Expand Chapter 5 Notes",
+          collapse: "📖 Collapse Chapter 5 Notes",
+          notes: [
+            { t: `Part 1 · Knowledge Notes`, h: 1 },
+
+            { t: `Learning Objectives`, h: 2 },
+            { t: `Distinguish between random access memory and read-only memory.` },
+            { t: `Analyse the advantages and disadvantages of using different types of secondary storage.` },
+            { t: `Understand units of data.` },
+
+            { t: `Activity 5.1 — How to submit presentation files?`, h: 2 },
+            { t: `The students need to submit their presentation files to Miss Chan. Which method is the most suitable? Discuss the advantages and disadvantages of each method.` },
+
+            { t: `5.1 Main Memory`, h: 2 },
+            { t: `Main memory (primary storage) is directly connected to the CPU to enable high-speed data access. It generally refers to two types: random access memory (RAM) and read-only memory (ROM).` },
+
+            { t: `Random Access Memory (RAM)`, h: 3 },
+            { t: `Temporarily stores data for the computer to process.` },
+            { t: `It is volatile — data is lost when the computer is switched off.` },
+            { t: `The data is continuously rewritten as the computer runs.` },
+            { t: `In general, the larger the RAM capacity, the faster the computer.` },
+            { t: `To increase RAM capacity, add or replace the RAM modules (sticks) on the motherboard.` },
+
+            { t: `Read-Only Memory (ROM)`, h: 3 },
+            { t: `Non-volatile — data is retained even after the computer is switched off.` },
+            { t: `The data it stores is read-only and usually cannot be rewritten.` },
+            { t: `ROM stores firmware (bootloader), which includes the instructions required to boot the computer.` },
+            { t: `This firmware is known as Basic Input/Output System (BIOS).` },
+            { t: `Modern computers commonly store this firmware in rewritable flash memory.` },
+
+            { t: `5.2 Secondary Storage Devices`, h: 2 },
+            { t: `Unlike main memory, all forms of secondary storage are non-volatile, as these devices store data for future use.` },
+
+            { t: `Hard disk (HDD)`, h: 3 },
+            { t: `Has multiple read/write heads; its metal disk is coated with a magnetic material.` },
+            { t: `It moves the read/write heads to access data on the disk.` },
+            { t: `Avoid moving the hard disk drive while the computer is in use, as impact could damage the disk.` },
+
+            { t: `Solid-state drive (SSD)`, h: 3 },
+            { t: `Consists of flash memory and a controller.` },
+            { t: `Flash memory allows the controller to read and write data at high speeds using electricity.` },
+            { t: `Contains no moving parts, so it is more shock-resistant, smaller in size and consumes less power than a hard disk.` },
+            { t: `However, an SSD is generally more expensive than a hard disk.` },
+            { t: `Internal storage devices are installed within the system unit and usually store the operating system and software.` },
+            { t: `External storage devices are portable and removable, usually used for data backup.` },
+
+            { t: `Memory card`, h: 3 },
+            { t: `Also made up of flash memory; mainly used in mobile devices thanks to its compact size.` },
+            { t: `Secure Digital (SD) is a common format, available in various sizes (e.g. SD, microSD).` },
+            { t: `A separate card reader may be needed to access files on a memory card.` },
+
+            { t: `USB flash drive`, h: 3 },
+            { t: `A flash memory device with a USB interface, compact and easy to carry.` },
+            { t: `Often used for data backup and data transfer between devices.` },
+            { t: `USB versions (by data transfer rate): USB 1.0 (White) Slow; USB 2.0 (Black) Normal; USB 3.0 (Blue) Fast.` },
+            { t: `USB connector types: Type-A (standard USB-A plug); Micro-B (micro USB plug); Type-C (USB-C plug).` },
+
+            { t: `5.3 Network Storage`, h: 2 },
+
+            { t: `Network-attached storage (NAS)`, h: 3 },
+            { t: `A dedicated file server or storage device.` },
+            { t: `Enables multiple users on the same local area network (LAN) to read and write data at the same time.` },
+
+            { t: `Cloud drive`, h: 3 },
+            { t: `Users with an internet connection can access and edit data anytime, anywhere.` },
+            { t: `Cloud storage providers may charge subscription fees for extra storage space.` },
+            { t: `Common examples: Google Drive, Microsoft OneDrive.` },
+
+            { t: `Activity 5.2 — Fire at a Korean data centre`, h: 2 },
+            { t: `A fire at a South Korean data centre caused 647 government systems to crash, and data was lost because it had not been backed up externally.` },
+            { t: `Discussion: Are cloud services completely reliable? What are the risks of using cloud services?` },
+
+            { t: `Advantages of cloud storage`, h: 3 },
+            { t: `Access data online anytime, anywhere, with different devices.` },
+            { t: `Easily change storage plans according to needs.` },
+            { t: `No need to purchase hardware, which lowers initial setup costs.` },
+            { t: `Providers typically use data redundancy to prevent file loss in case of hardware failures.` },
+
+            { t: `Disadvantages of cloud storage`, h: 3 },
+            { t: `Without an internet connection, users cannot access their cloud storage.` },
+            { t: `Poor management by the provider may lead to data leaks.` },
+            { t: `It may involve ongoing subscription fees.` },
+            { t: `As the server is shared by multiple users, access may be slower when the server is busy.` },
+
+            { t: `5.4 Storage Capacity`, h: 2 },
+            { t: `Storage capacity is the maximum amount of data a device can store.` },
+            { t: `Bit (bit, b): the most basic unit of data.` },
+            { t: `Byte (B): 1 B = 8 bits.` },
+            { t: `Kilobyte (KB): 1 KB = 1024 B.` },
+            { t: `Megabyte (MB): 1 MB = 1024 KB.` },
+            { t: `Gigabyte (GB): 1 GB = 1024 MB.` },
+            { t: `Terabyte (TB): 1 TB = 1024 GB.` },
+            { t: `Typical storage: a plain text file (1000 characters) 1–3 KB; a 4-minute MP3 4–10 MB; a 1-hour MP4 video 500 MB–3 GB.` },
+
+            { t: `5.5 Data Transfer Rate`, h: 2 },
+            { t: `Data transfer rate is the amount of data transferred per second.` },
+            { t: `Comparison (fastest → slowest): SSD (~500–14,000 MB/s) > Hard disk (~100–250 MB/s) > SD card (~10–100 MB/s).` },
+
+            { t: `Activity 5.3 — Computer components product catalogue`, h: 2 },
+            { t: `Task: Paul (budget $5,000, mainly word processing) and Tom (budget $6,000, mainly graphic design & video editing) plan to assemble computers. Recommend components and make shopping lists for them.` },
+            { t: `CPU: 1) 4 cores 2.4 GHz $1,800; 2) 2 cores 2.4 GHz $1,500; 3) 4 cores 3.5 GHz $1,700; 4) 6 cores 3.5 GHz $2,100.` },
+            { t: `RAM: 1) 8 GB 12.8 GB/s $350; 2) 8 GB 20.1 GB/s $400; 3) 16 GB 19.2 GB/s $600; 4) 16 GB 25.4 GB/s $1,200.` },
+            { t: `Storage: 1) 2 TB hard disk $400; 2) 4 TB hard disk $900; 3) 512 GB SSD $700; 4) 1 TB SSD $1,200.` },
+            { t: `Motherboard: 1) 4× USB 2.0, VGA $500; 2) 2× USB 2.0 + 2× USB 3.0, VGA, HDMI $600; 3) 4× USB 3.0, HDMI, Bluetooth $700; 4) 6× USB 3.0, HDMI, Wi-Fi $800.` },
+            { t: `Monitor: 1) 23-inch 1920×1080 VGA $800; 2) 27-inch 1920×1080 VGA $1,200; 3) 23-inch 2560×1440 HDMI $1,400; 4) 27-inch 2560×1440 HDMI $1,800.` },
+
+            { t: `Summary`, h: 2 },
+            { t: `Data flow: Input device → System unit (CPU ↔ Main memory ↔ Secondary storage) → Output device.` },
+            { t: `Memory/storage tiers (higher tier = faster, smaller capacity, higher cost per unit): Registers → RAM (main memory) → SSD (secondary) → Hard disk (secondary).` }
+          ]
+        },
+        {
+          id: "ch6",
+          title: "Chapter 6",
+          expand: "📖 Expand Chapter 6 Notes",
+          collapse: "📖 Collapse Chapter 6 Notes",
+          notes: [
+            { t: `Part 1 · Knowledge Notes`, h: 1 },
+
+            { t: `Learning Objectives`, h: 2 },
+            { t: `Distinguish between software and hardware.` },
+            { t: `Understand the functions of system software and application software.` },
+            { t: `List some examples of system software and application software.` },
+
+            { t: `Introduction`, h: 2 },
+            { t: `Apart from hardware, a computer also needs software to run properly. Software is the intangible (non-physical) part of a computer system, made up of data and instructions that help the computer perform tasks.` },
+            { t: `There are two main types of software: system software and application software.` },
+
+            { t: `Activity 6.1 — What software do you use most often?`, h: 2 },
+            { t: `Share with your classmates: which software do you use most often, and what do you use it for?` },
+
+            { t: `6.1 System Software`, h: 2 },
+            { t: `System software coordinates the operation of computer hardware and application software. There are three types of system software: operating system, utility program and driver program.` },
+
+            { t: `Operating system`, h: 3 },
+            { t: `An operating system (OS) controls the operation of the computer's hardware and software, and manages computer resources to ensure that all application software runs smoothly.` },
+            { t: `Main functions of an operating system:`, h: 3 },
+            { t: `Process management · Memory management · Peripheral device management · File system management · Storage management · User account management · User interface · Multitasking.` },
+
+            { t: `Types of operating systems`, h: 3 },
+            { t: `Desktop operating system — designed for desktop and laptop computers; compatible with more hardware and software; usually designed for a single user at a time. Examples: Microsoft Windows, macOS.` },
+            { t: `Mobile operating system — designed for mobile devices such as tablets, smartphones and smartwatches; to extend battery life, hardware is optimised (e.g. closing background apps and turning off the screen automatically); most are single-user. Examples: iOS, iPadOS, Android.` },
+            { t: `Network operating system — designed to manage network resources and provide services to multiple users or computers (file sharing, web hosting, database management); most are multi-user. Examples: Linux, UNIX.` },
+
+            { t: `Utility program`, h: 3 },
+            { t: `A utility program is software designed to maintain computer systems and improve their efficiency. It is usually included in the operating system; third-party utility programs are also available for users to install.` },
+            { t: `File management program — e.g. File Explorer: view, add, copy or delete files in the file system.` },
+            { t: `System monitoring software — e.g. Task Manager: monitor processes and display system resource usage.` },
+            { t: `Virus scanner — e.g. Avast Antivirus: detect and remove computer viruses.` },
+            { t: `File backup software — e.g. macOS Time Machine: create backups of files and system settings, so the system can be restored after data corruption or system failure.` },
+
+            { t: `Driver program`, h: 3 },
+            { t: `A driver program controls a peripheral device, such as a mouse, keyboard or speakers connected to the computer. Driver programs are usually designed to work with specific types of devices and operating systems.` },
+
+            { t: `6.2 Application Software`, h: 2 },
+            { t: `Application software helps users carry out specific tasks. It can be mainly categorised into productivity, communication, and multimedia development software.` },
+
+            { t: `Productivity software`, h: 3 },
+            { t: `Productivity software aims to enhance work productivity; it can be used to generate, analyse or present information.` },
+            { t: `Word processor — edit documents and apply text formatting. Examples: Microsoft Word, Google Docs.` },
+            { t: `Spreadsheet software — calculate formulas and create charts for data analysis. Examples: Microsoft Excel, Google Sheets.` },
+            { t: `Presentation software — create slides for presentations. Examples: Microsoft PowerPoint, Google Slides, Canva.` },
+            { t: `Database management system — create and organise databases. Examples: Microsoft Access, MySQL.` },
+
+            { t: `Communication software`, h: 3 },
+            { t: `Communication software enables users to exchange information via the internet.` },
+            { t: `Web browser — browse the internet and interact with it. Examples: Google Chrome, Mozilla Firefox, Safari, Microsoft Edge.` },
+            { t: `Email client — send, receive and manage emails. Examples: Gmail, Microsoft Outlook.` },
+            { t: `Instant messaging application — send, receive and manage instant messages. Examples: WhatsApp, LINE, WeChat, Instagram DM.` },
+            { t: `Web conferencing software — host real-time meetings to connect multiple participants remotely. Examples: Zoom Cloud Meetings, Microsoft Teams, Google Meet.` },
+
+            { t: `Multimedia development software`, h: 3 },
+            { t: `Multimedia development software is used to create or edit multimedia files.` },
+            { t: `Image editing software — Paint.NET, Adobe Photoshop, Adobe Illustrator.` },
+            { t: `Audio editing software — Audacity, Adobe Audition.` },
+            { t: `Video editing software — Adobe Premiere, iMovie, CapCut.` },
+
+            { t: `Other application software`, h: 3 },
+            { t: `Application software also offers other everyday functions: personal learning, leisure and entertainment, and financial management.` },
+            { t: `Educational software — programming, language learning and online courses. Examples: Scratch, MATLAB, Google Classroom.` },
+            { t: `Entertainment software — video/audio streaming and gaming platforms. Examples: Spotify, Netflix, Steam.` },
+            { t: `Financial management software — electronic payment, virtual banking and expense tracking. Examples: Octopus App, PayMe.` },
+
+            { t: `Activity 6.2 — Which software would you recommend?`, h: 2 },
+            { t: `1. "I would like to set up an online tutoring service so that students can study from home."` },
+            { t: `2. "I want to know if my computer has a virus."` },
+            { t: `3. "I want to edit my photos to make them look better."` },
+            { t: `4. "I want to calculate the average score of my maths test and then create a chart."` },
+
+            { t: `Summary`, h: 2 },
+            { t: `Software → System software (Operating system · Utility program · Driver program) + Application software (Productivity software · Communication software · Multimedia development software).` },
+
+            { t: `Relationship between hardware, system software, application software and users`, h: 2 },
+            { t: `System software controls the operation of hardware, manages system resources, and provides a platform for application software. Application software runs on this platform, enabling users to perform specific tasks.` },
+            { t: `Example: Ken (user) uses Excel (application software). Excel runs on the Windows operating system (system software). A driver program (system software) controls the graphics card (hardware) connected to the monitor.` },
+            { t: `Layered structure (from top to bottom): User → Application software → System software → Hardware.` }
+          ]
+        }
+      ]
+    }
+  },
+
+  // —— Science 科内容（按年级区分）——
+  scienceByGrade: {
+    S1: {
+      title: "Science Revision (S1)",
+      chapters: [
+        {
+          id: "ch2",
+          title: "Chapter 2 · Water",
+          sections: [
+            {
+              id: "2.1",
+              title: "2.1 Change in states of water",
+              pages: "p.80–91",
+              link: "s1-science-notes-2-1.html",
+              quiz: "s1-science-quiz-2-1.html",
+              expand: true,
+              tabs: [
+                {
+                  id: "notes",
+                  icon: "📖",
+                  title: "Notes",
+                  blocks: [
+                    { t: `Part A · Processes of change in states of water`, h: 1 },
+
+                    { t: `Three physical states of water`, h: 2, pg: 80 },
+                    { t: `Water exists in three physical states:` },
+                    { t: `Liquid state — we commonly call it water.`, h: 3 },
+                    { t: `Solid state — we call it ice.`, h: 3 },
+                    { t: `Gas state — we call it water vapour (invisible in air).`, h: 3 },
+                    { slider: { min: -30, max: 130, init: 20 } },
+                    { kp: `Water exists in three physical states. Ice is in the solid state, water is in the liquid state, and water vapour is in the gas state.`, pg: 80 },
+
+                    { t: `Let's begin — mist-spraying machine`, h: 2, pg: 80 },
+                    { t: `On hot summer days, the mist-spraying machine in the Avenue of Stars sprays mist into the air to lower the surrounding temperature. This cooling effect is related to evaporation, one of the processes of change in states of water.` },
+
+                    { t: `1. Melting`, h: 2, pg: 81 },
+                    { t: `Melting is the change in state from a solid to a liquid.` },
+                    { t: `When ice is heated to 0 °C, it melts and changes into water. This temperature (0 °C) is called the melting point of ice.` },
+                    { fig: { src: "images/science/ch2/fig2-3.jpg", caption: "Fig 2.3 Ice melts and changes into water", pg: 81 } },
+
+                    { t: `2. Freezing`, h: 2, pg: 81 },
+                    { t: `Freezing is the change in state from a liquid to a solid.` },
+                    { t: `When water is cooled to 0 °C, it freezes and changes into ice. This temperature (0 °C) is called the freezing point of water.` },
+
+                    { t: `3. Boiling`, h: 2, pg: 82 },
+                    { t: `Boiling is the change in state from a liquid to a gas.` },
+                    { t: `When water is heated to 100 °C, it boils and changes into steam. Steam is the gas state of water at or above 100 °C. This temperature (100 °C) is called the boiling point of water.` },
+
+                    { t: `4. Evaporation`, h: 2, pg: 82 },
+                    { t: `Evaporation is also a change in state from a liquid to a gas. Unlike boiling, evaporation of water takes place at temperatures below its boiling point (i.e. below 100 °C). When water evaporates, it changes into water vapour.` },
+                    { t: `Example: after raining, the water particles in the rainwater on the road absorb energy from the sun and move more quickly. They finally escape from the water surface to become water vapour, so the wet ground gradually becomes dry.` },
+
+                    { t: `5. Condensation`, h: 2, pg: 83 },
+                    { t: `Condensation is the change in state from a gas to a liquid.` },
+                    { t: `When steam or water vapour cools to or below its boiling point (i.e. at or below 100 °C), it condenses and changes into water.` },
+
+                    { t: `Summary of changes in states`, h: 2, pg: 83 },
+                    { kp: `ice ⇄ water ⇄ steam / water vapour — melting, freezing, boiling, evaporation and condensation are reversible changes of state.`, pg: 83 },
+
+                    { t: `STEM · Anti-fog spray for glasses`, h: 2, pg: 83 },
+                    { t: `Our glasses fog up when we go into the street from an air-conditioned place. This is because water vapour in the air condenses to form tiny water droplets on the cold glasses. The droplets form the 'fog' that blurs our vision.` },
+                    { t: `Some anti-fog sprays contain chemicals that prevent water droplets from forming. Instead, the water vapour condenses to form a thin water film that does not blur our vision.` },
+                    { fig: { src: "images/science/ch2/fig2-9.jpg", caption: "Fig 2.9 How anti-fog spray prevents glasses from fogging up", pg: 83 } },
+
+                    { t: `Textbook pages`, h: 2, pg: "80–83" },
+                    { gallery: {
+                        label: "View textbook pages",
+                        items: [
+                          { src: "images/science/ch2/sci-ch2-p80.jpg", caption: "Textbook p.80" },
+                          { src: "images/science/ch2/sci-ch2-p81.jpg", caption: "Textbook p.81" },
+                          { src: "images/science/ch2/sci-ch2-p82.jpg", caption: "Textbook p.82" },
+                          { src: "images/science/ch2/sci-ch2-p83.jpg", caption: "Textbook p.83" }
+                        ]
+                    } }
+                  ]
+                },
+                {
+                  id: "experiment",
+                  icon: "🧪",
+                  title: "Experiment & Summary",
+                  blocks: [
+                    { t: `Heating curve of water`, h: 2 },
+                    { chart: {
+                        title: "Heating curve of water",
+                        caption: "As ice is heated, the temperature rises — except at 0 °C (melting) and 100 °C (boiling), where it stays the same."
+                    } },
+
+                    { t: `Energy absorbed or released during changes of state`, h: 2, pg: 89 },
+                    { t: `Water may change from one state to another upon heating or cooling. At the moment when water changes states, it either absorbs energy from the surroundings, or releases energy to the surroundings. However, its temperature remains unchanged.` },
+                    { fig: { src: "images/science/ch2/sci-ch2-p89.jpg", caption: "Fig 2.10 Energy is absorbed or released during changes of state (p.89)", pg: 89 } },
+                    { kp: `At the moment when water changes from one state to another: its temperature remains unchanged; it either absorbs energy from, or releases energy to, the surroundings.`, pg: 89 },
+
+                    { t: `Did you know? — rubbing with alcohol`, h: 2, pg: 90 },
+                    { t: `When we rub our hands with alcohol, our hands feel particularly cool. Alcohol has a lower boiling point (82 °C) than water, so when it is applied on our hands, it evaporates more quickly and more energy is absorbed from the skin. Thus our hands feel cooler.` },
+                    { t: `Back to 'Let's begin': the mist-spraying machine sprays mist that evaporates quickly to form water vapour. During this process, the mist absorbs energy from the air, which lowers the surrounding temperature.` },
+
+                    { t: `Section summary 2.1`, h: 2, pg: 90 },
+                    { summaryTable: {
+                        title: "Complete the summary table below",
+                        rows: [
+                          { process: "Melting", change: "solid (ice) → liquid (water)", temp: "0 °C (melting point)", answer: "absorbed" },
+                          { process: "Boiling", change: "liquid (water) → gas (steam)", temp: "100 °C (boiling point)", answer: "absorbed" },
+                          { process: "Evaporation", change: "liquid (water) → gas (water vapour)", temp: "below the boiling point", answer: "absorbed" },
+                          { process: "Freezing", change: "liquid (water) → solid (ice)", temp: "0 °C (freezing point)", answer: "released" },
+                          { process: "Condensation", change: "gas (water vapour / steam) → liquid (water)", temp: "at or below the boiling point", answer: "released" }
+                        ]
+                    } },
+
+                    { t: `Textbook pages`, h: 2, pg: "89–90" },
+                    { gallery: {
+                        label: "View textbook pages",
+                        items: [
+                          { src: "images/science/ch2/sci-ch2-p89.jpg", caption: "Textbook p.89" },
+                          { src: "images/science/ch2/sci-ch2-p90.jpg", caption: "Textbook p.90" }
+                        ]
+                    } }
+                  ]
+                },
+                {
+                  id: "quiz",
+                  icon: "✍️",
+                  title: "Chapter Quiz",
+                  blocks: [
+                    { quizset: {
+                        title: "Chapter Quiz · Section exercise 2.1",
+                        intro: "Work through Section A (warm-up), then Section B (practice), then press “Submit & mark” to see your total score.",
+                        sections: [
+                          {
+                            id: "A",
+                            icon: "🔥",
+                            title: "Section A · Warm-up",
+                            sub: "Textbook P.91",
+                            blocks: [
+                              { kind: "photomatch",
+                                title: "Name the process in each case",
+                                intro: "Three everyday cases involve a change in states of water. Choose the correct process for each photo.",
+                                options: ["Freezing", "Evaporation", "Condensation"],
+                                items: [
+                                  { img: "images/science/ch2/ph-ice.jpg", cap: "Fruit juice turns into ice lollies", answer: "Freezing" },
+                                  { img: "images/science/ch2/ph-clothes.jpg", cap: "Wet clothes gradually dry in the air", answer: "Evaporation" },
+                                  { img: "images/science/ch2/ph-bottle.jpg", cap: "Water forms on the surface of a cold bottle", answer: "Condensation" }
+                                ]
+                              },
+                              { kind: "graph",
+                                caption: "A beaker of water is heated over a Bunsen flame. The graph shows how the water temperature changes with time."
+                              },
+                              { kind: "mc",
+                                items: [
+                                  { q: "What is the state of the water during 0–2 min?", options: ["Solid (ice)", "Liquid (water)", "Gas (steam)", "Water vapour"], answer: 1, explain: "Before boiling, the water is still in the liquid state." },
+                                  { q: "Name the process of change in states of water during 2–4 min.", options: ["Melting", "Boiling", "Evaporation", "Condensation"], answer: 1, explain: "The flat part at T is where liquid water boils into steam." },
+                                  { q: "During 2–4 min, is energy absorbed from or released to the surroundings?", hint: "⚠️ Remember: during boiling, energy is ABSORBED from the surroundings — the temperature stays constant at 100 °C.", options: ["Absorbed", "Released"], answer: 0, explain: "Boiling absorbs energy — that is why the temperature stays at 100 °C." },
+                                  { q: "Suggest a value for T in the graph.", options: ["0 °C", "82 °C", "100 °C", "120 °C"], answer: 2, explain: "Water boils at 100 °C, so the flat part is at 100 °C." }
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            id: "B",
+                            icon: "📝",
+                            title: "Section B · Practice",
+                            sub: "Workbook P.33–35",
+                            blocks: [
+                              { kind: "level", text: "P.33 · Level 1" },
+                              { kind: "fill",
+                                title: "Fill in the blanks",
+                                intro: "Fill each blank with the correct word from the word bank. Each word is used once.",
+                                wordbank: ["condenses", "freezes", "gas", "liquid", "solid", "steam", "vapour"],
+                                items: [
+                                  { label: "1", parts: [
+                                      { text: "Water exists in three physical states: ice is the " }, { blank: "solid" },
+                                      { text: " state, water is the " }, { blank: "liquid" },
+                                      { text: " state and water vapour is the " }, { blank: "gas" }, { text: " state." }
+                                  ]},
+                                  { label: "2", parts: [
+                                      { text: "When water boils, it changes into " }, { blank: "steam" }, { text: "." }
+                                  ]},
+                                  { label: "3", parts: [
+                                      { text: "When water is cooled to 0 °C, it " }, { blank: "freezes" }, { text: " and changes into ice." }
+                                  ]}
+                                ]
+                              },
+                              { kind: "tf",
+                                title: "True or false",
+                                intro: "Choose T (true) or F (false) for each statement.",
+                                items: [
+                                  { q: "The change in state of water from a liquid to a gas at 100 °C is called boiling.", answer: "T" },
+                                  { q: "Evaporation can occur in the solid state.", answer: "F" },
+                                  { q: "The melting point and the freezing point of water are different.", answer: "F" },
+                                  { q: "Water exists on Earth in three physical states.", answer: "T" },
+                                  { q: "When water freezes, its temperature decreases.", answer: "F" },
+                                  { q: "The white mist above boiling water is in the gas state.", answer: "F" }
+                                ]
+                              },
+                              { kind: "level", text: "P.34 · Level 2" },
+                              { kind: "mc",
+                                title: "Multiple-choice",
+                                items: [
+                                  { q: "Which of the following statements about the changes in physical states is INCORRECT?", mark: "INCORRECT", options: [
+                                      "Condensation occurs at or below the boiling point.",
+                                      "Energy is not absorbed or released during evaporation.",
+                                      "Freezing is the change in state from a liquid to a solid.",
+                                      "The temperature of a solid remains unchanged during melting."
+                                    ], answer: 1, explain: "Evaporation DOES absorb energy, so statement B is the incorrect one." },
+                                  { q: "Some water is being heated in a pot. What are the changes of state occurring in the pot and on the inside of the lid?", options: [
+                                      "In the pot: melting · On the lid: boiling",
+                                      "In the pot: evaporation · On the lid: freezing",
+                                      "In the pot: boiling · On the lid: condensation",
+                                      "In the pot: condensation · On the lid: evaporation"
+                                    ], answer: 2, explain: "Water boils in the pot, and the steam condenses on the cooler lid." }
+                                ]
+                              },
+                              { kind: "particle",
+                                stem: "Which of the following correctly shows how the water particles change when ice becomes liquid water?",
+                                answer: 0,
+                                options: [
+                                  { from: "solid", to: "liquid" },
+                                  { from: "solid", to: "gas" },
+                                  { from: "liquid", to: "solid" },
+                                  { from: "solid", to: "gasFew" }
+                                ]
+                              },
+                              { kind: "level", text: "P.35 · Structured question (18 marks)" },
+                              { kind: "diagram",
+                                title: "a. Label the processes",
+                                intro: "Look at the diagram of the changes in states of water. Choose the correct process for each numbered arrow. (5 marks)",
+                                options: ["melting", "freezing", "boiling", "condensation", "evaporation"],
+                                answers: ["melting", "freezing", "boiling", "condensation", "evaporation"]
+                              },
+                              { kind: "statetable",
+                                title: "b. Complete the table",
+                                intro: "Choose the correct word for each blank in the table. (13 marks)",
+                                cols: ["Process of change in state", "Temperature at which the change happens", "Energy absorbed or released?"],
+                                rows: [
+                                  { cells: [
+                                      "Melting (ice → water)",
+                                      { parts: [ { blank: "0 °C", opts: ["0 °C", "100 °C"] }, " (", { blank: "melting point", opts: ["melting point", "freezing point", "boiling point"] }, ")" ] },
+                                      { blank: "absorbed", opts: ["absorbed", "released"] }
+                                  ]},
+                                  { cells: [
+                                      "Freezing (water → ice)",
+                                      { parts: [ { blank: "0 °C", opts: ["0 °C", "100 °C"] }, " (", { blank: "freezing point", opts: ["melting point", "freezing point", "boiling point"] }, ")" ] },
+                                      { blank: "released", opts: ["absorbed", "released"] }
+                                  ]},
+                                  { cells: [
+                                      "Boiling (water → steam)",
+                                      { parts: [ { blank: "100 °C", opts: ["0 °C", "100 °C"] }, " (", { blank: "boiling point", opts: ["melting point", "freezing point", "boiling point"] }, ")" ] },
+                                      { blank: "absorbed", opts: ["absorbed", "released"] }
+                                  ]},
+                                  { cells: [
+                                      { parts: [ "Evaporation (water → ", { blank: "water vapour", opts: ["water vapour", "steam", "ice"] }, ")" ] },
+                                      "below 100 °C",
+                                      { blank: "absorbed", opts: ["absorbed", "released"] }
+                                  ]},
+                                  { cells: [
+                                      "Condensation (water vapour → water)",
+                                      { parts: [ "at or below ", { blank: "boiling point", opts: ["melting point", "freezing point", "boiling point"] } ] },
+                                      { blank: "released", opts: ["absorbed", "released"] }
+                                  ]}
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                    } },
+
+                    { t: `Textbook & workbook pages`, h: 2, pg: "91, 33–35" },
+                    { gallery: {
+                        label: "View textbook & workbook pages",
+                        items: [
+                          { src: "images/science/ch2/sci-ch2-p91.jpg", caption: "Textbook p.91" },
+                          { src: "images/science/ch2/sci-ch2-p33.jpg", caption: "Workbook p.33" },
+                          { src: "images/science/ch2/sci-ch2-p34.jpg", caption: "Workbook p.34" },
+                          { src: "images/science/ch2/sci-ch2-p35.jpg", caption: "Workbook p.35" }
+                        ]
+                    } }
+                  ]
+                }
+              ]
+            },
+            { id: "2.2", title: "2.2 Water cycle", pages: "", link: "s1-science-notes-2-2.html", quiz: "s1-science-quiz-2-2.html", blocks: [] },
+            { id: "2.3", title: "2.3 Dissolving", pages: "", link: "s1-science-notes-2-3.html", quiz: "s1-science-quiz-2-3.html", blocks: [] },
+            { id: "checkpoint", title: "Checkpoint: 2.1 - 2.3 Revision", desc: "Mini revision test · States of Water, Water Cycle & Dissolving", link: "s1-science-checkpoint-2-1-to-2-3.html", checkpoint: true },
+            { id: "2.4", title: "2.4 Water purification", pages: "", blocks: [] },
+            { id: "2.5", title: "2.5 Further treatment of drinking water", pages: "", blocks: [] },
+            { id: "2.6", title: "2.6 Water conservation and pollution", pages: "", blocks: [] }
+          ]
+        }
+      ]
+    }
+  }
+};
+
+/* 讲课 / 阅卷指令模板（{title} 自动替换篇名，{question} 自动替换该篇长题目） */
+const PROMPT_TEMPLATE = {
+  teach:
+    "你是一位精通香港中一课程的资深古文老师。请用动态板书分步讲解繁体{title}。" +
+    "每讲完一个情节，停下来用语音问我一道题，我答错就换说法重讲。" +
+    "讲完后，按香港阅读卷常见考法出题考我。全程使用语音互动。",
+  review:
+    "请扮演香港中一中文科阅卷老师。题目是：{question}" +
+    "我的答案是：[请在此处粘贴你的答案]。请严格按以下标准批改：" +
+    "①给分（4分制）：观点明确1分，结合课文事件印证2分，逻辑分析1分。" +
+    "②点评：指出亮点，挑出漏掉的踩分点。" +
+    "③引导：不要直接给答案，用提问引导我补充。请用繁体字回复。"
+};
+
+/* =========================================================================
+   2. 状态 & 工具
+   ========================================================================= */
+const state = {
+  grade: localStorage.getItem("activeGrade") || CONFIG.defaultGrade,
+  subject: localStorage.getItem("activeSubject") || "chinese"
+};
+
+const $  = (sel, root = document) => root.querySelector(sel);
+const el = (tag, cls, html) => {
+  const node = document.createElement(tag);
+  if (cls) node.className = cls;
+  if (html != null) node.innerHTML = html;
+  return node;
+};
+const escapeHTML = (str) =>
+  String(str).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+const gradeLabel = (g) => g;
+
+function subjectGroupsFor(grade) {
+  return CONFIG.gradeSubjectOverride?.[grade] || CONFIG.subjectGroups;
+}
+function findSubject(grade, id) {
+  for (const group of subjectGroupsFor(grade)) {
+    const hit = group.items.find((it) => it.id === id);
+    if (hit) return hit;
+  }
+  return null;
+}
+
+/* 复制到剪贴板（带降级方案） */
+async function copyText(text) {
+  try {
+    if (navigator.clipboard && window.isSecureContext) {
+      await navigator.clipboard.writeText(text);
+      return true;
+    }
+  } catch (e) { /* 继续走降级 */ }
+
+  const ta = document.createElement("textarea");
+  ta.value = text;
+  ta.setAttribute("readonly", "");
+  ta.style.cssText = "position:fixed;top:-1000px;left:-1000px;opacity:0";
+  document.body.appendChild(ta);
+  ta.select();
+  ta.setSelectionRange(0, ta.value.length);
+  let ok = false;
+  try { ok = document.execCommand("copy"); } catch (e) { ok = false; }
+  document.body.removeChild(ta);
+  return ok;
+}
+
+let toastTimer = null;
+function toast(msg) {
+  const node = $("#toast");
+  node.textContent = msg;
+  node.classList.add("is-show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => node.classList.remove("is-show"), 1900);
+}
+
+function bindCopy(btn, text, doneLabel = "已复制 ✓") {
+  const original = btn.innerHTML;
+  btn.addEventListener("click", async () => {
+    const ok = await copyText(text);
+    if (ok) {
+      toast("指令已复制，去豆包粘贴发送即可");
+      btn.classList.add("is-done");
+      btn.innerHTML = doneLabel;
+      setTimeout(() => {
+        btn.classList.remove("is-done");
+        btn.innerHTML = original;
+      }, 2000);
+    } else {
+      toast("复制失败，请长按/手动选择文本复制");
+    }
+  });
+}
+
+/* =========================================================================
+   3. 渲染：顶部年级切换
+   ========================================================================= */
+function renderGrades() {
+  const wrap = $("#gradeSwitch");
+  wrap.innerHTML = "";
+  CONFIG.grades.forEach((g) => {
+    const btn = el("button", "grade-btn", gradeLabel(g));
+    btn.type = "button";
+    btn.setAttribute("role", "tab");
+    btn.setAttribute("aria-current", String(state.grade === g));
+    btn.addEventListener("click", () => {
+      if (state.grade === g) return;
+      state.grade = g;
+      state.subject = defaultSubjectFor(g);
+      localStorage.setItem("activeGrade", g);
+      localStorage.setItem("activeSubject", state.subject);
+      renderGrades();
+      renderNav();
+      renderMain();
+      closeDrawer();
+    });
+    wrap.appendChild(btn);
+  });
+}
+
+/* 切年级后默认落到「中文」，没有中文则落第一个科目 */
+function defaultSubjectFor(grade) {
+  return findSubject(grade, "chinese") ? "chinese" : (subjectGroupsFor(grade)[0]?.items[0]?.id ?? "chinese");
+}
+
+/* =========================================================================
+   4. 渲染：左侧边栏
+   ========================================================================= */
+function renderNav() {
+  const root = $("#navRoot");
+  root.innerHTML = "";
+
+  subjectGroupsFor(state.grade).forEach((group) => {
+    const g = el("div", "nav-group");
+    g.appendChild(el("div", "nav-group__label", escapeHTML(group.label)));
+
+    group.items.forEach((item) => {
+      const btn = el("button", "nav-item");
+      btn.type = "button";
+      btn.setAttribute("aria-current", String(state.subject === item.id));
+      btn.innerHTML = `
+        <span class="nav-item__icon">${item.icon || "•"}</span>
+        <span class="nav-item__name">${escapeHTML(item.name)}</span>
+        <span class="nav-item__dot"></span>`;
+      btn.addEventListener("click", () => {
+        state.subject = item.id;
+        localStorage.setItem("activeSubject", item.id);
+        renderNav();
+        renderMain();
+        closeDrawer();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+      g.appendChild(btn);
+    });
+
+    root.appendChild(g);
+  });
+}
+
+/* =========================================================================
+   5. 渲染：主内容区
+   ========================================================================= */
+function pageHead(subjectName, desc) {
+  return `
+    <div class="page-head">
+      <div class="crumb">${escapeHTML(state.grade)} <span aria-hidden="true">/</span> <b>${escapeHTML(subjectName)}</b></div>
+      <h1 class="page-title">
+        ${escapeHTML(subjectName)}
+        <span class="pill">${escapeHTML(state.grade)}</span>
+      </h1>
+      ${desc ? `<p class="page-desc">${desc}</p>` : ""}
+    </div>`;
+}
+
+function renderMain() {
+  const main = $("#main");
+  const subject = findSubject(state.grade, state.subject);
+  const name = subject ? subject.name : "科目";
+
+  const chinese = CONFIG.chineseByGrade[state.grade];
+  if (state.subject === "chinese" && chinese) {
+    main.innerHTML = renderChinese(chinese, name);
+    bindCommonEvents();
+    return;
+  }
+
+  const ict = CONFIG.ictByGrade[state.grade];
+  if (state.subject === "ict" && ict) {
+    main.innerHTML = renderIct(ict, name);
+    bindCommonEvents();
+    return;
+  }
+
+  const sci = CONFIG.scienceByGrade[state.grade];
+  if (state.subject === "science" && sci) {
+    main.innerHTML = renderScience(sci, name);
+    bindCommonEvents();
+    return;
+  }
+
+  main.innerHTML =
+    pageHead(name, "") +
+    `<section class="card empty">
+       <div class="empty__icon">🚧</div>
+       <h2>系统建设中，敬请期待</h2>
+       <p>「${escapeHTML(name)} · ${escapeHTML(state.grade)}」模块正在开发中。</p>
+       <div class="empty__note">未来本模块将以英文提供AI讲解及练习。</div>
+     </section>`;
+}
+
+/* ---------- 中文科页面 ---------- */
+function renderTextPara(s) {
+  const t = (s || "").trim();
+  if (t.startsWith("第一部分") || t.startsWith("第二部分")) {
+    return `<div class="text-h">${escapeHTML(t)}</div>`;
+  }
+  if (t.startsWith("單元")) {
+    return `<div class="text-unit">${escapeHTML(t)}</div>`;
+  }
+  return `<p class="text-para">${escapeHTML(t)}</p>`;
+}
+
+/* ---------- ICT 笔记核心术语高亮 ---------- */
+// 核心专业术语词典（长短语在前，避免与缩写部分匹配）
+const ICT_TERMS = [
+  "Central Processing Unit",
+  "Arithmetic and Logic Unit",
+  "Random Access Memory",
+  "Read-Only Memory",
+  "Multimedia Development Software",
+  "Database Management System",
+  "Web Conferencing Software",
+  "File Management Program",
+  "System Monitoring Software",
+  "Financial Management Software",
+  "Network Operating System",
+  "Mobile Operating System",
+  "Desktop Operating System",
+  "Application Software",
+  "System Software",
+  "Operating System",
+  "Utility Program",
+  "Driver Program",
+  "Productivity Software",
+  "Communication Software",
+  "Educational Software",
+  "Entertainment Software",
+  "Word Processor",
+  "Spreadsheet Software",
+  "Presentation Software",
+  "Web Browser",
+  "Email Client",
+  "Instant Messaging",
+  "Image Editing Software",
+  "Audio Editing Software",
+  "Video Editing Software",
+  "File Backup Software",
+  "Secondary Storage",
+  "Storage Device",
+  "Input Device",
+  "Output Device",
+  "Pointing Device",
+  "Touch Screen",
+  "Power Supply Unit",
+  "Memory Card",
+  "Flash Drive",
+  "Solid State Drive",
+  "Hard Disk Drive",
+  "Clock Rate",
+  "Word Length",
+  "Number of Cores",
+  "Control Unit",
+  "User Interface",
+  "File System",
+  "Process Management",
+  "Memory Management",
+  "Peripheral Device",
+  "Virus Scanner",
+  "Main Memory",
+  "CPU", "ALU", "CU", "RAM", "ROM", "SSD", "HDD", "USB",
+  "GHz", "MHz", "OS", "BIOS", "NAS", "GPU", "KB", "MB", "GB", "TB"
+];
+
+function escapeRegExp(s) {
+  return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+let ICT_TERM_RE = null;
+function highlightTerms(text) {
+  if (!ICT_TERM_RE) {
+    const joined = ICT_TERMS
+      .map(escapeRegExp)
+      .sort((a, b) => b.length - a.length)
+      .join("|");
+    ICT_TERM_RE = new RegExp("\\b(" + joined + ")\\b", "gi");
+  }
+  return text.replace(ICT_TERM_RE, '<mark class="term">$1</mark>');
+}
+
+/* ICT 笔记条目（支持对象 { t, h }：h=1 大标题 / 2 小节 / 3 子标题） */
+function renderIctNote(item) {
+  if (typeof item === "string") {
+    return `<p class="text-para">${highlightTerms(escapeHTML(item))}</p>`;
+  }
+  const t = (item.t || "").trim();
+  const html = highlightTerms(escapeHTML(t));
+  if (item.h === 1) return `<div class="text-h">${html}</div>`;
+  if (item.h === 2) return `<div class="text-sub">${html}</div>`;
+  if (item.h === 3) return `<div class="text-sub3">${html}</div>`;
+  return `<p class="text-para">${html}</p>`;
+}
+
+/* ---------- Science 笔记核心术语高亮 ---------- */
+const SCIENCE_TERMS = [
+  "physical state", "water vapour", "water particle",
+  "melting point", "freezing point", "boiling point",
+  "liquid state", "solid state", "gas state",
+  "melting", "freezing", "boiling", "evaporation", "condensation",
+  "steam", "solid", "liquid", "gas", "particles", "particle",
+  "energy", "temperature"
+];
+
+let SCIENCE_TERM_RE = null;
+function highlightScienceTerms(text) {
+  if (!SCIENCE_TERM_RE) {
+    const joined = SCIENCE_TERMS
+      .map(escapeRegExp)
+      .sort((a, b) => b.length - a.length)
+      .join("|");
+    SCIENCE_TERM_RE = new RegExp("\\b(" + joined + ")\\b", "gi");
+  }
+  return text.replace(SCIENCE_TERM_RE, '<mark class="term">$1</mark>');
+}
+
+/* Science 页码徽章 */
+function sciPg(pg) {
+  return pg ? `<span class="pg">p.${escapeHTML(String(pg))}</span>` : "";
+}
+
+/* ---------- Science 章节测验 · 分节客观题 ---------- */
+// 粒子图坐标（百分比）
+const QZ_PARTICLES = {
+  solid:  [[20,20],[40,20],[60,20],[80,20],[20,45],[40,45],[60,45],[80,45],[20,70],[40,70],[60,70],[80,70]],
+  liquid: [[25,25],[50,18],[72,28],[30,45],[55,45],[80,42],[20,68],[45,65],[70,70],[85,60],[60,35],[15,50]],
+  gas:    [[15,15],[45,8],[75,15],[20,45],[55,40],[85,45],[15,75],[50,72],[80,75]],
+  gasFew: [[25,20],[65,25],[20,60],[70,65],[45,80]]
+};
+function qzParticles(kind) {
+  const pts = QZ_PARTICLES[kind] || QZ_PARTICLES.solid;
+  return pts.map((p) => `<span class="qz-pdot" style="left:${p[0]}%;top:${p[1]}%"></span>`).join("");
+}
+function qzDiagramSvg() {
+  return `<svg class="qz-diagram" viewBox="0 0 520 210" role="img" aria-label="Changes in states of water">
+    <defs>
+      <marker id="qzArrA" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+        <path d="M0,0 L8,4 L0,8 z" fill="#2f6bff"/>
+      </marker>
+    </defs>
+    <rect x="20" y="70" width="90" height="60" rx="10" fill="#eef4ff" stroke="#bcd0f2" stroke-width="1.5"/>
+    <text x="65" y="96" text-anchor="middle" font-size="13" font-weight="700" fill="#1e3a8a">ice</text>
+    <text x="65" y="114" text-anchor="middle" font-size="10" fill="#64748b">solid</text>
+    <rect x="215" y="70" width="90" height="60" rx="10" fill="#eef4ff" stroke="#bcd0f2" stroke-width="1.5"/>
+    <text x="260" y="96" text-anchor="middle" font-size="13" font-weight="700" fill="#1e3a8a">water</text>
+    <text x="260" y="114" text-anchor="middle" font-size="10" fill="#64748b">liquid</text>
+    <rect x="415" y="18" width="95" height="55" rx="10" fill="#fff7e6" stroke="#f0c060" stroke-width="1.5"/>
+    <text x="462" y="42" text-anchor="middle" font-size="13" font-weight="700" fill="#b45309">steam</text>
+    <text x="462" y="60" text-anchor="middle" font-size="10" fill="#a16207">gas</text>
+    <rect x="415" y="137" width="95" height="55" rx="10" fill="#fff7e6" stroke="#f0c060" stroke-width="1.5"/>
+    <text x="462" y="160" text-anchor="middle" font-size="12" font-weight="700" fill="#b45309">water</text>
+    <text x="462" y="178" text-anchor="middle" font-size="12" font-weight="700" fill="#b45309">vapour</text>
+    <line x1="112" y1="88" x2="212" y2="88" stroke="#2f6bff" stroke-width="2" marker-end="url(#qzArrA)"/>
+    <circle cx="162" cy="82" r="11" fill="#2f6bff"/><text x="162" y="86" text-anchor="middle" font-size="11" font-weight="800" fill="#fff">1</text>
+    <line x1="212" y1="112" x2="112" y2="112" stroke="#2f6bff" stroke-width="2" marker-end="url(#qzArrA)"/>
+    <circle cx="162" cy="122" r="11" fill="#2f6bff"/><text x="162" y="126" text-anchor="middle" font-size="11" font-weight="800" fill="#fff">2</text>
+    <line x1="285" y1="70" x2="410" y2="38" stroke="#2f6bff" stroke-width="2" marker-end="url(#qzArrA)"/>
+    <circle cx="348" cy="46" r="11" fill="#2f6bff"/><text x="348" y="50" text-anchor="middle" font-size="11" font-weight="800" fill="#fff">3</text>
+    <line x1="410" y1="150" x2="285" y2="115" stroke="#2f6bff" stroke-width="2" marker-end="url(#qzArrA)"/>
+    <circle cx="348" cy="142" r="11" fill="#2f6bff"/><text x="348" y="146" text-anchor="middle" font-size="11" font-weight="800" fill="#fff">4</text>
+    <line x1="285" y1="130" x2="410" y2="162" stroke="#2f6bff" stroke-width="2" marker-end="url(#qzArrA)"/>
+    <circle cx="348" cy="158" r="11" fill="#2f6bff"/><text x="348" y="162" text-anchor="middle" font-size="11" font-weight="800" fill="#fff">5</text>
+  </svg>`;
+}
+function renderQzText(text, mark) {
+  if (!mark) return escapeHTML(text);
+  const idx = text.toUpperCase().indexOf(String(mark).toUpperCase());
+  if (idx < 0) return escapeHTML(text);
+  return escapeHTML(text.slice(0, idx)) +
+    `<span class="qz-mark">${escapeHTML(text.slice(idx, idx + mark.length))}</span>` +
+    escapeHTML(text.slice(idx + mark.length));
+}
+function qzSelect(answer, opts, placeholder) {
+  const options = (opts || []).map((o) => `<option value="${escapeHTML(o)}">${escapeHTML(o)}</option>`).join("");
+  return `<select class="qz-sel" data-answer="${escapeHTML(answer)}"><option value="">${escapeHTML(placeholder || "—")}</option>${options}</select>`;
+}
+function renderQuizBlock(block, secIdx, blockIdx) {
+  const esc = escapeHTML;
+  if (!block || !block.kind) return "";
+  if (block.kind === "level") {
+    return `<div class="qz-block"><span class="qz-level">${esc(block.text)}</span></div>`;
+  }
+  if (block.kind === "note") {
+    return `<div class="qz-block"><div class="qz-block-intro">${esc(block.text)}</div></div>`;
+  }
+  if (block.kind === "graph") {
+    return `<div class="qz-block">
+      <div class="qq-graph-block">
+        <svg class="qq-graph" viewBox="0 0 320 200" role="img" aria-label="Heating curve of water">
+          <line x1="45" y1="20" x2="45" y2="165" stroke="#a9b8cc" stroke-width="1.5"/>
+          <line x1="45" y1="165" x2="300" y2="165" stroke="#a9b8cc" stroke-width="1.5"/>
+          <path d="M45,150 L150,60 L270,60" fill="none" stroke="#2f6bff" stroke-width="3" stroke-linejoin="round"/>
+          <line x1="45" y1="60" x2="270" y2="60" stroke="#f59e0b" stroke-dasharray="5 4" stroke-width="1.2"/>
+          <text x="36" y="64" text-anchor="end" font-size="11" fill="#b45309" font-weight="700">T</text>
+          <circle cx="45" cy="150" r="3" fill="#2f6bff"/>
+          <circle cx="150" cy="60" r="3" fill="#2f6bff"/>
+          <circle cx="270" cy="60" r="3" fill="#2f6bff"/>
+          <text x="45" y="180" text-anchor="middle" font-size="10" fill="#64748b">0</text>
+          <text x="150" y="180" text-anchor="middle" font-size="10" fill="#64748b">2</text>
+          <text x="270" y="180" text-anchor="middle" font-size="10" fill="#64748b">4</text>
+          <text x="172" y="194" text-anchor="middle" font-size="10" fill="#64748b">time (min)</text>
+          <text x="16" y="95" text-anchor="middle" font-size="10" fill="#64748b" transform="rotate(-90 16 95)">water temperature (°C)</text>
+        </svg>
+        <div class="qq-graph-cap">${esc(block.caption)}</div>
+      </div>
+    </div>`;
+  }
+  if (block.kind === "photomatch") {
+    const opts = block.options || [];
+    const items = (block.items || []).map((it) => `
+      <div class="qz-photo">
+        <img src="${esc(it.img)}" alt="${esc(it.cap)}" loading="lazy">
+        <div class="qz-photo-cap">${esc(it.cap)}</div>
+        ${qzSelect(it.answer, opts, "Choose a process")}
+      </div>`).join("");
+    return `<div class="qz-block">
+      ${block.title ? `<div class="qz-block-title">${esc(block.title)}</div>` : ""}
+      ${block.intro ? `<div class="qz-block-intro">${esc(block.intro)}</div>` : ""}
+      <div class="qz-photo-grid">${items}</div>
+    </div>`;
+  }
+  if (block.kind === "mc") {
+    const items = (block.items || []).map((q, qi) => `
+      <div class="qz-mc" data-answer="${q.answer}">
+        ${q.hint ? `<div class="qz-hint">${esc(q.hint)}</div>` : ""}
+        <div class="qz-mc-text">${renderQzText(q.q, q.mark)}</div>
+        <div class="qz-options">
+          ${(q.options || []).map((o, oi) => `
+            <label class="qz-opt">
+              <input type="radio" name="qz-mc-${secIdx}-${blockIdx}-${qi}" value="${oi}">
+              <span class="qz-opt__label">${String.fromCharCode(65 + oi)}. ${esc(o)}</span>
+            </label>`).join("")}
+        </div>
+        <div class="qz-fb" hidden></div>
+      </div>`).join("");
+    return `<div class="qz-block">
+      ${block.title ? `<div class="qz-block-title">${esc(block.title)}</div>` : ""}
+      ${items}
+    </div>`;
+  }
+  if (block.kind === "fill") {
+    const bank = (block.wordbank || []).map((w) => `<span class="qz-word">${esc(w)}</span>`).join("");
+    const opts = block.wordbank || [];
+    const items = (block.items || []).map((it) => {
+      const inner = it.parts.map((p) => p.blank
+        ? qzSelect(p.blank, opts, "—")
+        : `<span class="qz-fill-text">${esc(p.text)}</span>`).join("");
+      return `<div class="qz-fill-item"><span class="qz-fill-label">${esc(it.label)}</span>${inner}</div>`;
+    }).join("");
+    return `<div class="qz-block">
+      ${block.title ? `<div class="qz-block-title">${esc(block.title)}</div>` : ""}
+      ${block.intro ? `<div class="qz-block-intro">${esc(block.intro)}</div>` : ""}
+      <div class="qz-wordbank">${bank}</div>
+      ${items}
+    </div>`;
+  }
+  if (block.kind === "tf") {
+    const items = (block.items || []).map((it) => `
+      <div class="qz-tf-item">
+        <div class="qz-tf-q">${esc(it.q)}</div>
+        <div class="qz-tf-btns" data-answer="${esc(it.answer)}">
+          <button type="button" class="qz-tf-btn" data-val="T">T</button>
+          <button type="button" class="qz-tf-btn" data-val="F">F</button>
+        </div>
+      </div>`).join("");
+    return `<div class="qz-block">
+      ${block.title ? `<div class="qz-block-title">${esc(block.title)}</div>` : ""}
+      ${block.intro ? `<div class="qz-block-intro">${esc(block.intro)}</div>` : ""}
+      ${items}
+    </div>`;
+  }
+  if (block.kind === "particle") {
+    const options = (block.options || []).map((o, oi) => `
+      <label class="qz-particle-opt">
+        <input type="radio" name="qz-p-${secIdx}-${blockIdx}" value="${oi}">
+        <span class="qz-opt-label">${String.fromCharCode(65 + oi)}</span>
+        <div class="qz-particle-pair">
+          <div class="qz-pbox">${qzParticles(o.from)}</div>
+          <span class="qz-arrow">→</span>
+          <div class="qz-pbox">${qzParticles(o.to)}</div>
+        </div>
+      </label>`).join("");
+    return `<div class="qz-block">
+      ${block.title ? `<div class="qz-block-title">${esc(block.title)}</div>` : ""}
+      <div class="qz-mc" data-answer="${block.answer}">
+        <div class="qz-mc-text">${esc(block.stem)}</div>
+        <div class="qz-particle-grid">${options}</div>
+        <div class="qz-fb" hidden></div>
+      </div>
+    </div>`;
+  }
+  if (block.kind === "diagram") {
+    const opts = block.options || ["melting", "freezing", "boiling", "condensation", "evaporation"];
+    const labels = (block.answers || []).map((a, i) => `
+      <div class="qz-diag-label">
+        <span class="qz-diag-num">${i + 1}</span>
+        ${qzSelect(a, opts, "Choose a process")}
+      </div>`).join("");
+    return `<div class="qz-block">
+      ${block.title ? `<div class="qz-block-title">${esc(block.title)}</div>` : ""}
+      ${block.intro ? `<div class="qz-block-intro">${esc(block.intro)}</div>` : ""}
+      <div class="qz-diagram-wrap">${qzDiagramSvg()}</div>
+      <div class="qz-diagram-labels">${labels}</div>
+    </div>`;
+  }
+  if (block.kind === "statetable") {
+    const rows = (block.rows || []).map((row) => {
+      const cells = row.cells.map((c) => {
+        if (typeof c === "string") return `<td>${esc(c)}</td>`;
+        if (c.parts) {
+          const inner = c.parts.map((p) => {
+            if (typeof p === "string") return `<span>${esc(p)}</span>`;
+            if (p.blank) return qzSelect(p.blank, p.opts, "—");
+            return `<span>${esc(p.text)}</span>`;
+          }).join("");
+          return `<td>${inner}</td>`;
+        }
+        if (c.blank) return `<td>${qzSelect(c.blank, c.opts, "—")}</td>`;
+        return `<td>${esc(c.text || "")}</td>`;
+      }).join("");
+      return `<tr>${cells}</tr>`;
+    }).join("");
+    return `<div class="qz-block">
+      ${block.title ? `<div class="qz-block-title">${esc(block.title)}</div>` : ""}
+      ${block.intro ? `<div class="qz-block-intro">${esc(block.intro)}</div>` : ""}
+      <div class="qz-table-wrap">
+        <table class="qz-table">
+          <thead><tr>${(block.cols || []).map((c) => `<th>${esc(c)}</th>`).join("")}</tr></thead>
+          <tbody>${rows}</tbody>
+        </table>
+      </div>
+    </div>`;
+  }
+  return "";
+}
+function renderQuizSet(qz) {
+  const esc = escapeHTML;
+  const sections = (qz.sections || []).map((sec, si) => {
+    const blocks = (sec.blocks || []).map((b, bi) => renderQuizBlock(b, si, bi)).join("");
+    return `
+      <div class="qz-section">
+        <div class="qz-sec-head">
+          <span class="qz-sec-icon">${esc(sec.icon || "📋")}</span>
+          <span class="qz-sec-title">${esc(sec.title || "")}</span>
+          ${sec.sub ? `<span class="qz-sec-sub">${esc(sec.sub)}</span>` : ""}
+        </div>
+        ${blocks}
+      </div>`;
+  }).join("");
+  return `
+    <div class="qz-set" data-quizset>
+      <div class="qz-title">${esc(qz.title || "Chapter Quiz")}</div>
+      <div class="qz-intro">${esc(qz.intro || "")}</div>
+      ${sections}
+      <div class="qz-actions">
+        <button class="qz-submit" type="button">✍️ Submit &amp; mark</button>
+      </div>
+      <div class="qz-result" hidden></div>
+    </div>`;
+}
+
+/* Science 笔记条目（支持 { t, h, pg, kp, figrow, fig, slider, match, acc, gallery, chart }） */
+function renderScienceNote(item) {
+  if (typeof item === "string") {
+    return `<p class="text-para">${highlightScienceTerms(escapeHTML(item))}</p>`;
+  }
+  if (item.quizset) {
+    return renderQuizSet(item.quizset);
+  }
+  if (item.kp) {
+    return `<div class="kp"><b>Key point</b><br>${highlightScienceTerms(escapeHTML(item.kp))}${sciPg(item.pg)}</div>`;
+  }
+  if (item.figrow) {
+    const figs = (item.figrow || []).map((f) => `
+      <figure class="fig" data-lightbox="${escapeHTML(f.src)}" data-cap="${escapeHTML(f.caption)}">
+        <img src="${escapeHTML(f.src)}" alt="${escapeHTML(f.caption)}" loading="lazy">
+        <figcaption><span>${escapeHTML(f.caption)}</span>${sciPg(f.pg)}</figcaption>
+      </figure>`).join("");
+    return `<div class="fig-grid">${figs}</div>`;
+  }
+  if (item.fig) {
+    const f = item.fig;
+    return `
+      <figure class="fig-inline" data-lightbox="${escapeHTML(f.src)}" data-cap="${escapeHTML(f.caption)}">
+        <img src="${escapeHTML(f.src)}" alt="${escapeHTML(f.caption)}" loading="lazy">
+        <figcaption><span>${escapeHTML(f.caption)}</span>${sciPg(f.pg)}</figcaption>
+      </figure>`;
+  }
+  if (item.slider) {
+    return `
+      <div class="temp-slider" data-temp-min="${escapeHTML(String(item.slider.min ?? -30))}"
+           data-temp-max="${escapeHTML(String(item.slider.max ?? 130))}"
+           data-temp-init="${escapeHTML(String(item.slider.init ?? 20))}">
+        <div class="temp-head">
+          <div class="temp-state">
+            <div class="temp-state-icon" id="temp-icon">💧</div>
+            <div>
+              <div class="temp-state-name" id="temp-name">Water</div>
+              <div class="temp-state-sub" id="temp-sub">liquid state</div>
+            </div>
+          </div>
+          <div class="temp-val" id="temp-val">20 °C</div>
+          <div class="temp-energy is-idle" id="temp-energy">Energy: —</div>
+        </div>
+        <div class="temp-particles" id="temp-particles"></div>
+        <input type="range" id="temp-range" min="${escapeHTML(String(item.slider.min ?? -30))}"
+               max="${escapeHTML(String(item.slider.max ?? 130))}"
+               value="${escapeHTML(String(item.slider.init ?? 20))}" step="1"
+               aria-label="Water temperature">
+        <div class="temp-scale">
+          <span>−30 °C</span><span>0 °C</span><span>100 °C</span><span>130 °C</span>
+        </div>
+        <p class="temp-hint">Drag the slider to change the temperature and watch how the state of water and the energy change.</p>
+      </div>`;
+  }
+  if (item.match) {
+    const m = item.match;
+    const pairs = m.pairs || [];
+    const terms = pairs.map((p, i) =>
+      `<div class="match-term" draggable="true" data-match-term="${i}" data-term="${escapeHTML(p.term)}">${escapeHTML(p.term)}</div>`
+    ).join("");
+    const slots = pairs.map((p, i) =>
+      `<div class="match-slot" data-match-slot="${i}" data-slot="${escapeHTML(p.desc)}"><span class="match-slot__desc">${escapeHTML(p.desc)}</span></div>`
+    ).join("");
+    return `
+      <div class="match-game" data-match>
+        <div class="match-head">
+          <div class="match-title">${escapeHTML(m.title || "Match the terms")}</div>
+          <div class="match-count">Matched <b>0</b> / ${pairs.length}</div>
+          <button class="match-reset" type="button">↺ Reset</button>
+        </div>
+        <div class="match-board">
+          <div class="match-col">
+            <div class="match-col__label">Processes</div>
+            ${terms}
+          </div>
+          <div class="match-col">
+            <div class="match-col__label">Change of state</div>
+            ${slots}
+          </div>
+        </div>
+        <div class="match-done">🎉 Well done! All processes matched correctly.</div>
+      </div>`;
+  }
+  if (item.acc) {
+    const a = item.acc;
+    const inner = (a.blocks || []).map(renderScienceNote).join("");
+    return `
+      <div class="acc" data-acc>
+        <button class="acc-head" type="button" data-acc-toggle aria-expanded="${a.open ? "true" : "false"}">
+          <span class="acc-icon">${escapeHTML(a.icon || "🧩")}</span>
+          <span class="acc-title">${escapeHTML(a.title || "")}</span>
+          ${a.hint ? `<span class="acc-hint">${escapeHTML(a.hint)}</span>` : ""}
+          <span class="acc-caret">▼</span>
+        </button>
+        <div class="acc-body" ${a.open ? "" : "hidden"}>${inner}</div>
+      </div>`;
+  }
+  if (item.lab) {
+    const inner = (item.lab.blocks || []).map(renderScienceNote).join("");
+    return `<div class="lab-grid">${inner}</div>`;
+  }
+  if (item.gallery) {
+    const g = item.gallery;
+    const items = g.items || [];
+    const json = JSON.stringify(items.map((f) => ({ src: f.src, cap: f.caption })));
+    return `
+      <button class="gallery-btn" type="button" data-gallery="${escapeHTML(json)}">
+        📖 ${escapeHTML(g.label || "View textbook pages")}
+        <span class="gallery-btn__count">${items.length} pages</span>
+      </button>`;
+  }
+  if (item.chart) {
+    const c = item.chart;
+    return `
+      <div class="chart-block" data-chart>
+        <svg class="chart-svg" viewBox="0 0 360 230" role="img" aria-label="${escapeHTML(c.title || "Heating curve of water")}">
+          <line x1="40" y1="152" x2="340" y2="152" stroke="#e8f0fa" stroke-dasharray="4 4"/>
+          <line x1="40" y1="38" x2="340" y2="38" stroke="#e8f0fa" stroke-dasharray="4 4"/>
+          <line x1="40" y1="15" x2="40" y2="175" stroke="#a9b8cc" stroke-width="1.5"/>
+          <line x1="40" y1="175" x2="340" y2="175" stroke="#a9b8cc" stroke-width="1.5"/>
+          <text x="34" y="179" text-anchor="end" font-size="9" fill="#64748b">−20</text>
+          <text x="34" y="156" text-anchor="end" font-size="9" fill="#64748b">0</text>
+          <text x="34" y="42" text-anchor="end" font-size="9" fill="#64748b">100</text>
+          <text x="34" y="19" text-anchor="end" font-size="9" fill="#64748b">120</text>
+          <text x="16" y="95" text-anchor="middle" font-size="9" fill="#64748b" transform="rotate(-90 16 95)">Temperature (°C)</text>
+          <text x="40" y="190" text-anchor="middle" font-size="9" fill="#64748b">0</text>
+          <text x="340" y="190" text-anchor="middle" font-size="9" fill="#64748b">10</text>
+          <text x="190" y="203" text-anchor="middle" font-size="9" fill="#64748b">Time / energy absorbed (min)</text>
+          <path class="chart-seg chart-seg--1" d="M40,175 L100,152" stroke="#2f6bff" pathLength="100"/>
+          <path class="chart-seg chart-seg--2" d="M100,152 L160,152" stroke="#22a06b" pathLength="100"/>
+          <path class="chart-seg chart-seg--3" d="M160,152 L220,38" stroke="#2f6bff" pathLength="100"/>
+          <path class="chart-seg chart-seg--4" d="M220,38 L280,38" stroke="#f59e0b" pathLength="100"/>
+          <path class="chart-seg chart-seg--5" d="M280,38 L340,15" stroke="#2f6bff" pathLength="100"/>
+          <circle cx="40" cy="175" r="2.6" fill="#2f6bff"/>
+          <circle cx="100" cy="152" r="2.6" fill="#22a06b"/>
+          <circle cx="160" cy="152" r="2.6" fill="#22a06b"/>
+          <circle cx="220" cy="38" r="2.6" fill="#f59e0b"/>
+          <circle cx="280" cy="38" r="2.6" fill="#f59e0b"/>
+          <circle cx="340" cy="15" r="2.6" fill="#2f6bff"/>
+          <g class="chart-note chart-note--melt">
+            <text x="130" y="168" text-anchor="middle" font-size="9.5" font-weight="700" fill="#14683f">melting</text>
+            <text x="130" y="144" text-anchor="middle" font-size="8.5" fill="#22a06b">0 °C · solid → liquid</text>
+          </g>
+          <g class="chart-note chart-note--boil">
+            <text x="250" y="54" text-anchor="middle" font-size="9.5" font-weight="700" fill="#b45309">boiling</text>
+            <text x="250" y="30" text-anchor="middle" font-size="8.5" fill="#f59e0b">100 °C · liquid → gas</text>
+          </g>
+        </svg>
+        <div class="chart-cap">${escapeHTML(c.caption || "Heating curve of water: temperature stays the same during melting and boiling.")}</div>
+        <div class="chart-legend">
+          <span class="leg-heat"><i></i>heating (temp rises)</span>
+          <span class="leg-melt"><i></i>melting (0 °C)</span>
+          <span class="leg-boil"><i></i>boiling (100 °C)</span>
+        </div>
+        <button class="chart-replay" type="button">↺ Replay animation</button>
+      </div>`;
+  }
+  if (item.summaryTable) {
+    const st = item.summaryTable;
+    const rows = (st.rows || []).map((r) => `
+      <tr>
+        <td class="st-process">${escapeHTML(r.process)}</td>
+        <td>${escapeHTML(r.change)}</td>
+        <td>${escapeHTML(r.temp)}</td>
+        <td class="st-energy">
+          <select class="st-select" data-answer="${escapeHTML(r.answer)}" aria-label="Energy for ${escapeHTML(r.process)}">
+            <option value="">Choose…</option>
+            <option value="absorbed">Absorbed</option>
+            <option value="released">Released</option>
+          </select>
+        </td>
+      </tr>`).join("");
+    return `
+      <div class="summary-table" data-summary>
+        <div class="st-title">${escapeHTML(st.title || "Complete the summary table")}</div>
+        <div class="st-wrap">
+          <table class="st-table">
+            <thead>
+              <tr>
+                <th>Process</th>
+                <th>Change in states</th>
+                <th>Temperature</th>
+                <th>Energy absorbed or released?</th>
+              </tr>
+            </thead>
+            <tbody>${rows}</tbody>
+          </table>
+        </div>
+        <div class="st-actions">
+          <button class="st-check" type="button">✓ Check answers</button>
+          <span class="st-result" hidden></span>
+        </div>
+      </div>`;
+  }
+  if (item.quiz) {
+    const qz = item.quiz;
+    const graph = qz.graph ? `
+      <div class="qq-graph-block">
+        <svg class="qq-graph" viewBox="0 0 320 200" role="img" aria-label="Heating curve of water">
+          <line x1="45" y1="20" x2="45" y2="165" stroke="#a9b8cc" stroke-width="1.5"/>
+          <line x1="45" y1="165" x2="300" y2="165" stroke="#a9b8cc" stroke-width="1.5"/>
+          <path d="M45,150 L150,60 L270,60" fill="none" stroke="#2f6bff" stroke-width="3" stroke-linejoin="round"/>
+          <line x1="45" y1="60" x2="270" y2="60" stroke="#f59e0b" stroke-dasharray="5 4" stroke-width="1.2"/>
+          <text x="36" y="64" text-anchor="end" font-size="11" fill="#b45309" font-weight="700">T</text>
+          <circle cx="45" cy="150" r="3" fill="#2f6bff"/>
+          <circle cx="150" cy="60" r="3" fill="#2f6bff"/>
+          <circle cx="270" cy="60" r="3" fill="#2f6bff"/>
+          <text x="45" y="180" text-anchor="middle" font-size="10" fill="#64748b">0</text>
+          <text x="150" y="180" text-anchor="middle" font-size="10" fill="#64748b">2</text>
+          <text x="270" y="180" text-anchor="middle" font-size="10" fill="#64748b">4</text>
+          <text x="172" y="194" text-anchor="middle" font-size="10" fill="#64748b">time (min)</text>
+          <text x="16" y="95" text-anchor="middle" font-size="10" fill="#64748b" transform="rotate(-90 16 95)">water temperature (°C)</text>
+        </svg>
+        <div class="qq-graph-cap">${escapeHTML(qz.graph.caption)}</div>
+      </div>` : "";
+
+    const questions = (qz.questions || []).map((q, i) => `
+      <div class="qq" data-qq data-answer="${q.answer}">
+        <div class="qq-head">
+          <span class="qq-num">Q${i + 1}</span>
+          ${q.level ? `<span class="qq-level">${escapeHTML(q.level)}</span>` : ""}
+        </div>
+        <div class="qq-text">${escapeHTML(q.q)}</div>
+        <div class="qq-options">
+          ${(q.options || []).map((opt, oi) => `
+            <label class="qq-opt">
+              <input type="radio" name="qq-${i}" value="${oi}">
+              <span class="qq-opt__label">${String.fromCharCode(65 + oi)}. ${escapeHTML(opt)}</span>
+            </label>`).join("")}
+        </div>
+        <div class="qq-feedback" hidden></div>
+      </div>`).join("");
+
+    const dragPart = qz.drag ? `
+      <div class="qq-drag">
+        <div class="qq-drag-title">🧩 Drag &amp; drop question</div>
+        ${renderScienceNote({ match: { title: qz.drag.title || "Match the terms", pairs: qz.drag.pairs } })}
+      </div>` : "";
+
+    return `
+      <div class="chapter-quiz" data-quiz>
+        <div class="cq-title">${escapeHTML(qz.title || "Chapter quiz")}</div>
+        <div class="cq-intro">${escapeHTML(qz.intro || "")}</div>
+        ${graph}
+        ${questions}
+        ${dragPart}
+        <div class="cq-actions">
+          <button class="cq-submit" type="button">✍️ Submit</button>
+        </div>
+        <div class="cq-result" hidden></div>
+      </div>`;
+  }
+  const t = (item.t || "").trim();
+  const html = highlightScienceTerms(escapeHTML(t));
+  if (item.h === 1) return `<div class="text-h">${html}${sciPg(item.pg)}</div>`;
+  if (item.h === 2) return `<div class="text-sub">${html}${sciPg(item.pg)}</div>`;
+  if (item.h === 3) return `<div class="text-sub3">${html}${sciPg(item.pg)}</div>`;
+  return `<p class="text-para">${html}${sciPg(item.pg)}</p>`;
+}
+
+/* ---------- Science 标签页（Tabs） ---------- */
+function renderScienceTabs(tabs, key) {
+  const bar = tabs.map((t, i) => `
+    <button class="sci-tab" type="button" data-tab-target="${key}-${t.id}" role="tab" aria-selected="${i === 0 ? "true" : "false"}">
+      <span class="sci-tab__icon">${escapeHTML(t.icon || "")}</span>
+      <span class="sci-tab__label">${escapeHTML(t.title)}</span>
+    </button>`).join("");
+  const panels = tabs.map((t, i) => `
+    <div class="sci-tabpanel" id="${key}-${t.id}" role="tabpanel" ${i === 0 ? "" : "hidden"}>
+      ${(t.blocks || []).map(renderScienceNote).join("")}
+    </div>`).join("");
+  return `
+    <div class="sci-tabs" data-tabs="${key}">
+      <div class="sci-tabbar" role="tablist">${bar}</div>
+      <div class="sci-tabpanels">${panels}</div>
+    </div>`;
+}
+
+/* ---------- Science 科页面 ---------- */
+function renderScience(sci, name) {
+  const chapterCards = (sci.chapters || []).map((ch) => {
+    const num = (ch.title || "").match(/\d+/)?.[0] || "2";
+    const sections = (ch.sections || []).map((sec) => {
+      const key = `${ch.id}-${sec.id}`;
+      if (sec.checkpoint) {
+        return `
+      <div class="sci-section sci-section--checkpoint">
+        <a class="sci-checkpoint-card" href="${escapeHTML(sec.link)}" data-keep-share>
+          <span class="sci-checkpoint-icon">🌟</span>
+          <span class="sci-checkpoint-text">
+            <span class="sci-checkpoint-title">${escapeHTML(sec.title)}</span>
+            ${sec.desc ? `<span class="sci-checkpoint-desc">${escapeHTML(sec.desc)}</span>` : ""}
+          </span>
+          <span class="sci-checkpoint-arrow">→</span>
+        </a>
+      </div>`;
+      }
+      if (sec.link) {
+        return `
+      <div class="sci-section">
+        <div class="sci-link-row">
+          <div class="sci-link-main">
+            <span class="sci-sec-num">${escapeHTML(sec.id)}</span>
+            <span class="sci-sec-title">${escapeHTML(sec.title)}</span>
+            ${sec.pages ? `<span class="pg">${escapeHTML(sec.pages)}</span>` : ""}
+          </div>
+          <div class="sci-link-actions">
+            <a class="sci-link-btn" href="${escapeHTML(sec.link)}" data-keep-share>📖 Notes</a>
+            ${sec.quiz ? `<a class="sci-link-btn sci-link-btn--quiz" href="${escapeHTML(sec.quiz)}" data-keep-share>✍️ Quiz</a>` : ""}
+          </div>
+        </div>
+      </div>`;
+      }
+      const hasTabs = Array.isArray(sec.tabs) && sec.tabs.length > 0;
+      const hasContent = Array.isArray(sec.blocks) && sec.blocks.length > 0;
+      const body = hasTabs
+        ? renderScienceTabs(sec.tabs, key)
+        : (hasContent
+            ? sec.blocks.map(renderScienceNote).join("")
+            : `<p class="chapter-empty">${escapeHTML(sec.title)} notes coming soon.</p>`);
+      return `
+      <div class="sci-section">
+        <button class="sci-sec-head" type="button" data-sci-toggle="${key}" aria-expanded="${sec.expand ? "true" : "false"}">
+          <span class="sci-sec-num">${escapeHTML(sec.id)}</span>
+          <span class="sci-sec-title">${escapeHTML(sec.title)}</span>
+          ${sec.pages ? `<span class="pg">${escapeHTML(sec.pages)}</span>` : ""}
+          <span class="sci-sec-caret">▼</span>
+        </button>
+        <div class="sci-sec-body" id="${key}" ${sec.expand ? "" : "hidden"}>
+          ${body}
+        </div>
+      </div>`;
+    }).join("");
+    return `
+    <div class="chapter-card">
+      <div class="chapter-head">
+        <div class="chapter-num">${num}</div>
+        <h3 class="chapter-title">${escapeHTML(ch.title)}</h3>
+      </div>
+      <div class="sci-sections">${sections}</div>
+    </div>`;
+  }).join("");
+
+  return `
+  <div class="page-head">
+    <div class="crumb">${escapeHTML(state.grade)} <span aria-hidden="true">/</span> <b>${escapeHTML(name)}</b></div>
+    <h1 class="page-title">${escapeHTML(sci.title)}</h1>
+    <p class="page-desc">Structured revision notes · textbook page references · diagrams</p>
+  </div>
+  <div class="cards">
+    <section class="card card--wide">
+      <div class="card__head">
+        <div class="card__icon">🔬</div>
+        <div class="card__titles">
+          <h2 class="card__title">${escapeHTML(sci.title)}</h2>
+          <p class="card__sub">Revision notes with textbook page references</p>
+        </div>
+      </div>
+      <div class="card__body">
+        <div class="chapters">${chapterCards}</div>
+      </div>
+    </section>
+  </div>`;
+}
+
+/* ICT 练习题（支持 { q, options } 与 { divider }） */
+function renderQuizQuestion(item) {
+  if (item.divider) return `<div class="quiz__divider">${escapeHTML(item.divider)}</div>`;
+  const options = (item.options || []).map((o) => `<div class="quiz__opt">${escapeHTML(o)}</div>`).join("");
+  return `<div class="quiz__q"><div class="quiz__stem">${escapeHTML(item.q)}</div>${options}</div>`;
+}
+
+function renderChinese(chinese, name) {
+  const lessons = chinese.classics
+    .map((item, i) => {
+      const teachPrompt = PROMPT_TEMPLATE.teach.replace("{title}", item.title);
+      const reviewPrompt = item.review || PROMPT_TEMPLATE.review.replace("{question}", item.question || "");
+      const key = item.slug || `k${i + 1}`;
+
+      // 折叠式课文原文 + 注释
+      const textBlock = item.text && item.text.length
+        ? `
+        <button class="btn btn--ghost btn--toggle-text" type="button" data-toggle="text-${key}" aria-expanded="false">
+          📖 展开阅读课文原文
+        </button>
+        <div class="text-body" id="text-${key}" hidden>
+          ${item.text.map(renderTextPara).join("")}
+        </div>`
+        : "";
+
+      return `
+      <div class="lesson">
+        <div class="lesson__head">
+          <div class="lesson__no">${i + 1}</div>
+          <div>
+            <div class="lesson__title">${escapeHTML(item.title)}</div>
+            <div class="lesson__meta">${escapeHTML(item.meta || "")}</div>
+          </div>
+        </div>
+
+        <div class="lesson__actions">
+          <button class="btn btn--copy" type="button"
+                  data-copy="${escapeHTML(teachPrompt)}"
+                  title="复制讲课指令，粘贴到豆包即可">📋 复制讲课指令</button>
+        </div>
+
+        ${textBlock}
+
+        <div class="challenge">
+          <div class="challenge__label">长题目挑战</div>
+          <p class="challenge__q"><b>Q</b>${escapeHTML(item.question || "")}</p>
+          <button class="btn btn--copy" type="button"
+                  data-copy="${escapeHTML(reviewPrompt)}"
+                  title="复制题目与阅卷指令，粘贴到豆包即可">📋 复制题目及阅卷指令</button>
+        </div>
+
+        ${item.practice ? `
+        <div class="practice">
+          <div class="practice__label">${escapeHTML(item.practice.title)}</div>
+          <button class="btn btn--copy" type="button"
+                  data-copy="${escapeHTML(item.practice.prompt)}"
+                  title="复制指令，粘贴到豆包即可">${escapeHTML(item.practice.button || "📋 复制课后练习指令")}</button>
+        </div>` : ""}
+
+        <a class="btn btn--primary btn--block" href="s1-chinese-wenyan-quiz.html?chapter=${key}" data-keep-share>📝 客观题专项测验 <span class="btn__arrow">↗</span></a>
+      </div>`;
+    })
+    .join("");
+
+  const idiomAll = (chinese.idioms?.samples || [])
+    .map((w) => `<span class="feature__chip">${escapeHTML(w)}<small>成语闪卡</small></span>`)
+    .join("");
+
+  const conjRows = (chinese.grammar?.relations || [])
+    .map((r) => `<tr><td>${escapeHTML(r.name)}</td><td>${escapeHTML(r.words)}</td></tr>`)
+    .join("");
+
+  return `
+  ${pageHead(name, "古文精讲、成语闪卡与语法练习，配合 AI 老师逐课突破。")}
+  <div class="cards">
+
+    <!-- 卡片 1：古文精讲 -->
+    <section class="card card--wide">
+      <div class="card__head">
+        <div class="card__icon">📜</div>
+        <div class="card__titles">
+          <h2 class="card__title">古文精讲</h2>
+        </div>
+      </div>
+      <div class="card__body">
+        <div class="lessons">${lessons}</div>
+      </div>
+    </section>
+
+    <!-- 卡片 2：成语学习 -->
+    <section class="card">
+      <div class="card__head">
+        <div class="card__icon">🀄</div>
+        <div class="card__titles">
+          <h2 class="card__title">成语学习</h2>
+          <p class="card__sub">${escapeHTML(chinese.idioms?.subtitle || "闪卡 · 自测")}</p>
+        </div>
+      </div>
+      <div class="card__body feature">
+        <div class="feature__thumb">${idiomAll}</div>
+        <ul class="feature__list">
+          <li>翻卡记忆：成语释义、用法与例句</li>
+          <li>自测模式：随机抽卡，检验掌握程度</li>
+        </ul>
+        <a class="btn btn--primary btn--block" href="${CONFIG.links.chengyu}" target="_blank" rel="noopener noreferrer">
+          进入成语闪卡 <span class="btn__arrow">↗</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- 卡片 3：语法连词 -->
+    <section class="card">
+      <div class="card__head">
+        <div class="card__icon">🔗</div>
+        <div class="card__titles">
+          <h2 class="card__title">${escapeHTML(chinese.grammar?.title || "语法连词")}</h2>
+          <p class="card__sub">${escapeHTML(chinese.grammar?.subtitle || "八大关系 · 辨析闯关")}</p>
+        </div>
+      </div>
+      <div class="card__body">
+        <button class="btn btn--toggle-text" type="button" data-toggle="conj-relations" data-expand="📖 展开：连词八大关系" data-collapse="📖 收起：连词八大关系">📖 展开：连词八大关系</button>
+        <div id="conj-relations" hidden>
+          <div class="conj-table-wrap">
+            <table class="conj-table">
+              <thead><tr><th>关系类型</th><th>常用连词</th></tr></thead>
+              <tbody>${conjRows}</tbody>
+            </table>
+          </div>
+        </div>
+        <a class="btn btn--primary btn--block" href="s1-chinese-conjunctions-quiz.html" data-keep-share>🚀 开始连词闯关测验 <span class="btn__arrow">↗</span></a>
+      </div>
+    </section>
+
+  </div>`;
+}
+
+/* ---------- ICT 概念全景图（Mermaid mindmap） ---------- */
+const ICT_MINDMAP = `mindmap
+  root((Computer system))
+    Hardware
+      System unit
+        Motherboard
+        Central processing unit (CPU)
+          Arithmetic and logic unit (ALU)
+          Control unit (CU)
+          Registers
+        Storage device
+          Main memory
+            RAM
+            ROM
+          Secondary storage
+            SSD
+            USB flash drive
+            Memory card
+        Power supply unit
+      Input device
+        Keyboard
+        Pointing device
+          Mouse
+          Touch screen
+        Webcam
+      Output device
+        Monitor
+        Printer
+        Speakers
+    Software
+      System software
+        Operating system
+        Driver program
+        Utility program
+      Application software
+        Productivity software
+        Communication software
+        Multimedia development software
+`;
+
+// 思维导图配色：根节点用中性深色；第一层的两个分支（Hardware / Software）各用一套色系，
+// 分支内按层级由深到浅（第一层最深，逐级变浅）。
+const ROOT_COLOR = "#334155"; // 根节点 · 深灰蓝
+
+// 每个分支一套色系，下标 0 = 第一层（最深），逐级变浅
+const BRANCH_COLORS = [
+  // 分支 0 · Hardware · 橙色系（深 → 浅）
+  ["#7c2d12", "#9a3412", "#c2410c", "#ea580c", "#fb923c"],
+  // 分支 1 · Software · 蓝色系（深 → 浅）
+  ["#1e3a8a", "#1d4ed8", "#2563eb", "#3b82f6", "#60a5fa"]
+];
+
+// 从 mindmap 源码解析每个节点的层级与所属分支，返回与 SVG 节点顺序一致的数组
+function parseMindmapStructure(mmd) {
+  const lines = mmd.split("\n");
+  const rootLine = lines.find((l) => l.trim().startsWith("root("));
+  const rootIndent = rootLine ? (rootLine.match(/^\s*/) || [""])[0].length : 0;
+  const nodes = [];
+  let branch = 0;
+  for (const line of lines) {
+    const trimmed = line.trim();
+    if (!trimmed) continue;
+    if (trimmed === "mindmap" || trimmed.startsWith("classDef") || trimmed.startsWith("%%")) continue;
+    const indent = (line.match(/^\s*/) || [""])[0].length;
+    const depth = trimmed.startsWith("root(") ? 0 : Math.max(1, Math.round((indent - rootIndent) / 2));
+    if (depth === 0) {
+      branch = -1;
+    } else if (depth === 1) {
+      branch = /software/i.test(trimmed) ? 1 : 0; // Software → 蓝，其余第一层分支（Hardware）→ 橙
+    }
+    nodes.push({ depth, branch });
+  }
+  return nodes;
+}
+
+// 计算相对亮度，用于决定节点文字用白色还是深色
+function hexLuminance(hex) {
+  const h = hex.replace("#", "");
+  const c = (i) => {
+    const v = parseInt(h.slice(i, i + 2), 16) / 255;
+    return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
+  };
+  return 0.2126 * c(0) + 0.7152 * c(2) + 0.0722 * c(4);
+}
+
+// 渲染完成后，按「分支 + 层级」给节点背景上色，文字自动取白/深色保证对比度
+function colorizeMindmap(wrap) {
+  const structure = parseMindmapStructure(ICT_MINDMAP);
+  const nodes = wrap.querySelectorAll("g.mindmap-node");
+  nodes.forEach((g, i) => {
+    const info = structure[i] || { depth: 0, branch: 0 };
+    let color = ROOT_COLOR;
+    if (info.depth > 0 && info.branch >= 0) {
+      const ramp = BRANCH_COLORS[info.branch] || BRANCH_COLORS[0];
+      color = ramp[info.depth - 1] || ramp[ramp.length - 1];
+    }
+    const bgGroup = g.querySelector("g");
+    if (bgGroup) {
+      bgGroup.querySelectorAll("circle, rect, path, polygon").forEach((s) => {
+        s.style.fill = color;
+        s.style.stroke = "none";
+      });
+    }
+    const textColor = hexLuminance(color) > 0.35 ? "#1f2937" : "#ffffff";
+    g.querySelectorAll("text").forEach((t) => { t.style.fill = textColor; });
+  });
+}
+
+let mermaidPromise = null;
+function ensureMermaid() {
+  if (window.mermaid) return Promise.resolve(window.mermaid);
+  if (mermaidPromise) return mermaidPromise;
+  mermaidPromise = new Promise((resolve, reject) => {
+    const s = document.createElement("script");
+    s.src = "vendor/mermaid.min.js";
+    s.onload = () => {
+      try {
+        window.mermaid.initialize({ startOnLoad: false, theme: "base", securityLevel: "loose" });
+        resolve(window.mermaid);
+      } catch (e) {
+        mermaidPromise = null;
+        reject(e);
+      }
+    };
+    s.onerror = () => { mermaidPromise = null; reject(new Error("mermaid load failed")); };
+    document.head.appendChild(s);
+  });
+  return mermaidPromise;
+}
+
+function toggleMindmap(btn) {
+  const wrap = document.getElementById(btn.getAttribute("data-mindmap"));
+  if (!wrap) return;
+  const open = wrap.hidden;
+  wrap.hidden = !open;
+  btn.setAttribute("aria-expanded", String(open));
+  btn.innerHTML = open ? "🗺️ Hide Concept Map" : "🗺️ Show Concept Map";
+
+  if (open && !wrap.dataset.rendered) {
+    wrap.innerHTML = `<div class="mindmap-loading">Loading diagram…</div>`;
+    ensureMermaid()
+      .then((mermaid) => {
+        const id = "ict-mindmap-" + Date.now();
+        return mermaid.render(id, ICT_MINDMAP);
+      })
+      .then(({ svg }) => {
+        wrap.innerHTML = svg;
+        wrap.dataset.rendered = "1";
+        colorizeMindmap(wrap);
+      })
+      .catch(() => {
+        wrap.innerHTML = `<div class="mindmap-error">Failed to render the mindmap.</div>`;
+      });
+  }
+}
+
+/* ---------- ICT 科页面 ---------- */
+function renderIct(ict, name) {
+  const chapters = (ict.chapters || [])
+    .map((ch, i) => {
+      const key = ch.id || `ch${i + 1}`;
+      const hasNotes = Array.isArray(ch.notes) && ch.notes.length > 0;
+      const showNotes = !!ch.expand || hasNotes;
+
+      const notesBlock = showNotes
+        ? `
+        <button class="btn btn--ghost btn--toggle-text" type="button"
+                data-toggle="ict-${key}" aria-expanded="false"
+                data-expand="${escapeHTML(ch.expand || `📖 Expand ${ch.title} Notes`)}"
+                data-collapse="${escapeHTML(ch.collapse || `📖 Collapse ${ch.title} Notes`)}">
+          ${escapeHTML(ch.expand || `📖 Expand ${ch.title} Notes`)}
+        </button>
+        <div class="text-body" id="ict-${key}" hidden>
+          ${hasNotes ? ch.notes.map(renderIctNote).join("") : `<p class="chapter-empty">Notes content coming soon.</p>`}
+        </div>`
+        : "";
+
+      const quizBlock = ch.quiz
+        ? `
+        <div class="quiz">
+          <div class="quiz__label">${escapeHTML(ch.quiz.label || "Quiz")}</div>
+          ${ch.quiz.note ? `<p class="quiz__note">${escapeHTML(ch.quiz.note)}</p>` : ""}
+          ${(ch.quiz.questions || []).map(renderQuizQuestion).join("")}
+          <button class="btn btn--copy" type="button"
+                  data-copy="${escapeHTML(ch.quiz.prompt)}"
+                  title="复制后粘贴到豆包，让 AI 出题">${escapeHTML(ch.quiz.button)}</button>
+        </div>`
+        : "";
+
+      const emptyNote = !showNotes && !ch.quiz
+        ? `<p class="chapter-empty">${escapeHTML(ch.title)} notes coming soon.</p>`
+        : "";
+
+      return `
+      <div class="chapter-card">
+        <div class="chapter-head">
+          <div class="chapter-num">${(ch.title || "").match(/\d+/)?.[0] || (i + 1)}</div>
+          <h3 class="chapter-title">${escapeHTML(ch.title)}</h3>
+        </div>
+        ${notesBlock}
+        ${quizBlock}
+        ${emptyNote}
+      </div>`;
+    })
+    .join("");
+
+  return `
+  <div class="page-head">
+    <div class="crumb">${escapeHTML(state.grade)} <span aria-hidden="true">/</span> <b>${escapeHTML(name)}</b></div>
+    <h1 class="page-title">${escapeHTML(ict.title)}</h1>
+    <p class="page-desc">Interactive revision notes · quizzes · exam practice</p>
+    <div class="page-actions">
+      <a class="btn btn--primary" href="s1-ict-quiz.html" data-keep-share target="_blank" rel="noopener noreferrer">
+        🚀 Start S1 ICT Chapter Quiz <span class="btn__arrow">↗</span>
+      </a>
+    </div>
+  </div>
+  <div class="cards">
+    <section class="card card--wide">
+      <div class="card__head">
+        <div class="card__icon">💻</div>
+        <div class="card__titles">
+          <h2 class="card__title">${escapeHTML(ict.title)}</h2>
+          <p class="card__sub">Revision notes & interactive quizzes</p>
+        </div>
+      </div>
+      <div class="card__body">
+        <div class="mindmap-block">
+          <button class="btn btn--ghost btn--mindmap" type="button"
+                  data-mindmap="ict-mindmap" aria-expanded="false">
+            🗺️ Show Concept Map
+          </button>
+          <div class="mindmap-wrap" id="ict-mindmap" hidden></div>
+        </div>
+        <div class="chapters">${chapters}</div>
+      </div>
+    </section>
+  </div>`;
+}
+
+function bindCommonEvents() {
+  document.querySelectorAll("#main [data-copy]").forEach((btn) => {
+    bindCopy(btn, btn.getAttribute("data-copy"), "已复制 ✓");
+  });
+
+  // 折叠 / 展开内容（展开与收起文字可通过 data-expand / data-collapse 自定义）
+  document.querySelectorAll("#main .btn--toggle-text").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const target = document.getElementById(btn.getAttribute("data-toggle"));
+      if (!target) return;
+      const open = target.hidden;
+      target.hidden = !open;
+      btn.setAttribute("aria-expanded", String(open));
+      const expandText = btn.getAttribute("data-expand") || "📖 展开阅读课文原文";
+      const collapseText = btn.getAttribute("data-collapse") || "📖 收起课文原文";
+      btn.innerHTML = open ? collapseText : expandText;
+    });
+  });
+
+  // 概念全景图（Mermaid mindmap）
+  document.querySelectorAll("#main .btn--mindmap").forEach((btn) => {
+    btn.addEventListener("click", () => toggleMindmap(btn));
+  });
+
+  // Science 小节折叠 / 展开
+  document.querySelectorAll("#main .sci-sec-head").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const target = document.getElementById(btn.getAttribute("data-sci-toggle"));
+      if (!target) return;
+      const open = target.hidden;
+      target.hidden = !open;
+      btn.setAttribute("aria-expanded", String(open));
+    });
+  });
+
+  // Science 温度滑块
+  document.querySelectorAll("#main .temp-slider").forEach(initTempSlider);
+
+  // Science 拖拽匹配游戏
+  document.querySelectorAll("#main .match-game").forEach(initMatchGame);
+
+  // Science 折叠面板
+  document.querySelectorAll("#main .acc").forEach(initAcc);
+
+  // Science 折线图动画
+  document.querySelectorAll("#main .chart-block").forEach(initChart);
+
+  // Science 标签页切换
+  document.querySelectorAll("#main .sci-tabs").forEach(initTabs);
+
+  // Science 交互式总结表格
+  document.querySelectorAll("#main .summary-table").forEach(initSummaryTable);
+
+  // Science 章节测验
+  document.querySelectorAll("#main .chapter-quiz").forEach(initQuiz);
+
+  // Science 分节客观题测验（Section A/B）
+  document.querySelectorAll("#main .qz-set").forEach(initQuizSet);
+
+  attachShareCode();
+}
+
+/* ---------- 温度滑块交互 ---------- */
+// 状态配置：冰（solid）/ 水（liquid）/ 水蒸气（gas）
+const TEMP_STATES = [
+  { max: 0,  name: "Ice",         sub: "solid state",        icon: "🧊", key: "solid" },
+  { max: 100, name: "Water",      sub: "liquid state",       icon: "💧", key: "liquid" },
+  { max: Infinity, name: "Steam", sub: "gas state (water vapour)", icon: "💨", key: "gas" }
+];
+
+// 粒子排列坐标（百分比位置，12 颗粒子）
+const PARTICLE_POS = {
+  solid:  [[15,22],[35,18],[55,22],[75,18],[18,45],[38,45],[58,45],[78,45],[22,70],[42,70],[62,70],[82,70]],
+  liquid: [[20,25],[42,20],[65,28],[80,22],[25,48],[48,45],[70,50],[88,44],[30,70],[55,72],[75,68],[15,55]],
+  gas:    [[8,15],[28,8],[52,12],[74,7],[88,18],[15,40],[40,35],[60,42],[82,38],[25,68],[55,72],[80,66]]
+};
+
+function tempStateFor(t) {
+  return TEMP_STATES.find((s) => t <= s.max) || TEMP_STATES[TEMP_STATES.length - 1];
+}
+
+function initTempSlider(root) {
+  const range = root.querySelector("input[type=range]");
+  const icon = root.querySelector(".temp-state-icon");
+  const nameEl = root.querySelector(".temp-state-name");
+  const subEl = root.querySelector(".temp-state-sub");
+  const valEl = root.querySelector(".temp-val");
+  const energyEl = root.querySelector(".temp-energy");
+  const particles = root.querySelector(".temp-particles");
+  if (!range) return;
+
+  let lastT = Number(range.value);
+
+  function render() {
+    const t = Number(range.value);
+    const st = tempStateFor(t);
+
+    icon.textContent = st.icon;
+    nameEl.textContent = st.name;
+    subEl.textContent = st.sub;
+    valEl.textContent = `${t} °C`;
+
+    // 能量：温度升高 = absorbed，降低 = released
+    if (t > lastT) {
+      energyEl.textContent = "Energy: absorbed 🔥";
+      energyEl.className = "temp-energy is-absorbed";
+    } else if (t < lastT) {
+      energyEl.textContent = "Energy: released ❄️";
+      energyEl.className = "temp-energy is-released";
+    } else {
+      energyEl.textContent = "Energy: drag to explore";
+      energyEl.className = "temp-energy is-idle";
+    }
+    lastT = t;
+
+    // 粒子排列
+    const pos = PARTICLE_POS[st.key];
+    particles.innerHTML = pos.map((p) =>
+      `<i class="${st.key === "gas" ? "is-gas" : ""}" style="left:${p[0]}%;top:${p[1]}%"></i>`
+    ).join("");
+  }
+
+  range.addEventListener("input", render);
+  render();
+}
+
+/* ---------- 拖拽匹配游戏 ---------- */
+function initMatchGame(root) {
+  const terms = Array.from(root.querySelectorAll(".match-term"));
+  const slots = Array.from(root.querySelectorAll(".match-slot"));
+  const termCol = root.querySelector(".match-col");
+  const countEl = root.querySelector(".match-count b");
+  const doneEl = root.querySelector(".match-done");
+  const resetBtn = root.querySelector(".match-reset");
+  if (!terms.length || !slots.length) return;
+
+  let matched = 0;
+  let selectedTerm = null;
+  let draggingId = null;
+
+  const shuffleTerms = () => {
+    const order = [...terms].sort(() => Math.random() - 0.5);
+    order.forEach((t) => termCol.appendChild(t));
+  };
+
+  const refreshCount = () => {
+    countEl.textContent = String(matched);
+    if (matched >= slots.length) doneEl.classList.add("is-show");
+  };
+
+  const setMatched = (term, slot) => {
+    const text = term.getAttribute("data-term");
+    const desc = slot.getAttribute("data-slot");
+    term.classList.remove("is-selected");
+    term.classList.add("is-matched");
+    term.setAttribute("draggable", "false");
+    slot.classList.remove("is-over");
+    slot.classList.add("is-matched");
+    slot.innerHTML = `<span class="match-slot__desc">✔ ${escapeHTML(text)} · ${escapeHTML(desc)}</span>`;
+    matched += 1;
+    refreshCount();
+  };
+
+  const tryMatch = (term, slot) => {
+    if (!term || term.classList.contains("is-matched")) return;
+    if (slot.classList.contains("is-matched")) return;
+    if (term.getAttribute("data-match-term") === slot.getAttribute("data-match-slot")) {
+      setMatched(term, slot);
+    } else {
+      slot.classList.add("is-wrong");
+      setTimeout(() => slot.classList.remove("is-wrong"), 450);
+    }
+  };
+
+  terms.forEach((term) => {
+    term.addEventListener("dragstart", (e) => {
+      draggingId = term.getAttribute("data-match-term");
+      e.dataTransfer.effectAllowed = "move";
+      try { e.dataTransfer.setData("text/plain", draggingId); } catch (err) { /* 忽略 */ }
+      term.classList.add("is-dragging");
+    });
+    term.addEventListener("dragend", () => {
+      term.classList.remove("is-dragging");
+      draggingId = null;
+    });
+    term.addEventListener("click", () => {
+      if (term.classList.contains("is-matched")) return;
+      if (selectedTerm === term) {
+        term.classList.remove("is-selected");
+        selectedTerm = null;
+      } else {
+        if (selectedTerm) selectedTerm.classList.remove("is-selected");
+        selectedTerm = term;
+        term.classList.add("is-selected");
+      }
+    });
+  });
+
+  slots.forEach((slot) => {
+    slot.addEventListener("dragover", (e) => {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = "move";
+      slot.classList.add("is-over");
+    });
+    slot.addEventListener("dragleave", () => slot.classList.remove("is-over"));
+    slot.addEventListener("drop", (e) => {
+      e.preventDefault();
+      slot.classList.remove("is-over");
+      const id = e.dataTransfer.getData("text/plain") || draggingId;
+      const term = terms.find((t) => t.getAttribute("data-match-term") === id);
+      tryMatch(term, slot);
+    });
+    slot.addEventListener("click", () => {
+      if (slot.classList.contains("is-matched")) return;
+      if (selectedTerm) {
+        tryMatch(selectedTerm, slot);
+        selectedTerm.classList.remove("is-selected");
+        selectedTerm = null;
+      }
+    });
+  });
+
+  resetBtn.addEventListener("click", () => {
+    matched = 0;
+    selectedTerm = null;
+    draggingId = null;
+    doneEl.classList.remove("is-show");
+    countEl.textContent = "0";
+    terms.forEach((t) => {
+      t.classList.remove("is-matched", "is-selected", "is-dragging");
+      t.setAttribute("draggable", "true");
+    });
+    slots.forEach((s) => {
+      s.classList.remove("is-matched", "is-over", "is-wrong");
+      s.innerHTML = `<span class="match-slot__desc">${escapeHTML(s.getAttribute("data-slot"))}</span>`;
+    });
+    shuffleTerms();
+  });
+
+  shuffleTerms();
+}
+
+/* ---------- Science 折叠面板 ---------- */
+function initAcc(root) {
+  const head = root.querySelector(".acc-head");
+  const body = root.querySelector(".acc-body");
+  if (!head || !body) return;
+  head.addEventListener("click", () => {
+    const open = head.getAttribute("aria-expanded") === "true";
+    head.setAttribute("aria-expanded", String(!open));
+    body.hidden = open;
+  });
+}
+
+/* ---------- Science 折线图动画 ---------- */
+function initChart(root) {
+  const replay = root.querySelector(".chart-replay");
+  let played = false;
+  const play = () => {
+    root.classList.remove("is-anim");
+    void root.offsetWidth; // 强制重排以重启动画
+    root.classList.add("is-anim");
+  };
+  if (replay) replay.addEventListener("click", play);
+  if ("IntersectionObserver" in window) {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((en) => {
+        if (en.isIntersecting && !played) { played = true; play(); }
+      });
+    }, { threshold: 0.4 });
+    io.observe(root);
+  } else {
+    play();
+  }
+}
+
+/* ---------- Science 标签页切换 ---------- */
+function initTabs(root) {
+  const buttons = root.querySelectorAll(".sci-tab");
+  const panels = root.querySelectorAll(".sci-tabpanel");
+  if (!buttons.length) return;
+  buttons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const targetId = btn.getAttribute("data-tab-target");
+      panels.forEach((p) => { p.hidden = true; });
+      const target = document.getElementById(targetId);
+      if (target) target.hidden = false;
+      buttons.forEach((b) => b.setAttribute("aria-selected", String(b === btn)));
+    });
+  });
+}
+
+/* ---------- Science 交互式总结表格 ---------- */
+function initSummaryTable(root) {
+  const selects = root.querySelectorAll(".st-select");
+  const checkBtn = root.querySelector(".st-check");
+  const result = root.querySelector(".st-result");
+  if (!checkBtn || !selects.length) return;
+  checkBtn.addEventListener("click", () => {
+    let correct = 0;
+    selects.forEach((sel) => {
+      const answer = sel.getAttribute("data-answer");
+      const val = sel.value;
+      const ok = val === answer;
+      if (ok) correct++;
+      sel.classList.toggle("is-correct", ok);
+      sel.classList.toggle("is-wrong", val !== "" && !ok);
+    });
+    result.hidden = false;
+    result.textContent = `${correct} / ${selects.length} correct`;
+    result.classList.toggle("is-all", correct === selects.length);
+  });
+}
+
+/* ---------- Science 章节测验 ---------- */
+function initQuiz(root) {
+  const submitBtn = root.querySelector(".cq-submit");
+  const result = root.querySelector(".cq-result");
+  const questions = root.querySelectorAll(".qq");
+  if (!submitBtn) return;
+
+  submitBtn.addEventListener("click", () => {
+    let score = 0;
+    questions.forEach((q) => {
+      const answer = Number(q.getAttribute("data-answer"));
+      const checked = q.querySelector('input[type=radio]:checked');
+      const opts = q.querySelectorAll(".qq-opt");
+      const fb = q.querySelector(".qq-feedback");
+      const ok = checked ? Number(checked.value) === answer : false;
+      if (ok) score++;
+
+      opts.forEach((opt, oi) => {
+        const input = opt.querySelector("input");
+        const isCorrect = oi === answer;
+        opt.classList.toggle("is-correct", isCorrect);
+        opt.classList.toggle("is-wrong", input.checked && !isCorrect);
+        input.disabled = true;
+      });
+
+      fb.hidden = false;
+      fb.className = "qq-feedback " + (ok ? "is-ok" : "is-bad");
+      fb.textContent = ok ? "✓ Correct" : `✗ Correct answer: ${String.fromCharCode(65 + answer)}`;
+    });
+
+    const dragMatched = root.querySelectorAll(".match-term.is-matched").length;
+    const dragTotal = root.querySelectorAll(".match-term").length;
+    const total = questions.length + dragTotal;
+    const earned = score + dragMatched;
+
+    result.hidden = false;
+    result.innerHTML = `
+      <div class="cq-score">${earned} / ${total}</div>
+      <div class="cq-score-sub">Multiple choice: ${score}/${questions.length} · Drag &amp; drop: ${dragMatched}/${dragTotal}</div>
+      <div class="cq-score-msg">${earned === total ? "🎉 Perfect! Excellent work!" : earned >= total * 0.6 ? "👍 Good job! Review the marked answers." : "💪 Keep practising — check the notes and try again."}</div>`;
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = "✅ Submitted";
+    result.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  });
+}
+
+/* ---------- Science 分节客观题测验（Section A/B） ---------- */
+function initQuizSet(root) {
+  const submitBtn = root.querySelector(".qz-submit");
+  const result = root.querySelector(".qz-result");
+  if (!submitBtn) return;
+
+  // T/F 按钮：互斥选中
+  root.querySelectorAll(".qz-tf-btns").forEach((group) => {
+    group.querySelectorAll(".qz-tf-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        if (btn.disabled) return;
+        group.querySelectorAll(".qz-tf-btn").forEach((b) => b.classList.remove("is-on"));
+        btn.classList.add("is-on");
+      });
+    });
+  });
+
+  submitBtn.addEventListener("click", () => {
+    let total = 0;
+    let correct = 0;
+
+    // 1) 下拉选择（照片匹配 / 选词填空 / 填图 / 填表）
+    root.querySelectorAll("select.qz-sel[data-answer]").forEach((sel) => {
+      total++;
+      const ok = sel.value === sel.getAttribute("data-answer");
+      if (ok) correct++;
+      sel.classList.toggle("is-correct", ok);
+      sel.classList.toggle("is-wrong", !ok);
+      sel.disabled = true;
+    });
+
+    // 2) 单选题（含粒子图）
+    root.querySelectorAll(".qz-mc[data-answer]").forEach((q) => {
+      total++;
+      const ans = Number(q.getAttribute("data-answer"));
+      const checked = q.querySelector('input[type=radio]:checked');
+      const ok = checked ? Number(checked.value) === ans : false;
+      if (ok) correct++;
+      q.querySelectorAll(".qz-opt, .qz-particle-opt").forEach((opt, oi) => {
+        const inp = opt.querySelector("input");
+        const isCorrect = oi === ans;
+        opt.classList.toggle("is-correct", isCorrect);
+        opt.classList.toggle("is-wrong", !!inp && inp.checked && !isCorrect);
+        if (inp) inp.disabled = true;
+      });
+      const fb = q.querySelector(".qz-fb");
+      if (fb) {
+        fb.hidden = false;
+        fb.className = "qz-fb " + (ok ? "is-ok" : "is-bad");
+        fb.textContent = ok ? "✓ Correct" : `✗ Correct answer: ${String.fromCharCode(65 + ans)}`;
+      }
+    });
+
+    // 3) 判断题 T/F
+    root.querySelectorAll(".qz-tf-btns[data-answer]").forEach((group) => {
+      total++;
+      const ans = group.getAttribute("data-answer");
+      const on = group.querySelector(".qz-tf-btn.is-on");
+      const ok = on ? on.getAttribute("data-val") === ans : false;
+      if (ok) correct++;
+      group.querySelectorAll(".qz-tf-btn").forEach((b) => {
+        const good = b.getAttribute("data-val") === ans;
+        b.classList.toggle("is-correct", good);
+        b.classList.toggle("is-wrong", b.classList.contains("is-on") && !good);
+        b.disabled = true;
+      });
+    });
+
+    const pct = total ? Math.round((correct / total) * 100) : 0;
+    result.hidden = false;
+    result.innerHTML = `
+      <div class="qz-score">${correct} / ${total}</div>
+      <div class="qz-score-sub">Objective marks earned out of ${total}</div>
+      <div class="qz-score-msg">${correct === total ? "🎉 Perfect! Excellent work!" : pct >= 60 ? "👍 Good job! Review the marked answers." : "💪 Keep practising — check the notes and try again."}</div>`;
+    submitBtn.disabled = true;
+    submitBtn.textContent = "✅ Submitted";
+    result.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  });
+}
+
+/* ---------- 图片灯箱（全局委托，绑定一次；支持单图 + 多图画廊） ---------- */
+(function initLightbox() {
+  const lb = document.getElementById("lightbox");
+  if (!lb) return;
+  const img = lb.querySelector("img");
+  const cap = lb.querySelector(".lightbox__caption");
+  const countEl = lb.querySelector(".lightbox__count");
+  const prevBtn = lb.querySelector(".lightbox__prev");
+  const nextBtn = lb.querySelector(".lightbox__next");
+
+  let gallery = [];
+  let index = 0;
+
+  const renderItem = () => {
+    const it = gallery[index];
+    if (!it) return;
+    img.src = it.src;
+    cap.textContent = it.cap || "";
+    const multi = gallery.length > 1;
+    countEl.textContent = multi ? `${index + 1} / ${gallery.length}` : "";
+    countEl.hidden = !multi;
+    prevBtn.hidden = !multi;
+    nextBtn.hidden = !multi;
+  };
+
+  const open = (items, startIndex) => {
+    gallery = Array.isArray(items) && items.length ? items : [];
+    if (!gallery.length) return;
+    index = Math.max(0, Math.min(startIndex || 0, gallery.length - 1));
+    renderItem();
+    lb.classList.add("is-show");
+    lb.setAttribute("aria-hidden", "false");
+    document.body.style.overflow = "hidden";
+  };
+
+  const close = () => {
+    lb.classList.remove("is-show");
+    lb.setAttribute("aria-hidden", "true");
+    document.body.style.overflow = "";
+    img.removeAttribute("src");
+    cap.textContent = "";
+    countEl.textContent = "";
+    gallery = [];
+    index = 0;
+  };
+
+  const step = (d) => {
+    if (gallery.length <= 1) return;
+    index = (index + d + gallery.length) % gallery.length;
+    renderItem();
+  };
+
+  document.addEventListener("click", (e) => {
+    const fig = e.target.closest("[data-lightbox]");
+    if (fig) {
+      open([{ src: fig.getAttribute("data-lightbox"), cap: fig.getAttribute("data-cap") || "" }], 0);
+      return;
+    }
+    const gal = e.target.closest("[data-gallery]");
+    if (gal) {
+      let items = [];
+      try { items = JSON.parse(gal.getAttribute("data-gallery") || "[]"); } catch (err) { items = []; }
+      open(items, 0);
+      return;
+    }
+    if (e.target.closest(".lightbox__close")) { close(); return; }
+    if (e.target.closest(".lightbox__prev")) { step(-1); return; }
+    if (e.target.closest(".lightbox__next")) { step(1); return; }
+    if (e.target === lb) close();
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (!lb.classList.contains("is-show")) return;
+    if (e.key === "Escape") { close(); return; }
+    if (e.key === "ArrowLeft") step(-1);
+    if (e.key === "ArrowRight") step(1);
+  });
+})();
+
+// 为站内相对链接自动附加 sharecode（如 s1-ict-quiz.html），
+// 保证发布后的子页面在分享链接下也能正常访问；本地 file:// 打开时不受影响。
+function attachShareCode() {
+  const sc = new URLSearchParams(location.search).get("sharecode");
+  if (!sc) return;
+  document.querySelectorAll("a[data-keep-share]").forEach((a) => {
+    const base = a.getAttribute("href");
+    if (!base) return;
+    try {
+      const url = new URL(base, location.href);
+      url.searchParams.set("sharecode", sc);
+      a.setAttribute("href", url.pathname + url.search + url.hash);
+    } catch (e) {
+      /* 忽略非法链接 */
+    }
+  });
+}
+
+/* =========================================================================
+   6. 手机端抽屉
+   ========================================================================= */
+const body = document.body;
+function openDrawer() {
+  body.classList.add("drawer-open");
+  $("#backdrop").hidden = false;
+  $("#hamburger").setAttribute("aria-expanded", "true");
+}
+function closeDrawer() {
+  body.classList.remove("drawer-open");
+  $("#hamburger").setAttribute("aria-expanded", "false");
+  const bd = $("#backdrop");
+  if (!body.classList.contains("drawer-open")) {
+    setTimeout(() => { if (!body.classList.contains("drawer-open")) bd.hidden = true; }, 240);
+  }
+}
+$("#hamburger").addEventListener("click", () => {
+  body.classList.contains("drawer-open") ? closeDrawer() : openDrawer();
+});
+$("#sidebarClose").addEventListener("click", closeDrawer);
+$("#backdrop").addEventListener("click", closeDrawer);
+document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeDrawer(); });
+window.addEventListener("resize", () => { if (window.innerWidth > 900) closeDrawer(); });
+
+/* =========================================================================
+   7. 启动
+   ========================================================================= */
+// 校验本地记忆的年级/科目，避免非法值导致渲染异常
+(function sanitizeState() {
+  if (!CONFIG.grades.includes(state.grade)) state.grade = CONFIG.defaultGrade;
+  if (!findSubject(state.grade, state.subject)) state.subject = defaultSubjectFor(state.grade);
+})();
+renderGrades();
+renderNav();
+renderMain();
+$("#backdrop").hidden = true;
+</script>
+</body>
+</html>
