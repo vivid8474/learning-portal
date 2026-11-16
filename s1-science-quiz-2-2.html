@@ -1,0 +1,1354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>S1 Science · Water Quiz (2.2)</title>
+<style>
+:root{
+  --brand:#2563eb;
+  --brand-ink:#1d4ed8;
+  --ink:#1e293b;
+  --ink-2:#475569;
+  --muted:#94a3b8;
+  --line:#e2e8f0;
+  --bg:#f5f7fb;
+  --card:#ffffff;
+  --shadow:0 4px 16px rgba(15,23,42,.06);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+html{scroll-padding-top:16px}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",sans-serif;
+  background:var(--bg);color:var(--ink);line-height:1.55;
+}
+.wrap{max-width:860px;margin:0 auto;padding:24px 16px 60px}
+
+/* 顶部标题 */
+.topbar{text-align:center;padding:8px 0 20px}
+.topbar h1{font-size:26px;font-weight:800;margin:0;letter-spacing:.2px;color:var(--ink)}
+.topbar p{margin:8px auto 0;color:var(--muted);font-size:14px;max-width:560px}
+.topbar .badge{display:inline-block;margin-top:10px;font-size:12.5px;font-weight:700;color:#1e3a8a;background:#eef4ff;border:1px solid #d5e2fb;border-radius:999px;padding:4px 14px}
+.topbar-nav{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:14px}
+.topbar-nav a{display:inline-flex;align-items:center;gap:5px;font-size:13px;font-weight:700;color:#1e3a8a;background:#eef4ff;border:1px solid #d5e2fb;border-radius:999px;padding:6px 14px;text-decoration:none;transition:.15s}
+.topbar-nav a:hover{background:#dbe7ff;border-color:#bcd0f2}
+
+/* 图片灯箱 */
+.lightbox{position:fixed;inset:0;z-index:200;background:rgba(10,16,26,.9);display:flex;align-items:center;justify-content:center;padding:24px;opacity:0;pointer-events:none;transition:opacity .22s;cursor:zoom-out}
+.lightbox.is-show{opacity:1;pointer-events:auto}
+.lightbox img{max-width:100%;max-height:100%;border-radius:8px;box-shadow:0 24px 70px rgba(0,0,0,.5);background:#fff}
+.lightbox__close{position:absolute;top:18px;right:20px;width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.14);color:#fff;border:0;font-size:22px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1}
+.lightbox__caption{position:absolute;left:50%;bottom:22px;transform:translateX(-50%);color:#fff;font-size:13px;background:rgba(0,0,0,.45);padding:6px 14px;border-radius:999px;max-width:calc(100vw - 40px);text-align:center}
+.lightbox__nav{position:absolute;top:50%;transform:translateY(-50%);width:46px;height:46px;border-radius:50%;border:0;cursor:pointer;background:rgba(255,255,255,.14);color:#fff;font-size:30px;line-height:1;display:flex;align-items:center;justify-content:center;transition:background .15s}
+.lightbox__nav:hover{background:rgba(255,255,255,.28)}
+.lightbox__prev{left:14px}
+.lightbox__next{right:14px}
+.lightbox__count{position:absolute;top:22px;left:50%;transform:translateX(-50%);color:#fff;font-size:13px;background:rgba(0,0,0,.45);padding:5px 13px;border-radius:999px;font-variant-numeric:tabular-nums}
+
+/* 查看原书页按钮 */
+.btn-view{display:block;margin:18px auto 0;border:1.5px solid #d5e0f0;background:#fff;color:#1e3a8a;font-weight:700;font-size:14px;border-radius:10px;padding:11px 22px;cursor:pointer;transition:.15s}
+.btn-view:hover{border-color:#2f6bff;color:#2f6bff}
+
+/* Science 章节测验 · 分节客观题 */
+.qz-set{border:1px solid #e3ecf9;border-radius:16px;background:#fff;padding:16px;margin:4px 0}
+.qz-title{font-size:17px;font-weight:900;color:#1e3a8a;margin-bottom:4px}
+.qz-intro{font-size:13px;color:#64748b;margin-bottom:14px}
+.qz-section{border:1px solid #e8eff9;border-radius:14px;margin-bottom:0;overflow:hidden;background:#fff}
+.qz-divider{border-top:2px dashed #cbd5e1;margin:34px 0}
+.qz-sec-head{display:flex;align-items:center;gap:9px;padding:13px 16px;background:#f0f6ff;border-bottom:1px solid #e8eff9}
+.qz-sec-icon{font-size:19px;line-height:1}
+.qz-sec-title{font-size:15px;font-weight:900;color:#1e3a8a}
+.qz-sec-sub{font-size:11.5px;font-weight:700;color:#64748b;background:#eef2f9;border-radius:999px;padding:2px 9px;margin-left:auto;white-space:nowrap}
+.qz-block{background:#f8f9fa;border:1px solid #eef1f5;border-radius:12px;padding:20px;margin:16px 16px 24px}
+.qz-block:last-child{margin-bottom:16px}
+.qz-block--level,.qz-block--note{background:transparent;border:0;border-radius:0;padding:0;margin:6px 16px 18px}
+.qz-block--level:first-child,.qz-block--note:first-child{margin-top:16px}
+.qz-block-title{font-size:15.5px;font-weight:900;color:#1e3a8a;margin-bottom:10px}
+.qz-block-intro{font-size:12.5px;color:#64748b;line-height:1.55;margin-bottom:10px}
+.qz-level{display:inline-block;font-size:12px;font-weight:900;letter-spacing:.5px;color:#fff;background:#2f6bff;border:1px solid #2f6bff;border-radius:999px;padding:4px 14px;box-shadow:0 2px 8px rgba(47,107,255,.25)}
+/* 照片下拉匹配 */
+.qz-photo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.qz-photo{border:1px solid #e3ecf9;border-radius:11px;padding:10px;background:#fbfcff;display:flex;flex-direction:column;gap:8px}
+.qz-photo img{width:100%;height:110px;object-fit:cover;border-radius:8px;border:1px solid #eef2f9;background:#fff}
+.qz-photo-cap{font-size:12px;color:#33415c;font-weight:600;line-height:1.4}
+.qz-photo .qz-sel{font-size:12px;padding:6px 7px}
+/* 下拉 */
+.qz-sel{width:100%;border:1.5px solid #d5e0f0;border-radius:8px;padding:7px 9px;font-size:13px;color:#1e293b;background:#fff;font-weight:600;cursor:pointer;transition:border-color .12s,background .12s}
+.qz-sel:focus{outline:none;border-color:#2f6bff}
+.qz-sel.is-correct{border-color:#22a06b;background:#e6f6ec;color:#14683f}
+.qz-sel.is-wrong{border-color:#e11d48;background:#fff1f2;color:#be123c}
+/* 单选题 */
+.qz-mc{margin-bottom:12px}
+.qz-mc:last-child{margin-bottom:0}
+.qz-mc-text{font-size:14px;color:#1e293b;font-weight:700;line-height:1.5;margin-bottom:10px}
+.qz-mark{color:#e11d48;font-weight:900;font-size:1.25em;text-decoration:underline;background:#fff1f2;border-radius:4px;padding:0 3px;white-space:nowrap}
+.qz-mark::before{content:"⚠️ ";font-size:.9em}
+.qz-hint{font-size:12px;color:#b45309;background:#fff7e6;border:1px solid #fde68a;border-radius:8px;padding:7px 10px;line-height:1.45;margin-bottom:9px}
+.qz-options{display:flex;flex-direction:column;gap:6px}
+.qz-opt{display:flex;align-items:center;gap:9px;cursor:pointer;border:1.5px solid #e3ecf9;border-radius:9px;padding:8px 11px;transition:border-color .12s,background .12s}
+.qz-opt:hover{border-color:#bcd0f2;background:#f5f9ff}
+.qz-opt input{accent-color:#2f6bff;margin:0}
+.qz-opt__label{font-size:13px;color:#33415c;font-weight:600;line-height:1.4}
+.qz-opt.is-correct{border-color:#22a06b;background:#e6f6ec}
+.qz-opt.is-correct .qz-opt__label{color:#14683f}
+.qz-opt.is-wrong{border-color:#e11d48;background:#fff1f2}
+.qz-opt.is-wrong .qz-opt__label{color:#be123c}
+.qz-fb{font-size:12.5px;font-weight:700;margin-top:6px}
+.qz-fb.is-ok{color:#14683f}
+.qz-fb.is-bad{color:#be123c}
+/* 折线图 */
+.qq-graph-block{border:1px solid #e8eff9;border-radius:11px;background:#fbfcff;padding:10px;margin-bottom:14px;text-align:center}
+.qq-graph{display:block;width:100%;max-width:340px;height:auto;margin:0 auto}
+.qq-graph-cap{font-size:12.5px;color:#64748b;line-height:1.5;margin-top:6px;text-align:left}
+/* 选词填空 */
+.qz-wordbank{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.qz-word{font-size:12px;font-weight:700;color:#1e3a8a;background:#eef4ff;border:1px solid #d5e2fb;border-radius:999px;padding:3px 10px}
+.qz-fill-item{margin-bottom:10px;line-height:1.75}
+.qz-fill-item:last-child{margin-bottom:0}
+.qz-fill-label{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;background:#2f6bff;color:#fff;font-size:12px;font-weight:900;margin-right:8px;vertical-align:middle;box-shadow:0 2px 6px rgba(47,107,255,.3)}
+.qz-fill-text{font-size:13.5px;color:#1e293b;font-weight:600}
+.qz-fill-item .qz-sel{display:inline-block;width:auto;min-width:74px;padding:3px 6px;font-size:12.5px;margin:0 2px;vertical-align:middle}
+/* 判断 T/F */
+.qz-tf-item{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid #f1f5fb}
+.qz-tf-item:last-child{border-bottom:0}
+.qz-tf-q{flex:1;font-size:13.5px;color:#1e293b;font-weight:700;line-height:1.45}
+.qz-tf-btns{display:flex;gap:6px;flex:0 0 auto}
+.qz-tf-btn{width:42px;height:34px;border-radius:8px;border:1.5px solid #d5e0f0;background:#fff;color:#33415c;font-weight:800;font-size:14px;cursor:pointer;transition:all .12s}
+.qz-tf-btn:hover{border-color:#bcd0f2}
+.qz-tf-btn.is-on{border-color:#2f6bff;background:#2f6bff;color:#fff}
+.qz-tf-btn.is-correct{border-color:#22a06b;background:#e6f6ec;color:#14683f}
+.qz-tf-btn.is-wrong{border-color:#e11d48;background:#fff1f2;color:#be123c}
+.qz-tf-btn:disabled{cursor:default}
+/* 粒子图选择题 */
+.qz-particle-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.qz-particle-opt{position:relative;border:1.5px solid #e3ecf9;border-radius:11px;padding:10px;cursor:pointer;transition:border-color .12s,background .12s;background:#fff}
+.qz-particle-opt:hover{border-color:#bcd0f2;background:#f5f9ff}
+.qz-particle-opt input{position:absolute;left:10px;top:10px;margin:0;accent-color:#2f6bff}
+.qz-particle-opt .qz-opt-label{position:absolute;left:32px;top:8px;font-size:12px;font-weight:800;color:#33415c}
+.qz-particle-pair{display:flex;align-items:center;gap:8px;margin-top:22px;justify-content:center}
+.qz-pbox{position:relative;width:74px;height:74px;border:1px solid #dbe6f5;border-radius:8px;background:#fbfdff;flex:0 0 auto}
+.qz-pdot{position:absolute;width:9px;height:9px;border-radius:50%;background:#2f6bff;transform:translate(-50%,-50%)}
+.qz-arrow{font-size:20px;color:#94a3b8;font-weight:800}
+.qz-particle-opt.is-correct{border-color:#22a06b;background:#e6f6ec}
+.qz-particle-opt.is-wrong{border-color:#e11d48;background:#fff1f2}
+/* 状态变化填图 */
+.qz-diagram-wrap{text-align:center}
+.qz-diagram{width:100%;max-width:460px;height:auto}
+.qz-diagram-labels{margin-top:10px;display:flex;flex-direction:column;gap:8px}
+.qz-diag-label{display:flex;align-items:center;gap:8px;font-size:12.5px;font-weight:700;color:#33415c}
+.qz-diag-num{display:inline-flex;align-items:center;justify-content:center;min-width:28px;height:28px;padding:0 8px;border-radius:8px;background:#2f6bff;color:#fff;font-size:13px;font-weight:900;flex:0 0 auto;border:1px solid #2f6bff}
+.qz-diag-label .qz-sel{flex:1;max-width:220px}
+/* 状态变化填表 */
+.qz-table-wrap{overflow-x:auto}
+.qz-table{width:100%;border-collapse:collapse;font-size:12.5px}
+.qz-table th,.qz-table td{border:1px solid #dbe6f5;padding:8px 7px;text-align:left;vertical-align:middle}
+.qz-table th{background:#f0f6ff;color:#1e3a8a;font-weight:800;font-size:11.5px}
+.qz-table td{color:#33415c;font-weight:600;line-height:1.5}
+.qz-table .qz-sel{width:100%;min-width:96px;padding:5px 6px;font-size:12px}
+.qz-table td .qz-sel{display:inline-block;width:auto;min-width:96px;margin:1px 2px;vertical-align:middle}
+/* Section C · 简答题 */
+.qz-essay-item{margin-bottom:18px}
+.qz-essay-item:last-child{margin-bottom:0}
+.qz-essay-q{font-size:14px;color:#1e293b;font-weight:700;line-height:1.5;margin-bottom:8px}
+.qz-essay-marks{font-size:11.5px;font-weight:700;color:#64748b;margin-left:4px;white-space:nowrap}
+.qz-ta{width:100%;min-height:88px;border:1.5px solid #d5e0f0;border-radius:9px;padding:9px 11px;font-size:13.5px;color:#1e293b;font-family:inherit;resize:vertical;background:#fff}
+.qz-ta:focus{outline:none;border-color:#2f6bff}
+.qz-ans-toggle{display:inline-flex;align-items:center;gap:6px;margin-top:9px;border:1.5px solid #f0c060;background:#fff7e6;color:#b45309;font-weight:700;font-size:13px;border-radius:9px;padding:8px 14px;cursor:pointer;transition:.15s}
+.qz-ans-toggle:hover{background:#fff1d6}
+.qz-ans-caret{font-size:10px;transition:transform .2s}
+.qz-ans-toggle[aria-expanded="true"] .qz-ans-caret{transform:rotate(180deg)}
+.qz-ans-body{margin-top:10px;border:1.5px solid #f0c060;border-radius:10px;background:#fffbef;padding:12px;display:none}
+.qz-ans-body.is-show{display:block}
+.qz-ans-label{font-size:11px;font-weight:800;color:#b45309;letter-spacing:.4px;margin-bottom:7px}
+.qz-ans-img{max-width:100%;max-height:150px;border-radius:8px;border:1px solid #eee2c0;margin-bottom:8px;display:block;background:#fff}
+.qz-ans-text{font-size:13px;color:#33415c;line-height:1.55;font-weight:600}
+/* Section C · 多选题 */
+.qz-cb-item{display:flex;align-items:flex-start;gap:9px;padding:10px 12px;border:1.5px solid #e3ecf9;border-radius:9px;margin-bottom:7px;cursor:pointer;transition:.12s}
+.qz-cb-item:last-child{margin-bottom:0}
+.qz-cb-item:hover{border-color:#bcd0f2;background:#f5f9ff}
+.qz-cb-item input{margin-top:3px;accent-color:#2f6bff;flex:0 0 auto}
+.qz-cb-item span{font-size:13px;color:#33415c;font-weight:600;line-height:1.45}
+.qz-cb-item.is-correct{border-color:#22a06b;background:#e6f6ec}
+.qz-cb-item.is-correct span{color:#14683f}
+.qz-cb-item.is-wrong{border-color:#e11d48;background:#fff1f2}
+.qz-cb-item.is-wrong span{color:#be123c}
+/* Section C · 短文本填空 */
+.qz-short-item{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid #f1f5fb}
+.qz-short-item:last-child{border-bottom:0}
+.qz-short-label{font-size:13px;font-weight:700;color:#33415c;flex:0 0 auto;min-width:92px}
+.qz-short-input{flex:1;min-width:0}
+.qz-short{width:100%;border:1.5px solid #d5e0f0;border-radius:8px;padding:8px 10px;font-size:13px;font-weight:600;color:#1e293b;background:#fff}
+.qz-short:focus{outline:none;border-color:#2f6bff}
+.qz-short.is-correct{border-color:#22a06b;background:#e6f6ec;color:#14683f}
+.qz-short.is-wrong{border-color:#e11d48;background:#fff1f2;color:#be123c}
+.qz-graph-img{width:100%;max-width:420px;height:auto;border:1px solid #e3ecf9;border-radius:10px;display:block;margin:0 auto 4px;background:#fff}
+.qz-graph-img-cap{font-size:12px;color:#64748b;text-align:center;margin-bottom:6px}
+/* Section C · Canvas 画图题 */
+.qz-sea{display:grid;grid-template-columns:1.15fr 1fr;gap:16px;align-items:start}
+.qz-sea-canvas{width:100%;max-width:540px;height:auto;border:1px solid #e3ecf9;border-radius:10px;background:#fbfdff;touch-action:none;cursor:crosshair;display:block}
+.qz-sea-side{display:flex;flex-direction:column;gap:12px}
+.qz-sea-table{width:100%;border-collapse:collapse;font-size:12px;text-align:center}
+.qz-sea-table th,.qz-sea-table td{border:1px solid #dbe6f5;padding:5px 3px;font-weight:700}
+.qz-sea-table th{background:#f0f6ff;color:#1e3a8a;font-size:11px}
+.qz-sea-table td{color:#33415c}
+.qz-sea-table-wrap{overflow-x:auto}
+.qz-sea-actions{display:flex;gap:10px;flex-wrap:wrap}
+.qz-sea-btn{border:1.5px solid #2f6bff;background:#fff;color:#2f6bff;font-weight:800;font-size:13px;border-radius:9px;padding:9px 16px;cursor:pointer;transition:.15s}
+.qz-sea-btn:hover{background:#2f6bff;color:#fff}
+.qz-sea-btn.is-ghost{border-color:#d5e0f0;color:#64748b}
+.qz-sea-btn.is-ghost:hover{background:#f1f5fb;color:#33415c}
+.qz-sea-feedback{font-size:13px;font-weight:700;padding:10px 12px;border-radius:9px;display:none;line-height:1.5}
+.qz-sea-feedback.is-ok{display:block;background:#e6f6ec;color:#14683f;border:1px solid #bfe6ce}
+.qz-sea-feedback.is-bad{display:block;background:#fff1f2;color:#be123c;border:1px solid #fecdd3}
+.qz-sea-fill{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.qz-sea-fill-label{font-size:13px;font-weight:700;color:#33415c}
+.qz-sea-fill .qz-short{width:auto;max-width:110px}
+.qz-score-note{font-size:12px;color:#64748b;margin-top:9px;line-height:1.5}
+/* 提交与结果 */
+.qz-actions{margin-top:26px}
+.qz-submit{border:1px solid #22a06b;background:#22a06b;color:#fff;font-weight:800;font-size:15px;border-radius:10px;padding:12px 24px;cursor:pointer;width:100%}
+.qz-submit:hover{background:#1a865a;border-color:#1a865a}
+.qz-submit:disabled{background:#94a3b8;border-color:#94a3b8;cursor:default}
+.qz-result{margin-top:14px;border:1px solid #e3ecf9;border-radius:12px;background:#f7faff;padding:16px;text-align:center}
+.qz-score{font-size:34px;font-weight:900;color:#1e3a8a;line-height:1.1}
+.qz-score-sub{font-size:13px;color:#64748b;margin-top:6px}
+.qz-score-msg{font-size:14px;font-weight:700;color:#1e3a8a;margin-top:10px}
+
+/* 扫码分享卡片 */
+.share-card{margin:30px auto 0;max-width:360px;padding:24px 20px;background:var(--card);border:1px solid var(--line);border-radius:18px;display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center;box-shadow:var(--shadow)}
+.share-qr{width:150px;height:150px;display:flex;align-items:center;justify-content:center;border:1px solid #eef2f7;border-radius:12px;background:#fff;overflow:hidden}
+.share-qr canvas,.share-qr img{display:block;width:150px;height:150px}
+.share-title{font-size:15px;font-weight:750;color:var(--ink);margin:0}
+.share-sub{font-size:12.5px;color:var(--muted);margin:0;letter-spacing:.2px}
+.share-qr-fallback{font-size:13px;color:var(--muted)}
+
+/* toast */
+.toast{position:fixed;left:50%;bottom:30px;transform:translateX(-50%) translateY(20px);background:#111827;color:#fff;padding:11px 20px;border-radius:999px;font-size:14px;opacity:0;pointer-events:none;transition:.25s;z-index:50;max-width:90vw}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+@media (max-width:560px){
+  .topbar h1{font-size:21px}
+  .qz-block{padding:16px;margin:12px 12px 20px}
+  .qz-block--level,.qz-block--note{margin:4px 12px 16px}
+  .lightbox__nav{width:38px;height:38px;font-size:24px}
+  .lightbox__prev{left:6px}
+  .lightbox__next{right:6px}
+  .qz-photo-grid{grid-template-columns:1fr}
+  .qz-particle-grid{grid-template-columns:1fr}
+  .qz-photo img{height:auto;max-height:170px}
+  .qz-tf-item{flex-direction:column;align-items:flex-start}
+  .qz-tf-btns{align-self:flex-end}
+  .qz-sea{grid-template-columns:1fr}
+  .qz-short-item{flex-direction:column;align-items:stretch}
+  .qz-short-label{min-width:0}
+  .qz-ans-img{max-height:180px}
+}
+  /* ---------- 2.2 对比图 ---------- */
+  .qz-img{text-align:center;margin:6px 0}
+  .qz-img img{max-width:100%;border-radius:12px;border:1px solid var(--line);background:#fff}
+  .qz-img figcaption{font-size:12.5px;color:#64748b;margin-top:6px}
+
+  /* ---------- 2.2 变量分类拖拽 ---------- */
+  .dc-game{background:#f8fbff;border:1px solid var(--line);border-radius:14px;padding:14px;margin:4px 0}
+  .dc-cards{display:flex;flex-wrap:wrap;gap:8px;padding:12px;background:#fff;border:1.5px dashed #d5e2fb;border-radius:10px;margin-bottom:12px;min-height:56px}
+  .dc-card{display:inline-flex;align-items:center;padding:8px 14px;background:#eef4ff;border:1.5px solid #d5e2fb;border-radius:999px;font-size:13.5px;font-weight:700;color:#1e3a8a;cursor:grab;user-select:none;transition:.15s}
+  .dc-card:hover{border-color:#2f6bff}
+  .dc-card.is-sel{border-color:#2f6bff;background:#2f6bff;color:#fff;box-shadow:0 3px 10px rgba(47,107,255,.35)}
+  .dc-card.is-correct{border-color:#22a06b;background:#ecfdf3;color:#14683f}
+  .dc-card.is-wrong{border-color:#e11d48;background:#fff1f2;color:#be123c}
+  .dc-slots{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+  .dc-slot{background:#fff;border:2px dashed #c7d6ee;border-radius:10px;padding:8px;cursor:pointer}
+  .dc-slot-head{font-size:12px;color:#33415c;margin-bottom:8px;text-align:center}
+  .dc-slot-head b{display:block;font-size:13px;color:#1e3a8a}
+  .dc-slot-head span{font-size:11px;color:#77879c}
+  .dc-slot-drop{min-height:58px;display:flex;flex-direction:column;gap:6px;align-items:center;padding:6px}
+  .dc-fb{font-size:13.5px;font-weight:700;margin-top:10px}
+  .dc-fb.is-ok{color:#14683f}
+  .dc-fb.is-bad{color:#be123c}
+
+  /* ---------- 2.2 Key Point 选词填空 ---------- */
+  .qz-kp{display:flex;flex-direction:column;gap:10px}
+  .qz-kp-item{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:14.5px;color:#33415c;background:#fff8e6;border:1px solid #f5e6b8;border-radius:10px;padding:10px 14px}
+  .qz-kp-label{font-weight:600}
+  .qz-kp-item .qz-sel{min-width:110px}
+
+  /* ---------- 2.2 水循环标图 + 对比探究 ---------- */
+  .qz-diagram--cycle{max-width:600px}
+  .qz-compare-img{width:100%;max-width:520px;height:auto;border:1px solid #e3ecf9;border-radius:11px;display:block;margin:0 auto 6px;background:#fff}
+  .qz-compare-cap{font-size:12px;color:#64748b;text-align:center;margin-bottom:12px;line-height:1.55}
+  .qz-compare-choice .qz-options{display:flex;gap:10px;flex-wrap:wrap}
+  .qz-compare-choice .qz-opt{flex:1 1 90px;min-width:70px;justify-content:center}
+  .qz-compare-choice .qz-opt__label{font-size:15px;font-weight:800}
+  .qz-compare-reason{margin-top:4px}
+
+  @media(max-width:680px){
+    .dc-slots{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="topbar">
+    <h1>S1 Science · Water Quiz (2.2)</h1>
+    <p>Chapter 2.2 — Water cycle · Workbook section exercise (Level 1 &amp; Level 2). Answer each question, then press “Submit &amp; mark”.</p>
+    <span class="badge">📚 Workbook P.39–41</span>
+    <nav class="topbar-nav">
+      <a href="s1-science-notes-2-2.html" data-keep-share>📖 Back to Note</a>
+      <a href="index.html" data-keep-share>🏠 Back to Home</a>
+    </nav>
+  </header>
+
+  <div id="quiz-root"></div>
+
+  <button class="btn-view" id="view-pages" type="button">📖 View original textbook &amp; workbook pages</button>
+
+  <section class="share-card" aria-label="扫码分享">
+    <div class="share-qr" id="share-qr"></div>
+    <p class="share-title">📱 S1 Science 水专题测验（手机扫码即测）</p>
+    <p class="share-sub">Workbook P.39–41 · Level 1 + Level 2 自动批改</p>
+  </section>
+</div>
+
+<div class="lightbox" id="lightbox" aria-hidden="true">
+  <button class="lightbox__close" type="button" aria-label="Close">×</button>
+  <button class="lightbox__nav lightbox__prev" type="button" aria-label="Previous">‹</button>
+  <button class="lightbox__nav lightbox__next" type="button" aria-label="Next">›</button>
+  <span class="lightbox__count"></span>
+  <img alt="Original page">
+  <div class="lightbox__caption"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="vendor/qrcode.min.js"></script>
+<script>
+const escapeHTML = (str) =>
+  String(str).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+const extractInts = (s) => (String(s).match(/\d+/g) || []).map(Number);
+const extractSigned = (s) => (String(s).replace(/[\u2212\u2013\u2014]/g, "-").match(/-?\d+/g) || []).map(Number);
+
+/* ---------- 测验数据 ---------- */
+const QUIZSET = {
+  title: "Section exercise 2.2 · Water cycle",
+  intro: "Workbook P.39–41 · Level 1 and Level 2 questions. Answer everything, then press “Submit & mark” for your objective score.",
+  sections: [
+    {
+      id: "A",
+      icon: "🟢",
+      title: "Section A · Level 1",
+      sub: "Workbook P.39",
+      blocks: [
+        { kind: "level", text: "Level 1 · Textbook p.92–103" },
+        { kind: "fill",
+          title: "A. Fill in the blanks",
+          intro: "Choose the correct word from the word bank for each blank. (6 marks)",
+          wordbank: ["clouds", "droplets", "humidity", "precipitation", "speed", "surface", "temperature", "transportation"],
+          items: [
+            { label: "1", parts: [
+              { text: "In the water cycle, " },
+              { blank: "clouds" },
+              { text: " are formed when water vapour cools down and condenses to form small water " },
+              { blank: "droplets" },
+              { text: "." }
+            ] },
+            { label: "2", parts: [
+              { text: "The rate of evaporation of water is higher when the " },
+              { blank: "surface" },
+              { text: " area exposed to air is larger, when the " },
+              { blank: "humidity" },
+              { text: " is lower, when the " },
+              { blank: "temperature" },
+              { text: " is higher and when the air " },
+              { blank: "speed" },
+              { text: " is higher." }
+            ] }
+          ] },
+        { kind: "tf",
+          title: "B. True or false",
+          intro: "Choose T (true) or F (false) for each statement. (4 marks)",
+          items: [
+            { q: "In nature, water keeps changing between ice and water vapour.", answer: "F" },
+            { q: "Wind can carry clouds to another place.", answer: "T" },
+            { q: "In the water cycle, energy from the sun evaporates water from the sea.", answer: "T" },
+            { q: "The higher the temperature, the lower the rate of evaporation of water.", answer: "F" }
+          ] }
+      ]
+    },
+    {
+      id: "B",
+      icon: "🔵",
+      title: "Section B · Level 2",
+      sub: "Workbook P.39–41",
+      blocks: [
+        { kind: "level", text: "Level 2" },
+        { kind: "note", text: "Questions 1–3 refer to the simulation of formation of rain (Practical 2.2)." },
+        { kind: "image",
+          src: "images/science/ch2/practical2-2-setup.jpg",
+          caption: "Practical 2.2 set-up — hot water, hot pebbles and a cold metal dish holding ice" },
+        { kind: "mc",
+          title: "A. Multiple-choice",
+          intro: "Choose the best answer. (4 marks)",
+          items: [
+            { q: "1. Which of the following statements about the water in Nature is correct?",
+              options: [
+                "The Earth as a whole loses water due to evaporation.",
+                "The Earth as a whole gains water due to condensation.",
+                "Water in the sea changes from liquid water to water vapour.",
+                "Water droplets in the sky do NOT return to the ground."
+              ], answer: 2 },
+            { q: "2. In the simulation, the bag of ice is used to…",
+              options: [
+                "cool down the pebbles in the water.",
+                "cool down the water in the large beaker.",
+                "cool down the water vapour inside the large beaker.",
+                "act as the water source of the rain."
+              ], answer: 2 },
+            { q: "3. Which of the following processes of the water cycle is NOT shown in this simulation?",
+              options: ["Evaporation", "Condensation", "Transportation", "Precipitation"], answer: 2 },
+            { q: "4. A closed wet umbrella is put near the window. Which of the following actions can make the wet umbrella dry faster?  (1) Put the umbrella under the sun.  (2) Put the umbrella in front of a running fan.  (3) Fully open the umbrella.",
+              options: ["(1) only", "(1) and (2) only", "(2) and (3) only", "(1), (2) and (3)"], answer: 3 }
+          ] },
+        { kind: "cyclelabel",
+          title: "1a. Label the processes of the water cycle",
+          intro: "Match each numbered position on the diagram with the correct process. (4 marks)",
+          options: ["Evaporation", "Condensation", "Transportation", "Precipitation"],
+          answers: ["Evaporation", "Condensation", "Transportation", "Precipitation"] },
+        { kind: "fill",
+          title: "1b. Describe the water cycle",
+          intro: "Complete the paragraph using the words given. (7 marks)",
+          wordbank: ["evaporates", "water vapour", "condenses", "droplets", "wind", "rain", "snow"],
+          items: [
+            { label: "", parts: [
+              { text: "When the sun heats up water in the sea, rivers and on land, some water " },
+              { blank: "evaporates" },
+              { text: " and becomes " },
+              { blank: "water vapour" },
+              { text: ". It is carried by warm air into the sky." }
+            ] },
+            { label: "", parts: [
+              { text: "In the upper, cooler sky, the water vapour " },
+              { blank: "condenses" },
+              { text: " to form small " },
+              { blank: "droplets" },
+              { text: ". They join together to form clouds and may be carried to other places by " },
+              { blank: "wind" },
+              { text: "." }
+            ] },
+            { label: "", parts: [
+              { text: "Water droplets in the clouds gather and become heavier. They fall to the ground as " },
+              { blank: "rain" },
+              { text: ", which is collected in the sea, rivers or on land again. Water droplets in clouds at higher altitudes may freeze to form " },
+              { blank: "snow" },
+              { text: "." }
+            ] }
+          ] },
+        { kind: "compare",
+          title: "2a. Which T-shirt dries faster?",
+          intro: "Look at set-ups A and B. (2 marks)",
+          img: "images/science/ch2/sci-ch2-wb-q2a.jpg",
+          caption: "A — a T-shirt spread flat on a table · B — a T-shirt hung on a clothes line",
+          choicePrompt: "Which T-shirt will dry faster?",
+          answer: 1,
+          reasonPrompt: "Explain your choice briefly.",
+          reasonAnswer: "It has a larger surface exposed to air." },
+        { kind: "compare",
+          title: "2b. Which dish of water dries faster?",
+          intro: "Look at set-ups A and B. (3 marks)",
+          img: "images/science/ch2/sci-ch2-wb-q2b.jpg",
+          caption: "A — a dish near an open window (windy and sunny) · B — a dish inside a cupboard",
+          choicePrompt: "Which dish of water will dry faster?",
+          answer: 0,
+          reasonPrompt: "Explain your choice briefly.",
+          reasonAnswer: "The air speed is higher (and it is under the sun), so evaporation is faster." }
+      ]
+    }
+  ]
+};
+
+/* ---------- 渲染 ---------- */
+const QZ_PARTICLES = {
+  solid:  [[20,20],[40,20],[60,20],[80,20],[20,45],[40,45],[60,45],[80,45],[20,70],[40,70],[60,70],[80,70]],
+  liquid: [[25,25],[50,18],[72,28],[30,45],[55,45],[80,42],[20,68],[45,65],[70,70],[85,60],[60,35],[15,50]],
+  gas:    [[15,15],[45,8],[75,15],[20,45],[55,40],[85,45],[15,75],[50,72],[80,75]],
+  gasFew: [[25,20],[65,25],[20,60],[70,65],[45,80]]
+};
+function qzParticles(kind) {
+  const pts = QZ_PARTICLES[kind] || QZ_PARTICLES.solid;
+  return pts.map((p) => `<span class="qz-pdot" style="left:${p[0]}%;top:${p[1]}%"></span>`).join("");
+}
+function qzDiagramSvg() {
+  return `<svg class="qz-diagram" viewBox="0 0 520 210" role="img" aria-label="Changes in states of water">
+    <defs>
+      <marker id="qzArrA" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+        <path d="M0,0 L8,4 L0,8 z" fill="#2f6bff"/>
+      </marker>
+    </defs>
+    <rect x="20" y="70" width="90" height="60" rx="10" fill="#eef4ff" stroke="#bcd0f2" stroke-width="1.5"/>
+    <text x="65" y="96" text-anchor="middle" font-size="13" font-weight="700" fill="#1e3a8a">ice</text>
+    <text x="65" y="114" text-anchor="middle" font-size="10" fill="#64748b">solid</text>
+    <rect x="215" y="70" width="90" height="60" rx="10" fill="#eef4ff" stroke="#bcd0f2" stroke-width="1.5"/>
+    <text x="260" y="96" text-anchor="middle" font-size="13" font-weight="700" fill="#1e3a8a">water</text>
+    <text x="260" y="114" text-anchor="middle" font-size="10" fill="#64748b">liquid</text>
+    <rect x="415" y="18" width="95" height="55" rx="10" fill="#fff7e6" stroke="#f0c060" stroke-width="1.5"/>
+    <text x="462" y="42" text-anchor="middle" font-size="13" font-weight="700" fill="#b45309">steam</text>
+    <text x="462" y="60" text-anchor="middle" font-size="10" fill="#a16207">gas</text>
+    <rect x="415" y="137" width="95" height="55" rx="10" fill="#fff7e6" stroke="#f0c060" stroke-width="1.5"/>
+    <text x="462" y="160" text-anchor="middle" font-size="12" font-weight="700" fill="#b45309">water</text>
+    <text x="462" y="178" text-anchor="middle" font-size="12" font-weight="700" fill="#b45309">vapour</text>
+    <line x1="112" y1="88" x2="212" y2="88" stroke="#2f6bff" stroke-width="2" marker-end="url(#qzArrA)"/>
+    <circle cx="162" cy="82" r="11" fill="#2f6bff"/><text x="162" y="86" text-anchor="middle" font-size="11" font-weight="800" fill="#fff">1</text>
+    <line x1="212" y1="112" x2="112" y2="112" stroke="#2f6bff" stroke-width="2" marker-end="url(#qzArrA)"/>
+    <circle cx="162" cy="122" r="11" fill="#2f6bff"/><text x="162" y="126" text-anchor="middle" font-size="11" font-weight="800" fill="#fff">2</text>
+    <line x1="285" y1="70" x2="410" y2="38" stroke="#2f6bff" stroke-width="2" marker-end="url(#qzArrA)"/>
+    <circle cx="348" cy="46" r="11" fill="#2f6bff"/><text x="348" y="50" text-anchor="middle" font-size="11" font-weight="800" fill="#fff">3</text>
+    <line x1="410" y1="150" x2="285" y2="115" stroke="#2f6bff" stroke-width="2" marker-end="url(#qzArrA)"/>
+    <circle cx="348" cy="142" r="11" fill="#2f6bff"/><text x="348" y="146" text-anchor="middle" font-size="11" font-weight="800" fill="#fff">4</text>
+    <line x1="285" y1="130" x2="410" y2="162" stroke="#2f6bff" stroke-width="2" marker-end="url(#qzArrA)"/>
+    <circle cx="348" cy="158" r="11" fill="#2f6bff"/><text x="348" y="162" text-anchor="middle" font-size="11" font-weight="800" fill="#fff">5</text>
+  </svg>`;
+}
+function qzWaterCycleSvg() {
+  return `<svg class="qz-diagram qz-diagram--cycle" viewBox="0 0 640 340" role="img" aria-label="The water cycle">
+    <defs>
+      <linearGradient id="qzSkyG" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#eaf4ff"/>
+        <stop offset="1" stop-color="#f8fbff"/>
+      </linearGradient>
+      <linearGradient id="qzSeaG" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#7db9ff"/>
+        <stop offset="1" stop-color="#2f7bd9"/>
+      </linearGradient>
+      <marker id="qzWcArrow" markerWidth="9" markerHeight="9" refX="7" refY="3.5" orient="auto">
+        <path d="M0,0 L8,3.5 L0,7 z" fill="#2f6bff"/>
+      </marker>
+    </defs>
+    <!-- 天空与海 -->
+    <rect x="0" y="0" width="640" height="300" fill="url(#qzSkyG)"/>
+    <rect x="0" y="300" width="640" height="40" fill="url(#qzSeaG)"/>
+    <path d="M0,300 Q40,292 80,300 T160,300 T240,300 T320,300 T400,300 T480,300 T560,300 T640,300" fill="none" stroke="#ffffff" stroke-width="3" opacity=".7"/>
+    <!-- 太阳 -->
+    <g>
+      <circle cx="565" cy="62" r="24" fill="#ffd66b" stroke="#f2b93b" stroke-width="2"/>
+      <g stroke="#f2b93b" stroke-width="2.5" stroke-linecap="round">
+        <line x1="565" y1="26" x2="565" y2="14"/>
+        <line x1="565" y1="98" x2="565" y2="110"/>
+        <line x1="529" y1="62" x2="517" y2="62"/>
+        <line x1="601" y1="62" x2="613" y2="62"/>
+        <line x1="540" y1="37" x2="531" y2="28"/>
+        <line x1="590" y1="37" x2="599" y2="28"/>
+        <line x1="540" y1="87" x2="531" y2="96"/>
+        <line x1="590" y1="87" x2="599" y2="96"/>
+      </g>
+    </g>
+    <!-- 蒸发：海面上升的水汽箭头（标号 1） -->
+    <g fill="none" stroke="#2f6bff" stroke-width="3" stroke-linecap="round" opacity=".9">
+      <path d="M150,300 C140,278 160,274 150,252 C140,230 160,226 150,204" marker-end="url(#qzWcArrow)"/>
+      <path d="M185,300 C175,280 195,276 185,256 C175,236 195,232 185,212" marker-end="url(#qzWcArrow)"/>
+      <path d="M220,300 C210,284 230,280 220,264 C210,248 230,244 220,224" marker-end="url(#qzWcArrow)"/>
+    </g>
+    <circle cx="185" cy="252" r="15" fill="#2f6bff"/><text x="185" y="257" text-anchor="middle" font-size="15" font-weight="800" fill="#fff">1</text>
+    <!-- 云（凝结，标号 2） -->
+    <g>
+      <ellipse cx="360" cy="108" rx="44" ry="26" fill="#ffffff" stroke="#cfe0f5" stroke-width="2"/>
+      <ellipse cx="415" cy="90" rx="38" ry="30" fill="#ffffff" stroke="#cfe0f5" stroke-width="2"/>
+      <ellipse cx="460" cy="108" rx="42" ry="24" fill="#ffffff" stroke="#cfe0f5" stroke-width="2"/>
+      <ellipse cx="410" cy="112" rx="62" ry="20" fill="#ffffff" stroke="#cfe0f5" stroke-width="2"/>
+    </g>
+    <circle cx="375" cy="98" r="15" fill="#2f6bff"/><text x="375" y="103" text-anchor="middle" font-size="15" font-weight="800" fill="#fff">2</text>
+    <!-- 输送：风吹云（标号 3） -->
+    <g fill="none" stroke="#2f6bff" stroke-width="3" stroke-linecap="round" opacity=".85">
+      <path d="M130,92 C150,82 170,92 190,86" marker-end="url(#qzWcArrow)"/>
+      <path d="M170,108 C190,98 210,108 230,102" marker-end="url(#qzWcArrow)"/>
+      <path d="M150,124 C170,114 190,124 210,118" marker-end="url(#qzWcArrow)"/>
+    </g>
+    <circle cx="252" cy="86" r="15" fill="#2f6bff"/><text x="252" y="91" text-anchor="middle" font-size="15" font-weight="800" fill="#fff">3</text>
+    <!-- 降水：云下落雨（标号 4） -->
+    <g fill="none" stroke="#2f6bff" stroke-width="3" stroke-linecap="round">
+      <path d="M420,150 L412,172"/><path d="M445,150 L437,174"/><path d="M470,150 L462,172"/>
+      <path d="M432,178 L428,198"/><path d="M458,180 L454,200"/><path d="M412,184 L408,202"/>
+      <path d="M480,180 L476,198"/><path d="M436,206 L433,222"/>
+      <path d="M455,210 L452,224"/><path d="M420,212 L417,226"/><path d="M470,208 L468,222"/>
+    </g>
+    <circle cx="475" cy="188" r="15" fill="#2f6bff"/><text x="475" y="193" text-anchor="middle" font-size="15" font-weight="800" fill="#fff">4</text>
+  </svg>`;
+}
+function renderQzText(text, mark) {
+  if (!mark) return escapeHTML(text);
+  const idx = text.toUpperCase().indexOf(String(mark).toUpperCase());
+  if (idx < 0) return escapeHTML(text);
+  return escapeHTML(text.slice(0, idx)) +
+    `<span class="qz-mark">${escapeHTML(text.slice(idx, idx + mark.length))}</span>` +
+    escapeHTML(text.slice(idx + mark.length));
+}
+function qzSelect(answer, opts, placeholder) {
+  const options = (opts || []).map((o) => `<option value="${escapeHTML(o)}">${escapeHTML(o)}</option>`).join("");
+  return `<select class="qz-sel" data-answer="${escapeHTML(answer)}"><option value="">${escapeHTML(placeholder || "—")}</option>${options}</select>`;
+}
+function renderQuizBlock(block, secIdx, blockIdx) {
+  const esc = escapeHTML;
+  if (!block || !block.kind) return "";
+  if (block.kind === "level") {
+    return `<div class="qz-block qz-block--level"><span class="qz-level">${esc(block.text)}</span></div>`;
+  }
+  if (block.kind === "note") {
+    return `<div class="qz-block qz-block--note"><div class="qz-block-intro">${esc(block.text)}</div></div>`;
+  }
+  if (block.kind === "graph") {
+    return `<div class="qz-block">
+      <div class="qq-graph-block">
+        <svg class="qq-graph" viewBox="0 0 320 200" role="img" aria-label="Heating curve of water">
+          <line x1="45" y1="20" x2="45" y2="165" stroke="#a9b8cc" stroke-width="1.5"/>
+          <line x1="45" y1="165" x2="300" y2="165" stroke="#a9b8cc" stroke-width="1.5"/>
+          <path d="M45,150 L150,60 L270,60" fill="none" stroke="#2f6bff" stroke-width="3" stroke-linejoin="round"/>
+          <line x1="45" y1="60" x2="270" y2="60" stroke="#f59e0b" stroke-dasharray="5 4" stroke-width="1.2"/>
+          <text x="36" y="64" text-anchor="end" font-size="11" fill="#b45309" font-weight="700">T</text>
+          <circle cx="45" cy="150" r="3" fill="#2f6bff"/>
+          <circle cx="150" cy="60" r="3" fill="#2f6bff"/>
+          <circle cx="270" cy="60" r="3" fill="#2f6bff"/>
+          <text x="45" y="180" text-anchor="middle" font-size="10" fill="#64748b">0</text>
+          <text x="150" y="180" text-anchor="middle" font-size="10" fill="#64748b">2</text>
+          <text x="270" y="180" text-anchor="middle" font-size="10" fill="#64748b">4</text>
+          <text x="172" y="194" text-anchor="middle" font-size="10" fill="#64748b">time (min)</text>
+          <text x="16" y="95" text-anchor="middle" font-size="10" fill="#64748b" transform="rotate(-90 16 95)">water temperature (°C)</text>
+        </svg>
+        <div class="qq-graph-cap">${esc(block.caption)}</div>
+      </div>
+    </div>`;
+  }
+  if (block.kind === "photomatch") {
+    const opts = block.options || [];
+    const items = (block.items || []).map((it) => `
+      <div class="qz-photo">
+        <img src="${esc(it.img)}" alt="${esc(it.cap)}" loading="lazy">
+        <div class="qz-photo-cap">${esc(it.cap)}</div>
+        ${qzSelect(it.answer, opts, "Choose a process")}
+      </div>`).join("");
+    return `<div class="qz-block">
+      ${block.title ? `<div class="qz-block-title">${esc(block.title)}</div>` : ""}
+      ${block.intro ? `<div class="qz-block-intro">${esc(block.intro)}</div>` : ""}
+      <div class="qz-photo-grid">${items}</div>
+    </div>`;
+  }
+  if (block.kind === "mc") {
+    const items = (block.items || []).map((q, qi) => `
+      <div class="qz-mc" data-answer="${q.answer}">
+        ${q.hint ? `<div class="qz-hint">${esc(q.hint)}</div>` : ""}
+        <div class="qz-mc-text">${renderQzText(q.q, q.mark)}</div>
+        <div class="qz-options">
+          ${(q.options || []).map((o, oi) => `
+            <label class="qz-opt">
+              <input type="radio" name="qz-mc-${secIdx}-${blockIdx}-${qi}" value="${oi}">
+              <span class="qz-opt__label">${String.fromCharCode(65 + oi)}. ${esc(o)}</span>
+            </label>`).join("")}
+        </div>
+        <div class="qz-fb" hidden></div>
+      </div>`).join("");
+    return `<div class="qz-block">
+      ${block.title ? `<div class="qz-block-title">${esc(block.title)}</div>` : ""}
+      ${items}
+    </div>`;
+  }
+  if (block.kind === "fill") {
+    const bank = (block.wordbank || []).map((w) => `<span class="qz-word">${esc(w)}</span>`).join("");
+    const opts = block.wordbank || [];
+    const items = (block.items || []).map((it) => {
+      const inner = it.parts.map((p) => p.blank
+        ? qzSelect(p.blank, opts, "—")
+        : `<span class="qz-fill-text">${esc(p.text)}</span>`).join("");
+      return `<div class="qz-fill-item"><span class="qz-fill-label">${esc(it.label)}</span>${inner}</div>`;
+    }).join("");
+    return `<div class="qz-block">
+      ${block.title ? `<div class="qz-block-title">${esc(block.title)}</div>` : ""}
+      ${block.intro ? `<div class="qz-block-intro">${esc(block.intro)}</div>` : ""}
+      <div class="qz-wordbank">${bank}</div>
+      ${items}
+    </div>`;
+  }
+  if (block.kind === "tf") {
+    const items = (block.items || []).map((it) => `
+      <div class="qz-tf-item">
+        <div class="qz-tf-q">${esc(it.q)}</div>
+        <div class="qz-tf-btns" data-answer="${esc(it.answer)}">
+          <button type="button" class="qz-tf-btn" data-val="T">T</button>
+          <button type="button" class="qz-tf-btn" data-val="F">F</button>
+        </div>
+      </div>`).join("");
+    return `<div class="qz-block">
+      ${block.title ? `<div class="qz-block-title">${esc(block.title)}</div>` : ""}
+      ${block.intro ? `<div class="qz-block-intro">${esc(block.intro)}</div>` : ""}
+      ${items}
+    </div>`;
+  }
+  if (block.kind === "particle") {
+    const options = (block.options || []).map((o, oi) => `
+      <label class="qz-particle-opt">
+        <input type="radio" name="qz-p-${secIdx}-${blockIdx}" value="${oi}">
+        <span class="qz-opt-label">${String.fromCharCode(65 + oi)}</span>
+        <div class="qz-particle-pair">
+          <div class="qz-pbox">${qzParticles(o.from)}</div>
+          <span class="qz-arrow">→</span>
+          <div class="qz-pbox">${qzParticles(o.to)}</div>
+        </div>
+      </label>`).join("");
+    return `<div class="qz-block">
+      ${block.title ? `<div class="qz-block-title">${esc(block.title)}</div>` : ""}
+      <div class="qz-mc" data-answer="${block.answer}">
+        <div class="qz-mc-text">${esc(block.stem)}</div>
+        <div class="qz-particle-grid">${options}</div>
+        <div class="qz-fb" hidden></div>
+      </div>
+    </div>`;
+  }
+  if (block.kind === "diagram") {
+    const opts = block.options || ["melting", "freezing", "boiling", "condensation", "evaporation"];
+    const labels = (block.answers || []).map((a, i) => `
+      <div class="qz-diag-label">
+        <span class="qz-diag-num">${i + 1}.</span>
+        ${qzSelect(a, opts, "Choose a process")}
+      </div>`).join("");
+    return `<div class="qz-block">
+      ${block.title ? `<div class="qz-block-title">${esc(block.title)}</div>` : ""}
+      ${block.intro ? `<div class="qz-block-intro">${esc(block.intro)}</div>` : ""}
+      <div class="qz-diagram-wrap">${qzDiagramSvg()}</div>
+      <div class="qz-diagram-labels">${labels}</div>
+    </div>`;
+  }
+  if (block.kind === "statetable") {
+    const rows = (block.rows || []).map((row) => {
+      const cells = row.cells.map((c) => {
+        if (typeof c === "string") return `<td>${esc(c)}</td>`;
+        if (c.parts) {
+          const inner = c.parts.map((p) => {
+            if (typeof p === "string") return `<span>${esc(p)}</span>`;
+            if (p.blank) return qzSelect(p.blank, p.opts, "—");
+            return `<span>${esc(p.text)}</span>`;
+          }).join("");
+          return `<td>${inner}</td>`;
+        }
+        if (c.blank) return `<td>${qzSelect(c.blank, c.opts, "—")}</td>`;
+        return `<td>${esc(c.text || "")}</td>`;
+      }).join("");
+      return `<tr>${cells}</tr>`;
+    }).join("");
+    return `<div class="qz-block">
+      ${block.title ? `<div class="qz-block-title">${esc(block.title)}</div>` : ""}
+      ${block.intro ? `<div class="qz-block-intro">${esc(block.intro)}</div>` : ""}
+      <div class="qz-table-wrap">
+        <table class="qz-table">
+          <thead><tr>${(block.cols || []).map((c) => `<th>${esc(c)}</th>`).join("")}</tr></thead>
+          <tbody>${rows}</tbody>
+        </table>
+      </div>
+    </div>`;
+  }
+  if (block.kind === "essay") {
+    const items = (block.items || []).map((it) => `
+      <div class="qz-essay-item">
+        <div class="qz-essay-q">${esc(it.q)}${it.marks ? `<span class="qz-essay-marks">(${esc(it.marks)})</span>` : ""}</div>
+        <textarea class="qz-ta" placeholder="Write your answer here…"></textarea>
+        <button type="button" class="qz-ans-toggle" data-ans-toggle aria-expanded="false">
+          💡 查看标准答案 <span class="qz-ans-caret">▼</span>
+        </button>
+        <div class="qz-ans-body">
+          <div class="qz-ans-label">📝 Model answer</div>
+          ${it.answerImg ? `<img class="qz-ans-img" src="${esc(it.answerImg)}" alt="Model answer (handwritten)" loading="lazy">` : ""}
+          <div class="qz-ans-text">${esc(it.answer)}</div>
+        </div>
+      </div>`).join("");
+    return `<div class="qz-block">
+      ${block.title ? `<div class="qz-block-title">${esc(block.title)}</div>` : ""}
+      ${block.intro ? `<div class="qz-block-intro">${esc(block.intro)}</div>` : ""}
+      ${items}
+    </div>`;
+  }
+  if (block.kind === "checkbox") {
+    const items = (block.statements || []).map((s, si) => `
+      <label class="qz-cb-item">
+        <input type="checkbox" value="${si}">
+        <span>${esc(s.text)}</span>
+      </label>`).join("");
+    return `<div class="qz-block">
+      ${block.title ? `<div class="qz-block-title">${esc(block.title)}</div>` : ""}
+      ${block.intro ? `<div class="qz-block-intro">${esc(block.intro)}</div>` : ""}
+      <div class="qz-cb" data-answer="${esc(JSON.stringify(block.correct || []))}">${items}</div>
+      <div class="qz-fb" hidden></div>
+    </div>`;
+  }
+  if (block.kind === "shorttext") {
+    const items = (block.items || []).map((it) => `
+      <div class="qz-short-item">
+        <span class="qz-short-label">${esc(it.label)}</span>
+        <div class="qz-short-input">
+          <input class="qz-short" type="text" data-qtype="${esc(it.type)}" data-answer="${esc(JSON.stringify(it.answer))}" data-pretty="${esc(it.pretty || "")}" placeholder="Type here…" autocomplete="off">
+          <span class="qz-fb" hidden></span>
+        </div>
+      </div>`).join("");
+    return `<div class="qz-block">
+      ${block.title ? `<div class="qz-block-title">${esc(block.title)}</div>` : ""}
+      ${block.intro ? `<div class="qz-block-intro">${esc(block.intro)}</div>` : ""}
+      ${block.graph ? `<div><img class="qz-graph-img" src="${esc(block.graph)}" alt="Heating curve line graph"><div class="qz-graph-img-cap">Change in temperature when a beaker of ice is heated</div></div>` : ""}
+      ${items}
+    </div>`;
+  }
+  if (block.kind === "seagraph") {
+    const cols = (block.data || []).map((d) => `<th>${d[0]}</th>`).join("");
+    const cells = (block.data || []).map((d) => `<td>${d[1]}</td>`).join("");
+    return `<div class="qz-block">
+      ${block.title ? `<div class="qz-block-title">${esc(block.title)}</div>` : ""}
+      ${block.intro ? `<div class="qz-block-intro">${esc(block.intro)}</div>` : ""}
+      <div class="qz-sea" data-sea data-sea-data="${esc(JSON.stringify(block.data))}" data-melt="${esc(block.meltTemp)}">
+        <div class="qz-sea-canvas-wrap">
+          <canvas class="qz-sea-canvas" width="520" height="380"></canvas>
+        </div>
+        <div class="qz-sea-side">
+          <div class="qz-sea-table-wrap">
+            <table class="qz-sea-table">
+              <thead><tr><th>Time (min)</th>${cols}</tr></thead>
+              <tbody><tr><th>Temperature (°C)</th>${cells}</tr></tbody>
+            </table>
+          </div>
+          <div class="qz-sea-actions">
+            <button type="button" class="qz-sea-btn" data-sea-check>🔍 检查我的连线</button>
+            <button type="button" class="qz-sea-btn is-ghost" data-sea-clear>↺ 清除重画</button>
+          </div>
+          <div class="qz-sea-feedback" data-sea-fb></div>
+          <div class="qz-sea-fill">
+            <span class="qz-sea-fill-label">${esc(block.fill.q)}</span>
+            <input class="qz-short" type="text" data-qtype="num" data-answer="${esc(block.fill.answer)}" data-pretty="−4 °C" placeholder="— °C" autocomplete="off">
+            <span class="qz-fb" hidden></span>
+          </div>
+        </div>
+      </div>
+    </div>`;
+  }
+  if (block.kind === "image") {
+    return `<div class="qz-block">
+      <figure class="qz-img">
+        <img src="${esc(block.src)}" alt="${esc(block.caption)}" loading="lazy">
+        <figcaption>${esc(block.caption)}</figcaption>
+      </figure>
+    </div>`;
+  }
+  if (block.kind === "dragclassify") {
+    const cards = (block.cards || []).map((c, i) => `
+      <div class="dc-card" draggable="true" data-dc-card="${i}" data-dc-cat="${esc(c.cat)}">${esc(c.term)}</div>`).join("");
+    return `<div class="qz-block">
+      ${block.title ? `<div class="qz-block-title">${esc(block.title)}</div>` : ""}
+      ${block.intro ? `<div class="qz-block-intro">${esc(block.intro)}</div>` : ""}
+      <div class="dc-game" data-dc>
+        <div class="dc-cards">${cards}</div>
+        <div class="dc-slots">
+          <div class="dc-slot" data-dc-slot="independent">
+            <div class="dc-slot-head"><b>Independent variable</b><span>what you change</span></div>
+            <div class="dc-slot-drop"></div>
+          </div>
+          <div class="dc-slot" data-dc-slot="dependent">
+            <div class="dc-slot-head"><b>Dependent variable</b><span>what you measure</span></div>
+            <div class="dc-slot-drop"></div>
+          </div>
+          <div class="dc-slot" data-dc-slot="controlled">
+            <div class="dc-slot-head"><b>Controlled variables</b><span>keep the same</span></div>
+            <div class="dc-slot-drop"></div>
+          </div>
+        </div>
+        <div class="dc-fb" hidden></div>
+      </div>
+    </div>`;
+  }
+  if (block.kind === "keypoint") {
+    const items = (block.items || []).map((it) => `
+      <div class="qz-kp-item">
+        <span class="qz-kp-label">${esc(it.label)}</span>
+        ${qzSelect(it.answer, it.opts, "—")}
+      </div>`).join("");
+    return `<div class="qz-block">
+      ${block.title ? `<div class="qz-block-title">${esc(block.title)}</div>` : ""}
+      ${block.intro ? `<div class="qz-block-intro">${esc(block.intro)}</div>` : ""}
+      <div class="qz-kp">${items}</div>
+    </div>`;
+  }
+  if (block.kind === "cyclelabel") {
+    const opts = block.options || ["Evaporation", "Condensation", "Transportation", "Precipitation"];
+    const labels = (block.answers || []).map((a, i) => `
+      <div class="qz-diag-label">
+        <span class="qz-diag-num">${i + 1}.</span>
+        ${qzSelect(a, opts, "Choose a process")}
+      </div>`).join("");
+    return `<div class="qz-block">
+      ${block.title ? `<div class="qz-block-title">${esc(block.title)}</div>` : ""}
+      ${block.intro ? `<div class="qz-block-intro">${esc(block.intro)}</div>` : ""}
+      <div class="qz-diagram-wrap">${qzWaterCycleSvg()}</div>
+      <div class="qz-diagram-labels">${labels}</div>
+    </div>`;
+  }
+  if (block.kind === "compare") {
+    const name = `qz-compare-${secIdx}-${blockIdx}`;
+    return `<div class="qz-block">
+      ${block.title ? `<div class="qz-block-title">${esc(block.title)}</div>` : ""}
+      ${block.intro ? `<div class="qz-block-intro">${esc(block.intro)}</div>` : ""}
+      <div class="qz-compare">
+        <img class="qz-compare-img" src="${esc(block.img)}" alt="${esc(block.caption || "")}" loading="lazy">
+        ${block.caption ? `<div class="qz-compare-cap">${esc(block.caption)}</div>` : ""}
+        <div class="qz-compare-choice">
+          <div class="qz-mc" data-answer="${block.answer}">
+            <div class="qz-mc-text">${esc(block.choicePrompt || "Which one will dry faster?")}</div>
+            <div class="qz-options">
+              <label class="qz-opt"><input type="radio" name="${name}" value="0"><span class="qz-opt__label">A</span></label>
+              <label class="qz-opt"><input type="radio" name="${name}" value="1"><span class="qz-opt__label">B</span></label>
+            </div>
+            <div class="qz-fb" hidden></div>
+          </div>
+        </div>
+        <div class="qz-compare-reason qz-essay-item">
+          <div class="qz-essay-q">${esc(block.reasonPrompt || "Explain your choice briefly.")}</div>
+          <textarea class="qz-ta" placeholder="Write your answer here…"></textarea>
+          <button type="button" class="qz-ans-toggle" data-ans-toggle aria-expanded="false">
+            💡 查看标准答案 <span class="qz-ans-caret">▼</span>
+          </button>
+          <div class="qz-ans-body">
+            <div class="qz-ans-label">📝 Model answer</div>
+            <div class="qz-ans-text">${esc(block.reasonAnswer || "")}</div>
+          </div>
+        </div>
+      </div>
+    </div>`;
+  }
+  return "";
+}
+function renderQuizSet(qz) {
+  const esc = escapeHTML;
+  const sections = (qz.sections || []).map((sec, si) => {
+    const blocks = (sec.blocks || []).map((b, bi) => renderQuizBlock(b, si, bi)).join("");
+    return `
+      <div class="qz-section">
+        <div class="qz-sec-head">
+          <span class="qz-sec-icon">${esc(sec.icon || "📋")}</span>
+          <span class="qz-sec-title">${esc(sec.title || "")}</span>
+          ${sec.sub ? `<span class="qz-sec-sub">${esc(sec.sub)}</span>` : ""}
+        </div>
+        ${blocks}
+      </div>`;
+  }).join('<div class="qz-divider" role="separator" aria-hidden="true"></div>');
+  return `
+    <div class="qz-set" data-quizset>
+      <div class="qz-title">${esc(qz.title || "Chapter Quiz")}</div>
+      <div class="qz-intro">${esc(qz.intro || "")}</div>
+      ${sections}
+      <div class="qz-actions">
+        <button class="qz-submit" type="button">✍️ Submit &amp; mark</button>
+      </div>
+      <div class="qz-result" hidden></div>
+    </div>`;
+}
+
+/* ---------- 判分 ---------- */
+function initQuizSet(root) {
+  const submitBtn = root.querySelector(".qz-submit");
+  const result = root.querySelector(".qz-result");
+  if (!submitBtn) return;
+
+  root.querySelectorAll(".qz-tf-btns").forEach((group) => {
+    group.querySelectorAll(".qz-tf-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        if (btn.disabled) return;
+        group.querySelectorAll(".qz-tf-btn").forEach((b) => b.classList.remove("is-on"));
+        btn.classList.add("is-on");
+      });
+    });
+  });
+
+  root.querySelectorAll("[data-ans-toggle]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const body = btn.nextElementSibling;
+      if (!body) return;
+      const open = btn.getAttribute("aria-expanded") === "true";
+      btn.setAttribute("aria-expanded", String(!open));
+      body.classList.toggle("is-show", !open);
+    });
+  });
+
+  submitBtn.addEventListener("click", () => {
+    let total = 0;
+    let correct = 0;
+
+    root.querySelectorAll("select.qz-sel[data-answer]").forEach((sel) => {
+      total++;
+      const ok = sel.value === sel.getAttribute("data-answer");
+      if (ok) correct++;
+      sel.classList.toggle("is-correct", ok);
+      sel.classList.toggle("is-wrong", !ok);
+      sel.disabled = true;
+    });
+
+    root.querySelectorAll(".qz-mc[data-answer]").forEach((q) => {
+      total++;
+      const ans = Number(q.getAttribute("data-answer"));
+      const checked = q.querySelector('input[type=radio]:checked');
+      const ok = checked ? Number(checked.value) === ans : false;
+      if (ok) correct++;
+      q.querySelectorAll(".qz-opt, .qz-particle-opt").forEach((opt, oi) => {
+        const inp = opt.querySelector("input");
+        const isCorrect = oi === ans;
+        opt.classList.toggle("is-correct", isCorrect);
+        opt.classList.toggle("is-wrong", !!inp && inp.checked && !isCorrect);
+        if (inp) inp.disabled = true;
+      });
+      const fb = q.querySelector(".qz-fb");
+      if (fb) {
+        fb.hidden = false;
+        fb.className = "qz-fb " + (ok ? "is-ok" : "is-bad");
+        fb.textContent = ok ? "✓ Correct" : `✗ Correct answer: ${String.fromCharCode(65 + ans)}`;
+      }
+    });
+
+    root.querySelectorAll(".qz-tf-btns[data-answer]").forEach((group) => {
+      total++;
+      const ans = group.getAttribute("data-answer");
+      const on = group.querySelector(".qz-tf-btn.is-on");
+      const ok = on ? on.getAttribute("data-val") === ans : false;
+      if (ok) correct++;
+      group.querySelectorAll(".qz-tf-btn").forEach((b) => {
+        const good = b.getAttribute("data-val") === ans;
+        b.classList.toggle("is-correct", good);
+        b.classList.toggle("is-wrong", b.classList.contains("is-on") && !good);
+        b.disabled = true;
+      });
+    });
+
+    root.querySelectorAll(".qz-cb[data-answer]").forEach((cb) => {
+      total++;
+      let correctSet = [];
+      try { correctSet = JSON.parse(cb.getAttribute("data-answer")).map(Number).sort((a, b) => a - b); } catch (e) {}
+      const checked = Array.from(cb.querySelectorAll('input[type=checkbox]')).filter((i) => i.checked).map((i) => Number(i.value)).sort((a, b) => a - b);
+      const ok = JSON.stringify(checked) === JSON.stringify(correctSet);
+      if (ok) correct++;
+      cb.querySelectorAll(".qz-cb-item").forEach((item) => {
+        const val = Number(item.querySelector("input").value);
+        const good = correctSet.includes(val);
+        item.classList.toggle("is-correct", good);
+        item.classList.toggle("is-wrong", !good);
+        item.querySelector("input").disabled = true;
+      });
+      const fb = cb.nextElementSibling;
+      if (fb && fb.classList.contains("qz-fb")) {
+        fb.hidden = false;
+        fb.className = "qz-fb " + (ok ? "is-ok" : "is-bad");
+        fb.textContent = ok ? "✓ Correct" : "✗ Incorrect — only the 2nd statement is correct.";
+      }
+    });
+
+    root.querySelectorAll("input.qz-short[data-qtype]").forEach((inp) => {
+      total++;
+      const qtype = inp.getAttribute("data-qtype");
+      let ok = false;
+      if (qtype === "range") {
+        let expected = [];
+        try { expected = JSON.parse(inp.getAttribute("data-answer")).map(Number); } catch (e) {}
+        const nums = extractInts(inp.value);
+        ok = nums.length >= 2 && nums[0] === expected[0] && nums[1] === expected[1];
+      } else if (qtype === "num") {
+        const expected = Number(inp.getAttribute("data-answer"));
+        ok = extractSigned(inp.value).includes(expected);
+      }
+      if (ok) correct++;
+      inp.classList.toggle("is-correct", ok);
+      inp.classList.toggle("is-wrong", !ok);
+      inp.disabled = true;
+      const fb = inp.nextElementSibling;
+      if (fb && fb.classList.contains("qz-fb")) {
+        fb.hidden = false;
+        fb.className = "qz-fb " + (ok ? "is-ok" : "is-bad");
+        fb.textContent = ok ? "✓ Correct" : "✗ Correct answer: " + (inp.getAttribute("data-pretty") || "");
+      }
+    });
+
+    root.querySelectorAll(".dc-game[data-dc]").forEach((game) => {
+      const gameCards = game.querySelectorAll(".dc-card");
+      gameCards.forEach((card) => {
+        total++;
+        const cat = card.getAttribute("data-dc-cat");
+        const slot = card.closest(".dc-slot");
+        const placed = slot ? slot.getAttribute("data-dc-slot") : null;
+        const ok = placed === cat;
+        if (ok) correct++;
+        card.classList.toggle("is-correct", ok);
+        card.classList.toggle("is-wrong", !ok);
+        card.draggable = false;
+      });
+      const gTotal = gameCards.length;
+      const gCorrect = Array.from(gameCards).filter((c) => c.classList.contains("is-correct")).length;
+      const fb = game.querySelector(".dc-fb");
+      if (fb) {
+        fb.hidden = false;
+        fb.className = "dc-fb " + (gCorrect === gTotal ? "is-ok" : "is-bad");
+        fb.textContent = gCorrect === gTotal
+          ? `✓ All ${gTotal} variables correctly sorted!`
+          : `✗ ${gCorrect}/${gTotal} sorted correctly — check the highlighted cards.`;
+      }
+    });
+
+    const pct = total ? Math.round((correct / total) * 100) : 0;
+    result.hidden = false;
+    result.innerHTML = `
+      <div class="qz-score">${correct} / ${total}</div>
+      <div class="qz-score-sub">Objective marks earned out of ${total}</div>
+      <div class="qz-score-msg">${correct === total ? "🎉 Perfect! Excellent work!" : pct >= 60 ? "👍 Good job! Review the marked answers." : "💪 Keep practising — check the notes and try again."}</div>
+      <div class="qz-score-note">📝 2a &amp; 2b explanation questions (3 marks) are self-marked — compare them with the model answers above.</div>`;
+    submitBtn.disabled = true;
+    submitBtn.textContent = "✅ Submitted";
+    result.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  });
+}
+
+/* ---------- 变量分类拖拽 ---------- */
+function initDragClassify(root) {
+  const cards = root.querySelectorAll(".dc-card");
+  const slots = root.querySelectorAll(".dc-slot");
+  const cardsZone = root.querySelector(".dc-cards");
+  if (!cardsZone || !cards.length) return;
+  let selected = null;
+
+  cards.forEach((card) => {
+    card.addEventListener("dragstart", (e) => {
+      e.dataTransfer.setData("text/plain", card.getAttribute("data-dc-card"));
+      e.dataTransfer.effectAllowed = "move";
+    });
+    card.addEventListener("click", (e) => {
+      e.stopPropagation();
+      if (card.closest(".dc-slot")) {
+        cardsZone.appendChild(card);
+        card.classList.remove("is-sel");
+        if (selected === card) selected = null;
+        return;
+      }
+      if (selected) selected.classList.remove("is-sel");
+      if (selected === card) { selected = null; return; }
+      selected = card;
+      card.classList.add("is-sel");
+    });
+  });
+
+  slots.forEach((slot) => {
+    slot.addEventListener("dragover", (e) => { e.preventDefault(); });
+    slot.addEventListener("drop", (e) => {
+      e.preventDefault();
+      const id = e.dataTransfer.getData("text/plain");
+      const card = root.querySelector(`.dc-card[data-dc-card="${id}"]`);
+      if (card) {
+        slot.querySelector(".dc-slot-drop").appendChild(card);
+        card.classList.remove("is-sel");
+        selected = null;
+      }
+    });
+    slot.addEventListener("click", () => {
+      if (!selected) return;
+      slot.querySelector(".dc-slot-drop").appendChild(selected);
+      selected.classList.remove("is-sel");
+      selected = null;
+    });
+  });
+
+  cardsZone.addEventListener("click", (e) => {
+    if (e.target !== cardsZone) return;
+    if (selected) { selected.classList.remove("is-sel"); selected = null; }
+  });
+}
+
+/* ---------- P.38 Canvas 画图题 ---------- */
+function initSeaChart(root) {
+  const canvas = root.querySelector("canvas");
+  if (!canvas) return;
+  const ctx = canvas.getContext("2d");
+  let data = [];
+  try { data = JSON.parse(root.getAttribute("data-sea-data")); } catch (e) {}
+  const melt = Number(root.getAttribute("data-melt"));
+  const checkBtn = root.querySelector("[data-sea-check]");
+  const clearBtn = root.querySelector("[data-sea-clear]");
+  const fb = root.querySelector("[data-sea-fb]");
+  let points = [];
+
+  const W = canvas.width, H = canvas.height;
+  const L = 52, R = 18, T = 22, B = 44;
+  const pw = W - L - R, ph = H - T - B;
+  const xMin = 0, xMax = 12, yMin = -20, yMax = 20;
+  const X = (t) => L + (t - xMin) / (xMax - xMin) * pw;
+  const Y = (temp) => T + (yMax - temp) / (yMax - yMin) * ph;
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    ctx.fillStyle = "#fbfdff";
+    ctx.fillRect(0, 0, W, H);
+    ctx.lineWidth = 1;
+    for (let t = xMin; t <= xMax; t += 2) {
+      ctx.strokeStyle = (t === xMin) ? "#a9b8cc" : "#e6edf6";
+      ctx.beginPath(); ctx.moveTo(X(t), T); ctx.lineTo(X(t), T + ph); ctx.stroke();
+    }
+    for (let v = yMin; v <= yMax; v += 5) {
+      ctx.strokeStyle = (v === 0) ? "#c7d2e0" : "#e6edf6";
+      ctx.beginPath(); ctx.moveTo(L, Y(v)); ctx.lineTo(L + pw, Y(v)); ctx.stroke();
+    }
+    ctx.strokeStyle = "#f59e0b";
+    ctx.lineWidth = 1.6;
+    ctx.setLineDash([5, 4]);
+    ctx.beginPath(); ctx.moveTo(L, Y(melt)); ctx.lineTo(L + pw, Y(melt)); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = "#64748b";
+    ctx.font = "10px sans-serif";
+    ctx.textAlign = "right"; ctx.textBaseline = "middle";
+    for (let v = yMin; v <= yMax; v += 5) {
+      ctx.fillText(v + "°C", L - 7, Y(v));
+    }
+    ctx.textAlign = "center"; ctx.textBaseline = "top";
+    for (let t = xMin; t <= xMax; t += 2) {
+      ctx.fillText(t, X(t), T + ph + 6);
+    }
+    ctx.fillText("time (min)", L + pw / 2, T + ph + 24);
+    ctx.strokeStyle = "#e11d48";
+    ctx.lineWidth = 2.5;
+    ctx.lineCap = "round";
+    points.forEach((p) => {
+      const x = X(p.t), y = Y(p.temp), s = 6;
+      ctx.beginPath();
+      ctx.moveTo(x - s, y - s); ctx.lineTo(x + s, y + s);
+      ctx.moveTo(x + s, y - s); ctx.lineTo(x - s, y + s);
+      ctx.stroke();
+    });
+  }
+
+  function snap(e) {
+    const rect = canvas.getBoundingClientRect();
+    const sx = W / rect.width, sy = H / rect.height;
+    const cx = (e.clientX - rect.left) * sx;
+    const cy = (e.clientY - rect.top) * sy;
+    const t = Math.round((xMin + (cx - L) / pw * (xMax - xMin)) / 2) * 2;
+    const temp = Math.round(yMax - (cy - T) / ph * (yMax - yMin));
+    return { t, temp };
+  }
+
+  function addPoint(p) {
+    if (p.t < xMin || p.t > xMax || p.temp < yMin || p.temp > yMax) return;
+    if (points.some((q) => q.t === p.t && q.temp === p.temp)) return;
+    points.push(p);
+    draw();
+  }
+
+  canvas.addEventListener("pointerdown", (e) => {
+    e.preventDefault();
+    addPoint(snap(e));
+  });
+
+  checkBtn.addEventListener("click", () => {
+    const plateauTimes = data.filter((d) => Math.abs(d[1] - melt) <= 0.5).map((d) => d[0]);
+    const atMelt = points.filter((p) => Math.abs(p.temp - melt) <= 0.5);
+    const hit = plateauTimes.filter((t) => atMelt.some((p) => Math.abs(p.t - t) <= 0.5));
+    const label = plateauTimes.join("、");
+    if (hit.length === plateauTimes.length) {
+      fb.className = "qz-sea-feedback is-ok";
+      fb.textContent = `✓ 完美！你在 ${label} 分钟都正确标出了 ${melt} °C 的点，连成了一条水平线——海水冰熔化时温度保持不变。`;
+    } else if (hit.length >= 2) {
+      fb.className = "qz-sea-feedback is-ok";
+      fb.textContent = `✓ 不错！你找到了 ${hit.length} 个平台点（${melt} °C），形成了一条水平段。完整的熔化平台是 ${label} 分钟，可以再补上剩余的点。`;
+    } else if (atMelt.length >= 1) {
+      fb.className = "qz-sea-feedback is-bad";
+      fb.textContent = `你的点落在了 ${melt} °C 线上，但时间不对。熔化平台应该在 ${label} 分钟（水平段），请在这些分钟上打点。`;
+    } else {
+      fb.className = "qz-sea-feedback is-bad";
+      fb.textContent = `还没有点落在 ${melt} °C 水平段上。海水冰熔化时温度保持在 ${melt} °C，请在 ${label} 分钟打点，让它们连成一条水平线。`;
+    }
+  });
+
+  clearBtn.addEventListener("click", () => {
+    points = [];
+    fb.className = "qz-sea-feedback";
+    fb.textContent = "";
+    draw();
+  });
+
+  draw();
+}
+
+/* ---------- 原书页灯箱画廊 ---------- */
+const PAGES = [
+  { src: "images/science/ch2/sci-ch2-wb-p39.jpg", caption: "Workbook p.39" },
+  { src: "images/science/ch2/sci-ch2-wb-p40.jpg", caption: "Workbook p.40" },
+  { src: "images/science/ch2/sci-ch2-wb-p41.jpg", caption: "Workbook p.41" }
+];
+(function initLightbox() {
+  const lb = document.getElementById("lightbox");
+  const img = lb.querySelector("img");
+  const cap = lb.querySelector(".lightbox__caption");
+  const count = lb.querySelector(".lightbox__count");
+  const prev = lb.querySelector(".lightbox__prev");
+  const next = lb.querySelector(".lightbox__next");
+  const closeBtn = lb.querySelector(".lightbox__close");
+  let index = 0;
+
+  const render = () => {
+    const p = PAGES[index];
+    img.src = p.src;
+    cap.textContent = p.caption;
+    count.textContent = `${index + 1} / ${PAGES.length}`;
+  };
+  const open = () => {
+    index = 0;
+    render();
+    lb.classList.add("is-show");
+    document.body.style.overflow = "hidden";
+  };
+  const close = () => {
+    lb.classList.remove("is-show");
+    document.body.style.overflow = "";
+    img.removeAttribute("src");
+  };
+  const go = (d) => {
+    index = (index + d + PAGES.length) % PAGES.length;
+    render();
+  };
+
+  document.getElementById("view-pages").addEventListener("click", open);
+  closeBtn.addEventListener("click", close);
+  prev.addEventListener("click", (e) => { e.stopPropagation(); go(-1); });
+  next.addEventListener("click", (e) => { e.stopPropagation(); go(1); });
+  lb.addEventListener("click", (e) => { if (e.target === lb) close(); });
+  document.addEventListener("keydown", (e) => {
+    if (!lb.classList.contains("is-show")) return;
+    if (e.key === "Escape") close();
+    if (e.key === "ArrowLeft") go(-1);
+    if (e.key === "ArrowRight") go(1);
+  });
+})();
+
+/* ---------- 扫码分享 ---------- */
+function initShareQr() {
+  const el = document.getElementById("share-qr");
+  if (!el) return;
+  const url = window.location.href;
+  try {
+    if (window.QRCode) {
+      new QRCode(el, {
+        text: url,
+        width: 150,
+        height: 150,
+        colorDark: "#111827",
+        colorLight: "#ffffff",
+        correctLevel: QRCode.CorrectLevel.M
+      });
+    } else {
+      el.innerHTML = '<div class="share-qr-fallback">二维码加载失败</div>';
+    }
+  } catch (e) {
+    el.innerHTML = '<div class="share-qr-fallback">二维码加载失败</div>';
+  }
+}
+
+/* ---------- 初始化 ---------- */
+document.getElementById("quiz-root").innerHTML = renderQuizSet(QUIZSET);
+initQuizSet(document.querySelector(".qz-set"));
+document.querySelectorAll(".qz-sea").forEach(initSeaChart);
+document.querySelectorAll(".dc-game").forEach(initDragClassify);
+initShareQr();
+</script>
+</body>
+</html>
