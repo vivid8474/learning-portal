@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>S1 Science · Water Quiz (2.3)</title>
+<style>
+:root{
+  --brand:#2563eb;
+  --brand-ink:#1d4ed8;
+  --ink:#1e293b;
+  --ink-2:#475569;
+  --muted:#94a3b8;
+  --line:#e2e8f0;
+  --bg:#f5f7fb;
+  --card:#ffffff;
+  --shadow:0 4px 16px rgba(15,23,42,.06);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+html{scroll-padding-top:16px}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",sans-serif;
+  background:var(--bg);color:var(--ink);line-height:1.55;
+}
+.wrap{max-width:860px;margin:0 auto;padding:24px 16px 60px}
+
+/* 顶部标题 */
+.topbar{text-align:center;padding:8px 0 20px}
+.topbar h1{font-size:26px;font-weight:800;margin:0;letter-spacing:.2px;color:var(--ink)}
+.topbar p{margin:8px auto 0;color:var(--muted);font-size:14px;max-width:560px}
+.topbar .badge{display:inline-block;margin-top:10px;font-size:12.5px;font-weight:700;color:#1e3a8a;background:#eef4ff;border:1px solid #d5e2fb;border-radius:999px;padding:4px 14px}
+.topbar-nav{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:14px}
+.topbar-nav a{display:inline-flex;align-items:center;gap:5px;font-size:13px;font-weight:700;color:#1e3a8a;background:#eef4ff;border:1px solid #d5e2fb;border-radius:999px;padding:6px 14px;text-decoration:none;transition:.15s}
+.topbar-nav a:hover{background:#dbe7ff;border-color:#bcd0f2}
+
+/* 图片灯箱 */
+.lightbox{position:fixed;inset:0;z-index:200;background:rgba(10,16,26,.9);display:flex;align-items:center;justify-content:center;padding:24px;opacity:0;pointer-events:none;transition:opacity .22s;cursor:zoom-out}
+.lightbox.is-show{opacity:1;pointer-events:auto}
+.lightbox img{max-width:100%;max-height:100%;border-radius:8px;box-shadow:0 24px 70px rgba(0,0,0,.5);background:#fff}
+.lightbox__close{position:absolute;top:18px;right:20px;width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.14);color:#fff;border:0;font-size:22px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1}
+.lightbox__caption{position:absolute;left:50%;bottom:22px;transform:translateX(-50%);color:#fff;font-size:13px;background:rgba(0,0,0,.45);padding:6px 14px;border-radius:999px;max-width:calc(100vw - 40px);text-align:center}
+.lightbox__nav{position:absolute;top:50%;transform:translateY(-50%);width:46px;height:46px;border-radius:50%;border:0;cursor:pointer;background:rgba(255,255,255,.14);color:#fff;font-size:30px;line-height:1;display:flex;align-items:center;justify-content:center;transition:background .15s}
+.lightbox__nav:hover{background:rgba(255,255,255,.28)}
+.lightbox__prev{left:14px}
+.lightbox__next{right:14px}
+.lightbox__count{position:absolute;top:22px;left:50%;transform:translateX(-50%);color:#fff;font-size:13px;background:rgba(0,0,0,.45);padding:5px 13px;border-radius:999px;font-variant-numeric:tabular-nums}
+
+/* 查看原书页按钮 */
+.btn-view{display:block;margin:18px auto 0;border:1.5px solid #d5e0f0;background:#fff;color:#1e3a8a;font-weight:700;font-size:14px;border-radius:10px;padding:11px 22px;cursor:pointer;transition:.15s}
+.btn-view:hover{border-color:#2f6bff;color:#2f6bff}
+
+/* Science 章节测验 · 分节客观题 */
+.qz-set{border:1px solid #e3ecf9;border-radius:16px;background:#fff;padding:16px;margin:4px 0}
+.qz-title{font-size:17px;font-weight:900;color:#1e3a8a;margin-bottom:4px}
+.qz-intro{font-size:13px;color:#64748b;margin-bottom:14px}
+.qz-section{border:1px solid #e8eff9;border-radius:14px;margin-bottom:0;overflow:hidden;background:#fff}
+.qz-divider{border-top:2px dashed #cbd5e1;margin:34px 0}
+.qz-sec-head{display:flex;align-items:center;gap:9px;padding:13px 16px;background:#f0f6ff;border-bottom:1px solid #e8eff9}
+.qz-sec-icon{font-size:19px;line-height:1}
+.qz-sec-title{font-size:15px;font-weight:900;color:#1e3a8a}
+.qz-sec-sub{font-size:11.5px;font-weight:700;color:#64748b;background:#eef2f9;border-radius:999px;padding:2px 9px;margin-left:auto;white-space:nowrap}
+.qz-block{background:#f8f9fa;border:1px solid #eef1f5;border-radius:12px;padding:20px;margin:16px 16px 24px}
+.qz-block:last-child{margin-bottom:16px}
+.qz-block--level,.qz-block--note{background:transparent;border:0;border-radius:0;padding:0;margin:6px 16px 18px}
+.qz-block--level:first-child,.qz-block--note:first-child{margin-top:16px}
+.qz-block-title{font-size:15.5px;font-weight:900;color:#1e3a8a;margin-bottom:10px}
+.qz-block-intro{font-size:12.5px;color:#64748b;line-height:1.55;margin-bottom:10px}
+.qz-level{display:inline-block;font-size:12px;font-weight:900;letter-spacing:.5px;color:#fff;background:#2f6bff;border:1px solid #2f6bff;border-radius:999px;padding:4px 14px;box-shadow:0 2px 8px rgba(47,107,255,.25)}
+.qz-note-text{font-size:13.5px;color:#33415c;line-height:1.6;font-weight:600}
+
+/* 下拉 */
+.qz-sel{width:100%;border:1.5px solid #d5e0f0;border-radius:8px;padding:7px 9px;font-size:13px;color:#1e293b;background:#fff;font-weight:600;cursor:pointer;transition:border-color .12s,background .12s}
+.qz-sel:focus{outline:none;border-color:#2f6bff}
+.qz-sel.is-correct{border-color:#22a06b;background:#e6f6ec;color:#14683f}
+.qz-sel.is-wrong{border-color:#e11d48;background:#fff1f2;color:#be123c}
+
+/* 单选题 */
+.qz-mc{margin-bottom:18px}
+.qz-mc:last-child{margin-bottom:0}
+.qz-mc-text{font-size:14px;color:#1e293b;font-weight:700;line-height:1.5;margin-bottom:10px}
+.qz-mark{color:#e11d48;font-weight:900;font-size:1.25em;text-decoration:underline;background:#fff1f2;border-radius:4px;padding:0 3px;white-space:nowrap}
+.qz-mark::before{content:"⚠️ ";font-size:.9em}
+.qz-hint{font-size:12px;color:#b45309;background:#fff7e6;border:1px solid #fde68a;border-radius:8px;padding:7px 10px;line-height:1.45;margin-bottom:9px}
+.qz-options{display:flex;flex-direction:column;gap:6px}
+.qz-opt{display:flex;align-items:center;gap:9px;cursor:pointer;border:1.5px solid #e3ecf9;border-radius:9px;padding:8px 11px;transition:border-color .12s,background .12s}
+.qz-opt:hover{border-color:#bcd0f2;background:#f5f9ff}
+.qz-opt input{accent-color:#2f6bff;margin:0}
+.qz-opt__label{font-size:13px;color:#33415c;font-weight:600;line-height:1.4}
+.qz-opt.is-correct{border-color:#22a06b;background:#e6f6ec}
+.qz-opt.is-correct .qz-opt__label{color:#14683f}
+.qz-opt.is-wrong{border-color:#e11d48;background:#fff1f2}
+.qz-opt.is-wrong .qz-opt__label{color:#be123c}
+.qz-fb{font-size:12.5px;font-weight:700;margin-top:6px}
+.qz-fb.is-ok{color:#14683f}
+.qz-fb.is-bad{color:#be123c}
+
+/* 选词填空 */
+.qz-wordbank{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.qz-word{font-size:12px;font-weight:700;color:#1e3a8a;background:#eef4ff;border:1px solid #d5e2fb;border-radius:999px;padding:3px 10px}
+.qz-fill-item{margin-bottom:12px;line-height:1.9}
+.qz-fill-item:last-child{margin-bottom:0}
+.qz-fill-label{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;background:#2f6bff;color:#fff;font-size:12px;font-weight:900;margin-right:8px;vertical-align:middle;flex:0 0 auto;box-shadow:0 2px 6px rgba(47,107,255,.3)}
+.qz-fill-text{font-size:13.5px;color:#1e293b;font-weight:600}
+.qz-fill-item .qz-sel{display:inline-block;width:auto;min-width:86px;padding:3px 6px;font-size:12.5px;margin:0 2px;vertical-align:middle}
+
+/* 判断 T/F */
+.qz-tf-item{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid #f1f5fb}
+.qz-tf-item:last-child{border-bottom:0}
+.qz-tf-q{flex:1;font-size:13.5px;color:#1e293b;font-weight:700;line-height:1.45}
+.qz-tf-btns{display:flex;gap:6px;flex:0 0 auto}
+.qz-tf-btn{width:42px;height:34px;border-radius:8px;border:1.5px solid #d5e0f0;background:#fff;color:#33415c;font-weight:800;font-size:14px;cursor:pointer;transition:all .12s}
+.qz-tf-btn:hover{border-color:#bcd0f2}
+.qz-tf-btn.is-on{border-color:#2f6bff;background:#2f6bff;color:#fff}
+.qz-tf-btn.is-correct{border-color:#22a06b;background:#e6f6ec;color:#14683f}
+.qz-tf-btn.is-wrong{border-color:#e11d48;background:#fff1f2;color:#be123c}
+.qz-tf-btn:disabled{cursor:default}
+
+/* 匹配题 */
+.qz-match{display:flex;flex-direction:column;gap:8px}
+.qz-match-item{display:flex;align-items:center;gap:10px;padding:8px 10px;background:#fff;border:1px solid #e8eff9;border-radius:9px}
+.qz-match-num{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;background:#2f6bff;color:#fff;font-size:12px;font-weight:900;flex:0 0 auto}
+.qz-match-term{flex:1;font-size:13.5px;font-weight:700;color:#1e293b}
+.qz-match-item .qz-sel{width:auto;min-width:80px;flex:0 0 auto}
+.qz-match-desc{display:grid;grid-template-columns:1fr 1fr;gap:6px 14px;margin:12px 0;padding:12px 14px;background:#f0f6ff;border:1px dashed #c7d6ee;border-radius:10px}
+.qz-match-desc-item{font-size:12px;color:#33415c;line-height:1.5}
+.qz-match-desc-item b{color:#1e3a8a}
+
+/* 句子混合填空（下拉 + 输入） */
+.qz-fillmix{font-size:14.5px;line-height:2.2;color:#1e293b;font-weight:600}
+.qz-fillmix .qz-sel{display:inline-block;width:auto;min-width:88px;padding:3px 8px;font-size:13px;margin:0 3px;vertical-align:middle}
+.qz-fillmix .qz-short{display:inline-block;width:auto;min-width:150px;padding:5px 8px;font-size:13px;margin:0 3px;vertical-align:middle}
+.qz-fillmix .qz-fb{display:block;margin:2px 0 0;font-size:11.5px}
+
+/* 短文本填空 */
+.qz-short-item{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid #f1f5fb}
+.qz-short-item:last-child{border-bottom:0}
+.qz-short-label{font-size:13px;font-weight:700;color:#33415c;flex:0 0 auto;min-width:130px}
+.qz-short-input{flex:1;min-width:0}
+.qz-short{width:100%;border:1.5px solid #d5e0f0;border-radius:8px;padding:8px 10px;font-size:13px;font-weight:600;color:#1e293b;background:#fff}
+.qz-short:focus{outline:none;border-color:#2f6bff}
+.qz-short.is-correct{border-color:#22a06b;background:#e6f6ec;color:#14683f}
+.qz-short.is-wrong{border-color:#e11d48;background:#fff1f2;color:#be123c}
+.qz-short-input .qz-fb{display:block;margin-top:4px}
+
+/* 插图 */
+.qz-figure{text-align:center;margin:4px 0 2px}
+.qz-figure img{max-width:100%;border-radius:10px;border:1px solid #e3ecf9;background:#fff}
+.qz-figure figcaption{font-size:12px;color:#64748b;margin-top:6px;line-height:1.5}
+
+/* 提交与结果 */
+.qz-actions{margin-top:26px}
+.qz-submit{border:1px solid #22a06b;background:#22a06b;color:#fff;font-weight:800;font-size:15px;border-radius:10px;padding:12px 24px;cursor:pointer;width:100%}
+.qz-submit:hover{background:#1a865a;border-color:#1a865a}
+.qz-submit:disabled{background:#94a3b8;border-color:#94a3b8;cursor:default}
+.qz-result{margin-top:14px;border:1px solid #e3ecf9;border-radius:12px;background:#f7faff;padding:16px;text-align:center}
+.qz-score{font-size:34px;font-weight:900;color:#1e3a8a;line-height:1.1}
+.qz-score-sub{font-size:13px;color:#64748b;margin-top:6px}
+.qz-score-msg{font-size:14px;font-weight:700;color:#1e3a8a;margin-top:10px}
+.qz-score-note{font-size:12px;color:#64748b;margin-top:9px;line-height:1.5}
+
+/* 扫码分享卡片 */
+.share-card{margin:30px auto 0;max-width:360px;padding:24px 20px;background:var(--card);border:1px solid var(--line);border-radius:18px;display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center;box-shadow:var(--shadow)}
+.share-qr{width:150px;height:150px;display:flex;align-items:center;justify-content:center;border:1px solid #eef2f7;border-radius:12px;background:#fff;overflow:hidden}
+.share-qr canvas,.share-qr img{display:block;width:150px;height:150px}
+.share-title{font-size:15px;font-weight:750;color:var(--ink);margin:0}
+.share-sub{font-size:12.5px;color:var(--muted);margin:0;letter-spacing:.2px}
+.share-qr-fallback{font-size:13px;color:var(--muted)}
+
+/* toast */
+.toast{position:fixed;left:50%;bottom:30px;transform:translateX(-50%) translateY(20px);background:#111827;color:#fff;padding:11px 20px;border-radius:999px;font-size:14px;opacity:0;pointer-events:none;transition:.25s;z-index:50;max-width:90vw}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+@media (max-width:560px){
+  .topbar h1{font-size:21px}
+  .qz-block{padding:16px;margin:12px 12px 20px}
+  .qz-block--level,.qz-block--note{margin:4px 12px 16px}
+  .lightbox__nav{width:38px;height:38px;font-size:24px}
+  .lightbox__prev{left:6px}
+  .lightbox__next{right:6px}
+  .qz-tf-item{flex-direction:column;align-items:flex-start}
+  .qz-tf-btns{align-self:flex-end}
+  .qz-short-item{flex-direction:column;align-items:stretch}
+  .qz-short-label{min-width:0}
+  .qz-match-desc{grid-template-columns:1fr}
+  .qz-fillmix .qz-short{min-width:120px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="topbar">
+    <h1>S1 Science · Water Quiz (2.3)</h1>
+    <p>Chapter 2.3 — Dissolving · Workbook practice (P.42–45). Answer every question, then press “Submit &amp; mark”.</p>
+    <span class="badge">📚 Workbook P.42–45 · 36 marks</span>
+    <nav class="topbar-nav">
+      <a href="s1-science-notes-2-3.html" data-keep-share>📖 Back to Note</a>
+      <a href="index.html" data-keep-share>🏠 Back to Home</a>
+    </nav>
+  </header>
+
+  <div id="quiz-root"></div>
+
+  <button class="btn-view" id="view-pages" type="button">📖 View original workbook pages</button>
+
+  <section class="share-card" aria-label="扫码分享">
+    <div class="share-qr" id="share-qr"></div>
+    <p class="share-title">📱 S1 Science 溶解专题测验（手机扫码即测）</p>
+    <p class="share-sub">Workbook P.42–45 · 36 分自动批改</p>
+  </section>
+</div>
+
+<div class="lightbox" id="lightbox" aria-hidden="true">
+  <button class="lightbox__close" type="button" aria-label="Close">×</button>
+  <button class="lightbox__nav lightbox__prev" type="button" aria-label="Previous">‹</button>
+  <button class="lightbox__nav lightbox__next" type="button" aria-label="Next">›</button>
+  <span class="lightbox__count"></span>
+  <img alt="Original page">
+  <div class="lightbox__caption"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="vendor/qrcode.min.js"></script>
+<script>
+const escapeHTML = (str) =>
+  String(str).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+const extractInts = (s) => (String(s).match(/\d+/g) || []).map(Number);
+const extractSigned = (s) => (String(s).replace(/[\u2212\u2013\u2014]/g, "-").match(/-?\d+/g) || []).map(Number);
+
+/* ---------- 测验数据 ---------- */
+const QUIZSET = {
+  title: "Section exercise 2.3 · Dissolving",
+  intro: "Workbook P.42–45 · Level 1 and Level 2 questions. Answer everything, then press “Submit & mark” for your objective score (36 marks).",
+  sections: [
+    {
+      id: "D",
+      icon: "🧪",
+      title: "Section D · Workbook Practice",
+      sub: "Workbook P.42–45 · 36 marks",
+      blocks: [
+        { kind: "level", text: "P.42 · Level 1" },
+        { kind: "fill",
+          title: "A. Fill in the blanks",
+          intro: "Fill in the blanks below with the words given. (7 marks)",
+          wordbank: ["dissolve", "soluble", "insoluble", "saturated", "solubility", "solute", "solution", "solvent", "temperature"],
+          items: [
+            { label: "1", parts: [
+              { text: "When table salt dissolves in water, water is the " },
+              { blank: "solvent" },
+              { text: " and table salt is the " },
+              { blank: "solute" },
+              { text: "." }
+            ]},
+            { label: "2", parts: [
+              { text: "Substances that can be dissolved in water are described as " },
+              { blank: "soluble" },
+              { text: " in water; those that cannot are described as " },
+              { blank: "insoluble" },
+              { text: "." }
+            ]},
+            { label: "3", parts: [
+              { text: "When sugar is added to a sugar solution until no more sugar can be dissolved, the solution is said to be " },
+              { blank: "saturated" },
+              { text: "." }
+            ]},
+            { label: "4", parts: [
+              { text: "The amount of a substance that can be dissolved in a fixed amount of solvent at a given temperature is known as the " },
+              { blank: "solubility" },
+              { text: " of the substance. It usually increases with " },
+              { blank: "temperature" },
+              { text: "." }
+            ]}
+          ]
+        },
+        { kind: "tf",
+          title: "B. True or false",
+          intro: "Write T for a true statement and F for a false statement. (5 marks)",
+          items: [
+            { q: "Water can dissolve all solids.", answer: "F" },
+            { q: "Table salt is no longer in water after it has dissolved.", answer: "F" },
+            { q: "Sugar has a higher rate of dissolving when the temperature of water is higher.", answer: "T" },
+            { q: "For a solute with a higher solubility, more of it can be dissolved in a fixed volume of solvent before becoming saturated.", answer: "T" },
+            { q: "No matter how much alum is added in water, all of it will dissolve.", answer: "F" }
+          ]
+        },
+        { kind: "level", text: "P.43 · Level 1 & Level 2" },
+        { kind: "match",
+          title: "C. Matching",
+          intro: "Match the terms on the left with their descriptions on the right. Choose a letter (a–g) for each term. (7 marks)",
+          options: ["a", "b", "c", "d", "e", "f", "g"],
+          descriptions: [
+            { key: "a", text: "A substance that is dissolved" },
+            { key: "b", text: "A liquid that dissolves other substances" },
+            { key: "c", text: "It is formed when a solute dissolves in a solvent" },
+            { key: "d", text: "A substance changing from solid state to liquid state at its melting point" },
+            { key: "e", text: "A solution which has dissolved the maximum amount of solute and cannot dissolve any more solute" },
+            { key: "f", text: "The amount of a substance that can be dissolved in a fixed amount of solvent at a given temperature" },
+            { key: "g", text: "A process in which the solute breaks down into small pieces that we cannot see and spread evenly in the solvent" }
+          ],
+          items: [
+            { term: "Dissolving", answer: "g" },
+            { term: "Melting", answer: "d" },
+            { term: "Solute", answer: "a" },
+            { term: "Solvent", answer: "b" },
+            { term: "Solution", answer: "c" },
+            { term: "Solubility", answer: "f" },
+            { term: "Saturated solution", answer: "e" }
+          ]
+        },
+        { kind: "mc",
+          title: "A. Multiple-choice (Level 2)",
+          intro: "Choose the best answer for each question. (4 marks)",
+          items: [
+            { q: "Which of the following does NOT involve a solute dissolving in a solvent?", options: [
+              "Salt disappearing in soup.",
+              "Sugar disappearing in tea.",
+              "Ice cubes disappearing in fruit juice.",
+              "Coffee powder disappearing in hot water."
+            ], answer: 2 },
+            { q: "When making a cup of coffee, which of the following is / are the solute(s)? (1) Coffee powder (2) Sugar cubes (3) Hot water", options: [
+              "(1) only",
+              "(3) only",
+              "(1) and (2) only",
+              "(2) and (3) only"
+            ], answer: 2 },
+            { q: "Which of the following substances is insoluble in water?", options: [
+              "Table salt", "Sand", "Sugar", "Alum"
+            ], answer: 1 },
+            { q: "Which of the following statements about solubility is correct?", options: [
+              "If the temperature of a saturated solution is kept unchanged, the solution cannot dissolve more solutes.",
+              "Substance A has a higher solubility than another substance B if A dissolves faster than B.",
+              "The solubility of alum in water is independent of temperature.",
+              "Table salt and sugar have the same solubility."
+            ], answer: 0 }
+          ]
+        },
+        { kind: "level", text: "P.44–45 · B Structured questions (13 marks)" },
+        { kind: "note", text: "1. Jenny and Tony are having hot tea. They need to add milk and sugar to the tea. There are two types of sugar: sugar cubes and bags of granulated sugar." },
+        { kind: "figure",
+          src: "images/science/ch2/tea-jenny-tony.jpg",
+          caption: "Jenny adds cold milk first, then a sugar cube. Tony adds a sugar cube first, then the same amount of cold milk."
+        },
+        { kind: "fillmix",
+          title: "a. Whose cup of tea is ready to drink first?",
+          intro: "They wait until all the sugar has dissolved. Fill in the blanks below to explain your answer briefly. (5 marks)",
+          parts: [
+            { select: { answer: "Tony", opts: ["Tony", "Jenny"] } },
+            { text: "'s cup of tea is ready to drink first. Adding cold milk decreases the " },
+            { select: { answer: "temperature", opts: ["temperature", "solubility", "amount of sugar"] } },
+            { text: " of the tea. Sugar dissolves " },
+            { select: { answer: "slower", opts: ["slower", "faster"] } },
+            { text: " when " },
+            { input: { qtype: "text", answer: { need: ["temperature"], any: ["lower", "colder", "cold", "decreas"] }, pretty: "the temperature is lower" } },
+            { text: ". Therefore the sugar in " },
+            { select: { answer: "Jenny", opts: ["Tony", "Jenny"] } },
+            { text: "'s cup dissolves slower." }
+          ]
+        },
+        { kind: "fillmix",
+          title: "b. How can they get the tea ready in the shortest time?",
+          intro: "Fill in the blanks below. (3 marks)",
+          parts: [
+            { text: "They should add " },
+            { input: { qtype: "text", answer: { need: ["sugar"], any: [] }, pretty: "granulated sugar" } },
+            { text: " first and " },
+            { input: { qtype: "text", answer: { need: ["stir"], any: [] }, pretty: "stir" } },
+            { text: " the mixture. After the sugar has dissolved, they add the " },
+            { input: { qtype: "text", answer: { need: ["milk"], any: [] }, pretty: "milk" } },
+            { text: "." }
+          ]
+        },
+        { kind: "level", text: "P.45 · 2. Effect of temperature on the rate of dissolving" },
+        { kind: "note", text: "2. To study the effect of temperature on the rate of dissolving of sugar in water, Peggy performs an experiment. She adds 10 g of sugar into 100 cm³ of water at different temperatures without stirring." },
+        { kind: "figure",
+          src: "images/science/ch2/peggy-setup.jpg",
+          caption: "Peggy adds 10 g of sugar to 100 cm³ of water at 20 °C and 60 °C."
+        },
+        { kind: "figure",
+          src: "images/science/ch2/peggy-graph.jpg",
+          caption: "The graph shows the result of her experiment."
+        },
+        { kind: "shorttext",
+          title: "a. Name the following variables",
+          intro: "Type your answers below. (3 marks)",
+          items: [
+            { label: "Independent variable", type: "text", answer: { need: ["temperature"], any: [] }, pretty: "temperature of the water" },
+            { label: "Dependent variable", type: "text", answer: { need: ["time"], any: [] }, pretty: "time needed to dissolve all the sugar" },
+            { label: "Controlled variable (one)", type: "text", answer: { need: [], any: ["sugar", "water", "stir", "volume", "amount", "mass", "type", "10"] }, pretty: "mass of sugar / volume of water / no stirring" }
+          ]
+        },
+        { kind: "shorttext",
+          title: "b. Predict the time needed at 68 °C",
+          intro: "Predict the time needed to dissolve all the sugar in 68 °C water. Type a number of seconds. (1 mark)",
+          items: [
+            { label: "Time needed", type: "numrange", answer: [30, 42], pretty: "about 36 s" }
+          ]
+        },
+        { kind: "mc",
+          title: "c. Effect of stirring on the graph",
+          intro: "The question asks you to sketch a line for a stirred solution. Choose the correct statement instead. (1 mark)",
+          items: [
+            { q: "If the solution is stirred, how will the line on the graph change?", options: [
+              "It shifts upward (takes a longer time).",
+              "It shifts downward (takes a shorter time).",
+              "It stays the same."
+            ], answer: 1 }
+          ]
+        }
+      ]
+    }
+  ]
+};
+
+/* ---------- 渲染 ---------- */
+function renderQzText(text, mark) {
+  if (!mark) return escapeHTML(text);
+  const idx = text.toUpperCase().indexOf(String(mark).toUpperCase());
+  if (idx < 0) return escapeHTML(text);
+  return escapeHTML(text.slice(0, idx)) +
+    `<span class="qz-mark">${escapeHTML(text.slice(idx, idx + mark.length))}</span>` +
+    escapeHTML(text.slice(idx + mark.length));
+}
+function qzSelect(answer, opts, placeholder) {
+  const options = (opts || []).map((o) => `<option value="${escapeHTML(o)}">${escapeHTML(o)}</option>`).join("");
+  return `<select class="qz-sel" data-answer="${escapeHTML(answer)}"><option value="">${escapeHTML(placeholder || "—")}</option>${options}</select>`;
+}
+function qzNumBadge(n) {
+  return `<span class="qz-fill-label">${escapeHTML(String(n))}</span>`;
+}
+function renderQuizBlock(block, secIdx, blockIdx) {
+  const esc = escapeHTML;
+  if (!block || !block.kind) return "";
+  if (block.kind === "level") {
+    return `<div class="qz-block qz-block--level"><span class="qz-level">${esc(block.text)}</span></div>`;
+  }
+  if (block.kind === "note") {
+    return `<div class="qz-block qz-block--note"><div class="qz-note-text">${esc(block.text)}</div></div>`;
+  }
+  if (block.kind === "fill") {
+    const bank = (block.wordbank || []).map((w) => `<span class="qz-word">${esc(w)}</span>`).join("");
+    const opts = block.wordbank || [];
+    const items = (block.items || []).map((it) => {
+      const inner = it.parts.map((p) => p.blank
+        ? qzSelect(p.blank, opts, "—")
+        : `<span class="qz-fill-text">${esc(p.text)}</span>`).join("");
+      return `<div class="qz-fill-item"><span class="qz-fill-label">${esc(it.label)}</span>${inner}</div>`;
+    }).join("");
+    return `<div class="qz-block">
+      ${block.title ? `<div class="qz-block-title">${esc(block.title)}</div>` : ""}
+      ${block.intro ? `<div class="qz-block-intro">${esc(block.intro)}</div>` : ""}
+      <div class="qz-wordbank">${bank}</div>
+      ${items}
+    </div>`;
+  }
+  if (block.kind === "tf") {
+    const items = (block.items || []).map((it, i) => `
+      <div class="qz-tf-item">
+        ${qzNumBadge(i + 1)}
+        <div class="qz-tf-q">${esc(it.q)}</div>
+        <div class="qz-tf-btns" data-answer="${esc(it.answer)}">
+          <button type="button" class="qz-tf-btn" data-val="T">T</button>
+          <button type="button" class="qz-tf-btn" data-val="F">F</button>
+        </div>
+      </div>`).join("");
+    return `<div class="qz-block">
+      ${block.title ? `<div class="qz-block-title">${esc(block.title)}</div>` : ""}
+      ${block.intro ? `<div class="qz-block-intro">${esc(block.intro)}</div>` : ""}
+      ${items}
+    </div>`;
+  }
+  if (block.kind === "mc") {
+    const items = (block.items || []).map((q, qi) => `
+      <div class="qz-mc" data-answer="${q.answer}">
+        ${q.hint ? `<div class="qz-hint">${esc(q.hint)}</div>` : ""}
+        <div class="qz-mc-text">${qzNumBadge(qi + 1)}${renderQzText(q.q, q.mark)}</div>
+        <div class="qz-options">
+          ${(q.options || []).map((o, oi) => `
+            <label class="qz-opt">
+              <input type="radio" name="qz-mc-${secIdx}-${blockIdx}-${qi}" value="${oi}">
+              <span class="qz-opt__label">${String.fromCharCode(65 + oi)}. ${esc(o)}</span>
+            </label>`).join("")}
+        </div>
+        <div class="qz-fb" hidden></div>
+      </div>`).join("");
+    return `<div class="qz-block">
+      ${block.title ? `<div class="qz-block-title">${esc(block.title)}</div>` : ""}
+      ${block.intro ? `<div class="qz-block-intro">${esc(block.intro)}</div>` : ""}
+      ${items}
+    </div>`;
+  }
+  if (block.kind === "match") {
+    const opts = block.options || [];
+    const items = (block.items || []).map((it, i) => `
+      <div class="qz-match-item">
+        <span class="qz-match-num">${i + 1}</span>
+        <span class="qz-match-term">${esc(it.term)}</span>
+        ${qzSelect(it.answer, opts, "a–g")}
+      </div>`).join("");
+    const desc = (block.descriptions || []).map((d) => `<div class="qz-match-desc-item"><b>${esc(d.key)}.</b> ${esc(d.text)}</div>`).join("");
+    return `<div class="qz-block">
+      ${block.title ? `<div class="qz-block-title">${esc(block.title)}</div>` : ""}
+      ${block.intro ? `<div class="qz-block-intro">${esc(block.intro)}</div>` : ""}
+      <div class="qz-match-desc">${desc}</div>
+      <div class="qz-match">${items}</div>
+    </div>`;
+  }
+  if (block.kind === "fillmix") {
+    const parts = (block.parts || []).map((p) => {
+      if (p.text) return `<span>${esc(p.text)}</span>`;
+      if (p.select) return qzSelect(p.select.answer, p.select.opts, "—");
+      if (p.input) return `<input class="qz-short" type="text" data-qtype="${esc(p.input.qtype || "text")}" data-answer="${esc(JSON.stringify(p.input.answer))}" data-pretty="${esc(p.input.pretty || "")}" placeholder="…" autocomplete="off"><span class="qz-fb" hidden></span>`;
+      return "";
+    }).join("");
+    return `<div class="qz-block">
+      ${block.title ? `<div class="qz-block-title">${esc(block.title)}</div>` : ""}
+      ${block.intro ? `<div class="qz-block-intro">${esc(block.intro)}</div>` : ""}
+      <div class="qz-fillmix">${parts}</div>
+    </div>`;
+  }
+  if (block.kind === "shorttext") {
+    const items = (block.items || []).map((it) => `
+      <div class="qz-short-item">
+        <span class="qz-short-label">${esc(it.label)}</span>
+        <div class="qz-short-input">
+          <input class="qz-short" type="text" data-qtype="${esc(it.type)}" data-answer="${esc(JSON.stringify(it.answer))}" data-pretty="${esc(it.pretty || "")}" placeholder="Type here…" autocomplete="off">
+          <span class="qz-fb" hidden></span>
+        </div>
+      </div>`).join("");
+    return `<div class="qz-block">
+      ${block.title ? `<div class="qz-block-title">${esc(block.title)}</div>` : ""}
+      ${block.intro ? `<div class="qz-block-intro">${esc(block.intro)}</div>` : ""}
+      ${items}
+    </div>`;
+  }
+  if (block.kind === "figure") {
+    return `<div class="qz-block">
+      <figure class="qz-figure">
+        <img src="${esc(block.src)}" alt="${esc(block.caption || "")}" loading="lazy">
+        ${block.caption ? `<figcaption>${esc(block.caption)}</figcaption>` : ""}
+      </figure>
+    </div>`;
+  }
+  return "";
+}
+function renderQuizSet(qz) {
+  const esc = escapeHTML;
+  const sections = (qz.sections || []).map((sec, si) => {
+    const blocks = (sec.blocks || []).map((b, bi) => renderQuizBlock(b, si, bi)).join("");
+    return `
+      <div class="qz-section">
+        <div class="qz-sec-head">
+          <span class="qz-sec-icon">${esc(sec.icon || "📋")}</span>
+          <span class="qz-sec-title">${esc(sec.title || "")}</span>
+          ${sec.sub ? `<span class="qz-sec-sub">${esc(sec.sub)}</span>` : ""}
+        </div>
+        ${blocks}
+      </div>`;
+  }).join('<div class="qz-divider" role="separator" aria-hidden="true"></div>');
+  return `
+    <div class="qz-set" data-quizset>
+      <div class="qz-title">${esc(qz.title || "Chapter Quiz")}</div>
+      <div class="qz-intro">${esc(qz.intro || "")}</div>
+      ${sections}
+      <div class="qz-actions">
+        <button class="qz-submit" type="button">✍️ Submit &amp; mark</button>
+      </div>
+      <div class="qz-result" hidden></div>
+    </div>`;
+}
+
+/* ---------- 判分 ---------- */
+function initQuizSet(root) {
+  const submitBtn = root.querySelector(".qz-submit");
+  const result = root.querySelector(".qz-result");
+  if (!submitBtn) return;
+
+  root.querySelectorAll(".qz-tf-btns").forEach((group) => {
+    group.querySelectorAll(".qz-tf-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        if (btn.disabled) return;
+        group.querySelectorAll(".qz-tf-btn").forEach((b) => b.classList.remove("is-on"));
+        btn.classList.add("is-on");
+      });
+    });
+  });
+
+  submitBtn.addEventListener("click", () => {
+    let total = 0;
+    let correct = 0;
+
+    root.querySelectorAll("select.qz-sel[data-answer]").forEach((sel) => {
+      total++;
+      const ok = sel.value === sel.getAttribute("data-answer");
+      if (ok) correct++;
+      sel.classList.toggle("is-correct", ok);
+      sel.classList.toggle("is-wrong", !ok);
+      sel.disabled = true;
+    });
+
+    root.querySelectorAll(".qz-mc[data-answer]").forEach((q) => {
+      total++;
+      const ans = Number(q.getAttribute("data-answer"));
+      const checked = q.querySelector('input[type=radio]:checked');
+      const ok = checked ? Number(checked.value) === ans : false;
+      if (ok) correct++;
+      q.querySelectorAll(".qz-opt").forEach((opt, oi) => {
+        const inp = opt.querySelector("input");
+        const isCorrect = oi === ans;
+        opt.classList.toggle("is-correct", isCorrect);
+        opt.classList.toggle("is-wrong", !!inp && inp.checked && !isCorrect);
+        if (inp) inp.disabled = true;
+      });
+      const fb = q.querySelector(".qz-fb");
+      if (fb) {
+        fb.hidden = false;
+        fb.className = "qz-fb " + (ok ? "is-ok" : "is-bad");
+        fb.textContent = ok ? "✓ Correct" : `✗ Correct answer: ${String.fromCharCode(65 + ans)}`;
+      }
+    });
+
+    root.querySelectorAll(".qz-tf-btns[data-answer]").forEach((group) => {
+      total++;
+      const ans = group.getAttribute("data-answer");
+      const on = group.querySelector(".qz-tf-btn.is-on");
+      const ok = on ? on.getAttribute("data-val") === ans : false;
+      if (ok) correct++;
+      group.querySelectorAll(".qz-tf-btn").forEach((b) => {
+        const good = b.getAttribute("data-val") === ans;
+        b.classList.toggle("is-correct", good);
+        b.classList.toggle("is-wrong", b.classList.contains("is-on") && !good);
+        b.disabled = true;
+      });
+    });
+
+    root.querySelectorAll("input.qz-short[data-qtype]").forEach((inp) => {
+      total++;
+      const qtype = inp.getAttribute("data-qtype");
+      let ok = false;
+      if (qtype === "range") {
+        let expected = [];
+        try { expected = JSON.parse(inp.getAttribute("data-answer")).map(Number); } catch (e) {}
+        const nums = extractInts(inp.value);
+        ok = nums.length >= 2 && nums[0] === expected[0] && nums[1] === expected[1];
+      } else if (qtype === "num") {
+        const expected = Number(inp.getAttribute("data-answer"));
+        ok = extractSigned(inp.value).includes(expected);
+      } else if (qtype === "numrange") {
+        let r = [0, 0];
+        try { r = JSON.parse(inp.getAttribute("data-answer")).map(Number); } catch (e) {}
+        const nums = extractSigned(inp.value);
+        ok = nums.length >= 1 && nums[0] >= r[0] && nums[0] <= r[1];
+      } else if (qtype === "text") {
+        let spec = { need: [], any: [] };
+        try { spec = JSON.parse(inp.getAttribute("data-answer")); } catch (e) {}
+        const val = inp.value.toLowerCase();
+        const needOk = (spec.need || []).every((k) => val.includes(k));
+        const anyOk = !(spec.any || []).length || (spec.any || []).some((k) => val.includes(k));
+        ok = needOk && anyOk;
+      }
+      if (ok) correct++;
+      inp.classList.toggle("is-correct", ok);
+      inp.classList.toggle("is-wrong", !ok);
+      inp.disabled = true;
+      const fb = inp.nextElementSibling;
+      if (fb && fb.classList.contains("qz-fb")) {
+        fb.hidden = false;
+        fb.className = "qz-fb " + (ok ? "is-ok" : "is-bad");
+        fb.textContent = ok ? "✓ Correct" : "✗ Correct answer: " + (inp.getAttribute("data-pretty") || "");
+      }
+    });
+
+    const pct = total ? Math.round((correct / total) * 100) : 0;
+    result.hidden = false;
+    result.innerHTML = `
+      <div class="qz-score">${correct} / ${total}</div>
+      <div class="qz-score-sub">Objective marks earned out of ${total}</div>
+      <div class="qz-score-msg">${correct === total ? "🎉 Perfect! Excellent work!" : pct >= 60 ? "👍 Good job! Review the marked answers." : "💪 Keep practising — check the notes and try again."}</div>
+      <div class="qz-score-note">📝 Workbook P.42–45 · 36 marks total. Review the marked answers above.</div>`;
+    submitBtn.disabled = true;
+    submitBtn.textContent = "✅ Submitted";
+    result.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  });
+}
+
+/* ---------- 原书页灯箱画廊 ---------- */
+const PAGES = [
+  { src: "images/science/ch2/sci-ch2-wb-p42.jpg", caption: "Workbook p.42" },
+  { src: "images/science/ch2/sci-ch2-wb-p43.jpg", caption: "Workbook p.43" },
+  { src: "images/science/ch2/sci-ch2-wb-p44.jpg", caption: "Workbook p.44" },
+  { src: "images/science/ch2/sci-ch2-wb-p45.jpg", caption: "Workbook p.45" }
+];
+(function initLightbox() {
+  const lb = document.getElementById("lightbox");
+  const img = lb.querySelector("img");
+  const cap = lb.querySelector(".lightbox__caption");
+  const count = lb.querySelector(".lightbox__count");
+  const prev = lb.querySelector(".lightbox__prev");
+  const next = lb.querySelector(".lightbox__next");
+  const closeBtn = lb.querySelector(".lightbox__close");
+  let index = 0;
+
+  const render = () => {
+    const p = PAGES[index];
+    img.src = p.src;
+    cap.textContent = p.caption;
+    count.textContent = `${index + 1} / ${PAGES.length}`;
+  };
+  const open = () => {
+    index = 0;
+    render();
+    lb.classList.add("is-show");
+    document.body.style.overflow = "hidden";
+  };
+  const close = () => {
+    lb.classList.remove("is-show");
+    document.body.style.overflow = "";
+    img.removeAttribute("src");
+  };
+  const go = (d) => {
+    index = (index + d + PAGES.length) % PAGES.length;
+    render();
+  };
+
+  document.getElementById("view-pages").addEventListener("click", open);
+  closeBtn.addEventListener("click", close);
+  prev.addEventListener("click", (e) => { e.stopPropagation(); go(-1); });
+  next.addEventListener("click", (e) => { e.stopPropagation(); go(1); });
+  lb.addEventListener("click", (e) => { if (e.target === lb) close(); });
+  document.addEventListener("keydown", (e) => {
+    if (!lb.classList.contains("is-show")) return;
+    if (e.key === "Escape") close();
+    if (e.key === "ArrowLeft") go(-1);
+    if (e.key === "ArrowRight") go(1);
+  });
+})();
+
+/* ---------- 分享码透传 ---------- */
+function attachShareCode() {
+  const sc = new URLSearchParams(location.search).get("sharecode");
+  if (!sc) return;
+  document.querySelectorAll("a[data-keep-share]").forEach((a) => {
+    const base = a.getAttribute("href");
+    if (!base) return;
+    try {
+      const url = new URL(base, location.href);
+      url.searchParams.set("sharecode", sc);
+      a.setAttribute("href", url.pathname + url.search + url.hash);
+    } catch (e) {}
+  });
+}
+
+/* ---------- 扫码分享 ---------- */
+function initShareQr() {
+  const el = document.getElementById("share-qr");
+  if (!el) return;
+  const url = window.location.href;
+  try {
+    if (window.QRCode) {
+      new QRCode(el, {
+        text: url,
+        width: 150,
+        height: 150,
+        colorDark: "#111827",
+        colorLight: "#ffffff",
+        correctLevel: QRCode.CorrectLevel.M
+      });
+    } else {
+      el.innerHTML = '<div class="share-qr-fallback">二维码加载失败</div>';
+    }
+  } catch (e) {
+    el.innerHTML = '<div class="share-qr-fallback">二维码加载失败</div>';
+  }
+}
+
+/* ---------- 初始化 ---------- */
+document.getElementById("quiz-root").innerHTML = renderQuizSet(QUIZSET);
+initQuizSet(document.querySelector(".qz-set"));
+attachShareCode();
+initShareQr();
+</script>
+</body>
+</html>
