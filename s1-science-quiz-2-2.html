@@ -113,8 +113,8 @@ body{
 .qz-tf-item{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid #f1f5fb}
 .qz-tf-item:last-child{border-bottom:0}
 .qz-tf-q{flex:1;font-size:13.5px;color:#1e293b;font-weight:700;line-height:1.45}
-.qz-tf-btns{display:flex;gap:6px;flex:0 0 auto}
-.qz-tf-btn{width:42px;height:34px;border-radius:8px;border:1.5px solid #d5e0f0;background:#fff;color:#33415c;font-weight:800;font-size:14px;cursor:pointer;transition:all .12s}
+.qz-tf-btns{display:flex;gap:10px;flex:0 0 auto}
+.qz-tf-btn{width:44px;height:44px;border-radius:8px;border:1.5px solid #d5e0f0;background:#fff;color:#33415c;font-weight:800;font-size:14px;cursor:pointer;transition:all .12s}
 .qz-tf-btn:hover{border-color:#bcd0f2}
 .qz-tf-btn.is-on{border-color:#2f6bff;background:#2f6bff;color:#fff}
 .qz-tf-btn.is-correct{border-color:#22a06b;background:#e6f6ec;color:#14683f}
@@ -303,10 +303,10 @@ body{
 
   <button class="btn-view" id="view-pages" type="button">📖 View original textbook &amp; workbook pages</button>
 
-  <section class="share-card" aria-label="扫码分享">
+  <section class="share-card" aria-label="Scan to share">
     <div class="share-qr" id="share-qr"></div>
-    <p class="share-title">📱 S1 Science 水专题测验（手机扫码即测）</p>
-    <p class="share-sub">Workbook P.39–41 · Level 1 + Level 2 自动批改</p>
+    <p class="share-title">📱 S1 Science water quiz (scan with your phone)</p>
+    <p class="share-sub">Workbook P.39–41 · Level 1 + Level 2 · auto marking</p>
   </section>
 </div>
 
@@ -749,7 +749,7 @@ function renderQuizBlock(block, secIdx, blockIdx) {
         <div class="qz-essay-q">${esc(it.q)}${it.marks ? `<span class="qz-essay-marks">(${esc(it.marks)})</span>` : ""}</div>
         <textarea class="qz-ta" placeholder="Write your answer here…"></textarea>
         <button type="button" class="qz-ans-toggle" data-ans-toggle aria-expanded="false">
-          💡 查看标准答案 <span class="qz-ans-caret">▼</span>
+          Show model answer <span class="qz-ans-caret">▼</span>
         </button>
         <div class="qz-ans-body">
           <div class="qz-ans-label">📝 Model answer</div>
@@ -810,8 +810,8 @@ function renderQuizBlock(block, secIdx, blockIdx) {
             </table>
           </div>
           <div class="qz-sea-actions">
-            <button type="button" class="qz-sea-btn" data-sea-check>🔍 检查我的连线</button>
-            <button type="button" class="qz-sea-btn is-ghost" data-sea-clear>↺ 清除重画</button>
+            <button type="button" class="qz-sea-btn" data-sea-check>🔍 Check my line</button>
+            <button type="button" class="qz-sea-btn is-ghost" data-sea-clear>↺ Clear</button>
           </div>
           <div class="qz-sea-feedback" data-sea-fb></div>
           <div class="qz-sea-fill">
@@ -905,7 +905,7 @@ function renderQuizBlock(block, secIdx, blockIdx) {
           <div class="qz-essay-q">${esc(block.reasonPrompt || "Explain your choice briefly.")}</div>
           <textarea class="qz-ta" placeholder="Write your answer here…"></textarea>
           <button type="button" class="qz-ans-toggle" data-ans-toggle aria-expanded="false">
-            💡 查看标准答案 <span class="qz-ans-caret">▼</span>
+            Show model answer <span class="qz-ans-caret">▼</span>
           </button>
           <div class="qz-ans-body">
             <div class="qz-ans-label">📝 Model answer</div>
@@ -1336,10 +1336,10 @@ function initShareQr() {
         correctLevel: QRCode.CorrectLevel.M
       });
     } else {
-      el.innerHTML = '<div class="share-qr-fallback">二维码加载失败</div>';
+      el.innerHTML = '<div class="share-qr-fallback">QR code failed to load</div>';
     }
   } catch (e) {
-    el.innerHTML = '<div class="share-qr-fallback">二维码加载失败</div>';
+    el.innerHTML = '<div class="share-qr-fallback">QR code failed to load</div>';
   }
 }
 
