@@ -193,14 +193,14 @@ body{
   </div>
 
   <div class="actions">
-    <button class="btn btn-primary" id="submit-btn">提交测验</button>
-    <button class="btn btn-ghost" id="retry-btn">再来一次</button>
+    <button class="btn btn-primary" id="submit-btn">Submit quiz</button>
+    <button class="btn btn-ghost" id="retry-btn">Try again</button>
   </div>
 
-  <section class="share-card" aria-label="扫码分享">
+  <section class="share-card" aria-label="Scan to share">
     <div class="share-qr" id="share-qr"></div>
-    <p class="share-title">📱 S1 ICT 在线测验练习（手机扫码即测）</p>
-    <p class="share-sub">纯英文题库 · 随机抽题 · 自动批改</p>
+    <p class="share-title">📱 S1 ICT online quiz (scan with your phone)</p>
+    <p class="share-sub">English question bank · Random questions · Auto marking</p>
   </section>
 </div>
 
@@ -1208,6 +1208,7 @@ document.getElementById("quiz-area").addEventListener("click", (e) => {
 
 // 填空题支持回车提交
 document.getElementById("quiz-area").addEventListener("keydown", (e) => {
+  if (e.isComposing || e.keyCode === 229) return;
   if (e.key === "Enter") {
     const input = e.target.closest(".fill-input");
     if (input) {
@@ -1227,7 +1228,7 @@ document.getElementById("quiz-area").addEventListener("focusin", (e) => {
 document.getElementById("submit-btn").addEventListener("click", () => {
   const unanswered = state.questions.filter(q => state.answers[q.id] === undefined).length;
   if (unanswered > 0) {
-    toast(`还有 ${unanswered} 题未作答，请先完成所有题目。`);
+    toast(`${unanswered} question(s) still unanswered. Please finish all questions first.`);
     return;
   }
   showResult();
@@ -1254,10 +1255,10 @@ function initShareQr() {
         correctLevel: QRCode.CorrectLevel.M
       });
     } else {
-      el.innerHTML = '<div class="share-qr-fallback">二维码加载失败</div>';
+      el.innerHTML = '<div class="share-qr-fallback">QR code failed to load</div>';
     }
   } catch (e) {
-    el.innerHTML = '<div class="share-qr-fallback">二维码加载失败</div>';
+    el.innerHTML = '<div class="share-qr-fallback">QR code failed to load</div>';
   }
 }
 
