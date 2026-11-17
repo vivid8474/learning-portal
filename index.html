@@ -4144,7 +4144,10 @@ document.addEventListener("click", (e) => {
       box.querySelectorAll(".ict-hot").forEach((g) => g.classList.toggle("is-on", g === hot));
       const note = box.querySelector("[data-fignote]");
       const txt = (ICT_FIG_NOTES[kind] || {})[key];
-      if (note && txt) note.innerHTML = txt;
+      if (note && txt) {
+        note.innerHTML = txt;
+        note.scrollIntoView({ block: "nearest" });
+      }
     }
     return;
   }
@@ -4166,38 +4169,42 @@ document.addEventListener("click", (e) => {
       if (fb) {
         fb.className = "try-fb is-show " + (right ? "ok" : "no");
         fb.innerHTML = (right ? "✅ <b>Correct.</b> " : "❌ <b>Not quite.</b> ") + escapeHTML(explain);
+        fb.scrollIntoView({ block: "nearest" });
       }
     }
     return;
   }
 
-  /* 3) 分类练习：点卡片再点盒子 */
-  const chip = e.target.closest(".try-chip");
-  if (chip) {
-    const wrap = chip.closest("[data-ictsort]");
-    if (wrap) {
-      const inBin = !!chip.closest(".try-bin__list");
-      if (inBin) {
-        wrap.querySelector("[data-tray]").appendChild(chip);
-        chip.classList.remove("is-sel");
-        wrap.querySelectorAll(".try-bin").forEach((b) => b.classList.remove("is-ok", "is-bad"));
-      } else {
-        const already = chip.classList.contains("is-sel");
-        wrap.querySelectorAll(".try-chip").forEach((c) => c.classList.remove("is-sel"));
-        if (!already) chip.classList.add("is-sel");
-      }
-    }
-    return;
-  }
-
+  /* 3) 分类练习：先看是否点在投放框上（点框内已有卡片也要优先“放入”） */
   const bin = e.target.closest(".try-bin");
   if (bin) {
     const wrap = bin.closest("[data-ictsort]");
-    const sel = wrap && wrap.querySelector(".try-chip.is-sel");
+    const sel = wrap && wrap.querySelector("[data-tray] .try-chip.is-sel");
     if (sel) {
       bin.querySelector("[data-list]").appendChild(sel);
       sel.classList.remove("is-sel");
       wrap.querySelectorAll(".try-bin").forEach((b) => b.classList.remove("is-ok", "is-bad"));
+    } else {
+      const inBinChip = e.target.closest(".try-chip");
+      if (inBinChip && wrap) {
+        wrap.querySelector("[data-tray]").appendChild(inBinChip);
+        inBinChip.classList.remove("is-sel");
+        wrap.querySelectorAll(".try-bin").forEach((b) => b.classList.remove("is-ok", "is-bad"));
+      }
+    }
+    return;
+  }
+
+  const chip = e.target.closest(".try-chip");
+  if (chip) {
+    const wrap = chip.closest("[data-ictsort]");
+    if (wrap) {
+      const already = chip.classList.contains("is-sel");
+      wrap.querySelectorAll(".try-chip").forEach((c) => c.classList.remove("is-sel"));
+      if (!already) {
+        chip.classList.add("is-sel");
+        chip.scrollIntoView({ block: "nearest" });
+      }
     }
     return;
   }
@@ -4226,6 +4233,7 @@ document.addEventListener("click", (e) => {
       fb.innerHTML = right === chips.length
         ? "✅ <b>All correct.</b> You can sort every card into the right box."
         : `❌ <b>${chips.length - right} card(s) in the wrong box.</b> Tap a placed card to take it back and try again.`;
+      fb.scrollIntoView({ block: "nearest" });
     }
     return;
   }
