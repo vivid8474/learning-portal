@@ -1,0 +1,1359 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>成語複習卡｜情緒刻畫</title>
+<style>
+/* 全頁樣式：色彩明亮、圓角手繪感，方便中學生在手機上閱讀。 */
+/* 一鍵換膚：所有顏色集中於 :root 的 CSS 變數，切換時只改 body 的 class。 */
+:root {
+  --bg-color: #fff8ee;
+  --bg-top: #fff3e0;
+  --card-bg: #fff;
+  --text-color: #3d3229;
+  --muted-color: #7a6a5b;
+  --border-color: #f0e2d0;
+  --line-strong: #f4c095;
+  --brand: #c2410c;
+  --brand-soft: #e76f51;
+  --brand-green: #2a9d8f;
+  --brand-deep: #a4531c;
+  --toolbar-bg: rgba(255, 248, 238, 0.95);
+  --quizbar-bg: rgba(255, 248, 238, 0.97);
+  --field-bg: #fffaf3;
+  --chip-bg: #fff7ec;
+  --note-bg: #fff4e6;
+  --type-bg: #fff0d8;
+  --word-bg: #fff5e2;
+  --story-bg: #f2f8f5;
+  --pic-bg: #f4f8fd;
+  --pic-color: #3b7bbf;
+  --word-color: #b45309;
+  --tag-bg: #ffe6c7;
+  --soft-text: #b7a08a;
+  --placeholder: #c98a5b;
+  --correct-bg: #d9f2e5;
+  --correct-text: #1c6b5e;
+  --wrong-bg: #ffe0dc;
+  --wrong-text: #a3341c;
+  --feedback-ok: #eef9f3;
+  --feedback-no: #fff0ec;
+  --on-accent: #fff;
+  --shadow: rgba(120, 90, 60, 0.09);
+  --float-shadow: rgba(120, 60, 20, 0.35);
+  --main-shadow: rgba(194, 65, 12, 0.28);
+}
+/* 淺綠與天藍主題下，卡片色條、編號與標題一併改為該主題主色，達致全局換色。 */
+body.theme-green .卡片, body.theme-blue .卡片 { --accent: var(--brand); }
+/* 護眼淺綠：淡綠背景、純白卡片，長時間翻看較舒服。 */
+body.theme-green {
+  --bg-color: #f1f8ee;
+  --bg-top: #e2f1de;
+  --card-bg: #fff;
+  --text-color: #2b3a30;
+  --muted-color: #5f7465;
+  --border-color: #d9e9d6;
+  --line-strong: #a9d0a3;
+  --brand: #2f6b46;
+  --brand-soft: #3f8b62;
+  --brand-green: #2a9d8f;
+  --brand-deep: #2f6b46;
+  --toolbar-bg: rgba(241, 248, 238, 0.95);
+  --quizbar-bg: rgba(241, 248, 238, 0.97);
+  --field-bg: #f6fbf4;
+  --chip-bg: #eef7ec;
+  --note-bg: #eaf5e7;
+  --type-bg: #e2f1dd;
+  --word-bg: #ecf6e9;
+  --story-bg: #edf7f1;
+  --pic-bg: #eef6fb;
+  --pic-color: #3b7bbf;
+  --word-color: #3c7a4c;
+  --tag-bg: #dcefd6;
+  --soft-text: #7d9a84;
+  --placeholder: #6b9a72;
+  --shadow: rgba(50, 90, 60, 0.10);
+  --float-shadow: rgba(35, 90, 55, 0.32);
+  --main-shadow: rgba(47, 107, 70, 0.28);
+}
+/* 清新天藍：淡藍背景、純白卡片，配色清爽。 */
+body.theme-blue {
+  --bg-color: #eff6fd;
+  --bg-top: #e0f0fb;
+  --card-bg: #fff;
+  --text-color: #26384a;
+  --muted-color: #607689;
+  --border-color: #d7e6f3;
+  --line-strong: #a7cbe8;
+  --brand: #1f5f9e;
+  --brand-soft: #3b82c4;
+  --brand-green: #2a9d8f;
+  --brand-deep: #245b91;
+  --toolbar-bg: rgba(239, 246, 253, 0.95);
+  --quizbar-bg: rgba(239, 246, 253, 0.97);
+  --field-bg: #f5faff;
+  --chip-bg: #edf5fd;
+  --note-bg: #e9f3fc;
+  --type-bg: #e3f0fb;
+  --word-bg: #eaf4fd;
+  --story-bg: #edf7f1;
+  --pic-bg: #eef6fb;
+  --pic-color: #3b7bbf;
+  --word-color: #2a6ba8;
+  --tag-bg: #dcecf9;
+  --soft-text: #8aa3b8;
+  --placeholder: #6e9bc4;
+  --shadow: rgba(40, 75, 110, 0.10);
+  --float-shadow: rgba(30, 75, 120, 0.32);
+  --main-shadow: rgba(31, 95, 158, 0.28);
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  padding: 0 0 96px;
+  background: linear-gradient(180deg, var(--bg-top) 0%, var(--bg-color) 320px);
+  color: var(--text-color);
+  font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", "Heiti TC", sans-serif;
+  line-height: 1.75;
+  -webkit-text-size-adjust: 100%;
+}
+header {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 28px 18px 18px;
+}
+.主標 {
+  margin: 0;
+  font-size: clamp(26px, 6vw, 40px);
+  letter-spacing: 2px;
+  color: var(--brand);
+}
+.副標 {
+  margin: 6px 0 0;
+  font-size: clamp(15px, 3.6vw, 19px);
+  color: var(--muted-color);
+}
+.說明條 {
+  margin: 16px 0 0;
+  padding: 12px 16px;
+  border-radius: 14px;
+  background: var(--card-bg);
+  border: 2px dashed var(--line-strong);
+  font-size: 14px;
+  color: var(--muted-color);
+}
+.工具列 {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  padding: 12px 18px;
+  background: var(--toolbar-bg);
+  border-bottom: 1px solid var(--border-color);
+  backdrop-filter: blur(6px);
+}
+.工具列 input[type="search"] {
+  flex: 1 1 200px;
+  min-width: 160px;
+  padding: 10px 14px;
+  border: 2px solid var(--line-strong);
+  border-radius: 999px;
+  font-size: 16px;
+  font-family: inherit;
+  color: var(--text-color);
+  background: var(--card-bg);
+}
+.工具列 button {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 999px;
+  font-size: 15px;
+  font-family: inherit;
+  cursor: pointer;
+  color: var(--on-accent);
+  background: var(--brand-soft);
+}
+.工具列 button.次按鈕 { background: var(--brand-green); }
+.工具列 button:active { transform: scale(0.97); }
+main {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 20px 18px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+  gap: 18px;
+  align-items: start;
+}
+.卡片 {
+  --accent: var(--card-accent);
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-top: 7px solid var(--accent);
+  border-radius: 20px;
+  padding: 18px 18px 20px;
+  box-shadow: 0 6px 18px var(--shadow);
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+.卡首 { display: flex; align-items: center; gap: 8px 10px; flex-wrap: wrap; }
+.標題組 { display: inline-flex; align-items: center; gap: 8px; flex-wrap: nowrap; }
+.朗讀群 { display: inline-flex; align-items: center; gap: 6px; flex: none; }
+.朗讀鈕 {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  min-width: 40px;
+  height: 30px;
+  padding: 0 8px;
+  border: 1.5px solid var(--line-strong);
+  border-radius: 999px;
+  background: var(--chip-bg);
+  color: var(--brand-deep);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+.朗讀鈕 .喇叭 { width: 13px; height: 13px; flex: none; }
+.朗讀鈕:active { transform: scale(0.94); }
+.朗讀鈕.正在讀 { background: var(--brand-green); border-color: var(--brand-green); color: var(--on-accent); }
+.編號 {
+  display: inline-block;
+  min-width: 34px;
+  text-align: center;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--on-accent);
+  font-size: 14px;
+  font-weight: 700;
+}
+.卡首 h2 {
+  margin: 0;
+  font-size: clamp(23px, 5vw, 29px);
+  letter-spacing: 3px;
+  color: var(--accent);
+}
+.頁碼 { margin-left: auto; font-size: 13px; color: var(--muted-color); }
+.提示 {
+  margin: 10px 0 0;
+  padding: 8px 12px;
+  border-radius: 10px;
+  background: var(--note-bg);
+  color: var(--brand-deep);
+  font-size: 13px;
+}
+.插圖位 {
+  margin: 14px 0;
+  min-height: 76px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 2px dashed var(--line-strong);
+  border-radius: 14px;
+  background: var(--field-bg);
+  color: var(--placeholder);
+}
+.插圖位文字 { font-size: 16px; letter-spacing: 2px; }
+.插圖位小字 { font-size: 12px; color: var(--soft-text); }
+.插圖 { margin: 14px 0 4px; }
+.插圖 img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 14px;
+  border: 2px solid var(--border-color);
+}
+.插圖 figcaption {
+  margin-top: 6px;
+  text-align: center;
+  font-size: 12px;
+  color: var(--muted-color);
+}
+.欄位 {
+  display: flex;
+  gap: 10px;
+  padding: 9px 0;
+  border-top: 1px solid var(--border-color);
+  font-size: 15px;
+}
+.欄名 {
+  flex: 0 0 58px;
+  font-weight: 700;
+  color: var(--brand);
+  letter-spacing: 1px;
+}
+.欄值 { flex: 1 1 auto; word-break: break-word; }
+.典故欄 {
+  margin: 4px 0;
+  padding: 10px 12px;
+  border: none;
+  border-radius: 12px;
+  background: var(--story-bg);
+}
+.典故欄 .欄名 { color: var(--brand-green); }
+.字詞欄 {
+  margin: 4px 0;
+  padding: 10px 12px;
+  border: none;
+  border-radius: 12px;
+  background: var(--word-bg);
+}
+.字詞欄 .欄名 { flex-basis: 72px; color: var(--word-color); }
+.字詞欄 .欄值 { font-weight: 700; }
+.插圖欄 { margin-top: 6px; background: var(--pic-bg); border-radius: 12px; padding: 10px 12px; border: none; }
+.插圖欄 .欄名 { flex-basis: 68px; color: var(--pic-color); }
+.補充標記 {
+  display: inline-block;
+  margin-right: 6px;
+  padding: 0 7px;
+  border-radius: 6px;
+  background: var(--tag-bg);
+  color: var(--brand-deep);
+  font-size: 12px;
+  font-weight: 700;
+  vertical-align: 1px;
+}
+.遮蓋答案 .答案 { visibility: hidden; }
+.遮蓋答案 .插圖欄 { visibility: hidden; }
+footer {
+  max-width: 1100px;
+  margin: 10px auto 0;
+  padding: 18px;
+  font-size: 14px;
+  color: var(--muted-color);
+  border-top: 2px solid var(--border-color);
+}
+footer p { margin: 6px 0; }
+.找不到 {
+  grid-column: 1 / -1;
+  padding: 30px;
+  text-align: center;
+  color: var(--muted-color);
+  font-size: 16px;
+}
+@media (max-width: 420px) {
+  main { grid-template-columns: 1fr; padding: 14px 12px; }
+  header { padding: 20px 12px 12px; }
+  .工具列 { padding: 10px 12px; }
+  .欄位 { flex-direction: column; gap: 2px; }
+  /* 直排時欄名不可再沿用橫排的固定寬度，否則會留下大片空白。 */
+  .欄位 .欄名 { flex-basis: auto; }
+}
+/* 互動測試區：沿用卡片的圓角、米白底色與橙綠配色。 */
+[hidden] { display: none !important; }
+/* 全螢幕測驗層：由頁首按鈕或右下角懸浮鈕進入，蓋住卡片專心作答。 */
+body.測驗模式 { overflow: hidden; }
+.工具列 button.主入口 {
+  background: var(--brand);
+  font-weight: 700;
+  letter-spacing: 1px;
+  box-shadow: 0 4px 12px var(--main-shadow);
+}
+.工具列 button.主入口 svg {
+  width: 15px;
+  height: 15px;
+  margin-right: 5px;
+  vertical-align: -3px;
+}
+.懸浮測驗 {
+  position: fixed;
+  right: calc(18px + env(safe-area-inset-right));
+  bottom: calc(18px + env(safe-area-inset-bottom));
+  z-index: 40;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 999px;
+  background: var(--brand);
+  color: var(--on-accent);
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  box-shadow: 0 6px 20px var(--float-shadow);
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+.懸浮測驗 svg { width: 18px; height: 18px; flex: none; }
+.懸浮測驗:active { transform: scale(0.95); }
+body.測驗模式 .懸浮測驗 { display: none; }
+.測驗層 {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  background: linear-gradient(180deg, var(--bg-top) 0%, var(--bg-color) 300px);
+}
+.測驗頂欄 {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 10px 18px;
+  background: var(--quizbar-bg);
+  border-bottom: 1px solid var(--border-color);
+  backdrop-filter: blur(6px);
+}
+.返回按鈕 {
+  padding: 9px 14px;
+  border: 2px solid var(--brand-soft);
+  border-radius: 999px;
+  background: var(--card-bg);
+  color: var(--brand);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.返回按鈕:active { transform: scale(0.97); }
+.測驗頂欄 .重測按鈕 { padding: 9px 14px; font-size: 14px; white-space: nowrap; }
+#測驗區 {
+  max-width: 900px;
+  margin: 22px auto 0;
+  padding: 0 18px 96px;
+}
+.測驗框 {
+  background: var(--card-bg);
+  border: 2px solid var(--line-strong);
+  border-radius: 20px;
+  padding: 20px 18px 22px;
+  box-shadow: 0 6px 18px var(--shadow);
+}
+.頂欄標題 {
+  flex: 1 1 auto;
+  margin: 0;
+  text-align: center;
+  font-size: clamp(15px, 4vw, 20px);
+  letter-spacing: 2px;
+  color: var(--brand);
+}
+.測驗說明 {
+  margin: 8px 0 16px;
+  font-size: 14px;
+  color: var(--muted-color);
+}
+.測驗工具列 {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  padding-bottom: 6px;
+}
+.重測按鈕 {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 999px;
+  background: var(--brand-green);
+  color: var(--on-accent);
+  font-family: inherit;
+  font-size: 15px;
+  cursor: pointer;
+}
+.重測按鈕:active { transform: scale(0.97); }
+.進度 { font-size: 14px; color: var(--muted-color); }
+.測驗題 {
+  margin-top: 14px;
+  padding: 14px 16px 16px;
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  background: var(--field-bg);
+}
+.題首 { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.題號 {
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: var(--brand-soft);
+  color: var(--on-accent);
+  font-size: 13px;
+  font-weight: 700;
+}
+.題型 {
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: var(--type-bg);
+  color: var(--brand-deep);
+  font-size: 13px;
+}
+.題目 { margin: 12px 0; font-size: 17px; line-height: 1.8; }
+.選項列 { display: flex; flex-wrap: wrap; gap: 10px; }
+.選項 {
+  padding: 9px 18px;
+  border: 2px solid var(--line-strong);
+  border-radius: 999px;
+  background: var(--card-bg);
+  color: var(--text-color);
+  font-family: inherit;
+  font-size: 15px;
+  cursor: pointer;
+}
+.選項:active { transform: scale(0.97); }
+.填空選單 {
+  width: 100%;
+  max-width: 340px;
+  padding: 10px 14px;
+  border: 2px solid var(--line-strong);
+  border-radius: 12px;
+  background: var(--card-bg);
+  color: var(--text-color);
+  font-family: inherit;
+  font-size: 16px;
+}
+.選項.對, .填空選單.對 {
+  background: var(--correct-bg);
+  border-color: var(--brand-green);
+  color: var(--correct-text);
+}
+.選項.錯, .填空選單.錯 {
+  background: var(--wrong-bg);
+  border-color: var(--brand-soft);
+  color: var(--wrong-text);
+}
+.選項:disabled, .填空選單:disabled { cursor: default; opacity: 1; }
+.回饋 {
+  margin-top: 12px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  font-size: 14px;
+}
+.回饋.正確 { background: var(--feedback-ok); color: var(--correct-text); }
+.回饋.錯誤 { background: var(--feedback-no); color: var(--wrong-text); }
+.回饋 p { margin: 0 0 4px; }
+.回饋 p:last-child { margin-bottom: 0; }
+.解析標 { font-weight: 700; margin-right: 4px; }
+.計分板 {
+  margin-top: 18px;
+  padding: 18px;
+  border-radius: 16px;
+  background: var(--word-bg);
+  text-align: center;
+}
+.分數 { font-size: clamp(24px, 6vw, 32px); font-weight: 700; color: var(--brand); }
+.鼓勵語 { margin: 6px 0 0; font-size: 16px; color: var(--muted-color); }
+@media (max-width: 420px) {
+  #測驗區 { padding: 0 12px 96px; }
+  .測驗框 { padding: 16px 12px 18px; }
+  .測驗頂欄 { padding: 10px 12px; }
+  .頂欄標題 { letter-spacing: 1px; }
+  .懸浮測驗 { padding: 11px 16px; font-size: 15px; }
+  .卡首 { gap: 6px 8px; }
+  .卡首 h2 { letter-spacing: 2px; }
+  .標題組 { gap: 6px; }
+  .朗讀群 { gap: 5px; }
+  .朗讀鈕 { min-width: 36px; height: 28px; padding: 0 6px; font-size: 12px; }
+  .朗讀鈕 .喇叭 { width: 12px; height: 12px; }
+  .頁碼 { font-size: 12px; }
+}
+/* 頁首換膚列：三顆小圓點，選中者加外圈；純色、無圖片。 */
+.主題列 {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 18px 14px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+.主題標籤 {
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: var(--muted-color);
+}
+.主題點 {
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border: 2px solid var(--line-strong);
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 2px 6px var(--shadow);
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 0.15s ease, outline-color 0.15s ease;
+}
+.主題點.復古點 { background: linear-gradient(135deg, #f4c095 0 58%, #fff 58% 100%); }
+.主題點.淺綠點 { background: linear-gradient(135deg, #a8d0a2 0 58%, #fff 58% 100%); }
+.主題點.天藍點 { background: linear-gradient(135deg, #a7cbe8 0 58%, #fff 58% 100%); }
+.主題點:active { transform: scale(0.9); }
+.主題點.選中 {
+  outline: 2px solid var(--brand);
+  outline-offset: 3px;
+  border-color: var(--brand);
+}
+.主題名稱 {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: var(--brand);
+}
+@media (max-width: 420px) {
+  .主題列 { padding: 0 12px 10px; gap: 8px; }
+  .主題點 { width: 24px; height: 24px; }
+  .主題標籤 { font-size: 13px; }
+  .主題名稱 { font-size: 12px; }
+}
+@media print {
+  .工具列, .主題列, footer, #測驗區, .朗讀群, .懸浮測驗, .測驗層 { display: none; }
+  body { background: var(--card-bg); }
+  main { grid-template-columns: repeat(2, 1fr); }
+  .卡片 { box-shadow: none; }
+}
+</style>
+</head>
+<body>
+<script>
+// 一鍵換膚：三種主題皆由 :root 的 CSS 變數定義，切換時只改 body 的 class。
+(function () {
+  var KEY = 'chengyu-theme';
+  var MAP = {
+    'default': { cls: '', name: '復古米黃' },
+    'green': { cls: 'theme-green', name: '護眼淺綠' },
+    'blue': { cls: 'theme-blue', name: '清新天藍' }
+  };
+  function read() {
+    try { return window.localStorage.getItem(KEY); } catch (e) { return null; }
+  }
+  function save(v) {
+    // 部分瀏覽器在私隱模式下會擋住 localStorage，不影響本次切換。
+    try { window.localStorage.setItem(KEY, v); } catch (e) { /* 略過 */ }
+  }
+  function apply(t, persist) {
+    if (!MAP[t]) { t = 'default'; }
+    document.body.classList.remove('theme-green', 'theme-blue');
+    if (MAP[t].cls) { document.body.classList.add(MAP[t].cls); }
+    var label = document.getElementById('themeName');
+    if (label) { label.textContent = MAP[t].name; }
+    var dots = document.querySelectorAll('.主題點');
+    for (var i = 0; i < dots.length; i += 1) {
+      var on = dots[i].getAttribute('data-theme') === t;
+      if (on) { dots[i].classList.add('選中'); }
+      else { dots[i].classList.remove('選中'); }
+      dots[i].setAttribute('aria-pressed', on ? 'true' : 'false');
+    }
+    if (persist) { save(t); }
+  }
+  apply(read(), false);
+  document.addEventListener('DOMContentLoaded', function () { apply(read(), false); });
+  document.addEventListener('click', function (e) {
+    var el = e.target;
+    while (el && el !== document && !(el.classList && el.classList.contains('主題點'))) {
+      el = el.parentNode;
+    }
+    if (!el || el === document || !el.classList) { return; }
+    apply(el.getAttribute('data-theme'), true);
+  });
+})();
+</script>
+<header>
+  <h1 class="主標">成語複習卡</h1>
+  <p class="副標">情緒刻畫｜人物描寫篇　·　考試日期：十一月十八日</p>
+  <p class="說明條">全頁使用繁體（正體）字，共 24 張卡片，全份教材的成語已全數整理完成。每張卡片於解釋之下新增【字詞拆解】，標出最易考的字義；標題旁設有【普】【粵】朗讀鈕，【普】讀成語與例句，【粵】讀成語（須裝置已安裝粵語語音，欠缺時會提示而不發聲）。按頁首【開始測驗】或右下角懸浮【測驗】鈕，即進入全螢幕答題畫面，每次隨機抽 10 題（選詞填空 6、字義辨析 2、近反義詞 2）、即時批改，做完按【返回複習】回到卡片。解釋與例句保留學校教材原句；標示「補充」者為教材相片未列、由整理者補上。目前已有 24 張插圖，全部完成。</p>
+</header>
+<div class="主題列" role="group" aria-label="一鍵切換主題">
+  <span class="主題標籤">一鍵換膚</span>
+  <button type="button" class="主題點 復古點" data-theme="default" title="復古米黃" aria-label="復古米黃" aria-pressed="true"></button>
+  <button type="button" class="主題點 淺綠點" data-theme="green" title="護眼淺綠" aria-label="護眼淺綠" aria-pressed="false"></button>
+  <button type="button" class="主題點 天藍點" data-theme="blue" title="清新天藍" aria-label="清新天藍" aria-pressed="false"></button>
+  <span class="主題名稱" id="themeName">復古米黃</span>
+</div>
+<nav class="工具列">
+  <input type="search" id="searchBox" placeholder="輸入成語搜尋" aria-label="輸入成語搜尋">
+  <button type="button" id="maskBtn">遮蓋答案</button>
+  <button type="button" class="測驗入口 主入口"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 3h11l3 3v15H5z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>開始測驗</button>
+  <button type="button" id="printBtn" class="次按鈕">列印卡片</button>
+</nav>
+<main>
+<article class="卡片" data-name="七上八下" style="--card-accent:#f4a261">
+<div class="卡首"><span class="編號">01</span><div class="標題組"><h2>七上八下</h2><span class="朗讀群" role="group" aria-label="語音朗讀"><button type="button" class="朗讀鈕" data-lang="mandarin" data-name="七上八下" data-example="在宣佈比賽結果前的一刻，我們的心情七上八下。" title="普通話：朗讀成語及例句" aria-label="普通話朗讀七上八下及例句"><svg class="喇叭" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 9h3l4-3v12l-4-3H4z"/><path d="M13.5 9a4 4 0 0 1 0 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M16 6.5a7.5 7.5 0 0 1 0 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>普</span></button><button type="button" class="朗讀鈕" data-lang="cantonese" data-name="七上八下" data-example="在宣佈比賽結果前的一刻，我們的心情七上八下。" title="粵語：朗讀成語" aria-label="粵語朗讀七上八下"><svg class="喇叭" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 9h3l4-3v12l-4-3H4z"/><path d="M13.5 9a4 4 0 0 1 0 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M16 6.5a7.5 7.5 0 0 1 0 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>粵</span></button></span></div><span class="頁碼">第 7 頁</span></div>
+<figure class="插圖"><img src="images/c01.jpg" alt="七上八下 插圖" loading="lazy"><figcaption>插圖已完成</figcaption></figure>
+<div class="答案">
+<div class="欄位 "><span class="欄名">解釋</span><span class="欄值">七、八：指多而雜。形容心情慌亂不安，也指情緒複雜，無所適從。</span></div>
+<div class="欄位 字詞欄"><span class="欄名">字詞拆解</span><span class="欄值">七、八：指多而雜｜上、下：指心緒起伏不定</span></div>
+<div class="欄位 "><span class="欄名">例句</span><span class="欄值">在宣佈比賽結果前的一刻，我們的心情七上八下。</span></div>
+<div class="欄位 "><span class="欄名">近義</span><span class="欄值">心神不定｜忐忑不安：形容心神非常不安。</span></div>
+<div class="欄位 "><span class="欄名">反義</span><span class="欄值">若無其事：形容神態鎮靜、自然。</span></div>
+</div>
+<div class="欄位 插圖欄"><span class="欄名">插圖畫面</span><span class="欄值">頒獎台前，一個小男孩胸口像吊着十五個小水桶，七個往上、八個往下不停晃動，頭上冒着問號。</span></div>
+</article>
+<article class="卡片" data-name="力不從心" style="--card-accent:#e76f51">
+<div class="卡首"><span class="編號">02</span><div class="標題組"><h2>力不從心</h2><span class="朗讀群" role="group" aria-label="語音朗讀"><button type="button" class="朗讀鈕" data-lang="mandarin" data-name="力不從心" data-example="爺爺年老體弱，走較遠的路往往覺得力不從心。" title="普通話：朗讀成語及例句" aria-label="普通話朗讀力不從心及例句"><svg class="喇叭" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 9h3l4-3v12l-4-3H4z"/><path d="M13.5 9a4 4 0 0 1 0 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M16 6.5a7.5 7.5 0 0 1 0 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>普</span></button><button type="button" class="朗讀鈕" data-lang="cantonese" data-name="力不從心" data-example="爺爺年老體弱，走較遠的路往往覺得力不從心。" title="粵語：朗讀成語" aria-label="粵語朗讀力不從心"><svg class="喇叭" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 9h3l4-3v12l-4-3H4z"/><path d="M13.5 9a4 4 0 0 1 0 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M16 6.5a7.5 7.5 0 0 1 0 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>粵</span></button></span></div><span class="頁碼">第 7 頁</span></div>
+<figure class="插圖"><img src="images/c02.jpg" alt="力不從心 插圖" loading="lazy"><figcaption>插圖已完成</figcaption></figure>
+<div class="答案">
+<div class="欄位 "><span class="欄名">解釋</span><span class="欄值">心裏想做某事，可是力量不足。</span></div>
+<div class="欄位 字詞欄"><span class="欄名">字詞拆解</span><span class="欄值">從：順從、聽從｜力：力量、能力</span></div>
+<div class="欄位 "><span class="欄名">例句</span><span class="欄值">爺爺年老體弱，走較遠的路往往覺得力不從心。</span></div>
+<div class="欄位 "><span class="欄名">近義</span><span class="欄值">無能為力：沒有力量或能力去做。</span></div>
+<div class="欄位 "><span class="欄名">反義</span><span class="欄值">得心應手：比喻技藝熟練，或做事順利。</span></div>
+<div class="欄位 典故欄"><span class="欄名">典故</span><span class="欄值">東漢的班超在西域守了二十七年，頭髮都白了，走路要撐着手杖，超想回家。妹妹班昭看不下去，寫信給皇帝：「我哥哥老啦，萬一邊疆出事，他就算心裏想拚，身體也跟不上啊！」皇帝一看十分感動，立刻讓他返回中土。就像你想幫同學搬一大箱書，心裏超願意，手臂卻一直抖——這就是「力不從心」。</span></div>
+</div>
+<div class="欄位 插圖欄"><span class="欄名">插圖畫面</span><span class="欄值">白髮斑斑的老將軍扶着手杖站在沙漠城門外，想跨上馬背卻跨不上去，旁邊一隻駱駝靜靜看着。</span></div>
+</article>
+<article class="卡片" data-name="三心二意" style="--card-accent:#2a9d8f">
+<div class="卡首"><span class="編號">03</span><div class="標題組"><h2>三心二意</h2><span class="朗讀群" role="group" aria-label="語音朗讀"><button type="button" class="朗讀鈕" data-lang="mandarin" data-name="三心二意" data-example="妹妹一時想吃冰淇淋，一時又想喝果汁，真是三心二意。" title="普通話：朗讀成語及例句" aria-label="普通話朗讀三心二意及例句"><svg class="喇叭" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 9h3l4-3v12l-4-3H4z"/><path d="M13.5 9a4 4 0 0 1 0 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M16 6.5a7.5 7.5 0 0 1 0 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>普</span></button><button type="button" class="朗讀鈕" data-lang="cantonese" data-name="三心二意" data-example="妹妹一時想吃冰淇淋，一時又想喝果汁，真是三心二意。" title="粵語：朗讀成語" aria-label="粵語朗讀三心二意"><svg class="喇叭" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 9h3l4-3v12l-4-3H4z"/><path d="M13.5 9a4 4 0 0 1 0 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M16 6.5a7.5 7.5 0 0 1 0 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>粵</span></button></span></div><span class="頁碼">第 7 頁</span></div>
+<figure class="插圖"><img src="images/c03.jpg" alt="三心二意 插圖" loading="lazy"><figcaption>插圖已完成</figcaption></figure>
+<div class="答案">
+<div class="欄位 "><span class="欄名">解釋</span><span class="欄值">形容猶豫不決、意志不堅定。</span></div>
+<div class="欄位 字詞欄"><span class="欄名">字詞拆解</span><span class="欄值">三、二：指多而雜，不是實數｜意：念頭、主意</span></div>
+<div class="欄位 "><span class="欄名">例句</span><span class="欄值">妹妹一時想吃冰淇淋，一時又想喝果汁，真是三心二意。</span></div>
+<div class="欄位 "><span class="欄名">近義</span><span class="欄值">舉棋不定：比喻做事無法拿定主意。</span></div>
+<div class="欄位 "><span class="欄名">反義</span><span class="欄值">一心一意：指十分專一，沒有其他念頭。</span></div>
+</div>
+<div class="欄位 插圖欄"><span class="欄名">插圖畫面</span><span class="欄值">小女孩左手舉着冰淇淋、右手拿着果汁，身體左右搖擺，頭上兩個方向箭頭各拉一邊。</span></div>
+</article>
+<article class="卡片" data-name="大快人心" style="--card-accent:#e9c46a">
+<div class="卡首"><span class="編號">04</span><div class="標題組"><h2>大快人心</h2><span class="朗讀群" role="group" aria-label="語音朗讀"><button type="button" class="朗讀鈕" data-lang="mandarin" data-name="大快人心" data-example="這個歹徒終於受到法律制裁，實在大快人心。" title="普通話：朗讀成語及例句" aria-label="普通話朗讀大快人心及例句"><svg class="喇叭" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 9h3l4-3v12l-4-3H4z"/><path d="M13.5 9a4 4 0 0 1 0 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M16 6.5a7.5 7.5 0 0 1 0 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>普</span></button><button type="button" class="朗讀鈕" data-lang="cantonese" data-name="大快人心" data-example="這個歹徒終於受到法律制裁，實在大快人心。" title="粵語：朗讀成語" aria-label="粵語朗讀大快人心"><svg class="喇叭" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 9h3l4-3v12l-4-3H4z"/><path d="M13.5 9a4 4 0 0 1 0 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M16 6.5a7.5 7.5 0 0 1 0 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>粵</span></button></span></div><span class="頁碼">第 8 頁</span></div>
+<figure class="插圖"><img src="images/c04.jpg" alt="大快人心 插圖" loading="lazy"><figcaption>插圖已完成</figcaption></figure>
+<div class="答案">
+<div class="欄位 "><span class="欄名">解釋</span><span class="欄值">指壞人受到懲罰或打擊，使大家非常痛快。</span></div>
+<div class="欄位 字詞欄"><span class="欄名">字詞拆解</span><span class="欄值">快：痛快、暢快｜人心：眾人的心</span></div>
+<div class="欄位 "><span class="欄名">例句</span><span class="欄值">這個歹徒終於受到法律制裁，實在大快人心。</span></div>
+<div class="欄位 "><span class="欄名">近義</span><span class="欄值">拍手稱快：拍着手喊痛快，形容十分高興和痛快。</span></div>
+<div class="欄位 "><span class="欄名">反義</span><span class="欄值">天怒人怨：形容為害作惡十分嚴重，引起普遍的怨憤。</span></div>
+</div>
+<div class="欄位 插圖欄"><span class="欄名">插圖畫面</span><span class="欄值">壞蛋被警察戴上手銬帶走，圍觀的同學一起拍手歡呼，彩色紙屑滿天飛。</span></div>
+</article>
+<article class="卡片" data-name="不知所措" style="--card-accent:#8e7dbe">
+<div class="卡首"><span class="編號">05</span><div class="標題組"><h2>不知所措</h2><span class="朗讀群" role="group" aria-label="語音朗讀"><button type="button" class="朗讀鈕" data-lang="mandarin" data-name="不知所措" data-example="遇上交通意外，小潔嚇得不知所措。" title="普通話：朗讀成語及例句" aria-label="普通話朗讀不知所措及例句"><svg class="喇叭" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 9h3l4-3v12l-4-3H4z"/><path d="M13.5 9a4 4 0 0 1 0 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M16 6.5a7.5 7.5 0 0 1 0 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>普</span></button><button type="button" class="朗讀鈕" data-lang="cantonese" data-name="不知所措" data-example="遇上交通意外，小潔嚇得不知所措。" title="粵語：朗讀成語" aria-label="粵語朗讀不知所措"><svg class="喇叭" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 9h3l4-3v12l-4-3H4z"/><path d="M13.5 9a4 4 0 0 1 0 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M16 6.5a7.5 7.5 0 0 1 0 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>粵</span></button></span></div><span class="頁碼">第 8 頁</span></div>
+<figure class="插圖"><img src="images/c05.jpg" alt="不知所措 插圖" loading="lazy"><figcaption>插圖已完成</figcaption></figure>
+<div class="答案">
+<div class="欄位 "><span class="欄名">解釋</span><span class="欄值">措：安置、處理。形容人惶恐不安，不知道怎麼辦才好。</span></div>
+<div class="欄位 字詞欄"><span class="欄名">字詞拆解</span><span class="欄值">措：安置、處理</span></div>
+<div class="欄位 "><span class="欄名">例句</span><span class="欄值">遇上交通意外，小潔嚇得不知所措。</span></div>
+<div class="欄位 "><span class="欄名">近義</span><span class="欄值">手足無措：形容心慌意亂，沒有主意，不知如何是好。</span></div>
+<div class="欄位 "><span class="欄名">反義</span><span class="欄值">從容不迫：形容沉着鎮定，不慌張。</span></div>
+</div>
+<div class="欄位 插圖欄"><span class="欄名">插圖畫面</span><span class="欄值">交通意外現場，小女孩抱着書包站在倒下的單車旁，雙手攤開，頭上轉着一圈問號。</span></div>
+</article>
+<article class="卡片" data-name="六神無主" style="--card-accent:#5aa9e6">
+<div class="卡首"><span class="編號">06</span><div class="標題組"><h2>六神無主</h2><span class="朗讀群" role="group" aria-label="語音朗讀"><button type="button" class="朗讀鈕" data-lang="mandarin" data-name="六神無主" data-example="這突然發生的事故使我六神無主，你就不要再給我添煩惱了。" title="普通話：朗讀成語及例句" aria-label="普通話朗讀六神無主及例句"><svg class="喇叭" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 9h3l4-3v12l-4-3H4z"/><path d="M13.5 9a4 4 0 0 1 0 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M16 6.5a7.5 7.5 0 0 1 0 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>普</span></button><button type="button" class="朗讀鈕" data-lang="cantonese" data-name="六神無主" data-example="這突然發生的事故使我六神無主，你就不要再給我添煩惱了。" title="粵語：朗讀成語" aria-label="粵語朗讀六神無主"><svg class="喇叭" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 9h3l4-3v12l-4-3H4z"/><path d="M13.5 9a4 4 0 0 1 0 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M16 6.5a7.5 7.5 0 0 1 0 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>粵</span></button></span></div><span class="頁碼">第 8 頁</span></div>
+<figure class="插圖"><img src="images/c06.jpg" alt="六神無主 插圖" loading="lazy"><figcaption>插圖已完成</figcaption></figure>
+<div class="答案">
+<div class="欄位 "><span class="欄名">解釋</span><span class="欄值">六神：心、肺、肝、腎、脾、膽六種重要器官之神。形容因心慌意亂而拿不定主意。</span></div>
+<div class="欄位 字詞欄"><span class="欄名">字詞拆解</span><span class="欄值">六神：心、肺、肝、腎、脾、膽六種器官之神｜主：主意、主張</span></div>
+<div class="欄位 "><span class="欄名">例句</span><span class="欄值">這突然發生的事故使我六神無主，你就不要再給我添煩惱了。</span></div>
+<div class="欄位 "><span class="欄名">近義</span><span class="欄值">不知所措：形容人惶恐不安，不知道怎麼辦才好。</span></div>
+<div class="欄位 "><span class="欄名">反義</span><span class="欄值">泰然自若：形容遇到緊急或危難的情況時，仍能從容鎮定。</span></div>
+</div>
+<div class="欄位 插圖欄"><span class="欄名">插圖畫面</span><span class="欄值">六個圓滾滾的小器官精靈在主人頭頂驚慌亂跑，主人雙手抱頭，眼睛轉成圈圈。</span></div>
+</article>
+<article class="卡片" data-name="心有餘悸" style="--card-accent:#f4a261">
+<div class="卡首"><span class="編號">07</span><div class="標題組"><h2>心有餘悸</h2><span class="朗讀群" role="group" aria-label="語音朗讀"><button type="button" class="朗讀鈕" data-lang="mandarin" data-name="心有餘悸" data-example="自從那次交通意外後，每次經過公路上那個彎角，我還是心有餘悸。" title="普通話：朗讀成語及例句" aria-label="普通話朗讀心有餘悸及例句"><svg class="喇叭" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 9h3l4-3v12l-4-3H4z"/><path d="M13.5 9a4 4 0 0 1 0 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M16 6.5a7.5 7.5 0 0 1 0 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>普</span></button><button type="button" class="朗讀鈕" data-lang="cantonese" data-name="心有餘悸" data-example="自從那次交通意外後，每次經過公路上那個彎角，我還是心有餘悸。" title="粵語：朗讀成語" aria-label="粵語朗讀心有餘悸"><svg class="喇叭" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 9h3l4-3v12l-4-3H4z"/><path d="M13.5 9a4 4 0 0 1 0 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M16 6.5a7.5 7.5 0 0 1 0 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>粵</span></button></span></div><span class="頁碼">第 8 頁</span></div>
+<figure class="插圖"><img src="images/c07.jpg" alt="心有餘悸 插圖" loading="lazy"><figcaption>插圖已完成</figcaption></figure>
+<div class="答案">
+<div class="欄位 "><span class="欄名">解釋</span><span class="欄值">悸：因害怕而心跳加速。形容危險不安的事情雖然過去，但回想起來心裏仍感到緊張、害怕。</span></div>
+<div class="欄位 字詞欄"><span class="欄名">字詞拆解</span><span class="欄值">悸：因害怕而心跳加速｜餘：剩下、殘留</span></div>
+<div class="欄位 "><span class="欄名">例句</span><span class="欄值">自從那次交通意外後，每次經過公路上那個彎角，我還是心有餘悸。</span></div>
+<div class="欄位 "><span class="欄名">近義</span><span class="欄值"><span class="補充標記">補充</span>驚魂不定：受驚之後心神還沒有安定下來。</span></div>
+<div class="欄位 "><span class="欄名">反義</span><span class="欄值"><span class="補充標記">補充</span>神色不驚：神情一點也沒有被嚇到，十分鎮定。</span></div>
+</div>
+<div class="欄位 插圖欄"><span class="欄名">插圖畫面</span><span class="欄值">男孩再次走過那個馬路彎角，回頭望向地上的煞車痕，胸口一顆紅心還在怦怦跳。</span></div>
+</article>
+<article class="卡片" data-name="心急如焚" style="--card-accent:#e76f51">
+<div class="卡首"><span class="編號">08</span><div class="標題組"><h2>心急如焚</h2><span class="朗讀群" role="group" aria-label="語音朗讀"><button type="button" class="朗讀鈕" data-lang="mandarin" data-name="心急如焚" data-example="聽到爸爸受傷入院的消息，他心急如焚地趕往醫院。" title="普通話：朗讀成語及例句" aria-label="普通話朗讀心急如焚及例句"><svg class="喇叭" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 9h3l4-3v12l-4-3H4z"/><path d="M13.5 9a4 4 0 0 1 0 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M16 6.5a7.5 7.5 0 0 1 0 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>普</span></button><button type="button" class="朗讀鈕" data-lang="cantonese" data-name="心急如焚" data-example="聽到爸爸受傷入院的消息，他心急如焚地趕往醫院。" title="粵語：朗讀成語" aria-label="粵語朗讀心急如焚"><svg class="喇叭" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 9h3l4-3v12l-4-3H4z"/><path d="M13.5 9a4 4 0 0 1 0 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M16 6.5a7.5 7.5 0 0 1 0 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>粵</span></button></span></div><span class="頁碼">第 8 頁</span></div>
+<figure class="插圖"><img src="images/c08.jpg" alt="心急如焚 插圖" loading="lazy"><figcaption>插圖已完成</figcaption></figure>
+<div class="答案">
+<div class="欄位 "><span class="欄名">解釋</span><span class="欄值">焚：火燒。形容心中十分着急。</span></div>
+<div class="欄位 字詞欄"><span class="欄名">字詞拆解</span><span class="欄值">焚：火燒｜如：好像</span></div>
+<div class="欄位 "><span class="欄名">例句</span><span class="欄值">聽到爸爸受傷入院的消息，他心急如焚地趕往醫院。</span></div>
+<div class="欄位 "><span class="欄名">近義</span><span class="欄值"><span class="補充標記">補充</span>急不可耐：急得再也等不住，一刻也坐不下來。</span></div>
+<div class="欄位 "><span class="欄名">反義</span><span class="欄值">氣定神閒：形容神情悠閒，心意安定。</span></div>
+</div>
+<div class="欄位 插圖欄"><span class="欄名">插圖畫面</span><span class="欄值">男孩朝醫院大門狂奔，胸口畫着一團小火苗，腳邊揚起一陣風和幾片落葉。</span></div>
+</article>
+<article class="卡片" data-name="心曠神怡" style="--card-accent:#2a9d8f">
+<div class="卡首"><span class="編號">09</span><div class="標題組"><h2>心曠神怡</h2><span class="朗讀群" role="group" aria-label="語音朗讀"><button type="button" class="朗讀鈕" data-lang="mandarin" data-name="心曠神怡" data-example="姐姐放下工作到郊外遊玩，欣賞青山綠水，頓覺心曠神怡。" title="普通話：朗讀成語及例句" aria-label="普通話朗讀心曠神怡及例句"><svg class="喇叭" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 9h3l4-3v12l-4-3H4z"/><path d="M13.5 9a4 4 0 0 1 0 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M16 6.5a7.5 7.5 0 0 1 0 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>普</span></button><button type="button" class="朗讀鈕" data-lang="cantonese" data-name="心曠神怡" data-example="姐姐放下工作到郊外遊玩，欣賞青山綠水，頓覺心曠神怡。" title="粵語：朗讀成語" aria-label="粵語朗讀心曠神怡"><svg class="喇叭" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 9h3l4-3v12l-4-3H4z"/><path d="M13.5 9a4 4 0 0 1 0 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M16 6.5a7.5 7.5 0 0 1 0 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>粵</span></button></span></div><span class="頁碼">第 8 頁</span></div>
+<figure class="插圖"><img src="images/c09.jpg" alt="心曠神怡 插圖" loading="lazy"><figcaption>插圖已完成</figcaption></figure>
+<div class="答案">
+<div class="欄位 "><span class="欄名">解釋</span><span class="欄值">心境曠達，精神愉快。</span></div>
+<div class="欄位 字詞欄"><span class="欄名">字詞拆解</span><span class="欄值">曠：開闊、豁達｜怡：愉快、舒暢</span></div>
+<div class="欄位 "><span class="欄名">例句</span><span class="欄值">姐姐放下工作到郊外遊玩，欣賞青山綠水，頓覺心曠神怡。</span></div>
+<div class="欄位 "><span class="欄名">近義</span><span class="欄值">賞心悅目：看到美麗的景色而心情愉快。</span></div>
+<div class="欄位 "><span class="欄名">反義</span><span class="欄值">心煩意亂：心情煩躁，思緒凌亂。</span></div>
+<div class="欄位 典故欄"><span class="欄名">典故</span><span class="欄值"><span class="補充標記">補充</span>范仲淹寫《岳陽樓記》時，描寫春天登上岳陽樓、望着洞庭湖：風和日麗、波光閃閃，一時間寵辱都忘了，端起酒杯迎着風，整個人開心到不行。就像考完試跑到海邊大口吸一口氣，煩惱被風吹光光——「心曠神怡」就是這種爽感。</span></div>
+</div>
+<div class="欄位 插圖欄"><span class="欄名">插圖畫面</span><span class="欄值">女孩站在湖邊樓閣上遠望青山綠水，張開雙臂深呼吸，白雲和小鳥繞着她打轉。</span></div>
+</article>
+<article class="卡片" data-name="毛骨悚然" style="--card-accent:#e9c46a">
+<div class="卡首"><span class="編號">10</span><div class="標題組"><h2>毛骨悚然</h2><span class="朗讀群" role="group" aria-label="語音朗讀"><button type="button" class="朗讀鈕" data-lang="mandarin" data-name="毛骨悚然" data-example="姊姊每次看驚慄電影，總會感到毛骨悚然。" title="普通話：朗讀成語及例句" aria-label="普通話朗讀毛骨悚然及例句"><svg class="喇叭" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 9h3l4-3v12l-4-3H4z"/><path d="M13.5 9a4 4 0 0 1 0 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M16 6.5a7.5 7.5 0 0 1 0 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>普</span></button><button type="button" class="朗讀鈕" data-lang="cantonese" data-name="毛骨悚然" data-example="姊姊每次看驚慄電影，總會感到毛骨悚然。" title="粵語：朗讀成語" aria-label="粵語朗讀毛骨悚然"><svg class="喇叭" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 9h3l4-3v12l-4-3H4z"/><path d="M13.5 9a4 4 0 0 1 0 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M16 6.5a7.5 7.5 0 0 1 0 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>粵</span></button></span></div><span class="頁碼">第 9 頁</span></div>
+<figure class="插圖"><img src="images/c10.jpg" alt="毛骨悚然 插圖" loading="lazy"><figcaption>插圖已完成</figcaption></figure>
+<div class="答案">
+<div class="欄位 "><span class="欄名">解釋</span><span class="欄值">悚然：恐懼之意。形容十分恐懼害怕。</span></div>
+<div class="欄位 字詞欄"><span class="欄名">字詞拆解</span><span class="欄值">悚：恐懼、害怕｜然：……的樣子</span></div>
+<div class="欄位 "><span class="欄名">例句</span><span class="欄值">姊姊每次看驚慄電影，總會感到毛骨悚然。</span></div>
+<div class="欄位 "><span class="欄名">近義</span><span class="欄值">不寒而慄：慄：發抖。不冷仍直發抖。形容十分害怕。</span></div>
+<div class="欄位 "><span class="欄名">反義</span><span class="欄值">面不改色：形容在緊急情況下態度鎮定，毫不慌亂，像平常一樣。</span></div>
+</div>
+<div class="欄位 插圖欄"><span class="欄名">插圖畫面</span><span class="欄值">電影院裏女孩抱着爆谷桶發抖，手臂汗毛一根根豎起，銀幕上伸出一隻黑影手。</span></div>
+</article>
+<article class="卡片" data-name="火冒三丈" style="--card-accent:#8e7dbe">
+<div class="卡首"><span class="編號">11</span><div class="標題組"><h2>火冒三丈</h2><span class="朗讀群" role="group" aria-label="語音朗讀"><button type="button" class="朗讀鈕" data-lang="mandarin" data-name="火冒三丈" data-example="妹妹不慎撕破了哥哥的作業簿，令哥哥火冒三丈。" title="普通話：朗讀成語及例句" aria-label="普通話朗讀火冒三丈及例句"><svg class="喇叭" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 9h3l4-3v12l-4-3H4z"/><path d="M13.5 9a4 4 0 0 1 0 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M16 6.5a7.5 7.5 0 0 1 0 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>普</span></button><button type="button" class="朗讀鈕" data-lang="cantonese" data-name="火冒三丈" data-example="妹妹不慎撕破了哥哥的作業簿，令哥哥火冒三丈。" title="粵語：朗讀成語" aria-label="粵語朗讀火冒三丈"><svg class="喇叭" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 9h3l4-3v12l-4-3H4z"/><path d="M13.5 9a4 4 0 0 1 0 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M16 6.5a7.5 7.5 0 0 1 0 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>粵</span></button></span></div><span class="頁碼">第 9 頁</span></div>
+<figure class="插圖"><img src="images/c11.jpg" alt="火冒三丈 插圖" loading="lazy"><figcaption>插圖已完成</figcaption></figure>
+<div class="答案">
+<div class="欄位 "><span class="欄名">解釋</span><span class="欄值">怒火上升到三丈高。形容人十分生氣。</span></div>
+<div class="欄位 字詞欄"><span class="欄名">字詞拆解</span><span class="欄值">冒：往上衝、升起｜三丈：形容很高，不是實數</span></div>
+<div class="欄位 "><span class="欄名">例句</span><span class="欄值">妹妹不慎撕破了哥哥的作業簿，令哥哥火冒三丈。</span></div>
+<div class="欄位 "><span class="欄名">近義</span><span class="欄值">怒氣沖天：非常忿怒的樣子。</span></div>
+<div class="欄位 "><span class="欄名">反義</span><span class="欄值">心平氣和：心情平靜，態度溫和。指不急躁，不生氣。</span></div>
+</div>
+<div class="欄位 插圖欄"><span class="欄名">插圖畫面</span><span class="欄值">哥哥頭頂竄起三丈高的大火焰，手裏抓着被撕破的作業簿，滿臉通紅。</span></div>
+</article>
+<article class="卡片" data-name="叫苦連天" style="--card-accent:#5aa9e6">
+<div class="卡首"><span class="編號">12</span><div class="標題組"><h2>叫苦連天</h2><span class="朗讀群" role="group" aria-label="語音朗讀"><button type="button" class="朗讀鈕" data-lang="mandarin" data-name="叫苦連天" data-example="姊姊三個月來都要加班工作，令她叫苦連天。" title="普通話：朗讀成語及例句" aria-label="普通話朗讀叫苦連天及例句"><svg class="喇叭" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 9h3l4-3v12l-4-3H4z"/><path d="M13.5 9a4 4 0 0 1 0 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M16 6.5a7.5 7.5 0 0 1 0 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>普</span></button><button type="button" class="朗讀鈕" data-lang="cantonese" data-name="叫苦連天" data-example="姊姊三個月來都要加班工作，令她叫苦連天。" title="粵語：朗讀成語" aria-label="粵語朗讀叫苦連天"><svg class="喇叭" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 9h3l4-3v12l-4-3H4z"/><path d="M13.5 9a4 4 0 0 1 0 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M16 6.5a7.5 7.5 0 0 1 0 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>粵</span></button></span></div><span class="頁碼">第 9 頁</span></div>
+<figure class="插圖"><img src="images/c12.jpg" alt="叫苦連天 插圖" loading="lazy"><figcaption>插圖已完成</figcaption></figure>
+<div class="答案">
+<div class="欄位 "><span class="欄名">解釋</span><span class="欄值">不斷地叫苦，表示痛苦到了極點。</span></div>
+<div class="欄位 字詞欄"><span class="欄名">字詞拆解</span><span class="欄值">連天：接連不斷，形容程度極深｜苦：痛苦、辛苦</span></div>
+<div class="欄位 "><span class="欄名">例句</span><span class="欄值">姊姊三個月來都要加班工作，令她叫苦連天。</span></div>
+<div class="欄位 "><span class="欄名">近義</span><span class="欄值">叫苦不迭：形容連聲叫苦。</span></div>
+<div class="欄位 "><span class="欄名">反義</span><span class="欄值">眉開眼笑：眉頭舒展，眼含笑意。形容高興愉快的樣子。</span></div>
+</div>
+<div class="欄位 插圖欄"><span class="欄名">插圖畫面</span><span class="欄值">加班的姊姊被一疊疊文件山壓着，雙手舉高，嘴邊冒出一長串灰色小雲朵。</span></div>
+</article>
+<article class="卡片" data-name="如釋重負" style="--card-accent:#f4a261">
+<div class="卡首"><span class="編號">13</span><div class="標題組"><h2>如釋重負</h2><span class="朗讀群" role="group" aria-label="語音朗讀"><button type="button" class="朗讀鈕" data-lang="mandarin" data-name="如釋重負" data-example="我向爸爸承認自己的錯誤後，心中如釋重負。" title="普通話：朗讀成語及例句" aria-label="普通話朗讀如釋重負及例句"><svg class="喇叭" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 9h3l4-3v12l-4-3H4z"/><path d="M13.5 9a4 4 0 0 1 0 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M16 6.5a7.5 7.5 0 0 1 0 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>普</span></button><button type="button" class="朗讀鈕" data-lang="cantonese" data-name="如釋重負" data-example="我向爸爸承認自己的錯誤後，心中如釋重負。" title="粵語：朗讀成語" aria-label="粵語朗讀如釋重負"><svg class="喇叭" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 9h3l4-3v12l-4-3H4z"/><path d="M13.5 9a4 4 0 0 1 0 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M16 6.5a7.5 7.5 0 0 1 0 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>粵</span></button></span></div><span class="頁碼">第 9 頁</span></div>
+<figure class="插圖"><img src="images/c13.jpg" alt="如釋重負 插圖" loading="lazy"><figcaption>插圖已完成</figcaption></figure>
+<div class="答案">
+<div class="欄位 "><span class="欄名">解釋</span><span class="欄值">好像放下了沉重的負擔那樣輕鬆愉快。</span></div>
+<div class="欄位 字詞欄"><span class="欄名">字詞拆解</span><span class="欄值">如：好像｜釋：放下｜重負：沉重的負擔</span></div>
+<div class="欄位 "><span class="欄名">例句</span><span class="欄值">我向爸爸承認自己的錯誤後，心中如釋重負。</span></div>
+<div class="欄位 "><span class="欄名">近義</span><span class="欄值"><span class="補充標記">補充</span>了無牽掛：心裏再沒有牽掛，整個人放鬆下來。</span></div>
+<div class="欄位 "><span class="欄名">反義</span><span class="欄值">千鈞重負：好像背負着千斤的重擔一樣。</span></div>
+<div class="欄位 典故欄"><span class="欄名">典故</span><span class="欄值"><span class="補充標記">補充</span>春秋時魯昭公整天玩樂、不理國事，百姓被他折騰得叫苦連天。後來他被趕出國，《穀梁傳》只寫了一句：「昭公出奔，民如釋重負」——老百姓居然像卸下大石頭一樣鬆一口氣。就像期考最後一科交卷那一刻，書包瞬間變輕，就是這個感覺。</span></div>
+</div>
+<div class="欄位 插圖欄"><span class="欄名">插圖畫面</span><span class="欄值">男孩把背上的大石頭「咚」一聲放到地上，整個人輕得飄起來，頭上是一片藍天白雲。</span></div>
+</article>
+<article class="卡片" data-name="妙不可言" style="--card-accent:#e76f51">
+<div class="卡首"><span class="編號">14</span><div class="標題組"><h2>妙不可言</h2><span class="朗讀群" role="group" aria-label="語音朗讀"><button type="button" class="朗讀鈕" data-lang="mandarin" data-name="妙不可言" data-example="《天鵝湖》中那個女主角的舞姿輕盈優美，簡直妙不可言。" title="普通話：朗讀成語及例句" aria-label="普通話朗讀妙不可言及例句"><svg class="喇叭" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 9h3l4-3v12l-4-3H4z"/><path d="M13.5 9a4 4 0 0 1 0 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M16 6.5a7.5 7.5 0 0 1 0 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>普</span></button><button type="button" class="朗讀鈕" data-lang="cantonese" data-name="妙不可言" data-example="《天鵝湖》中那個女主角的舞姿輕盈優美，簡直妙不可言。" title="粵語：朗讀成語" aria-label="粵語朗讀妙不可言"><svg class="喇叭" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 9h3l4-3v12l-4-3H4z"/><path d="M13.5 9a4 4 0 0 1 0 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M16 6.5a7.5 7.5 0 0 1 0 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>粵</span></button></span></div><span class="頁碼">第 9 頁</span></div>
+<figure class="插圖"><img src="images/c14.jpg" alt="妙不可言 插圖" loading="lazy"><figcaption>插圖已完成</figcaption></figure>
+<div class="答案">
+<div class="欄位 "><span class="欄名">解釋</span><span class="欄值">言：說。美妙到了無法用言語來形容的地步，常用於表示誇獎。</span></div>
+<div class="欄位 字詞欄"><span class="欄名">字詞拆解</span><span class="欄值">妙：美妙｜言：說、用言語形容</span></div>
+<div class="欄位 "><span class="欄名">例句</span><span class="欄值">《天鵝湖》中那個女主角的舞姿輕盈優美，簡直妙不可言。</span></div>
+<div class="欄位 "><span class="欄名">近義</span><span class="欄值"><span class="補充標記">補充</span>歎為觀止：讚歎眼前的事物好到極點。</span></div>
+<div class="欄位 "><span class="欄名">反義</span><span class="欄值">一無可取：沒有一點可取的地方。</span></div>
+</div>
+<div class="欄位 插圖欄"><span class="欄名">插圖畫面</span><span class="欄值">芭蕾舞者單腳旋轉，裙擺化成一道彩色光帶，台下觀眾張大嘴巴、一個字也說不出來。</span></div>
+</article>
+<article class="卡片" data-name="忐忑不安" style="--card-accent:#2a9d8f">
+<div class="卡首"><span class="編號">15</span><div class="標題組"><h2>忐忑不安</h2><span class="朗讀群" role="group" aria-label="語音朗讀"><button type="button" class="朗讀鈕" data-lang="mandarin" data-name="忐忑不安" data-example="妹妹不慎把爸爸的藏書弄污了，她正忐忑不安地等待爸爸回家，向他認錯。" title="普通話：朗讀成語及例句" aria-label="普通話朗讀忐忑不安及例句"><svg class="喇叭" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 9h3l4-3v12l-4-3H4z"/><path d="M13.5 9a4 4 0 0 1 0 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M16 6.5a7.5 7.5 0 0 1 0 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>普</span></button><button type="button" class="朗讀鈕" data-lang="cantonese" data-name="忐忑不安" data-example="妹妹不慎把爸爸的藏書弄污了，她正忐忑不安地等待爸爸回家，向他認錯。" title="粵語：朗讀成語" aria-label="粵語朗讀忐忑不安"><svg class="喇叭" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 9h3l4-3v12l-4-3H4z"/><path d="M13.5 9a4 4 0 0 1 0 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M16 6.5a7.5 7.5 0 0 1 0 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>粵</span></button></span></div><span class="頁碼">第 9 至 10 頁</span></div>
+<figure class="插圖"><img src="images/c15.jpg" alt="忐忑不安 插圖" loading="lazy"><figcaption>插圖已完成</figcaption></figure>
+<div class="答案">
+<div class="欄位 "><span class="欄名">解釋</span><span class="欄值">形容心緒起伏不定的樣子。</span></div>
+<div class="欄位 字詞欄"><span class="欄名">字詞拆解</span><span class="欄值">忐忑：心神不定、七上八下｜安：安定</span></div>
+<div class="欄位 "><span class="欄名">例句</span><span class="欄值">妹妹不慎把爸爸的藏書弄污了，她正忐忑不安地等待爸爸回家，向他認錯。</span></div>
+<div class="欄位 "><span class="欄名">近義</span><span class="欄值">坐立不安｜惴惴不安：形容焦急、煩躁、心神不寧的樣子。</span></div>
+<div class="欄位 "><span class="欄名">反義</span><span class="欄值">悠然自得：形容神態從容、心情舒暢。</span></div>
+</div>
+<div class="欄位 插圖欄"><span class="欄名">插圖畫面</span><span class="欄值">小女孩抱着弄污的藏書站在大門口等爸爸回家，一顆心在胸口一上一下彈跳。</span></div>
+</article>
+<article class="卡片" data-name="刻骨銘心" style="--card-accent:#e9c46a">
+<div class="卡首"><span class="編號">16</span><div class="標題組"><h2>刻骨銘心</h2><span class="朗讀群" role="group" aria-label="語音朗讀"><button type="button" class="朗讀鈕" data-lang="mandarin" data-name="刻骨銘心" data-example="這個教訓實在刻骨銘心，我再不會犯上同樣的錯誤。" title="普通話：朗讀成語及例句" aria-label="普通話朗讀刻骨銘心及例句"><svg class="喇叭" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 9h3l4-3v12l-4-3H4z"/><path d="M13.5 9a4 4 0 0 1 0 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M16 6.5a7.5 7.5 0 0 1 0 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>普</span></button><button type="button" class="朗讀鈕" data-lang="cantonese" data-name="刻骨銘心" data-example="這個教訓實在刻骨銘心，我再不會犯上同樣的錯誤。" title="粵語：朗讀成語" aria-label="粵語朗讀刻骨銘心"><svg class="喇叭" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 9h3l4-3v12l-4-3H4z"/><path d="M13.5 9a4 4 0 0 1 0 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M16 6.5a7.5 7.5 0 0 1 0 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>粵</span></button></span></div><span class="頁碼">第 10 頁</span></div>
+<figure class="插圖"><img src="images/c16.jpg" alt="刻骨銘心 插圖" loading="lazy"><figcaption>插圖已完成</figcaption></figure>
+<div class="答案">
+<div class="欄位 "><span class="欄名">解釋</span><span class="欄值">形容感受深刻，難以忘懷。</span></div>
+<div class="欄位 字詞欄"><span class="欄名">字詞拆解</span><span class="欄值">刻：雕刻｜銘：在器物上刻字，引申為牢記</span></div>
+<div class="欄位 "><span class="欄名">例句</span><span class="欄值">這個教訓實在刻骨銘心，我再不會犯上同樣的錯誤。</span></div>
+<div class="欄位 "><span class="欄名">近義</span><span class="欄值">沒齒難忘：一世都忘記不了。多用於對別人的幫助，表示感激。</span></div>
+<div class="欄位 "><span class="欄名">反義</span><span class="欄值">置之腦後：放在一邊，不再想起。</span></div>
+</div>
+<div class="欄位 插圖欄"><span class="欄名">插圖畫面</span><span class="欄值">一顆發光的紅心上有一道深深的刻痕，男孩按着心口認真點頭，旁邊飄着小星星。</span></div>
+</article>
+<article class="卡片" data-name="受寵若驚" style="--card-accent:#8e7dbe">
+<div class="卡首"><span class="編號">17</span><div class="標題組"><h2>受寵若驚</h2><span class="朗讀群" role="group" aria-label="語音朗讀"><button type="button" class="朗讀鈕" data-lang="mandarin" data-name="受寵若驚" data-example="收到校長送給我的小禮物後，我感到受寵若驚，心情久久未能平伏。" title="普通話：朗讀成語及例句" aria-label="普通話朗讀受寵若驚及例句"><svg class="喇叭" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 9h3l4-3v12l-4-3H4z"/><path d="M13.5 9a4 4 0 0 1 0 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M16 6.5a7.5 7.5 0 0 1 0 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>普</span></button><button type="button" class="朗讀鈕" data-lang="cantonese" data-name="受寵若驚" data-example="收到校長送給我的小禮物後，我感到受寵若驚，心情久久未能平伏。" title="粵語：朗讀成語" aria-label="粵語朗讀受寵若驚"><svg class="喇叭" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 9h3l4-3v12l-4-3H4z"/><path d="M13.5 9a4 4 0 0 1 0 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M16 6.5a7.5 7.5 0 0 1 0 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>粵</span></button></span></div><span class="頁碼">第 10 頁</span></div>
+<figure class="插圖"><img src="images/c17.jpg" alt="受寵若驚 插圖" loading="lazy"><figcaption>插圖已完成</figcaption></figure>
+<div class="答案">
+<div class="欄位 "><span class="欄名">解釋</span><span class="欄值">受到過分的寵愛或賞識而感到驚喜或不安。</span></div>
+<div class="欄位 字詞欄"><span class="欄名">字詞拆解</span><span class="欄值">寵：寵愛、賞識｜若：好像｜驚：驚喜、不安</span></div>
+<div class="欄位 "><span class="欄名">例句</span><span class="欄值">收到校長送給我的小禮物後，我感到受寵若驚，心情久久未能平伏。</span></div>
+<div class="欄位 "><span class="欄名">近義</span><span class="欄值"><span class="補充標記">補充</span>大喜過望：結果遠比預期好，高興得不得了。</span></div>
+<div class="欄位 "><span class="欄名">反義</span><span class="欄值">寵辱不驚：不管受寵或受辱，都不動心。形容不把個人的榮辱得失放在心上。</span></div>
+<div class="欄位 典故欄"><span class="欄名">典故</span><span class="欄值"><span class="補充標記">補充</span>老子在《道德經》裏早就說過「寵辱若驚」：忽然被大人誇兩句，心裏又爽又慌，跟被老師當眾點名表揚時一模一樣——想開心，又怕太招搖。宋朝蘇軾還把這種感覺寫成「被寵若驚」，後來就變成「受寵若驚」啦。</span></div>
+</div>
+<div class="欄位 插圖欄"><span class="欄名">插圖畫面</span><span class="欄值">校長親手把小禮物交到學生手上，學生雙手接過、眼睛瞪得圓圓、臉頰泛紅，頭上冒出小驚嘆號。</span></div>
+</article>
+<article class="卡片" data-name="南柯一夢" style="--card-accent:#5aa9e6">
+<div class="卡首"><span class="編號">18</span><div class="標題組"><h2>南柯一夢</h2><span class="朗讀群" role="group" aria-label="語音朗讀"><button type="button" class="朗讀鈕" data-lang="mandarin" data-name="南柯一夢" data-example="即使他登上事業的高峯，但沒人可保證這一切不會只是南柯一夢。" title="普通話：朗讀成語及例句" aria-label="普通話朗讀南柯一夢及例句"><svg class="喇叭" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 9h3l4-3v12l-4-3H4z"/><path d="M13.5 9a4 4 0 0 1 0 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M16 6.5a7.5 7.5 0 0 1 0 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>普</span></button><button type="button" class="朗讀鈕" data-lang="cantonese" data-name="南柯一夢" data-example="即使他登上事業的高峯，但沒人可保證這一切不會只是南柯一夢。" title="粵語：朗讀成語" aria-label="粵語朗讀南柯一夢"><svg class="喇叭" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 9h3l4-3v12l-4-3H4z"/><path d="M13.5 9a4 4 0 0 1 0 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M16 6.5a7.5 7.5 0 0 1 0 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>粵</span></button></span></div><span class="頁碼">第 10 頁</span></div>
+<figure class="插圖"><img src="images/c18.jpg" alt="南柯一夢 插圖" loading="lazy"><figcaption>插圖已完成</figcaption></figure>
+<div class="答案">
+<div class="欄位 "><span class="欄名">解釋</span><span class="欄值">柯：樹枝。南柯：指夢境，也比喻虛幻。比喻空歡喜一場，也形容做了一場大夢。</span></div>
+<div class="欄位 字詞欄"><span class="欄名">字詞拆解</span><span class="欄值">柯：樹枝｜南柯：借指夢境、虛幻之事</span></div>
+<div class="欄位 "><span class="欄名">例句</span><span class="欄值">即使他登上事業的高峯，但沒人可保證這一切不會只是南柯一夢。</span></div>
+<div class="欄位 "><span class="欄名">近義</span><span class="欄值">黃粱一夢：一鍋黃米飯還沒有煮熟，一場好夢已被驚醒。比喻虛幻的夢想，多指空想。</span></div>
+<div class="欄位 "><span class="欄名">反義</span><span class="欄值"><span class="補充標記">補充</span>如願以償：願望真的實現了，不是一場空夢。</span></div>
+<div class="欄位 典故欄"><span class="欄名">典故</span><span class="欄值">唐朝有個淳于棼，在大槐樹下睡着，夢裏直接人生勝利組：娶了公主、當上南柯郡太守、榮華富貴全包。結果一睜眼——甚麼都沒有，所謂「槐安國」只是樹下一個螞蟻洞，整場富貴還不到一頓飯時間。就像打機一路升到滿級，醒來發現是午睡按到做夢模式，白高興一場。</span></div>
+</div>
+<div class="欄位 插圖欄"><span class="欄名">插圖畫面</span><span class="欄值">書生躺在大槐樹下睡着，樹下小蟻洞冒出一個大泡泡，泡泡裏是金色宮殿，邊緣快要破掉。</span></div>
+</article>
+<article class="卡片" data-name="喜出望外" style="--card-accent:#f4a261">
+<div class="卡首"><span class="編號">19</span><div class="標題組"><h2>喜出望外</h2><span class="朗讀群" role="group" aria-label="語音朗讀"><button type="button" class="朗讀鈕" data-lang="mandarin" data-name="喜出望外" data-example="今天可以找回失蹤三年的小狗，我們一家人都喜出望外。" title="普通話：朗讀成語及例句" aria-label="普通話朗讀喜出望外及例句"><svg class="喇叭" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 9h3l4-3v12l-4-3H4z"/><path d="M13.5 9a4 4 0 0 1 0 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M16 6.5a7.5 7.5 0 0 1 0 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>普</span></button><button type="button" class="朗讀鈕" data-lang="cantonese" data-name="喜出望外" data-example="今天可以找回失蹤三年的小狗，我們一家人都喜出望外。" title="粵語：朗讀成語" aria-label="粵語朗讀喜出望外"><svg class="喇叭" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 9h3l4-3v12l-4-3H4z"/><path d="M13.5 9a4 4 0 0 1 0 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M16 6.5a7.5 7.5 0 0 1 0 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>粵</span></button></span></div><span class="頁碼">第 11 頁</span></div>
+<figure class="插圖"><img src="images/c19.jpg" alt="喜出望外 插圖" loading="lazy"><figcaption>插圖已完成</figcaption></figure>
+<div class="答案">
+<div class="欄位 "><span class="欄名">解釋</span><span class="欄值">望外：意想不到。因意想不到的好事而感到欣喜。</span></div>
+<div class="欄位 字詞欄"><span class="欄名">字詞拆解</span><span class="欄值">望：期望、預料｜望外：意料之外</span></div>
+<div class="欄位 "><span class="欄名">例句</span><span class="欄值">今天可以找回失蹤三年的小狗，我們一家人都喜出望外。</span></div>
+<div class="欄位 "><span class="欄名">近義</span><span class="欄值">大喜過望：因結果超過原本預期而感到特別高興。</span></div>
+<div class="欄位 "><span class="欄名">反義</span><span class="欄值">大失所望：非常失望。</span></div>
+</div>
+<div class="欄位 插圖欄"><span class="欄名">插圖畫面</span><span class="欄值">走失三年的小狗撲回一家人懷裏，全家張大嘴巴、眼眶發亮，彩色愛心四散飛起。</span></div>
+</article>
+<article class="卡片" data-name="惴惴不安" style="--card-accent:#e76f51">
+<div class="卡首"><span class="編號">20</span><div class="標題組"><h2>惴惴不安</h2><span class="朗讀群" role="group" aria-label="語音朗讀"><button type="button" class="朗讀鈕" data-lang="mandarin" data-name="惴惴不安" data-example="小傑不知道校長要見他的原因，正懷着惴惴不安的心情走進校長室。" title="普通話：朗讀成語及例句" aria-label="普通話朗讀惴惴不安及例句"><svg class="喇叭" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 9h3l4-3v12l-4-3H4z"/><path d="M13.5 9a4 4 0 0 1 0 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M16 6.5a7.5 7.5 0 0 1 0 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>普</span></button><button type="button" class="朗讀鈕" data-lang="cantonese" data-name="惴惴不安" data-example="小傑不知道校長要見他的原因，正懷着惴惴不安的心情走進校長室。" title="粵語：朗讀成語" aria-label="粵語朗讀惴惴不安"><svg class="喇叭" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 9h3l4-3v12l-4-3H4z"/><path d="M13.5 9a4 4 0 0 1 0 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M16 6.5a7.5 7.5 0 0 1 0 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>粵</span></button></span></div><span class="頁碼">第 11 頁</span></div>
+<figure class="插圖"><img src="images/c20.jpg" alt="惴惴不安 插圖" loading="lazy"><figcaption>插圖已完成</figcaption></figure>
+<div class="答案">
+<div class="欄位 "><span class="欄名">解釋</span><span class="欄值">惴惴：恐懼、擔憂的樣子。形容因恐懼擔憂而心神不定。</span></div>
+<div class="欄位 字詞欄"><span class="欄名">字詞拆解</span><span class="欄值">惴惴：恐懼、擔憂的樣子｜安：安定</span></div>
+<div class="欄位 "><span class="欄名">例句</span><span class="欄值">小傑不知道校長要見他的原因，正懷着惴惴不安的心情走進校長室。</span></div>
+<div class="欄位 "><span class="欄名">近義</span><span class="欄值">憂心忡忡｜惶恐不安：擔憂害怕，心神不定。</span></div>
+<div class="欄位 "><span class="欄名">反義</span><span class="欄值"><span class="補充標記">補充</span>安之若素：遇上不尋常的事，仍像平常一樣安心自在。</span></div>
+</div>
+<div class="欄位 插圖欄"><span class="欄名">插圖畫面</span><span class="欄值">小傑捧着一張空白通知紙走向校長室，手心冒汗，門把旁畫着一圈顫抖的小波浪線。</span></div>
+</article>
+<article class="卡片" data-name="提心吊膽" style="--card-accent:#2a9d8f">
+<div class="卡首"><span class="編號">21</span><div class="標題組"><h2>提心吊膽</h2><span class="朗讀群" role="group" aria-label="語音朗讀"><button type="button" class="朗讀鈕" data-lang="mandarin" data-name="提心吊膽" data-example="這座橋樑日久失修，來往的行人都提心吊膽。" title="普通話：朗讀成語及例句" aria-label="普通話朗讀提心吊膽及例句"><svg class="喇叭" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 9h3l4-3v12l-4-3H4z"/><path d="M13.5 9a4 4 0 0 1 0 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M16 6.5a7.5 7.5 0 0 1 0 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>普</span></button><button type="button" class="朗讀鈕" data-lang="cantonese" data-name="提心吊膽" data-example="這座橋樑日久失修，來往的行人都提心吊膽。" title="粵語：朗讀成語" aria-label="粵語朗讀提心吊膽"><svg class="喇叭" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 9h3l4-3v12l-4-3H4z"/><path d="M13.5 9a4 4 0 0 1 0 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M16 6.5a7.5 7.5 0 0 1 0 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>粵</span></button></span></div><span class="頁碼">第 11 頁</span></div>
+<figure class="插圖"><img src="images/c21.jpg" alt="提心吊膽 插圖" loading="lazy"><figcaption>插圖已完成</figcaption></figure>
+<div class="答案">
+<div class="欄位 "><span class="欄名">解釋</span><span class="欄值">形容十分擔心、害怕，無法平靜下來。</span></div>
+<div class="欄位 字詞欄"><span class="欄名">字詞拆解</span><span class="欄值">提：向上懸起｜吊：懸掛，比喻放心不下</span></div>
+<div class="欄位 "><span class="欄名">例句</span><span class="欄值">這座橋樑日久失修，來往的行人都提心吊膽。</span></div>
+<div class="欄位 "><span class="欄名">近義</span><span class="欄值">心驚膽戰：形容十分害怕。</span></div>
+<div class="欄位 "><span class="欄名">反義</span><span class="欄值">心安理得：認為自己所做的事合情合理而內心坦然。</span></div>
+</div>
+<div class="欄位 插圖欄"><span class="欄名">插圖畫面</span><span class="欄值">行人走在搖搖晃晃的舊吊橋上，一顆顆紅心被細線吊在半空，橋下浪花翻滾。</span></div>
+</article>
+<article class="卡片" data-name="晴天霹靂" style="--card-accent:#e9c46a">
+<div class="卡首"><span class="編號">22</span><div class="標題組"><h2>晴天霹靂</h2><span class="朗讀群" role="group" aria-label="語音朗讀"><button type="button" class="朗讀鈕" data-lang="mandarin" data-name="晴天霹靂" data-example="麗明知道被好朋友出賣，頓時晴天霹靂，說不出半句話來。" title="普通話：朗讀成語及例句" aria-label="普通話朗讀晴天霹靂及例句"><svg class="喇叭" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 9h3l4-3v12l-4-3H4z"/><path d="M13.5 9a4 4 0 0 1 0 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M16 6.5a7.5 7.5 0 0 1 0 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>普</span></button><button type="button" class="朗讀鈕" data-lang="cantonese" data-name="晴天霹靂" data-example="麗明知道被好朋友出賣，頓時晴天霹靂，說不出半句話來。" title="粵語：朗讀成語" aria-label="粵語朗讀晴天霹靂"><svg class="喇叭" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 9h3l4-3v12l-4-3H4z"/><path d="M13.5 9a4 4 0 0 1 0 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M16 6.5a7.5 7.5 0 0 1 0 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>粵</span></button></span></div><span class="頁碼">第 11 頁</span></div>
+<figure class="插圖"><img src="images/c22.jpg" alt="晴天霹靂 插圖" loading="lazy"><figcaption>插圖已完成</figcaption></figure>
+<div class="答案">
+<div class="欄位 "><span class="欄名">解釋</span><span class="欄值">在晴天打起響雷。比喻突然發生意料之外、令人震驚的事件。</span></div>
+<div class="欄位 字詞欄"><span class="欄名">字詞拆解</span><span class="欄值">霹靂：又急又響的雷｜晴天：比喻本來平靜無事</span></div>
+<div class="欄位 "><span class="欄名">例句</span><span class="欄值">麗明知道被好朋友出賣，頓時晴天霹靂，說不出半句話來。</span></div>
+<div class="欄位 "><span class="欄名">近義</span><span class="欄值">平地風波：比喻突然發生意料不到的糾紛或事故。</span></div>
+<div class="欄位 "><span class="欄名">反義</span><span class="欄值">喜從天降：比喻突然遇到意想不到的喜事。</span></div>
+</div>
+<div class="欄位 插圖欄"><span class="欄名">插圖畫面</span><span class="欄值">萬里無雲的藍天上突然劈下一道巨大閃電，女孩愣在原地，手裏的書掉在地上。</span></div>
+</article>
+<article class="卡片" data-name="意興闌珊" style="--card-accent:#8e7dbe">
+<div class="卡首"><span class="編號">23</span><div class="標題組"><h2>意興闌珊</h2><span class="朗讀群" role="group" aria-label="語音朗讀"><button type="button" class="朗讀鈕" data-lang="mandarin" data-name="意興闌珊" data-example="志文長期沒有登上籃球比賽的正選名單，感到意興闌珊，打算在這場比賽後退出球隊。" title="普通話：朗讀成語及例句" aria-label="普通話朗讀意興闌珊及例句"><svg class="喇叭" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 9h3l4-3v12l-4-3H4z"/><path d="M13.5 9a4 4 0 0 1 0 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M16 6.5a7.5 7.5 0 0 1 0 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>普</span></button><button type="button" class="朗讀鈕" data-lang="cantonese" data-name="意興闌珊" data-example="志文長期沒有登上籃球比賽的正選名單，感到意興闌珊，打算在這場比賽後退出球隊。" title="粵語：朗讀成語" aria-label="粵語朗讀意興闌珊"><svg class="喇叭" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 9h3l4-3v12l-4-3H4z"/><path d="M13.5 9a4 4 0 0 1 0 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M16 6.5a7.5 7.5 0 0 1 0 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>粵</span></button></span></div><span class="頁碼">第 11 頁</span></div>
+<figure class="插圖"><img src="images/c23.jpg" alt="意興闌珊 插圖" loading="lazy"><figcaption>插圖已完成</figcaption></figure>
+<div class="答案">
+<div class="欄位 "><span class="欄名">解釋</span><span class="欄值">闌珊：衰落。形容興致極為低落，無甚興趣，意志消沉。</span></div>
+<div class="欄位 字詞欄"><span class="欄名">字詞拆解</span><span class="欄值">闌珊：衰落、將盡｜意興：興致</span></div>
+<div class="欄位 "><span class="欄名">例句</span><span class="欄值">志文長期沒有登上籃球比賽的正選名單，感到意興闌珊，打算在這場比賽後退出球隊。</span></div>
+<div class="欄位 "><span class="欄名">近義</span><span class="欄值">心灰意冷：形容意志消沉，態度消極，不思振作。</span></div>
+<div class="欄位 "><span class="欄名">反義</span><span class="欄值">興致勃勃：形容興趣濃厚，情緒高漲。</span></div>
+</div>
+<div class="欄位 插圖欄"><span class="欄名">插圖畫面</span><span class="欄值">籃球員坐在空蕩球場邊的長凳上，手裏的籃球洩了氣，頭上浮着一朵小灰雲。</span></div>
+</article>
+<article class="卡片" data-name="愛不釋手" style="--card-accent:#5aa9e6">
+<div class="卡首"><span class="編號">24</span><div class="標題組"><h2>愛不釋手</h2><span class="朗讀群" role="group" aria-label="語音朗讀"><button type="button" class="朗讀鈕" data-lang="mandarin" data-name="愛不釋手" data-example="妹妹對這本故事書愛不釋手，甚至連睡覺時也要把它放在枕邊。" title="普通話：朗讀成語及例句" aria-label="普通話朗讀愛不釋手及例句"><svg class="喇叭" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 9h3l4-3v12l-4-3H4z"/><path d="M13.5 9a4 4 0 0 1 0 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M16 6.5a7.5 7.5 0 0 1 0 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>普</span></button><button type="button" class="朗讀鈕" data-lang="cantonese" data-name="愛不釋手" data-example="妹妹對這本故事書愛不釋手，甚至連睡覺時也要把它放在枕邊。" title="粵語：朗讀成語" aria-label="粵語朗讀愛不釋手"><svg class="喇叭" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 9h3l4-3v12l-4-3H4z"/><path d="M13.5 9a4 4 0 0 1 0 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M16 6.5a7.5 7.5 0 0 1 0 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>粵</span></button></span></div><span class="頁碼">第 11 頁</span></div>
+<p class="提示">※ 學校相片於本頁頁底截斷，近義、反義與典故由整理者補充；本條為教材清單最後一個成語。</p>
+<figure class="插圖"><img src="images/c24.jpg" alt="愛不釋手 插圖" loading="lazy"><figcaption>插圖已完成</figcaption></figure>
+<div class="答案">
+<div class="欄位 "><span class="欄名">解釋</span><span class="欄值">釋：放開，放下。對鍾愛的事物捨不得放手。</span></div>
+<div class="欄位 字詞欄"><span class="欄名">字詞拆解</span><span class="欄值">愛：喜愛、鍾愛｜釋：放下、放開</span></div>
+<div class="欄位 "><span class="欄名">例句</span><span class="欄值">妹妹對這本故事書愛不釋手，甚至連睡覺時也要把它放在枕邊。</span></div>
+<div class="欄位 "><span class="欄名">近義</span><span class="欄值"><span class="補充標記">補充</span>手不釋卷：拿着書本捨不得放下，形容非常喜愛閱讀。</span></div>
+<div class="欄位 "><span class="欄名">反義</span><span class="欄值"><span class="補充標記">補充</span>不屑一顧：連看一眼都懶得看，完全提不起興趣。</span></div>
+<div class="欄位 典故欄"><span class="欄名">典故</span><span class="欄值"><span class="補充標記">補充</span>南朝的昭明太子蕭統超愛陶淵明的文章，編《陶淵明集》時寫下「余愛嗜其文，不能釋手」——意思就是：太喜歡了，手根本捨不得放開。跟今天追劇追到捨不得按暫停、手機滑到半夜簡直同一款。</span></div>
+</div>
+<div class="欄位 插圖欄"><span class="欄名">插圖畫面</span><span class="欄值">小女孩抱着故事書睡着了，書還緊緊摟在懷裏、貼着枕邊，床頭小燈亮着暖暖的光。</span></div>
+</article>
+  <p class="找不到" id="emptyHint" style="display:none">找不到符合的成語，請換個字再試。</p>
+</main>
+<footer>
+  <p>資料來源：學校教材《人物描寫篇》「情緒刻畫」章節，第 7 至 11 頁相片，合計 24 個成語，已全數整理完成。</p>
+  <p>第 11 頁「愛不釋手」條目於頁底截斷，其近義、反義與典故由整理者補充；除此之外並無缺漏。</p>
+  <p>【字詞拆解】按香港中一考試需要整理，用「字：意思」標注核心字義；典故改寫與補充資料僅作理解輔助，考試作答請以學校教材為準。</p>
+  <p>插圖共完成 3 張（七上八下、力不從心、三心二意），其餘卡片暫以「插圖待補」標示，日後補齊即可直接更新本頁。</p>
+  <p>【語音朗讀】使用瀏覽器內建語音合成，【普】為 zh-CN、【粵】為 zh-HK。【粵】會先確認裝置已安裝 zh-HK／yue 語音，沒有便提示「您的設備暫未安裝粵語語音包，請在手機系統設置中添加粵語（香港）語音，或使用普通話發音。」並停止發聲，絕不以普通話代替；其餘功能不受影響。</p>
+  <p>【互動測試區】已改為全螢幕答題畫面，頁首【開始測驗】與右下角懸浮【測驗】鈕皆可進入，頂部【返回複習】可隨時退出；三大題型的題目全部由這 24 個成語編成，題庫合共 112 道備選題，每次隨機抽 10 題，按學校比重分為實戰選詞填空 6 題、核心字義與辨析 2 題、近反義詞點選 2 題；題目與選項每次重新洗牌。解析僅作理解輔助，考試作答請以學校教材為準。</p>
+</footer>
+<div id="測驗層" class="測驗層" hidden role="dialog" aria-modal="true" aria-labelledby="測驗標題">
+  <div class="測驗頂欄">
+    <button type="button" id="quizBack" class="返回按鈕">← 返回複習</button>
+    <h2 id="測驗標題" class="頂欄標題">互動測試區</h2>
+    <button type="button" id="quizReset" class="重測按鈕">重新測試</button>
+  </div>
+  <section id="測驗區" aria-labelledby="測驗標題">
+    <div class="測驗框">
+      <p class="測驗說明">三大題型全部取自 24 張卡片，題庫合共 112 道備選題。每次進入測驗或按「重新測試」，都按學校比重隨機抽 10 題：實戰選詞填空 6 題、核心字義與辨析 2 題、近反義詞點選 2 題；各題選項次序亦會重新打亂。選好即刻批改，答錯會附上【解析】；全部作答後顯示總分。按左上角「返回複習」即可隨時回去看卡片。</p>
+      <div class="測驗工具列">
+        <span class="進度" id="quizProgress">已完成 0／10 題</span>
+      </div>
+      <div id="quizList"></div>
+      <div id="quizScore" class="計分板" hidden></div>
+    </div>
+  </section>
+</div>
+<button type="button" class="測驗入口 懸浮測驗" aria-label="開始測驗">
+  <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 3h11l3 3v15H5z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9h8M8 13h8M8 17h5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+  <span>測驗</span>
+</button>
+<script>
+// 自我測驗：遮蓋或顯示答案，方便孩子只看成語回想意思。
+var maskBtn = document.getElementById('maskBtn');
+var masked = false;
+maskBtn.addEventListener('click', function () {
+  masked = !masked;
+  document.body.classList.toggle('遮蓋答案', masked);
+  maskBtn.textContent = masked ? '顯示答案' : '遮蓋答案';
+});
+
+// 輸入成語即時篩選卡片。
+var searchBox = document.getElementById('searchBox');
+searchBox.addEventListener('input', function () {
+  var keyword = searchBox.value.trim();
+  var cards = document.querySelectorAll('.卡片');
+  var shown = 0;
+  cards.forEach(function (card) {
+    var name = card.getAttribute('data-name');
+    var hit = name.indexOf(keyword) !== -1;
+    card.style.display = hit ? '' : 'none';
+    if (hit) { shown += 1; }
+  });
+  var empty = document.getElementById('emptyHint');
+  empty.style.display = shown === 0 ? 'block' : 'none';
+});
+
+// 列印成紙本卡片。
+document.getElementById('printBtn').addEventListener('click', function () {
+  window.print();
+});
+</script>
+<script>
+// 【普】以 zh-CN 讀出成語及例句；【粵】須先確認裝置裝有 zh-HK／yue 語音，才以 zh-HK 讀出成語。
+(function () {
+  // 沒有粵語語音引擎時一律提示並停止發聲，絕不降級成普通話，以免誤導孩子。
+  var MSG_YUE = '您的設備暫未安裝粵語語音包，請在手機系統設置中添加粵語（香港）語音，或使用普通話發音。';
+  var MSG_NONE = '您的裝置暫不支持語音朗讀';
+  var synth = window.speechSynthesis;
+  var Utterance = window.SpeechSynthesisUtterance;
+  var voices = [];
+  var currentBtn = null;
+  var currentUtterance = null;
+
+  function refresh() {
+    try { voices = synth.getVoices() || []; } catch (e) { voices = []; }
+  }
+  function norm(lang) {
+    return String(lang || '').toLowerCase().replace(/_/g, '-');
+  }
+  function pick(prefix) {
+    for (var i = 0; i < voices.length; i += 1) {
+      if (norm(voices[i].lang).indexOf(prefix) === 0) { return voices[i]; }
+    }
+    return null;
+  }
+  function pickYue() {
+    return pick('zh-hk') || pick('yue') || pick('zh-yue');
+  }
+  function clearBtn() {
+    if (currentBtn && currentBtn.classList) { currentBtn.classList.remove('正在讀'); }
+    currentBtn = null;
+  }
+  function speak(text, lang, voice, fallback, btn) {
+    try {
+      // 先作廢上一句，避免取消朗讀時誤觸上一句的錯誤回呼。
+      currentUtterance = null;
+      clearBtn();
+      if (synth.cancel) { synth.cancel(); }
+      var u = new Utterance(text);
+      u.lang = lang;
+      if (voice) { u.voice = voice; }
+      u.rate = 0.9;
+      u.pitch = 1;
+      u.onend = function () {
+        if (currentUtterance !== u) { return; }
+        currentUtterance = null;
+        clearBtn();
+      };
+      u.onerror = function (ev) {
+        if (currentUtterance !== u) { return; }
+        currentUtterance = null;
+        clearBtn();
+        var err = ev && ev.error ? String(ev.error) : '';
+        // 被下一次點擊中斷屬正常情況，不打擾孩子。
+        if (err === 'interrupted' || err === 'canceled') { return; }
+        if (fallback) { window.alert(fallback); }
+      };
+      currentUtterance = u;
+      if (btn && btn.classList) {
+        btn.classList.add('正在讀');
+        currentBtn = btn;
+      }
+      synth.speak(u);
+      if (synth.paused && synth.resume) { synth.resume(); }
+    } catch (e) {
+      currentUtterance = null;
+      clearBtn();
+      if (fallback) { window.alert(fallback); }
+    }
+  }
+  // 最多等候約 1.2 秒，讓部分瀏覽器補送語音清單，避免誤判「稍後才載入」為沒有粵語。
+  var MAX_WAIT = 15;
+  function readYue(name, btn) {
+    var tries = 0;
+    (function attempt() {
+      refresh();
+      var yueVoice = pickYue();
+      // 語音清單仍空白且尚有等候次數：稍後重試。
+      if (!yueVoice && !voices.length && tries < MAX_WAIT) {
+        tries += 1;
+        window.setTimeout(attempt, 80);
+        return;
+      }
+      // 找不到 zh-HK／yue 語音引擎：直接提示並停止發聲，不以普通話硬讀代替。
+      if (!yueVoice) { window.alert(MSG_YUE); return; }
+      // 已確認裝置裝有粵語語音，明確指定該語音物件，瀏覽器才不會悄悄降級。
+      speak(name, 'zh-HK', yueVoice, MSG_YUE, btn);
+    })();
+  }
+  function onClick(btn) {
+    var name = btn.getAttribute('data-name') || '';
+    var example = btn.getAttribute('data-example') || '';
+    if (!synth || !Utterance) {
+      // 完全沒有語音合成能力時，【粵】同樣視為沒有粵語語音引擎。
+      window.alert(btn.getAttribute('data-lang') === 'cantonese' ? MSG_YUE : MSG_NONE);
+      return;
+    }
+    if (btn.getAttribute('data-lang') === 'cantonese') {
+      readYue(name, btn);
+      return;
+    }
+    refresh();
+    speak(name + '。' + example, 'zh-CN', pick('zh-cn') || pick('zh'), '', btn);
+  }
+  var buttons = document.querySelectorAll('.朗讀鈕');
+  Array.prototype.forEach.call(buttons, function (btn) {
+    btn.addEventListener('click', function () { onClick(btn); });
+  });
+  // 預先取得語音清單；部分瀏覽器會稍後才補送語音資料。
+  if (synth) {
+    refresh();
+    try {
+      if (synth.addEventListener) { synth.addEventListener('voiceschanged', refresh); }
+      else { synth.onvoiceschanged = refresh; }
+    } catch (e) {}
+  }
+})();
+</script>
+<script>
+// 互動測試區：由 24 個成語組成三組題庫，隨機抽題、打亂選項、即時批改。
+(function () {
+  var BANK = {"idioms":["七上八下","力不從心","三心二意","大快人心","不知所措","六神無主","心有餘悸","心急如焚","心曠神怡","毛骨悚然","火冒三丈","叫苦連天","如釋重負","妙不可言","忐忑不安","刻骨銘心","受寵若驚","南柯一夢","喜出望外","惴惴不安","提心吊膽","晴天霹靂","意興闌珊","愛不釋手"],"A":[{"id":"A01","type":"A","prompt":"公佈比賽結果前的一刻，同學們的心情＿＿，又緊張又期待。","answer":"七上八下","explain":"七上八下形容心情慌亂不安；句子寫的是等待結果時忐忑，不是急着去做事。","options":[]},{"id":"A02","type":"A","prompt":"爺爺想替我們搬箱子，可是年紀大了，實在＿＿。","answer":"力不從心","explain":"心裏想做、力量卻不夠，正是力不從心。","options":[]},{"id":"A03","type":"A","prompt":"一時想學吉他、一時想學畫，妹妹老是＿＿。","answer":"三心二意","explain":"拿不定主意、意志不堅定，用三心二意。","options":[]},{"id":"A04","type":"A","prompt":"騙子終於被警方拘捕，街坊都說＿＿。","answer":"大快人心","explain":"壞人受懲罰、大家覺得痛快，用大快人心。","options":[]},{"id":"A05","type":"A","prompt":"突然被老師提問，小潔一時＿＿，半句話也答不出。","answer":"不知所措","explain":"措是安置、處理；慌得不知怎麼辦，就是不知所措。","options":[]},{"id":"A06","type":"A","prompt":"聽到壞消息，他一時＿＿，連要打電話給誰都拿不定主意。","answer":"六神無主","explain":"六神無主強調心慌得拿不定主意；不知所措偏向不知怎樣着手。","options":[]},{"id":"A07","type":"A","prompt":"車禍過去半年，他每次經過那個彎位仍然＿＿。","answer":"心有餘悸","explain":"事情過去了，回想起來還會怕，就是心有餘悸。","options":[]},{"id":"A08","type":"A","prompt":"弟弟發高燒送院，媽媽＿＿地趕往急症室。","answer":"心急如焚","explain":"焚是火燒；心中急得像火燒，應用心急如焚。","options":[]},{"id":"A09","type":"A","prompt":"站在山頂迎着微風望向青山綠水，令人＿＿。","answer":"心曠神怡","explain":"心境開闊、精神愉快，正是心曠神怡。","options":[]},{"id":"A10","type":"A","prompt":"半夜看驚慄電影，妹妹嚇得＿＿，汗毛都豎起來。","answer":"毛骨悚然","explain":"悚是恐懼；害怕到汗毛豎起，用毛骨悚然。","options":[]},{"id":"A11","type":"A","prompt":"弟弟撕破了我的作業簿，我氣得＿＿。","answer":"火冒三丈","explain":"怒火升到三丈高，形容十分生氣。","options":[]},{"id":"A12","type":"A","prompt":"測驗、報告、補課全擠在同一星期，同學們＿＿。","answer":"叫苦連天","explain":"不斷叫苦、痛苦到極點，用叫苦連天。","options":[]},{"id":"A13","type":"A","prompt":"向爸爸認錯之後，我心裏＿＿，像放下大石。","answer":"如釋重負","explain":"釋是放下；像卸下重擔那樣輕鬆，就是如釋重負。","options":[]},{"id":"A14","type":"A","prompt":"女主角的舞姿輕盈得＿＿，台下觀眾都看呆了。","answer":"妙不可言","explain":"言是說；美得沒有詞語可以形容，用妙不可言。","options":[]},{"id":"A15","type":"A","prompt":"弄污了爸爸的藏書，妹妹＿＿地等他回家。","answer":"忐忑不安","explain":"心緒起伏不定、擔心被責備，用忐忑不安。","options":[]},{"id":"A16","type":"A","prompt":"那次教訓太深刻，至今＿＿，我不敢再犯。","answer":"刻骨銘心","explain":"感受深刻、難以忘懷，用刻骨銘心。","options":[]},{"id":"A17","type":"A","prompt":"校長親自送我小禮物，我實在有點＿＿。","answer":"受寵若驚","explain":"受到過分賞識而既驚喜又不安，用受寵若驚。","options":[]},{"id":"A18","type":"A","prompt":"以為從此飛黃騰達，醒來才知道只是＿＿。","answer":"南柯一夢","explain":"比喻空歡喜一場、富貴如夢，用南柯一夢。","options":[]},{"id":"A19","type":"A","prompt":"走失三年的小狗忽然跑回家，一家人＿＿。","answer":"喜出望外","explain":"意想不到的好事帶來欣喜，用喜出望外。","options":[]},{"id":"A20","type":"A","prompt":"不知校長為何召見，小傑＿＿地走進校長室。","answer":"惴惴不安","explain":"因恐懼擔憂而心神不定，用惴惴不安。","options":[]},{"id":"A21","type":"A","prompt":"走過那條日久失修的舊吊橋，行人都＿＿。","answer":"提心吊膽","explain":"十分擔心害怕、無法平靜，用提心吊膽。","options":[]},{"id":"A22","type":"A","prompt":"得知被好朋友出賣，他頓時如遭＿＿，說不出話。","answer":"晴天霹靂","explain":"比喻突然發生令人震驚的壞事，用晴天霹靂。","options":[]},{"id":"A23","type":"A","prompt":"長期沒入選正選，志文感到＿＿，打算退出球隊。","answer":"意興闌珊","explain":"闌珊是衰落；興致極低，用意興闌珊。","options":[]},{"id":"A24","type":"A","prompt":"妹妹對這本故事書＿＿，連睡覺也要放在枕邊。","answer":"愛不釋手","explain":"釋是放開；喜愛得捨不得放手，用愛不釋手。","options":[]},{"id":"A25","type":"A","prompt":"聽到要上台演講，我心裏＿＿，連手心也冒汗。","answer":"七上八下","explain":"上台前慌亂不安，正是七上八下；不是急着趕去做一件事。","options":[]},{"id":"A26","type":"A","prompt":"他很想幫忙搬那箱厚厚的書，可惜手臂沒力，＿＿。","answer":"力不從心","explain":"心裏願意、力量卻跟不上，用力不從心。","options":[]},{"id":"A27","type":"A","prompt":"選科時一時想讀理科、一時又想讀商科，哥哥一直＿＿。","answer":"三心二意","explain":"猶豫不決、意志不堅定，用三心二意。","options":[]},{"id":"A28","type":"A","prompt":"那個長期欺騙老人的騙子終於落網，市民都覺得＿＿。","answer":"大快人心","explain":"壞人受懲罰、眾人痛快，用大快人心。","options":[]},{"id":"A29","type":"A","prompt":"第一次走進試場，看見滿桌試卷，小敏一時＿＿。","answer":"不知所措","explain":"措是安置、處理；慌得不知怎樣應付，就是不知所措。","options":[]},{"id":"A30","type":"A","prompt":"妹妹把媽媽的手機掉進水裏，嚇得＿＿，不知先做甚麼。","answer":"六神無主","explain":"六神無主強調心慌得拿不定主意，連先做哪一步都亂了。","options":[]},{"id":"A31","type":"A","prompt":"想起上次差點被車撞到，他現在過馬路仍＿＿。","answer":"心有餘悸","explain":"事情過去了，回想起來心還在怦怦跳，就是心有餘悸。","options":[]},{"id":"A32","type":"A","prompt":"小狗走失了一整晚，全家人＿＿，四出尋找。","answer":"心急如焚","explain":"焚是火燒；急得像心裏着火，忙着四處找，用心急如焚。","options":[]},{"id":"A33","type":"A","prompt":"考完試到郊外走走，望着藍天白雲，頓覺＿＿。","answer":"心曠神怡","explain":"心境開闊、精神愉快，正是心曠神怡。","options":[]},{"id":"A34","type":"A","prompt":"一個人走過漆黑的走廊，忽然聽到怪聲，令人＿＿。","answer":"毛骨悚然","explain":"悚是恐懼；害怕到汗毛豎起，用毛骨悚然。","options":[]},{"id":"A35","type":"A","prompt":"得知有人把他的模型弄壞，弟弟即時＿＿。","answer":"火冒三丈","explain":"怒火升到三丈高，形容十分生氣。","options":[]},{"id":"A36","type":"A","prompt":"連續三天通宵趕功課，同學們都＿＿。","answer":"叫苦連天","explain":"不斷叫苦、辛苦到極點，用叫苦連天。","options":[]},{"id":"A37","type":"A","prompt":"把欠了很久的功課終於交妥，他＿＿，整個人鬆下來。","answer":"如釋重負","explain":"釋是放下；像卸下重擔那樣輕鬆，就是如釋重負。","options":[]},{"id":"A38","type":"A","prompt":"煙花在夜空綻放的那一刻，美得＿＿。","answer":"妙不可言","explain":"言是說；美得沒有詞語可以形容，用妙不可言。","options":[]},{"id":"A39","type":"A","prompt":"等待面試結果時，她一直＿＿，不停看手機。","answer":"忐忑不安","explain":"心緒起伏不定、又緊張又擔心，用忐忑不安。","options":[]},{"id":"A40","type":"A","prompt":"老師那句鼓勵的話，多年來一直＿＿。","answer":"刻骨銘心","explain":"感受深刻、難以忘懷，用刻骨銘心。","options":[]},{"id":"A41","type":"A","prompt":"被校長在全校面前點名表揚，他感到＿＿。","answer":"受寵若驚","explain":"受到過分賞識而既驚喜又不安，用受寵若驚。","options":[]},{"id":"A42","type":"A","prompt":"他把整副身家押上去，最後富貴成空，恍如＿＿。","answer":"南柯一夢","explain":"比喻空歡喜一場、富貴轉眼成空，用南柯一夢。","options":[]},{"id":"A43","type":"A","prompt":"本以為趕不上校車，竟然剛好趕到，真是＿＿。","answer":"喜出望外","explain":"意想不到的好事帶來欣喜，用喜出望外。","options":[]},{"id":"A44","type":"A","prompt":"被叫進教員室前，他＿＿，生怕自己做錯了事。","answer":"惴惴不安","explain":"因恐懼擔憂而心神不定，用惴惴不安。","options":[]},{"id":"A45","type":"A","prompt":"颱風夜裏舊屋的窗戶咯咯作響，一家人＿＿。","answer":"提心吊膽","explain":"十分擔心害怕、無法平靜，用提心吊膽。","options":[]},{"id":"A46","type":"A","prompt":"比賽臨時取消的消息傳來，對苦練半年的隊友猶如＿＿。","answer":"晴天霹靂","explain":"晴天打響雷，比喻突然發生、令人震驚的壞事。","options":[]},{"id":"A47","type":"A","prompt":"連輸三場之後，隊員們對練習都＿＿。","answer":"意興闌珊","explain":"闌珊是衰落；興致極低，用意興闌珊。","options":[]},{"id":"A48","type":"A","prompt":"外婆送的音樂盒，妹妹＿＿，天天都要拿出來看看。","answer":"愛不釋手","explain":"釋是放開；喜愛得捨不得放手，用愛不釋手。","options":[]}],"B":[{"id":"B01","type":"B","prompt":"「愛不釋手」的「釋」是甚麼意思？","answer":"放下、放開","explain":"釋在這裏是放開、放下；整句指喜愛得捨不得放手，和解釋、釋放無關。","options":["放下、放開","解釋說明","釋放犯人","加水稀釋"]},{"id":"B02","type":"B","prompt":"「六神無主」的「主」是甚麼意思？","answer":"主意、主張","explain":"六神無主是心慌得拿不定主意，不是沒有主人。","options":["主意、主張","主人","主要","主持"]},{"id":"B03","type":"B","prompt":"「力不從心」的「從」是甚麼意思？","answer":"順從、聽從","explain":"力量不聽從心裏的願望，想做卻做不到。","options":["順從、聽從","從前","從頭","自從"]},{"id":"B04","type":"B","prompt":"「不知所措」的「措」是甚麼意思？","answer":"安置、處理","explain":"措是安置、處理；不知道怎樣安置、處理眼前的狀況。","options":["安置、處理","錯過","握手","責備"]},{"id":"B05","type":"B","prompt":"「心急如焚」的「焚」是甚麼意思？","answer":"火燒","explain":"焚是火燒；急得像心裏着火一樣。","options":["火燒","水淹","風吹","冰凍"]},{"id":"B06","type":"B","prompt":"「南柯一夢」的「柯」是甚麼意思？","answer":"樹枝","explain":"柯是樹枝；南柯原指夢裏槐樹南枝下的蟻國，後來借指虛幻的夢。","options":["樹枝","斧頭","樹根","繩子"]},{"id":"B07","type":"B","prompt":"「意興闌珊」的「闌珊」是甚麼意思？","answer":"衰落、將盡","explain":"闌珊是衰落；興致快沒了，不是興致正高。","options":["衰落、將盡","興致很高","剛剛開始","燈火通明"]},{"id":"B08","type":"B","prompt":"「妙不可言」的「言」是甚麼意思？","answer":"說、用言語形容","explain":"言是說；美得沒有詞語可以形容。","options":["說、用言語形容","寫信","答應","責罵"]},{"id":"B09","type":"B","prompt":"「刻骨銘心」的「銘」是甚麼意思？","answer":"刻字牢記","explain":"銘本來是在器物上刻字，引申為牢牢記住，所以感受深刻難忘。","options":["刻字牢記","忘記","名字","發光"]},{"id":"B10","type":"B","prompt":"「喜出望外」的「望」是甚麼意思？","answer":"期望、預料","explain":"望外就是超出原本預料之外，所以指意料之外的喜事。","options":["期望、預料","遠看","探望","名望"]},{"id":"B11","type":"B","prompt":"「受寵若驚」的「若」是甚麼意思？","answer":"好像","explain":"若在成語裏是好像；受寵好像受驚，又喜又慌。","options":["好像","如果","若干","若是"]},{"id":"B12","type":"B","prompt":"「毛骨悚然」的「悚」是甚麼意思？","answer":"恐懼、害怕","explain":"悚然是恐懼的樣子，然是……的樣子。","options":["恐懼、害怕","寒冷","高興","疲倦"]},{"id":"B13","type":"B","prompt":"等待公佈名次時心裏慌亂、七上八落，最貼切的是哪個成語？","answer":"七上八下","explain":"七上八下是慌亂不安；心急如焚是急着趕去做一件事，重點不同。","options":["七上八下","心急如焚","心曠神怡","大快人心"]},{"id":"B14","type":"B","prompt":"事情已經過去，回想起來仍然害怕，該用哪個成語？","answer":"心有餘悸","explain":"心有餘悸強調事後回想仍怕；毛骨悚然是當下害怕到汗毛豎起。","options":["心有餘悸","毛骨悚然","提心吊膽","火冒三丈"]},{"id":"B15","type":"B","prompt":"壞人終於被法律制裁，大家覺得十分痛快，該用哪個成語？","answer":"大快人心","explain":"大快人心專指壞人受罰、眾人痛快。","options":["大快人心","喜出望外","妙不可言","如釋重負"]},{"id":"B16","type":"B","prompt":"考完最後一科，壓力一下子卸下來，該用哪個成語？","answer":"如釋重負","explain":"如釋重負是放下重擔；心曠神怡多指景色令人心境舒暢。","options":["如釋重負","心曠神怡","喜出望外","意興闌珊"]},{"id":"B17","type":"B","prompt":"對球隊再也提不起勁、打算退出，該用哪個成語？","answer":"意興闌珊","explain":"興致低落、意志消沉，正是意興闌珊。","options":["意興闌珊","忐忑不安","叫苦連天","心急如焚"]},{"id":"B18","type":"B","prompt":"聽到家人受傷，急着趕去醫院，該用哪個成語？","answer":"心急如焚","explain":"急着行動用如焚；七上八下與惴惴不安偏向心裏慌、擔心。","options":["心急如焚","七上八下","心有餘悸","惴惴不安"]},{"id":"B19","type":"B","prompt":"比喻突然發生、令人震驚的壞消息，該用哪個成語？","answer":"晴天霹靂","explain":"晴天打響雷，比喻意料之外的震驚事件，多用於壞事。","options":["晴天霹靂","喜出望外","如釋重負","大快人心"]},{"id":"B20","type":"B","prompt":"比喻一場空歡喜、富貴轉眼成空，該用哪個成語？","answer":"南柯一夢","explain":"淳于棼夢裏當上太守，醒來只是槐樹下的蟻洞，故用南柯一夢。","options":["南柯一夢","喜出望外","刻骨銘心","妙不可言"]},{"id":"B21","type":"B","prompt":"「提心吊膽」的「吊」是甚麼意思？","answer":"懸掛","explain":"吊是懸掛；把心提起、把膽懸着，比喻放心不下。","options":["懸掛","購買","吊銷","安慰"]},{"id":"B22","type":"B","prompt":"「晴天霹靂」的「霹靂」是甚麼意思？","answer":"又急又響的雷","explain":"霹靂是又急又響的雷；大晴天忽然打雷，比喻突發的震驚事件。","options":["又急又響的雷","綿綿細雨","一陣微風","滿天烏雲"]},{"id":"B23","type":"B","prompt":"「忐忑不安」的「忐忑」是甚麼意思？","answer":"心神不定","explain":"忐忑就是心緒一上一下、定不下來。","options":["心神不定","十分生氣","非常興奮","完全放心"]},{"id":"B24","type":"B","prompt":"「如釋重負」的「釋」是甚麼意思？","answer":"放下","explain":"釋是放下；放下沉重負擔，才會覺得輕鬆。和「愛不釋手」的「釋」同一個字義。","options":["放下","解釋","釋放","稀釋"]},{"id":"B25","type":"B","prompt":"「心有餘悸」的「悸」是甚麼意思？","answer":"因害怕而心跳加速","explain":"悸是因害怕而心跳加速；事情過去了，心還在怦怦跳。","options":["因害怕而心跳加速","因寒冷而發抖","因病而發燒","因高興而大笑"]},{"id":"B26","type":"B","prompt":"「叫苦連天」的「連天」是甚麼意思？","answer":"接連不斷","explain":"連天形容接連不斷、程度極深，不是真的接到天上。","options":["接連不斷","天空放晴","聲音響亮","非常安靜"]},{"id":"B27","type":"B","prompt":"「刻骨銘心」的「刻」是甚麼意思？","answer":"雕刻","explain":"刻是雕刻；像刻在骨頭上、銘在心上那樣，永遠抹不掉。","options":["雕刻","時間","刻苦","立刻"]},{"id":"B28","type":"B","prompt":"「受寵若驚」的「寵」是甚麼意思？","answer":"寵愛、賞識","explain":"寵是寵愛、賞識；受寵好像受驚，所以又喜又慌。","options":["寵愛、賞識","寵物","驚訝","責罰"]},{"id":"B29","type":"B","prompt":"「意興闌珊」的「意興」是甚麼意思？","answer":"興致","explain":"意興就是興致；闌珊是衰落，合起來指興致快沒了。","options":["興致","意思","意志","意義"]},{"id":"B30","type":"B","prompt":"「喜出望外」的「望外」是甚麼意思？","answer":"意料之外","explain":"望是期望、預料；望外就是超出原本預料之外。","options":["意料之外","向遠處望","失去希望","盼望已久"]},{"id":"B31","type":"B","prompt":"心裏很想幫忙，力量卻不夠，該用哪個成語？","answer":"力不從心","explain":"力不從心是想做卻做不到；得心應手反而是技藝熟練、做起來順利。","options":["力不從心","得心應手","心曠神怡","三心二意"]},{"id":"B32","type":"B","prompt":"忽然被長輩大力稱讚，又驚喜又不安，該用哪個成語？","answer":"受寵若驚","explain":"受寵若驚強調「受賞識」帶來的又喜又慌；喜出望外只是意外的好事。","options":["受寵若驚","喜出望外","大快人心","如釋重負"]}],"C":[{"id":"C01","type":"C","prompt":"請選出「七上八下」的近義詞。","answer":"忐忑不安","explain":"七上八下與忐忑不安都寫心緒起伏不定；若無其事神態鎮靜，意思相反。","options":["忐忑不安","若無其事","得心應手","心平氣和"]},{"id":"C02","type":"C","prompt":"請選出「力不從心」的近義詞。","answer":"無能為力","explain":"兩者都指力量或能力不足，做不到想做的事。","options":["無能為力","一心一意","從容不迫","興致勃勃"]},{"id":"C03","type":"C","prompt":"請選出「三心二意」的反義詞。","answer":"一心一意","explain":"三心二意是猶豫不決，一心一意是專一沒有雜念，正好相反。","options":["一心一意","舉棋不定","心煩意亂","手足無措"]},{"id":"C04","type":"C","prompt":"請選出「大快人心」的近義詞。","answer":"拍手稱快","explain":"兩者都寫壞人受罰、大家痛快；天怒人怨是惹起普遍怨憤，意思不同。","options":["拍手稱快","天怒人怨","大失所望","一無可取"]},{"id":"C05","type":"C","prompt":"請選出「不知所措」的近義詞。","answer":"手足無措","explain":"兩者都指慌亂得不知如何是好；從容不迫、泰然自若都是反義。","options":["手足無措","從容不迫","泰然自若","心安理得"]},{"id":"C06","type":"C","prompt":"請選出「六神無主」的反義詞。","answer":"泰然自若","explain":"六神無主是慌得拿不定主意；泰然自若遇上急事仍從容鎮定。","options":["泰然自若","不知所措","心驚膽戰","急不可耐"]},{"id":"C07","type":"C","prompt":"請選出「心急如焚」的反義詞。","answer":"氣定神閒","explain":"心急如焚急得像火燒；氣定神閒神情悠閒、心意安定。","options":["氣定神閒","急不可耐","坐立不安","憂心忡忡"]},{"id":"C08","type":"C","prompt":"請選出「心曠神怡」的近義詞。","answer":"賞心悅目","explain":"兩者都寫看到美景而心情愉快；心煩意亂是反義。","options":["賞心悅目","心煩意亂","心灰意冷","大失所望"]},{"id":"C09","type":"C","prompt":"請選出「毛骨悚然」的近義詞。","answer":"不寒而慄","explain":"不寒而慄是不冷也發抖，和毛骨悚然同樣寫十分害怕；面不改色是反義。","options":["不寒而慄","面不改色","眉開眼笑","悠然自得"]},{"id":"C10","type":"C","prompt":"請選出「火冒三丈」的近義詞。","answer":"怒氣沖天","explain":"兩者都寫非常忿怒；心平氣和是反義。","options":["怒氣沖天","心平氣和","喜出望外","妙不可言"]},{"id":"C11","type":"C","prompt":"請選出「叫苦連天」的近義詞。","answer":"叫苦不迭","explain":"叫苦不迭是連聲叫苦，與叫苦連天相近；眉開眼笑是反義。","options":["叫苦不迭","眉開眼笑","賞心悅目","了無牽掛"]},{"id":"C12","type":"C","prompt":"請選出「如釋重負」的反義詞。","answer":"千鈞重負","explain":"如釋重負是卸下重擔；千鈞重負是仍背着千斤重擔，正好相反。","options":["千鈞重負","了無牽掛","悠然自得","如願以償"]},{"id":"C13","type":"C","prompt":"請選出「妙不可言」的反義詞。","answer":"一無可取","explain":"妙不可言是好到說不出來；一無可取是沒有一點好處，意思相反。","options":["一無可取","歎為觀止","賞心悅目","大喜過望"]},{"id":"C14","type":"C","prompt":"請選出「刻骨銘心」的近義詞。","answer":"沒齒難忘","explain":"兩者都指一世都忘不了；置之腦後是反義。","options":["沒齒難忘","置之腦後","一無可取","心灰意冷"]},{"id":"C15","type":"C","prompt":"請選出「受寵若驚」的反義詞。","answer":"寵辱不驚","explain":"受寵若驚是受賞識又喜又慌；寵辱不驚是得失都不動心。","options":["寵辱不驚","大喜過望","拍手稱快","急不可耐"]},{"id":"C16","type":"C","prompt":"請選出「南柯一夢」的近義詞。","answer":"黃粱一夢","explain":"兩者都比喻虛幻、空歡喜一場；如願以償是願望真的實現。","options":["黃粱一夢","如願以償","心安理得","喜從天降"]},{"id":"C17","type":"C","prompt":"請選出「喜出望外」的反義詞。","answer":"大失所望","explain":"喜出望外是意外的好事；大失所望是非常失望，正好相反。","options":["大失所望","大喜過望","大快人心","眉開眼笑"]},{"id":"C18","type":"C","prompt":"請選出「提心吊膽」的近義詞。","answer":"心驚膽戰","explain":"兩者都寫十分害怕；心安理得、泰然自若都偏向安心鎮定。","options":["心驚膽戰","心安理得","泰然自若","氣定神閒"]},{"id":"C19","type":"C","prompt":"請選出「晴天霹靂」的反義詞。","answer":"喜從天降","explain":"晴天霹靂是突發的震驚壞事；喜從天降是突然遇到意想不到的喜事。","options":["喜從天降","平地風波","大失所望","心驚膽戰"]},{"id":"C20","type":"C","prompt":"請選出「意興闌珊」的反義詞。","answer":"興致勃勃","explain":"意興闌珊是興致低落；興致勃勃是興趣濃厚、情緒高漲。","options":["興致勃勃","心灰意冷","悠然自得","眉開眼笑"]},{"id":"C21","type":"C","prompt":"請選出「心有餘悸」的近義詞。","answer":"驚魂不定","explain":"兩者都寫事後心神還沒安定；神色不驚、泰然自若反而偏向鎮定。","options":["驚魂不定","神色不驚","泰然自若","氣定神閒"]},{"id":"C22","type":"C","prompt":"請選出「忐忑不安」的反義詞。","answer":"悠然自得","explain":"忐忑不安是心緒起伏不定；悠然自得是神態從容、心情舒暢。","options":["悠然自得","坐立不安","惴惴不安","心驚膽戰"]},{"id":"C23","type":"C","prompt":"請選出「惴惴不安」的近義詞。","answer":"惶恐不安","explain":"惶恐不安與惴惴不安都寫擔憂害怕、心神不定；安之若素是反義。","options":["惶恐不安","安之若素","心安理得","氣定神閒"]},{"id":"C24","type":"C","prompt":"請選出「愛不釋手」的近義詞。","answer":"手不釋卷","explain":"兩者都寫拿着東西捨不得放下；不屑一顧是連看一眼都懶得看。","options":["手不釋卷","不屑一顧","置之腦後","一無可取"]},{"id":"C25","type":"C","prompt":"請選出「愛不釋手」的反義詞。","answer":"不屑一顧","explain":"愛不釋手是喜愛得捨不得放手；不屑一顧是完全提不起興趣。","options":["不屑一顧","手不釋卷","沒齒難忘","歎為觀止"]},{"id":"C26","type":"C","prompt":"請選出「七上八下」的反義詞。","answer":"若無其事","explain":"七上八下是心情慌亂不安；若無其事是神態鎮靜、自然。","options":["若無其事","忐忑不安","心神不定","坐立不安"]},{"id":"C27","type":"C","prompt":"請選出「心急如焚」的近義詞。","answer":"急不可耐","explain":"兩者都寫急得再也等不住；氣定神閒、泰然自若都是反義。","options":["急不可耐","氣定神閒","泰然自若","悠然自得"]},{"id":"C28","type":"C","prompt":"請選出「不知所措」的反義詞。","answer":"從容不迫","explain":"不知所措是慌得不知怎麼辦；從容不迫是沉着鎮定、不慌張。","options":["從容不迫","手足無措","六神無主","心驚膽戰"]},{"id":"C29","type":"C","prompt":"請選出「心曠神怡」的反義詞。","answer":"心煩意亂","explain":"心曠神怡是心境開闊、精神愉快；心煩意亂是心情煩躁、思緒凌亂。","options":["心煩意亂","賞心悅目","悠然自得","心平氣和"]},{"id":"C30","type":"C","prompt":"請選出「忐忑不安」的近義詞。","answer":"坐立不安","explain":"坐立不安與忐忑不安都寫焦急煩躁、心神不寧；悠然自得是反義。","options":["坐立不安","悠然自得","心安理得","氣定神閒"]},{"id":"C31","type":"C","prompt":"請選出「惴惴不安」的反義詞。","answer":"安之若素","explain":"惴惴不安是恐懼擔憂；安之若素是遇上不尋常的事仍像平常一樣安心。","options":["安之若素","惶恐不安","憂心忡忡","提心吊膽"]},{"id":"C32","type":"C","prompt":"請選出「心有餘悸」的反義詞。","answer":"神色不驚","explain":"心有餘悸是事後回想仍怕；神色不驚是一點也沒被嚇到，十分鎮定。","options":["神色不驚","驚魂不定","心驚膽戰","毛骨悚然"]}]};
+  var IDIOMS = BANK.idioms;
+  var POOLS = { A: BANK.A, B: BANK.B, C: BANK.C };
+  var TYPE_NAME = {
+    A: '實戰選詞填空',
+    B: '核心字義與辨析',
+    C: '近反義詞點選'
+  };
+  // 配合學校考法：每次共 10 題，選詞填空佔大頭 6 題，其餘兩類各 2 題。
+  var QUOTA = { A: 6, B: 2, C: 2 };
+  var TOTAL = QUOTA.A + QUOTA.B + QUOTA.C;
+  var state = { questions: [], done: [], correct: 0, answered: 0 };
+
+  // 費雪耶茲洗牌：每次都重新排列，避免孩子記住答案位置。
+  function shuffle(arr) {
+    var a = arr.slice();
+    for (var i = a.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = a[i]; a[i] = a[j]; a[j] = t;
+    }
+    return a;
+  }
+
+  // 按固定配額由各題庫「抽出不放回」取題：A 6 題、B 2 題、C 2 題。
+  // 各池題目遠多於配額，故每次進入或重測都能換一批，最後再打亂題目次序。
+  function pickQuestions() {
+    var chosen = [];
+    ['A', 'B', 'C'].forEach(function (key) {
+      shuffle(POOLS[key]).slice(0, QUOTA[key]).forEach(function (q) {
+        chosen.push(q);
+      });
+    });
+    return shuffle(chosen);
+  }
+
+  function el(tag, cls, text) {
+    var node = document.createElement(tag);
+    if (cls) { node.className = cls; }
+    if (text !== undefined) { node.textContent = text; }
+    return node;
+  }
+
+  function encourage(n) {
+    if (n === TOTAL) { return '太強了！十題全對，十一月十八日考試穩操勝券！'; }
+    if (n >= 8) { return '非常出色！只差一點點，把錯題的解析再讀一次就完美了。'; }
+    if (n >= 6) { return '有底子了！把解析看一遍，下次一定再進步。'; }
+    if (n >= 4) { return '別氣餒，翻回卡片把解釋與字義再看一輪，很快就上手！'; }
+    if (n >= 1) { return '萬事起頭難，先陪孩子看一遍卡片，我們再試一次！'; }
+    return '萬事起頭難，先陪孩子看一遍卡片，我們再試一次！';
+  }
+
+  function showScore() {
+    var panel = document.getElementById('quizScore');
+    panel.textContent = '';
+    panel.hidden = false;
+    panel.appendChild(el('div', '分數', '答對 ' + state.correct + '／' + TOTAL + ' 題'));
+    panel.appendChild(el('p', '鼓勵語', encourage(state.correct)));
+    if (panel.scrollIntoView) {
+      panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+  }
+
+  // 批改：對的變綠、錯的變紅，並附上文字解析。
+  function grade(q, idx, chosen, allEls, feedback) {
+    if (state.done[idx]) { return; }
+    state.done[idx] = true;
+    state.answered += 1;
+    var right = chosen === q.answer;
+    if (right) { state.correct += 1; }
+
+    allEls.forEach(function (node) {
+      if (node.tagName === 'SELECT') {
+        node.disabled = true;
+        node.classList.add(right ? '對' : '錯');
+        return;
+      }
+      node.disabled = true;
+      if (node.textContent === chosen) {
+        node.classList.add(right ? '對' : '錯');
+      } else if (!right && node.textContent === q.answer) {
+        node.classList.add('對');
+      }
+    });
+
+    feedback.hidden = false;
+    feedback.classList.add(right ? '正確' : '錯誤');
+    feedback.appendChild(el('p', '批改', right ? '答對了！' : '答錯了，正確答案是「' + q.answer + '」。'));
+    var line = el('p', '解析');
+    line.appendChild(el('span', '解析標', '【解析】'));
+    line.appendChild(document.createTextNode(q.explain));
+    feedback.appendChild(line);
+
+    document.getElementById('quizProgress').textContent =
+      '已完成 ' + state.answered + '／' + TOTAL + ' 題';
+    if (state.answered === TOTAL) { showScore(); }
+  }
+
+  function buildQuestion(q, idx) {
+    var box = el('section', '測驗題');
+    var head = el('div', '題首');
+    head.appendChild(el('span', '題號', '第 ' + (idx + 1) + ' 題'));
+    head.appendChild(el('span', '題型', TYPE_NAME[q.type]));
+    box.appendChild(head);
+    box.appendChild(el('p', '題目', q.prompt));
+
+    var feedback = el('div', '回饋');
+    feedback.hidden = true;
+
+    if (q.type === 'A') {
+      // 選詞填空：下拉選單列出全部 24 個成語，次序每次隨機。
+      var select = document.createElement('select');
+      select.className = '填空選單';
+      var hint = document.createElement('option');
+      hint.value = '';
+      hint.textContent = '請選出最合適的成語';
+      select.appendChild(hint);
+      shuffle(IDIOMS).forEach(function (word) {
+        var opt = document.createElement('option');
+        opt.value = word;
+        opt.textContent = word;
+        select.appendChild(opt);
+      });
+      select.addEventListener('change', function () {
+        if (!select.value) { return; }
+        grade(q, idx, select.value, [select], feedback);
+      });
+      box.appendChild(select);
+    } else {
+      var row = el('div', '選項列');
+      var buttons = [];
+      shuffle(q.options).forEach(function (text) {
+        var btn = el('button', '選項', text);
+        btn.type = 'button';
+        btn.addEventListener('click', function () {
+          grade(q, idx, text, buttons, feedback);
+        });
+        buttons.push(btn);
+        row.appendChild(btn);
+      });
+      box.appendChild(row);
+    }
+    box.appendChild(feedback);
+    return box;
+  }
+
+  function render() {
+    state = { questions: pickQuestions(), done: [], correct: 0, answered: 0 };
+    var list = document.getElementById('quizList');
+    list.textContent = '';
+    state.questions.forEach(function (q, i) {
+      list.appendChild(buildQuestion(q, i));
+    });
+    var panel = document.getElementById('quizScore');
+    panel.textContent = '';
+    panel.hidden = true;
+    document.getElementById('quizProgress').textContent = '已完成 0／' + TOTAL + ' 題';
+  }
+
+  document.getElementById('quizReset').addEventListener('click', render);
+
+  // 全螢幕測驗層：頁首或懸浮鈕進入，左上角或 Esc 返回複習。
+  var overlay = document.getElementById('測驗層');
+  var backBtn = document.getElementById('quizBack');
+  var savedScroll = 0;
+  function openQuiz() {
+    if (typeof window !== 'undefined') { savedScroll = window.pageYOffset || 0; }
+    if (overlay) { overlay.hidden = false; overlay.scrollTop = 0; }
+    if (document.body && document.body.classList) {
+      document.body.classList.add('測驗模式');
+    }
+    render();
+  }
+  function closeQuiz() {
+    if (overlay) { overlay.hidden = true; }
+    if (document.body && document.body.classList) {
+      document.body.classList.remove('測驗模式');
+    }
+    if (typeof window !== 'undefined' && window.scrollTo) {
+      window.scrollTo(0, savedScroll);
+    }
+  }
+  var entries = document.querySelectorAll('.測驗入口');
+  Array.prototype.forEach.call(entries, function (btn) {
+    btn.addEventListener('click', openQuiz);
+  });
+  if (backBtn) { backBtn.addEventListener('click', closeQuiz); }
+  if (document.addEventListener) {
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && overlay && !overlay.hidden) { closeQuiz(); }
+    });
+  }
+  render();
+})();
+</script>
+</body>
+</html>
