@@ -299,6 +299,7 @@ function renderQuestion() {
   answered = false;
 
   input.addEventListener("keydown", (e) => {
+    if (e.isComposing || e.keyCode === 229) return;
     if (e.key === "Enter" && !answered) checkBtn.click();
     if (e.key === "Enter" && answered) nextBtn.click();
   });
