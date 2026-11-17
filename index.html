@@ -1292,7 +1292,7 @@ const CONFIG = {
   // —— 外部链接 ——
   links: {
     doubao: "https://www.doubao.com/chat",
-    chengyu: "https://vivid8474.github.io/learning-portal/chengyu-with-images/index.html"
+    chengyu: "https://vivid8474.github.io/learning-portal/chengyu-with-images/chengyu.html"
   },
 
   // —— 中文科内容（按年级区分）——
@@ -1539,6 +1539,7 @@ const CONFIG = {
 
             { t: `Summary`, h: 2 },
             { t: `The CPU consists of the ALU, CU and Registers.` },
+            { fig: "perf", cap: "Fig 4.2 Three factors that decide CPU performance — tap one to explore." },
             { t: `Three factors affect CPU performance:` },
             { t: `More cores → higher processing speed.` },
             { t: `Higher clock rate → higher processing speed.` },
@@ -2436,6 +2437,12 @@ const ICT_FIG_NOTES = {
     app: `<b>Application software</b> — programs that do a specific job: Word, Excel, Chrome, Photoshop, Zoom.`,
     sys: `<b>System software</b> — the operating system (Windows, macOS, Android), utility programs (Task Manager, virus scanner) and driver programs. It runs the hardware and provides a platform for apps.`,
     hw: `<b>Hardware</b> — the physical parts: CPU, RAM, SSD, keyboard, monitor.`
+  },
+  perf: {
+    "": `<span class="hint">Three factors decide how fast a CPU is. Tap one to explore it.</span>`,
+    cores: `<b>1. Number of cores.</b> A core is an independent processing unit inside the CPU. More cores let the CPU work on several tasks at the same time (parallel processing), so more work gets done in the same time.`,
+    clock: `<b>2. Clock rate (MHz / GHz).</b> It is the number of instruction cycles the CPU carries out per second. A higher clock rate means faster processing — but it also uses more power and produces more heat.`,
+    word: `<b>3. Word length (bits).</b> It is the amount of data the CPU can process in one operation. A 64-bit CPU can handle more data at once than a 32-bit one, so it is generally faster. But a 64-bit CPU is not automatically twice as fast.`
   }
 };
 
@@ -2525,6 +2532,62 @@ function ictFigSvg(kind) {
           <text x="22" y="${52 + i * 76}" font-size="10" fill="#4b5b70">${sub}</text>
         </g>
         ${i < 3 ? `<line x1="150" y1="${66 + i * 76}" x2="150" y2="${72 + i * 76}" stroke="#9aa8bd" stroke-width="2.6" marker-end="url(#icb)"/>` : ""}`).join("")}
+    </svg>`;
+  }
+  if (kind === "perf") {
+    return `<svg viewBox="0 0 300 358" role="img" aria-label="Three factors affecting CPU performance: cores, clock rate, word length">
+      <defs><marker id="icp" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+        <path d="M0,0 L8,4 L0,8 z" fill="#e0a500"/></marker></defs>
+
+      <g class="ict-hot" data-fig="perf" data-key="cores" tabindex="0" role="button">
+        <rect x="4" y="4" width="292" height="110" rx="12" fill="#fff" stroke="#93b4f7" stroke-width="1.8"/>
+        <rect x="4" y="4" width="5" height="110" rx="2.5" fill="#2f6bff"/>
+        <text x="20" y="25" font-size="13.4" font-weight="800" fill="#1e3a8a">1 · Number of cores</text>
+        <rect x="20" y="38" width="118" height="58" rx="8" fill="#f4f8ff" stroke="#d5e3fb"/>
+        <rect x="30" y="49" width="42" height="36" rx="6" fill="#2f6bff" opacity=".85"/>
+        <text x="51" y="72" text-anchor="middle" font-size="10.5" font-weight="800" fill="#fff">1 core</text>
+        <line x1="143" y1="67" x2="168" y2="67" stroke="#e0a500" stroke-width="2.4" marker-end="url(#icp)"/>
+        <rect x="172" y="40" width="112" height="78" rx="8" fill="#f4f8ff" stroke="#d5e3fb"/>
+        <g fill="#2f6bff" opacity=".85">
+          <rect x="180" y="50" width="21" height="21" rx="4"/>
+          <rect x="209" y="50" width="21" height="21" rx="4"/>
+          <rect x="238" y="50" width="21" height="21" rx="4"/>
+          <rect x="267" y="50" width="9" height="21" rx="3" opacity=".45"/>
+        </g>
+        <text x="228" y="91" text-anchor="middle" font-size="10" font-weight="800" fill="#1e3a8a">4 cores</text>
+        <text x="228" y="106" text-anchor="middle" font-size="9" fill="#5b6f88">parallel work → faster</text>
+      </g>
+
+      <g class="ict-hot" data-fig="perf" data-key="clock" tabindex="0" role="button">
+        <rect x="4" y="124" width="292" height="110" rx="12" fill="#fff" stroke="#93b4f7" stroke-width="1.8"/>
+        <rect x="4" y="124" width="5" height="110" rx="2.5" fill="#f59e0b"/>
+        <text x="20" y="145" font-size="13.4" font-weight="800" fill="#1e3a8a">2 · Clock rate (GHz)</text>
+        <text x="20" y="168" font-size="10" fill="#5b6f88">2.4 GHz</text>
+        <path d="M20,205 Q35,180 50,205 T80,205 T110,205 T140,205" fill="none" stroke="#93b4f7" stroke-width="2"/>
+        <line x1="150" y1="195" x2="172" y2="195" stroke="#e0a500" stroke-width="2.4" marker-end="url(#icp)"/>
+        <text x="182" y="168" font-size="10" fill="#5b6f88">3.5 GHz</text>
+        <path d="M182,205 Q190,180 198,205 T214,205 T230,205 T246,205 T262,205 T278,205" fill="none" stroke="#f59e0b" stroke-width="2"/>
+        <text x="20" y="226" font-size="9.3" fill="#7b8aa0">more cycles each second → faster</text>
+      </g>
+
+      <g class="ict-hot" data-fig="perf" data-key="word" tabindex="0" role="button">
+        <rect x="4" y="244" width="292" height="110" rx="12" fill="#fff" stroke="#93b4f7" stroke-width="1.8"/>
+        <rect x="4" y="244" width="5" height="110" rx="2.5" fill="#16a34a"/>
+        <text x="20" y="265" font-size="13.4" font-weight="800" fill="#1e3a8a">3 · Word length (bits)</text>
+        <text x="20" y="288" font-size="10" fill="#5b6f88">32-bit</text>
+        <g fill="#86c9a4">
+          <rect x="20" y="296" width="9" height="14" rx="2"/><rect x="32" y="296" width="9" height="14" rx="2"/>
+          <rect x="44" y="296" width="9" height="14" rx="2"/><rect x="56" y="296" width="9" height="14" rx="2"/>
+          <rect x="68" y="296" width="9" height="14" rx="2"/><rect x="80" y="296" width="9" height="14" rx="2"/>
+          <rect x="92" y="296" width="9" height="14" rx="2"/><rect x="104" y="296" width="9" height="14" rx="2"/>
+        </g>
+        <line x1="140" y1="305" x2="162" y2="305" stroke="#e0a500" stroke-width="2.4" marker-end="url(#icp)"/>
+        <text x="172" y="288" font-size="10" fill="#5b6f88">64-bit</text>
+        <g fill="#16a34a">
+          ${Array.from({ length: 14 }, (_, i) => `<rect x="${172 + i * 9}" y="296" width="7.5" height="14" rx="2"/>`).join("")}
+        </g>
+        <text x="20" y="347" font-size="9.3" fill="#7b8aa0">more bits per operation → faster</text>
+      </g>
     </svg>`;
   }
   return "";
