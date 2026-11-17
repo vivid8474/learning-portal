@@ -113,8 +113,8 @@ body{
 .qz-tf-item{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid #f1f5fb}
 .qz-tf-item:last-child{border-bottom:0}
 .qz-tf-q{flex:1;font-size:13.5px;color:#1e293b;font-weight:700;line-height:1.45}
-.qz-tf-btns{display:flex;gap:6px;flex:0 0 auto}
-.qz-tf-btn{width:42px;height:34px;border-radius:8px;border:1.5px solid #d5e0f0;background:#fff;color:#33415c;font-weight:800;font-size:14px;cursor:pointer;transition:all .12s}
+.qz-tf-btns{display:flex;gap:10px;flex:0 0 auto}
+.qz-tf-btn{width:44px;height:44px;border-radius:8px;border:1.5px solid #d5e0f0;background:#fff;color:#33415c;font-weight:800;font-size:14px;cursor:pointer;transition:all .12s}
 .qz-tf-btn:hover{border-color:#bcd0f2}
 .qz-tf-btn.is-on{border-color:#2f6bff;background:#2f6bff;color:#fff}
 .qz-tf-btn.is-correct{border-color:#22a06b;background:#e6f6ec;color:#14683f}
@@ -262,10 +262,10 @@ body{
 
   <button class="btn-view" id="view-pages" type="button">📖 View original textbook &amp; workbook pages</button>
 
-  <section class="share-card" aria-label="扫码分享">
+  <section class="share-card" aria-label="Scan to share">
     <div class="share-qr" id="share-qr"></div>
-    <p class="share-title">📱 S1 Science 水专题测验（手机扫码即测）</p>
-    <p class="share-sub">Section A 热身 + Section B 练习 + Section C 挑战 · 自动批改</p>
+    <p class="share-title">📱 S1 Science water quiz (scan with your phone)</p>
+    <p class="share-sub">Section A warm-up + Section B practice + Section C challenge · auto marking</p>
   </section>
 </div>
 
@@ -437,7 +437,7 @@ const QUIZSET = {
         { kind: "level", text: "P.36 · Practical video assignment — Heating ice to steam" },
         { kind: "essay",
           title: "Short-answer questions",
-          intro: "Write your answer in each box, then press “💡 查看标准答案” to compare with the model answer.",
+          intro: "Write your answer in each box, then press “Show model answer” to compare with the model answer.",
           items: [
             { q: "Explain why the thermometer should NOT touch the bottom of the beaker.", marks: "2 marks",
               answer: "The bottom of the beaker is very hot because it is heated directly. The thermometer bulb may break if it gets too hot.",
@@ -470,7 +470,7 @@ const QUIZSET = {
         { kind: "level", text: "P.38 · Drawing line graphs (Skill practice)" },
         { kind: "seagraph",
           title: "a. Draw a line graph of the temperature of the sea water ice",
-          intro: "Some ice made from sea water is heated. The table shows how its temperature changes with time. Click the grid to place a ✕ at each point, then press “检查我的连线”.",
+          intro: "Some ice made from sea water is heated. The table shows how its temperature changes with time. Click the grid to place a ✕ at each point, then press “Check my line”.",
           data: [[0,-20],[2,-12],[4,-4],[6,-4],[8,-4],[10,6],[12,16]],
           meltTemp: -4,
           fill: { q: "b. From the graph, determine the melting point of the sea water ice.", answer: -4 }
@@ -697,7 +697,7 @@ function renderQuizBlock(block, secIdx, blockIdx) {
         <div class="qz-essay-q">${esc(it.q)}${it.marks ? `<span class="qz-essay-marks">(${esc(it.marks)})</span>` : ""}</div>
         <textarea class="qz-ta" placeholder="Write your answer here…"></textarea>
         <button type="button" class="qz-ans-toggle" data-ans-toggle aria-expanded="false">
-          💡 查看标准答案 <span class="qz-ans-caret">▼</span>
+          Show model answer <span class="qz-ans-caret">▼</span>
         </button>
         <div class="qz-ans-body">
           <div class="qz-ans-label">📝 Model answer</div>
@@ -758,8 +758,8 @@ function renderQuizBlock(block, secIdx, blockIdx) {
             </table>
           </div>
           <div class="qz-sea-actions">
-            <button type="button" class="qz-sea-btn" data-sea-check>🔍 检查我的连线</button>
-            <button type="button" class="qz-sea-btn is-ghost" data-sea-clear>↺ 清除重画</button>
+            <button type="button" class="qz-sea-btn" data-sea-check>🔍 Check my line</button>
+            <button type="button" class="qz-sea-btn is-ghost" data-sea-clear>↺ Clear</button>
           </div>
           <div class="qz-sea-feedback" data-sea-fb></div>
           <div class="qz-sea-fill">
@@ -1023,16 +1023,16 @@ function initSeaChart(root) {
     const label = plateauTimes.join("、");
     if (hit.length === plateauTimes.length) {
       fb.className = "qz-sea-feedback is-ok";
-      fb.textContent = `✓ 完美！你在 ${label} 分钟都正确标出了 ${melt} °C 的点，连成了一条水平线——海水冰熔化时温度保持不变。`;
+      fb.textContent = `✓ Correct. At ${label} min you marked ${melt} °C, forming a horizontal line. The temperature stays the same while sea-water ice melts.`;
     } else if (hit.length >= 2) {
       fb.className = "qz-sea-feedback is-ok";
-      fb.textContent = `✓ 不错！你找到了 ${hit.length} 个平台点（${melt} °C），形成了一条水平段。完整的熔化平台是 ${label} 分钟，可以再补上剩余的点。`;
+      fb.textContent = `✓ Close. You found ${hit.length} plateau point(s) at ${melt} °C. The full melting plateau is at ${label} min. Add the remaining points.`;
     } else if (atMelt.length >= 1) {
       fb.className = "qz-sea-feedback is-bad";
-      fb.textContent = `你的点落在了 ${melt} °C 线上，但时间不对。熔化平台应该在 ${label} 分钟（水平段），请在这些分钟上打点。`;
+      fb.textContent = `Your points are on the ${melt} °C line, but the time is wrong. The melting plateau is at ${label} min (the horizontal part). Mark those minutes.`;
     } else {
       fb.className = "qz-sea-feedback is-bad";
-      fb.textContent = `还没有点落在 ${melt} °C 水平段上。海水冰熔化时温度保持在 ${melt} °C，请在 ${label} 分钟打点，让它们连成一条水平线。`;
+      fb.textContent = `No point is on the ${melt} °C plateau yet. While sea-water ice melts, the temperature stays at ${melt} °C. Mark ${label} min so the points form a horizontal line.`;
     }
   });
 
@@ -1117,10 +1117,10 @@ function initShareQr() {
         correctLevel: QRCode.CorrectLevel.M
       });
     } else {
-      el.innerHTML = '<div class="share-qr-fallback">二维码加载失败</div>';
+      el.innerHTML = '<div class="share-qr-fallback">QR code failed to load</div>';
     }
   } catch (e) {
-    el.innerHTML = '<div class="share-qr-fallback">二维码加载失败</div>';
+    el.innerHTML = '<div class="share-qr-fallback">QR code failed to load</div>';
   }
 }
 
