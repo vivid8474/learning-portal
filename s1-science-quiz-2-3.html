@@ -108,8 +108,8 @@ body{
 .qz-tf-item{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid #f1f5fb}
 .qz-tf-item:last-child{border-bottom:0}
 .qz-tf-q{flex:1;font-size:13.5px;color:#1e293b;font-weight:700;line-height:1.45}
-.qz-tf-btns{display:flex;gap:6px;flex:0 0 auto}
-.qz-tf-btn{width:42px;height:34px;border-radius:8px;border:1.5px solid #d5e0f0;background:#fff;color:#33415c;font-weight:800;font-size:14px;cursor:pointer;transition:all .12s}
+.qz-tf-btns{display:flex;gap:10px;flex:0 0 auto}
+.qz-tf-btn{width:44px;height:44px;border-radius:8px;border:1.5px solid #d5e0f0;background:#fff;color:#33415c;font-weight:800;font-size:14px;cursor:pointer;transition:all .12s}
 .qz-tf-btn:hover{border-color:#bcd0f2}
 .qz-tf-btn.is-on{border-color:#2f6bff;background:#2f6bff;color:#fff}
 .qz-tf-btn.is-correct{border-color:#22a06b;background:#e6f6ec;color:#14683f}
@@ -203,10 +203,10 @@ body{
 
   <button class="btn-view" id="view-pages" type="button">📖 View original workbook pages</button>
 
-  <section class="share-card" aria-label="扫码分享">
+  <section class="share-card" aria-label="Scan to share">
     <div class="share-qr" id="share-qr"></div>
-    <p class="share-title">📱 S1 Science 溶解专题测验（手机扫码即测）</p>
-    <p class="share-sub">Workbook P.42–45 · 36 分自动批改</p>
+    <p class="share-title">📱 S1 Science dissolving quiz (scan with your phone)</p>
+    <p class="share-sub">Workbook P.42–45 · 36 marks · auto marking</p>
   </section>
 </div>
 
@@ -767,10 +767,10 @@ function initShareQr() {
         correctLevel: QRCode.CorrectLevel.M
       });
     } else {
-      el.innerHTML = '<div class="share-qr-fallback">二维码加载失败</div>';
+      el.innerHTML = '<div class="share-qr-fallback">QR code failed to load</div>';
     }
   } catch (e) {
-    el.innerHTML = '<div class="share-qr-fallback">二维码加载失败</div>';
+    el.innerHTML = '<div class="share-qr-fallback">QR code failed to load</div>';
   }
 }
 
