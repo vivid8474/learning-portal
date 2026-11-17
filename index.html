@@ -974,16 +974,45 @@
     .lightbox__next{right:6px}
   }
 
-  /* 概念全景图（Mermaid 思维导图） */
+  /* 概念全景图（原生可折叠树状图，无外部依赖） */
   .mindmap-block{display:flex;flex-direction:column;gap:10px;margin-top:2px}
   .btn--mindmap{align-self:flex-start}
   .mindmap-wrap{
     border:1px solid var(--line);border-radius:12px;background:#fff;
-    padding:10px;max-height:72vh;overflow:auto;
+    padding:14px 16px;max-height:72vh;overflow:auto;
   }
-  .mindmap-wrap svg{max-width:none;height:auto}
-  .mindmap-loading,.mindmap-error{color:var(--muted);font-size:14px;text-align:center;padding:22px 10px}
-  .mindmap-error{color:#d64545}
+  .tree-legend{display:flex;gap:16px;flex-wrap:wrap;margin:0 0 12px;font-size:12.5px;color:#5b6f88}
+  .tree-legend span{display:inline-flex;align-items:center;gap:6px}
+  .tree-legend i{width:12px;height:12px;border-radius:4px;display:inline-block}
+  .tree,.tree ul{list-style:none;margin:0;padding:0}
+  .tree ul{margin-left:16px;padding-left:16px;border-left:1.5px dashed #d6e2f5}
+  .tree li{margin:2px 0}
+  .tree details>summary{
+    list-style:none;cursor:pointer;display:inline-flex;align-items:center;gap:7px;
+    padding:5px 9px;border-radius:8px;font-size:13.5px;line-height:1.45;
+    color:#1f2937;min-height:36px;transition:background .15s;
+  }
+  .tree details>summary::-webkit-details-marker{display:none}
+  .tree details>summary:hover{background:#f3f7ff}
+  .tree details>summary .t-arrow{
+    flex:0 0 auto;width:16px;height:16px;border-radius:5px;
+    display:inline-flex;align-items:center;justify-content:center;
+    background:#eaf1ff;color:#2f6bff;font-size:10px;font-weight:800;
+    transition:transform .15s;
+  }
+  .tree details[open]>summary .t-arrow{transform:rotate(90deg)}
+  .tree .t-leaf{display:inline-flex;align-items:center;gap:7px;padding:5px 9px;border-radius:8px;font-size:13.5px;line-height:1.45;color:#1f2937;min-height:32px}
+  .tree .t-leaf .t-dot{flex:0 0 auto;width:6px;height:6px;border-radius:50%;background:var(--dot,#94a3b8)}
+  .tree .t-badge{
+    font-size:11px;font-weight:800;color:#fff;padding:1px 8px;border-radius:999px;
+    margin-left:6px;letter-spacing:.3px;
+  }
+  .mindmap-error{color:#d64545;font-size:14px;text-align:center;padding:22px 10px}
+  @media (max-width:520px){
+    .mindmap-wrap{padding:12px}
+    .tree ul{margin-left:10px;padding-left:12px}
+    .tree details>summary,.tree .t-leaf{font-size:13px}
+  }
 
   /* ICT 练习区 */
   .quiz{
@@ -3433,7 +3462,7 @@ function renderChinese(chinese, name) {
   </div>`;
 }
 
-/* ---------- ICT 概念全景图（Mermaid mindmap） ---------- */
+/* ---------- ICT 概念全景图（原生可折叠树状图，零外部依赖） ---------- */
 const ICT_MINDMAP = `mindmap
   root((Computer system))
     Hardware
@@ -3473,42 +3502,14 @@ const ICT_MINDMAP = `mindmap
         Multimedia development software
 `;
 
-// 思维导图配色：根节点用中性深色；第一层的两个分支（Hardware / Software）各用一套色系，
-// 分支内按层级由深到浅（第一层最深，逐级变浅）。
-const ROOT_COLOR = "#334155"; // 根节点 · 深灰蓝
+// 配色：硬件分支橙色系、软件分支蓝色系，按层级由深到浅
+const TREE_ROOT_COLOR = "#334155";
+const TREE_BRANCH_COLORS = {
+  hw: ["#7c2d12", "#9a3412", "#c2410c", "#ea580c", "#fb923c"],
+  sw: ["#1e3a8a", "#1d4ed8", "#2563eb", "#3b82f6", "#60a5fa"]
+};
 
-// 每个分支一套色系，下标 0 = 第一层（最深），逐级变浅
-const BRANCH_COLORS = [
-  // 分支 0 · Hardware · 橙色系（深 → 浅）
-  ["#7c2d12", "#9a3412", "#c2410c", "#ea580c", "#fb923c"],
-  // 分支 1 · Software · 蓝色系（深 → 浅）
-  ["#1e3a8a", "#1d4ed8", "#2563eb", "#3b82f6", "#60a5fa"]
-];
-
-// 从 mindmap 源码解析每个节点的层级与所属分支，返回与 SVG 节点顺序一致的数组
-function parseMindmapStructure(mmd) {
-  const lines = mmd.split("\n");
-  const rootLine = lines.find((l) => l.trim().startsWith("root("));
-  const rootIndent = rootLine ? (rootLine.match(/^\s*/) || [""])[0].length : 0;
-  const nodes = [];
-  let branch = 0;
-  for (const line of lines) {
-    const trimmed = line.trim();
-    if (!trimmed) continue;
-    if (trimmed === "mindmap" || trimmed.startsWith("classDef") || trimmed.startsWith("%%")) continue;
-    const indent = (line.match(/^\s*/) || [""])[0].length;
-    const depth = trimmed.startsWith("root(") ? 0 : Math.max(1, Math.round((indent - rootIndent) / 2));
-    if (depth === 0) {
-      branch = -1;
-    } else if (depth === 1) {
-      branch = /software/i.test(trimmed) ? 1 : 0; // Software → 蓝，其余第一层分支（Hardware）→ 橙
-    }
-    nodes.push({ depth, branch });
-  }
-  return nodes;
-}
-
-// 计算相对亮度，用于决定节点文字用白色还是深色
+// 计算相对亮度，决定文字用白色还是深色
 function hexLuminance(hex) {
   const h = hex.replace("#", "");
   const c = (i) => {
@@ -3518,49 +3519,57 @@ function hexLuminance(hex) {
   return 0.2126 * c(0) + 0.7152 * c(2) + 0.0722 * c(4);
 }
 
-// 渲染完成后，按「分支 + 层级」给节点背景上色，文字自动取白/深色保证对比度
-function colorizeMindmap(wrap) {
-  const structure = parseMindmapStructure(ICT_MINDMAP);
-  const nodes = wrap.querySelectorAll("g.mindmap-node");
-  nodes.forEach((g, i) => {
-    const info = structure[i] || { depth: 0, branch: 0 };
-    let color = ROOT_COLOR;
-    if (info.depth > 0 && info.branch >= 0) {
-      const ramp = BRANCH_COLORS[info.branch] || BRANCH_COLORS[0];
-      color = ramp[info.depth - 1] || ramp[ramp.length - 1];
+// 把缩进文本解析成树（root 为根，缩进每两格一层）
+function parseMmdTree(mmd) {
+  const root = { label: "Computer system", depth: 0, branch: "root", children: [] };
+  const stack = [root];
+  for (const line of mmd.split("\n")) {
+    const t = line.trim();
+    if (!t || t === "mindmap" || t.startsWith("%%")) continue;
+    if (/^root\(/.test(t)) {
+      root.label = t.replace(/^root\(/, "").replace(/\)\s*$/, "").replace(/^\s*\(\s*/, "").replace(/\s*\)\s*$/, "");
+      continue;
     }
-    const bgGroup = g.querySelector("g");
-    if (bgGroup) {
-      bgGroup.querySelectorAll("circle, rect, path, polygon").forEach((s) => {
-        s.style.fill = color;
-        s.style.stroke = "none";
-      });
-    }
-    const textColor = hexLuminance(color) > 0.35 ? "#1f2937" : "#ffffff";
-    g.querySelectorAll("text").forEach((t) => { t.style.fill = textColor; });
-  });
+    const indent = (line.match(/^\s*/) || [""])[0].length;
+    const depth = Math.max(1, Math.round(indent / 2));
+    while (stack.length > 1 && stack[stack.length - 1].depth >= depth) stack.pop();
+    const parent = stack[stack.length - 1];
+    const branch = depth === 1 ? (/software/i.test(t) ? "sw" : "hw") : parent.branch;
+    const node = { label: t, depth, branch, children: [] };
+    parent.children.push(node);
+    stack.push(node);
+  }
+  return root;
 }
 
-let mermaidPromise = null;
-function ensureMermaid() {
-  if (window.mermaid) return Promise.resolve(window.mermaid);
-  if (mermaidPromise) return mermaidPromise;
-  mermaidPromise = new Promise((resolve, reject) => {
-    const s = document.createElement("script");
-    s.src = "vendor/mermaid.min.js";
-    s.onload = () => {
-      try {
-        window.mermaid.initialize({ startOnLoad: false, theme: "base", securityLevel: "loose" });
-        resolve(window.mermaid);
-      } catch (e) {
-        mermaidPromise = null;
-        reject(e);
-      }
-    };
-    s.onerror = () => { mermaidPromise = null; reject(new Error("mermaid load failed")); };
-    document.head.appendChild(s);
-  });
-  return mermaidPromise;
+function treeNodeColor(node) {
+  if (node.branch === "root" || node.depth === 0) return TREE_ROOT_COLOR;
+  const ramp = TREE_BRANCH_COLORS[node.branch] || TREE_BRANCH_COLORS.hw;
+  return ramp[Math.min(node.depth - 1, ramp.length - 1)];
+}
+
+// 递归生成 <details> 可折叠树
+function renderTreeList(node) {
+  const color = treeNodeColor(node);
+  if (!node.children.length) {
+    return `<span class="t-leaf"><span class="t-dot" style="--dot:${color}"></span>${escapeHTML(node.label)}</span>`;
+  }
+  const open = node.depth <= 2 ? " open" : "";
+  const fg = hexLuminance(color) > 0.35 ? "#1f2937" : "#fff";
+  const badge = node.depth === 1
+    ? `<span class="t-badge" style="background:${color};color:${fg}">${node.children.length}</span>` : "";
+  const labelColor = node.depth <= 1 ? `style="color:${color};font-weight:800"` : "";
+  const kids = node.children.map((c) => `<li>${renderTreeList(c)}</li>`).join("");
+  return `<details${open}><summary><span class="t-arrow">▶</span><span ${labelColor}>${escapeHTML(node.label)}</span>${badge}</summary><ul>${kids}</ul></details>`;
+}
+
+function buildConceptTree(wrap) {
+  const root = parseMmdTree(ICT_MINDMAP);
+  const legend = `<div class="tree-legend">
+    <span><i style="background:${TREE_BRANCH_COLORS.hw[1]}"></i>Hardware</span>
+    <span><i style="background:${TREE_BRANCH_COLORS.sw[1]}"></i>Software</span>
+  </div>`;
+  wrap.innerHTML = legend + `<ul class="tree"><li>${renderTreeList(root)}</li></ul>`;
 }
 
 function toggleMindmap(btn) {
@@ -3570,22 +3579,13 @@ function toggleMindmap(btn) {
   wrap.hidden = !open;
   btn.setAttribute("aria-expanded", String(open));
   btn.innerHTML = open ? "🗺️ Hide Concept Map" : "🗺️ Show Concept Map";
-
   if (open && !wrap.dataset.rendered) {
-    wrap.innerHTML = `<div class="mindmap-loading">Loading diagram…</div>`;
-    ensureMermaid()
-      .then((mermaid) => {
-        const id = "ict-mindmap-" + Date.now();
-        return mermaid.render(id, ICT_MINDMAP);
-      })
-      .then(({ svg }) => {
-        wrap.innerHTML = svg;
-        wrap.dataset.rendered = "1";
-        colorizeMindmap(wrap);
-      })
-      .catch(() => {
-        wrap.innerHTML = `<div class="mindmap-error">Failed to render the mindmap.</div>`;
-      });
+    try {
+      buildConceptTree(wrap);
+      wrap.dataset.rendered = "1";
+    } catch (e) {
+      wrap.innerHTML = `<div class="mindmap-error">Concept map is unavailable.</div>`;
+    }
   }
 }
 
@@ -3692,7 +3692,7 @@ function bindCommonEvents() {
     });
   });
 
-  // 概念全景图（Mermaid mindmap）
+  // 概念全景图（原生树状图）
   document.querySelectorAll("#main .btn--mindmap").forEach((btn) => {
     btn.addEventListener("click", () => toggleMindmap(btn));
   });
