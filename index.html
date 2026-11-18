@@ -4519,11 +4519,16 @@ function parseRoute() {
 function applyRoute() {
   const r = parseRoute();
   if (!r) return false;
-  const g = CONFIG.grades.includes((r.grade || "").toUpperCase())
+  const s = (r.subject || "").toLowerCase();
+  let g = CONFIG.grades.includes((r.grade || "").toUpperCase())
     ? r.grade.toUpperCase()
     : state.grade;
-  const s = (r.subject || "").toLowerCase();
-  if (!findSubject(g, s)) return false;
+  // 该年级没有此科目时，自动回退到第一个有内容的年级（如分享给 S2 学生打开 #ict）
+  if (!findSubject(g, s)) {
+    const alt = CONFIG.grades.find((x) => findSubject(x, s));
+    if (!alt) return false;
+    g = alt;
+  }
   const changed = state.grade !== g || state.subject !== s;
   state.grade = g;
   state.subject = s;
@@ -4534,6 +4539,7 @@ function applyRoute() {
     renderNav();
     renderMain();
     window.scrollTo({ top: 0 });
+    syncRoute();
   }
   return true;
 }
