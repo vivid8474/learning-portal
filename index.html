@@ -974,43 +974,62 @@
     .lightbox__next{right:6px}
   }
 
-  /* 概念全景图（原生可折叠树状图，无外部依赖） */
+  /* 概念全景图（原生视觉导图，零外部依赖） */
   .mindmap-block{display:flex;flex-direction:column;gap:10px;margin-top:2px}
   .btn--mindmap{align-self:flex-start}
   .mindmap-wrap{
-    border:1px solid var(--line);border-radius:12px;background:#fff;
-    padding:14px 16px;max-height:72vh;overflow:auto;
+    border:1px solid #e2e8f0;border-radius:16px;
+    background:linear-gradient(180deg,#f9fafb 0%,#f1f5f9 100%);
+    padding:16px 18px;max-height:72vh;overflow:auto;
+    box-shadow:0 3px 14px rgba(15,23,42,.06);
   }
-  .tree-legend{display:flex;gap:16px;flex-wrap:wrap;margin:0 0 12px;font-size:12.5px;color:#5b6f88}
-  .tree-legend span{display:inline-flex;align-items:center;gap:6px}
+  .tree-legend{display:flex;gap:10px;flex-wrap:wrap;margin:0 0 8px}
+  .tree-legend span{
+    display:inline-flex;align-items:center;gap:6px;
+    background:#fff;border:1px solid #e2e8f0;border-radius:999px;
+    padding:3px 10px;font-size:12.5px;color:#475569;font-weight:700;
+  }
   .tree-legend i{width:12px;height:12px;border-radius:4px;display:inline-block}
+  .t-hint{font-size:11.5px;color:#94a3b8;margin:0 0 12px}
   .tree,.tree ul{list-style:none;margin:0;padding:0}
-  .tree ul{margin-left:16px;padding-left:16px;border-left:1.5px dashed #d6e2f5}
-  .tree li{margin:2px 0}
+  .tree ul{margin-left:18px;padding-left:15px;border-left:2px solid #d9e3f3}
+  .tree li{margin:3px 0}
   .tree details>summary{
     list-style:none;cursor:pointer;display:inline-flex;align-items:center;gap:7px;
-    padding:5px 9px;border-radius:8px;font-size:13.5px;line-height:1.45;
-    color:#1f2937;min-height:36px;transition:background .15s;
+    padding:6px 11px;border-radius:10px;font-size:13.5px;line-height:1.45;
+    min-height:38px;color:var(--tc,#1f2937);font-weight:750;
+    background:#fff;border:1px solid #e6edf7;
+    transition:background .15s,transform .16s,box-shadow .16s,border-color .16s;
   }
   .tree details>summary::-webkit-details-marker{display:none}
-  .tree details>summary:hover{background:#f3f7ff}
+  .tree details>summary:hover{background:var(--tint,#f3f7ff);border-color:var(--tc,#cbd5e1)}
   .tree details>summary .t-arrow{
-    flex:0 0 auto;width:16px;height:16px;border-radius:5px;
+    flex:0 0 auto;width:18px;height:18px;border-radius:6px;
     display:inline-flex;align-items:center;justify-content:center;
-    background:#eaf1ff;color:#2f6bff;font-size:10px;font-weight:800;
+    background:var(--tint,#eaf1ff);color:var(--tc,#2f6bff);font-size:10px;font-weight:800;
     transition:transform .15s;
   }
   .tree details[open]>summary .t-arrow{transform:rotate(90deg)}
-  .tree .t-leaf{display:inline-flex;align-items:center;gap:7px;padding:5px 9px;border-radius:8px;font-size:13.5px;line-height:1.45;color:#1f2937;min-height:32px}
-  .tree .t-leaf .t-dot{flex:0 0 auto;width:6px;height:6px;border-radius:50%;background:var(--dot,#94a3b8)}
+  .tree .t-ico{font-size:15px;line-height:1;flex:0 0 auto}
+  .tree .t-leaf{
+    display:inline-flex;align-items:center;gap:8px;padding:6px 11px;border-radius:10px;
+    font-size:13.5px;line-height:1.45;min-height:34px;color:var(--tc,#1f2937);font-weight:650;
+    background:#fff;border:1px solid #e6edf7;
+    transition:background .15s,transform .16s,box-shadow .16s;
+  }
   .tree .t-badge{
     font-size:11px;font-weight:800;color:#fff;padding:1px 8px;border-radius:999px;
     margin-left:6px;letter-spacing:.3px;
   }
+  /* 聚焦：相关分支高亮放大，无关分支变暗 */
+  .tree li.node-dim details>summary,.tree li.node-dim .t-leaf{opacity:.3;filter:grayscale(.65)}
+  .tree li.node-focus details>summary{background:var(--tint,#f3f7ff)}
+  .tree li.node-focus>details>summary{transform:scale(1.03);box-shadow:0 4px 12px rgba(15,23,42,.12);border-color:var(--tc)}
+  .tree li.node-focus .t-leaf{background:var(--tint,#f3f7ff);transform:translateX(3px);box-shadow:0 2px 7px rgba(15,23,42,.08)}
   .mindmap-error{color:#d64545;font-size:14px;text-align:center;padding:22px 10px}
   @media (max-width:520px){
-    .mindmap-wrap{padding:12px}
-    .tree ul{margin-left:10px;padding-left:12px}
+    .mindmap-wrap{padding:13px}
+    .tree ul{margin-left:8px;padding-left:12px}
     .tree details>summary,.tree .t-leaf{font-size:13px}
   }
 
@@ -3502,27 +3521,66 @@ const ICT_MINDMAP = `mindmap
         Multimedia development software
 `;
 
-// 配色：硬件分支橙色系、软件分支蓝色系，按层级由深到浅
-const TREE_ROOT_COLOR = "#334155";
-const TREE_BRANCH_COLORS = {
-  hw: ["#7c2d12", "#9a3412", "#c2410c", "#ea580c", "#fb923c"],
-  sw: ["#1e3a8a", "#1d4ed8", "#2563eb", "#3b82f6", "#60a5fa"]
+// 配色：与顶部图例完全一致 —— Hardware 棕色系、Software 蓝色系
+const TREE_ROOT = { main: "#334155", tint: "#e9eef5" };
+const TREE_BRANCH = {
+  hw: { main: "#9a3412", tint: "#fff3e6" },
+  sw: { main: "#1d4ed8", tint: "#eaf1ff" }
 };
 
-// 计算相对亮度，决定文字用白色还是深色
-function hexLuminance(hex) {
-  const h = hex.replace("#", "");
-  const c = (i) => {
-    const v = parseInt(h.slice(i, i + 2), 16) / 255;
-    return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
-  };
-  return 0.2126 * c(0) + 0.7152 * c(2) + 0.0722 * c(4);
+// 图标：按节点名称关键字匹配，越具体的规则放越前面
+const TREE_ICON_RULES = [
+  [/computer system/i, "💻"],
+  [/motherboard/i, "🔌"],
+  [/central processing unit|\bCPU\b/i, "🧠"],
+  [/arithmetic|\bALU\b/i, "➗"],
+  [/control unit|\bCU\b/i, "🎛️"],
+  [/register/i, "📝"],
+  [/\bRAM\b/i, "⚡"],
+  [/\bROM\b/i, "📀"],
+  [/\bSSD\b/i, "💾"],
+  [/flash drive|usb/i, "🔗"],
+  [/memory card/i, "🗂️"],
+  [/power supply/i, "🔋"],
+  [/keyboard/i, "⌨️"],
+  [/mouse/i, "🖱️"],
+  [/touch screen/i, "👆"],
+  [/webcam/i, "📷"],
+  [/monitor/i, "🖥️"],
+  [/printer/i, "🖨️"],
+  [/speaker/i, "🔊"],
+  [/operating system/i, "🪟"],
+  [/driver/i, "⚙️"],
+  [/utility/i, "🛠️"],
+  [/productivity/i, "📊"],
+  [/communication/i, "💬"],
+  [/multimedia/i, "🎨"],
+  [/secondary storage/i, "🗄️"],
+  [/main memory/i, "🧮"],
+  [/storage device/i, "💾"],
+  [/system unit/i, "🖥️"],
+  [/input device/i, "⌨️"],
+  [/output device/i, "🖨️"],
+  [/pointing device/i, "🖱️"],
+  [/system software/i, "⚙️"],
+  [/application software/i, "📱"],
+  [/^hardware$/i, "🖥️"],
+  [/^software$/i, "💿"]
+];
+function iconFor(label) {
+  for (const [re, icon] of TREE_ICON_RULES) if (re.test(label)) return icon;
+  return "•";
 }
 
 // 把缩进文本解析成树（root 为根，缩进每两格一层）
 function parseMmdTree(mmd) {
   const root = { label: "Computer system", depth: 0, branch: "root", children: [] };
   const stack = [root];
+  // 数据源里 root 行本身带缩进，需以它为基准计算相对层级
+  let rootIndent = 0;
+  for (const line of mmd.split("\n")) {
+    if (/^\s*root\(/.test(line)) { rootIndent = (line.match(/^\s*/) || [""])[0].length; break; }
+  }
   for (const line of mmd.split("\n")) {
     const t = line.trim();
     if (!t || t === "mindmap" || t.startsWith("%%")) continue;
@@ -3531,7 +3589,7 @@ function parseMmdTree(mmd) {
       continue;
     }
     const indent = (line.match(/^\s*/) || [""])[0].length;
-    const depth = Math.max(1, Math.round(indent / 2));
+    const depth = Math.max(1, Math.round((indent - rootIndent) / 2));
     while (stack.length > 1 && stack[stack.length - 1].depth >= depth) stack.pop();
     const parent = stack[stack.length - 1];
     const branch = depth === 1 ? (/software/i.test(t) ? "sw" : "hw") : parent.branch;
@@ -3542,34 +3600,56 @@ function parseMmdTree(mmd) {
   return root;
 }
 
-function treeNodeColor(node) {
-  if (node.branch === "root" || node.depth === 0) return TREE_ROOT_COLOR;
-  const ramp = TREE_BRANCH_COLORS[node.branch] || TREE_BRANCH_COLORS.hw;
-  return ramp[Math.min(node.depth - 1, ramp.length - 1)];
+function treeStyle(node) {
+  if (node.depth === 0) return `--tc:${TREE_ROOT.main};--tint:${TREE_ROOT.tint}`;
+  const b = TREE_BRANCH[node.branch] || TREE_BRANCH.hw;
+  return `--tc:${b.main};--tint:${b.tint}`;
 }
 
-// 递归生成 <details> 可折叠树
+// 递归生成 <details> 可折叠树，颜色与图例一致，叶子带 Emoji
 function renderTreeList(node) {
-  const color = treeNodeColor(node);
+  const style = treeStyle(node);
+  const icon = iconFor(node.label);
+  const branch = node.branch === "root" ? "" : node.branch;
+  const topAttr = node.depth === 1 ? ` data-top-branch="${branch}"` : "";
   if (!node.children.length) {
-    return `<span class="t-leaf"><span class="t-dot" style="--dot:${color}"></span>${escapeHTML(node.label)}</span>`;
+    return `<li data-branch="${branch}"${topAttr}><span class="t-leaf" style="${style}"><span class="t-ico">${icon}</span>${escapeHTML(node.label)}</span></li>`;
   }
   const open = node.depth <= 2 ? " open" : "";
-  const fg = hexLuminance(color) > 0.35 ? "#1f2937" : "#fff";
-  const badge = node.depth === 1
-    ? `<span class="t-badge" style="background:${color};color:${fg}">${node.children.length}</span>` : "";
-  const labelColor = node.depth <= 1 ? `style="color:${color};font-weight:800"` : "";
-  const kids = node.children.map((c) => `<li>${renderTreeList(c)}</li>`).join("");
-  return `<details${open}><summary><span class="t-arrow">▶</span><span ${labelColor}>${escapeHTML(node.label)}</span>${badge}</summary><ul>${kids}</ul></details>`;
+  const focusAttr = node.depth === 1 ? ` data-focus="${branch}" title="Tap to focus this branch; tap again to show all"` : "";
+  const main = node.depth === 1 ? (TREE_BRANCH[branch] || TREE_ROOT).main : "";
+  const badge = node.depth === 1 ? `<span class="t-badge" style="background:${main}">${node.children.length}</span>` : "";
+  const kids = node.children.map(renderTreeList).join("");
+  return `<li data-branch="${branch}"${topAttr}><details${open}><summary style="${style}"${focusAttr}><span class="t-arrow">▶</span><span class="t-ico">${icon}</span><span class="t-label">${escapeHTML(node.label)}</span>${badge}</summary><ul>${kids}</ul></details></li>`;
 }
 
 function buildConceptTree(wrap) {
   const root = parseMmdTree(ICT_MINDMAP);
   const legend = `<div class="tree-legend">
-    <span><i style="background:${TREE_BRANCH_COLORS.hw[1]}"></i>Hardware</span>
-    <span><i style="background:${TREE_BRANCH_COLORS.sw[1]}"></i>Software</span>
-  </div>`;
+    <span><i style="background:${TREE_BRANCH.hw.main}"></i>Hardware</span>
+    <span><i style="background:${TREE_BRANCH.sw.main}"></i>Software</span>
+  </div><p class="t-hint">Tap <b>Hardware</b> or <b>Software</b> to focus one branch; tap it again to show all. Tap any other node to fold it.</p>`;
   wrap.innerHTML = legend + `<ul class="tree"><li>${renderTreeList(root)}</li></ul>`;
+  // 聚焦交互：捕获阶段拦截顶层分类点击，阻止折叠，改为高亮/变暗
+  wrap.addEventListener("click", (e) => {
+    const sum = e.target.closest("summary[data-focus]");
+    if (!sum || !wrap.contains(sum)) return;
+    e.preventDefault();
+    e.stopPropagation();
+    const key = sum.getAttribute("data-focus");
+    const tree = wrap.querySelector("ul.tree");
+    if (tree.getAttribute("data-focus") === key) {
+      tree.removeAttribute("data-focus");
+      tree.querySelectorAll(".node-focus,.node-dim").forEach((li) => li.classList.remove("node-focus", "node-dim"));
+    } else {
+      tree.setAttribute("data-focus", key);
+      tree.querySelectorAll("li[data-top-branch]").forEach((li) => {
+        const on = li.getAttribute("data-top-branch") === key;
+        li.classList.toggle("node-focus", on);
+        li.classList.toggle("node-dim", !on);
+      });
+    }
+  }, true);
 }
 
 function toggleMindmap(btn) {
