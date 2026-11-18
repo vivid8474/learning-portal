@@ -567,6 +567,161 @@
   .order-card.is-wrong .order-num{background:#dc2626;color:#fff}
   .order-txt{flex:1 1 auto;min-width:0}
 
+  /* 双卡片对比（RAM vs ROM） */
+  .vs2{display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:stretch}
+  .vs2__card{
+    display:flex;flex-direction:column;gap:7px;
+    border:1.5px solid #dbe7fb;border-radius:12px;padding:11px 12px;background:#fbfdff;
+  }
+  .vs2__card--ram{border-color:#bfdbfe;background:linear-gradient(180deg,#f7fbff,#eff6ff)}
+  .vs2__card--rom{border-color:#ddd6fe;background:linear-gradient(180deg,#faf8ff,#f3efff)}
+  .vs2__head{display:flex;align-items:center;gap:7px}
+  .vs2__ico{font-size:17px;line-height:1}
+  .vs2__title{font-size:14.5px;font-weight:900;color:#1e3a8a}
+  .vs2__card--rom .vs2__title{color:#5b21b6}
+  .vs2__tag{margin:0;font-size:11.6px;line-height:1.45;color:#64748b}
+  .vs2__rows{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+  .vs2__rows li{
+    font-size:12.2px;line-height:1.5;color:#1f2937;
+    padding-top:6px;border-top:1px dashed #e2e8f0;
+  }
+  .vs2__rows li:first-child{border-top:none;padding-top:0}
+  .vs2__rows b{
+    display:block;font-size:10.2px;font-weight:800;letter-spacing:.4px;
+    text-transform:uppercase;color:#7b8aa0;margin-bottom:1px;
+  }
+  .vs2__mid{
+    align-self:center;width:26px;height:26px;border-radius:50%;
+    background:#eef4ff;color:#2f6bff;font-size:10.5px;font-weight:900;
+    display:flex;align-items:center;justify-content:center;
+  }
+  @media (max-width:560px){
+    .vs2{grid-template-columns:1fr;gap:6px}
+    .vs2__mid{justify-self:center;width:24px;height:24px;font-size:10px}
+  }
+
+  /* 存储金字塔 */
+  .pyr__hint{margin:0 0 10px;font-size:12.3px;color:#8595ab}
+  .pyr__stack{display:flex;flex-direction:column;align-items:center;gap:5px}
+  .pyr__lv{
+    width:var(--w,100%);max-width:100%;min-height:46px;
+    display:flex;align-items:center;justify-content:center;gap:7px;
+    border:1.5px solid #cfe0f7;border-radius:10px;
+    background:linear-gradient(180deg,#f8fbff,#eef5ff);
+    font:inherit;font-size:13px;font-weight:800;color:#1e3a8a;
+    cursor:pointer;transition:border-color .15s,background .15s,box-shadow .15s;
+  }
+  .pyr__lv:active{transform:scale(.99)}
+  .pyr__lv[aria-pressed="true"]{
+    border-color:#2f6bff;background:#e8f1ff;
+    box-shadow:0 0 0 3px rgba(47,107,255,.13);
+  }
+  .pyr__ico{font-size:15px;line-height:1}
+  .pyr__panel{
+    margin-top:11px;padding:11px 12px;min-height:78px;
+    border:1px solid #e0eafb;border-radius:11px;background:#fbfdff;
+  }
+  .pyr__empty{
+    display:block;font-size:12.4px;color:#9aa8bd;text-align:center;padding:14px 0;
+  }
+  .pyr__dt{
+    display:flex;align-items:center;gap:7px;
+    font-size:13.2px;font-weight:900;color:#1e3a8a;margin-bottom:8px;
+  }
+  .pyr__grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
+  .pyr__cell{background:#fff;border:1px solid #e6eefb;border-radius:9px;padding:7px 8px}
+  .pyr__cell b{
+    display:block;font-size:9.6px;letter-spacing:.4px;text-transform:uppercase;
+    color:#8595ab;margin-bottom:2px;
+  }
+  .pyr__cell span{font-size:11.7px;line-height:1.45;color:#1f2937;font-weight:600}
+  .pyr__note{margin:10px 0 0;font-size:11.8px;line-height:1.6;color:#64748b}
+  .pyr__vol{margin:8px 0 0;font-size:11.4px;color:#5b6f88}
+  @media (max-width:480px){
+    .pyr__grid{grid-template-columns:1fr;gap:5px}
+    .pyr__cell{display:flex;align-items:baseline;gap:7px;padding:6px 9px}
+    .pyr__cell b{margin-bottom:0;flex:0 0 62px}
+  }
+
+  /* 容量换算 */
+  .conv__row{display:flex;gap:8px;margin-bottom:10px}
+  .conv__in{
+    flex:1 1 auto;min-width:0;min-height:48px;padding:10px 12px;
+    border:1.5px solid #dfe8f6;border-radius:10px;background:#fff;
+    font:inherit;font-size:16px;font-weight:700;color:#1f2937;
+  }
+  .conv__in:focus{outline:none;border-color:#2f6bff;box-shadow:0 0 0 3px rgba(47,107,255,.13)}
+  .conv__sel{
+    flex:0 0 88px;min-height:48px;padding:8px 10px;
+    border:1.5px solid #dfe8f6;border-radius:10px;background:#f8fbff;
+    font:inherit;font-size:14px;font-weight:800;color:#1e3a8a;
+  }
+  .conv__sel:focus{outline:none;border-color:#2f6bff}
+  .conv__out{display:flex;flex-direction:column;gap:6px}
+  .conv__eq{font-size:11.8px;color:#8595ab;margin-bottom:2px}
+  .conv__line{
+    display:flex;align-items:baseline;justify-content:space-between;gap:10px;
+    padding:9px 12px;border:1px solid #e6eefb;border-radius:9px;background:#fbfdff;
+  }
+  .conv__line.is-same{background:#eef4ff;border-color:#cfe0f7}
+  .conv__num{font-size:15px;font-weight:900;color:#1e3a8a;letter-spacing:.2px}
+  .conv__u{font-size:11.6px;font-weight:800;color:#5b6f88}
+  .conv__warn{font-size:12.4px;color:#b45309}
+  .conv__hint{margin:10px 0 0;font-size:11.4px;line-height:1.6;color:#8595ab}
+
+  /* 图标配对 */
+  .pair__grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:2px 0 12px}
+  .pair__col{display:flex;flex-direction:column;gap:8px}
+  .pair__item{
+    display:flex;align-items:center;gap:8px;width:100%;min-height:56px;
+    padding:8px 10px;text-align:left;
+    border:1.5px solid #dfe8f6;border-radius:10px;background:#fff;
+    font:inherit;cursor:pointer;
+    transition:border-color .15s,background .15s,box-shadow .15s;
+  }
+  .pair__item.is-sel{border-color:#2f6bff;background:#eaf2ff;box-shadow:0 0 0 3px rgba(47,107,255,.13)}
+  .pair__item.is-done{border-color:#16a34a;background:#f0fdf4}
+  .pair__item.is-done .pair__txt b{color:#14532d}
+  .pair__item.is-bad{border-color:#dc2626;background:#fef2f2;animation:pairshake .3s}
+  @keyframes pairshake{
+    0%,100%{transform:translateX(0)}
+    25%{transform:translateX(-4px)}
+    75%{transform:translateX(4px)}
+  }
+  .pair__ico{
+    flex:0 0 auto;width:30px;height:30px;border-radius:8px;
+    background:#eef4ff;display:flex;align-items:center;justify-content:center;
+    font-size:16px;line-height:1;
+  }
+  .pair__txt{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;gap:1px}
+  .pair__txt b{font-size:12.6px;font-weight:800;color:#1f2937;line-height:1.35}
+  .pair__txt small{font-size:10.8px;color:#8595ab;line-height:1.4}
+  .pair__item--r{justify-content:center;text-align:center;background:#fbfdff}
+  .pair__item--r .pair__txt b{color:#1e3a8a}
+  @media (max-width:360px){
+    .pair__grid{gap:6px}
+    .pair__txt b{font-size:11.8px}
+    .pair__ico{width:26px;height:26px;font-size:14px}
+  }
+
+  /* 带图标的分类卡片（大挑战） */
+  .try-chip--ico{display:flex;align-items:center;gap:7px}
+  .chip-ico{flex:0 0 auto;font-size:15px;line-height:1}
+  .chip-t{flex:1 1 auto;min-width:0}
+  .ict-sort--big .try-sort__tray{min-height:auto;padding:11px;gap:9px}
+  .ict-sort--big .try-chip{min-height:56px;font-size:13px;padding:9px 10px}
+  .ict-sort--big .try-bin{min-height:132px}
+  .ict-sort--big .try-bin__t{font-size:13px;margin-bottom:8px}
+  @media (max-width:560px){
+    .ict-sort--big .try-chip{min-height:52px;font-size:12.2px;padding:8px 9px;gap:5px}
+    .ict-sort--big .chip-ico{font-size:14px}
+    .ict-sort--big .try-bin__t{font-size:12.2px}
+    .pair__txt small{display:none}
+    .pair__item{min-height:46px;padding:7px 9px;gap:7px}
+    .pair__ico{width:26px;height:26px;font-size:14px}
+    .pair__txt b{font-size:12px}
+  }
+
   /* 对比卡片（窄屏也不会横向溢出） */
   .ict-cmp{display:flex;flex-direction:column;gap:10px;margin:4px 0 16px}
   .ict-cmp__row{
@@ -1822,32 +1977,58 @@ const CONFIG = {
             { t: `Activity 5.1 — How to submit presentation files?`, h: 2 },
             { t: `The students need to submit their presentation files to Miss Chan. Which method is the most suitable? Discuss the advantages and disadvantages of each method.` },
 
-            { t: `5.1 Main Memory`, h: 2 },
+            { t: `5.1 Main Memory`, h: 2, ico: "💾" },
             { t: `Main memory (primary storage) is directly connected to the CPU to enable high-speed data access. It generally refers to two types: random access memory (RAM) and read-only memory (ROM).` },
-            { fig: "storage", cap: "Fig 5.1 The memory and storage hierarchy — tap a level to compare speed, size and volatility." },
+            {
+              pyr: {
+                tag: "storage pyramid",
+                note: "Registers sit even higher than the cache — inside the CPU, and fastest of all. Going down the pyramid: bigger capacity, cheaper per GB, slower.",
+                levels: [
+                  { t: "Cache", ico: "⚡", w: 42, vol: "Volatile", speed: "Extremely fast — a few nanoseconds", cap: "A few MB", price: "Highest cost per GB" },
+                  { t: "RAM", ico: "🧠", w: 60, vol: "Volatile", speed: "Very fast — tens of nanoseconds", cap: "8 – 32 GB", price: "High cost per GB" },
+                  { t: "SSD", ico: "💾", w: 80, vol: "Non-volatile", speed: "Fast — hundreds of MB per second", cap: "256 GB – 2 TB", price: "Moderate cost per GB" },
+                  { t: "HDD", ico: "💿", w: 100, vol: "Non-volatile", speed: "Slowest — around 100 MB per second", cap: "1 – 4 TB", price: "Cheapest per GB" }
+                ]
+              }
+            },
 
-            { t: `Random Access Memory (RAM)`, h: 3 },
+            { t: `Random Access Memory (RAM)`, h: 3, ico: "⚡" },
             { t: `Temporarily stores data for the computer to process.` },
             { t: `It is volatile — data is lost when the computer is switched off.` },
             { t: `The data is continuously rewritten as the computer runs.` },
             { t: `In general, the larger the RAM capacity, the faster the computer.` },
             { t: `To increase RAM capacity, add or replace the RAM modules (sticks) on the motherboard.` },
 
-            { t: `Read-Only Memory (ROM)`, h: 3 },
+            { t: `Read-Only Memory (ROM)`, h: 3, ico: "🔒" },
             { t: `Non-volatile — data is retained even after the computer is switched off.` },
             { t: `The data it stores is read-only and usually cannot be rewritten.` },
             { t: `ROM stores firmware (bootloader), which includes the instructions required to boot the computer.` },
             { t: `This firmware is known as Basic Input/Output System (BIOS).` },
             { t: `Modern computers commonly store this firmware in rewritable flash memory.` },
             {
-              tbl: {
-                head: ["", "RAM", "ROM"],
-                rows: [
-                  ["Volatile?", "Yes — data is lost when power is off", "No — data stays after power is off"],
-                  ["Typical content", "Programs and files being used right now", "Firmware / BIOS used to boot the computer"],
-                  ["Can it be rewritten?", "Yes, all the time while the computer runs", "Usually read-only"],
-                  ["Effect on speed", "More RAM usually makes the computer faster", "Does not affect processing speed"]
-                ]
+              vs: {
+                tag: "RAM vs ROM",
+                q: "Both live inside the system unit — but they do opposite jobs.",
+                left: {
+                  tone: "ram", ico: "⚡", title: "RAM", tagline: "Working memory · volatile",
+                  rows: [
+                    ["Volatile?", "Yes — data is lost when power is off"],
+                    ["Speed", "Very fast"],
+                    ["Read / write", "Read and rewritten all the time"],
+                    ["Holds", "Programs and files you are using right now"],
+                    ["More = better?", "More RAM usually makes the PC faster"]
+                  ]
+                },
+                right: {
+                  tone: "rom", ico: "🔒", title: "ROM", tagline: "Permanent firmware · read-only",
+                  rows: [
+                    ["Volatile?", "No — data stays after shutdown"],
+                    ["Speed", "Slower than RAM"],
+                    ["Read / write", "Read-only in normal use"],
+                    ["Holds", "Firmware / BIOS that boots the computer"],
+                    ["More = better?", "Does not affect processing speed"]
+                  ]
+                }
               }
             },
             {
@@ -1867,15 +2048,15 @@ const CONFIG = {
               }
             },
 
-            { t: `5.2 Secondary Storage Devices`, h: 2 },
+            { t: `5.2 Secondary Storage Devices`, h: 2, ico: "🗄️" },
             { t: `Unlike main memory, all forms of secondary storage are non-volatile, as these devices store data for future use.` },
 
-            { t: `Hard disk (HDD)`, h: 3 },
+            { t: `Hard disk (HDD)`, h: 3, ico: "💿" },
             { t: `Has multiple read/write heads; its metal disk is coated with a magnetic material.` },
             { t: `It moves the read/write heads to access data on the disk.` },
             { t: `Avoid moving the hard disk drive while the computer is in use, as impact could damage the disk.` },
 
-            { t: `Solid-state drive (SSD)`, h: 3 },
+            { t: `Solid-state drive (SSD)`, h: 3, ico: "💾" },
             { t: `Consists of flash memory and a controller.` },
             { t: `Flash memory allows the controller to read and write data at high speeds using electricity.` },
             { t: `Contains no moving parts, so it is more shock-resistant, smaller in size and consumes less power than a hard disk.` },
@@ -1883,24 +2064,24 @@ const CONFIG = {
             { t: `Internal storage devices are installed within the system unit and usually store the operating system and software.` },
             { t: `External storage devices are portable and removable, usually used for data backup.` },
 
-            { t: `Memory card`, h: 3 },
+            { t: `Memory card`, h: 3, ico: "🗂️" },
             { t: `Also made up of flash memory; mainly used in mobile devices thanks to its compact size.` },
             { t: `Secure Digital (SD) is a common format, available in various sizes (e.g. SD, microSD).` },
             { t: `A separate card reader may be needed to access files on a memory card.` },
 
-            { t: `USB flash drive`, h: 3 },
+            { t: `USB flash drive`, h: 3, ico: "🔗" },
             { t: `A flash memory device with a USB interface, compact and easy to carry.` },
             { t: `Often used for data backup and data transfer between devices.` },
             { t: `USB versions (by data transfer rate): USB 1.0 (White) Slow; USB 2.0 (Black) Normal; USB 3.0 (Blue) Fast.` },
             { t: `USB connector types: Type-A (standard USB-A plug); Micro-B (micro USB plug); Type-C (USB-C plug).` },
 
-            { t: `5.3 Network Storage`, h: 2 },
+            { t: `5.3 Network Storage`, h: 2, ico: "🌐" },
 
-            { t: `Network-attached storage (NAS)`, h: 3 },
+            { t: `Network-attached storage (NAS)`, h: 3, ico: "📡" },
             { t: `A dedicated file server or storage device.` },
             { t: `Enables multiple users on the same local area network (LAN) to read and write data at the same time.` },
 
-            { t: `Cloud drive`, h: 3 },
+            { t: `Cloud drive`, h: 3, ico: "☁️" },
             { t: `Users with an internet connection can access and edit data anytime, anywhere.` },
             { t: `Cloud storage providers may charge subscription fees for extra storage space.` },
             { t: `Common examples: Google Drive, Microsoft OneDrive.` },
@@ -1921,7 +2102,7 @@ const CONFIG = {
             { t: `It may involve ongoing subscription fees.` },
             { t: `As the server is shared by multiple users, access may be slower when the server is busy.` },
 
-            { t: `5.4 Storage Capacity`, h: 2 },
+            { t: `5.4 Storage Capacity`, h: 2, ico: "📦" },
             { t: `Storage capacity is the maximum amount of data a device can store.` },
             { t: `Bit (bit, b): the most basic unit of data.` },
             { t: `Byte (B): 1 B = 8 bits.` },
@@ -1929,6 +2110,12 @@ const CONFIG = {
             { t: `Megabyte (MB): 1 MB = 1024 KB.` },
             { t: `Gigabyte (GB): 1 GB = 1024 MB.` },
             { t: `Terabyte (TB): 1 TB = 1024 GB.` },
+            {
+              conv: {
+                tag: "capacity converter",
+                q: "Type an amount and choose a unit — the smaller units are worked out for you."
+              }
+            },
             { t: `Typical storage: a plain text file (1000 characters) 1–3 KB; a 4-minute MP3 4–10 MB; a 1-hour MP4 video 500 MB–3 GB.` },
             {
               try: {
@@ -1941,7 +2128,7 @@ const CONFIG = {
               }
             },
 
-            { t: `5.5 Data Transfer Rate`, h: 2 },
+            { t: `5.5 Data Transfer Rate`, h: 2, ico: "🚀" },
             { t: `Data transfer rate is the amount of data transferred per second.` },
             { t: `Comparison (fastest → slowest): SSD (~500–14,000 MB/s) > Hard disk (~100–250 MB/s) > SD card (~10–100 MB/s).` },
 
@@ -1979,10 +2166,10 @@ const CONFIG = {
             { t: `Activity 6.1 — What software do you use most often?`, h: 2 },
             { t: `Share with your classmates: which software do you use most often, and what do you use it for?` },
 
-            { t: `6.1 System Software`, h: 2 },
+            { t: `6.1 System Software`, h: 2, ico: "🧩" },
             { t: `System software coordinates the operation of computer hardware and application software. There are three types of system software: operating system, utility program and driver program.` },
 
-            { t: `Operating system`, h: 3 },
+            { t: `Operating system`, h: 3, ico: "🪟" },
             { t: `An operating system (OS) controls the operation of the computer's hardware and software, and manages computer resources to ensure that all application software runs smoothly.` },
             { t: `Main functions of an operating system:`, h: 3 },
             { t: `Process management · Memory management · Peripheral device management · File system management · Storage management · User account management · User interface · Multitasking.` },
@@ -1992,34 +2179,34 @@ const CONFIG = {
             { t: `Mobile operating system — designed for mobile devices such as tablets, smartphones and smartwatches; to extend battery life, hardware is optimised (e.g. closing background apps and turning off the screen automatically); most are single-user. Examples: iOS, iPadOS, Android.` },
             { t: `Network operating system — designed to manage network resources and provide services to multiple users or computers (file sharing, web hosting, database management); most are multi-user. Examples: Linux, UNIX.` },
 
-            { t: `Utility program`, h: 3 },
+            { t: `Utility program`, h: 3, ico: "🧰" },
             { t: `A utility program is software designed to maintain computer systems and improve their efficiency. It is usually included in the operating system; third-party utility programs are also available for users to install.` },
             { t: `File management program — e.g. File Explorer: view, add, copy or delete files in the file system.` },
             { t: `System monitoring software — e.g. Task Manager: monitor processes and display system resource usage.` },
             { t: `Virus scanner — e.g. Avast Antivirus: detect and remove computer viruses.` },
             { t: `File backup software — e.g. macOS Time Machine: create backups of files and system settings, so the system can be restored after data corruption or system failure.` },
 
-            { t: `Driver program`, h: 3 },
+            { t: `Driver program`, h: 3, ico: "🔌" },
             { t: `A driver program controls a peripheral device, such as a mouse, keyboard or speakers connected to the computer. Driver programs are usually designed to work with specific types of devices and operating systems.` },
 
-            { t: `6.2 Application Software`, h: 2 },
+            { t: `6.2 Application Software`, h: 2, ico: "📱" },
             { t: `Application software helps users carry out specific tasks. It can be mainly categorised into productivity, communication, and multimedia development software.` },
 
-            { t: `Productivity software`, h: 3 },
+            { t: `Productivity software`, h: 3, ico: "📊" },
             { t: `Productivity software aims to enhance work productivity; it can be used to generate, analyse or present information.` },
             { t: `Word processor — edit documents and apply text formatting. Examples: Microsoft Word, Google Docs.` },
             { t: `Spreadsheet software — calculate formulas and create charts for data analysis. Examples: Microsoft Excel, Google Sheets.` },
             { t: `Presentation software — create slides for presentations. Examples: Microsoft PowerPoint, Google Slides, Canva.` },
             { t: `Database management system — create and organise databases. Examples: Microsoft Access, MySQL.` },
 
-            { t: `Communication software`, h: 3 },
+            { t: `Communication software`, h: 3, ico: "💬" },
             { t: `Communication software enables users to exchange information via the internet.` },
             { t: `Web browser — browse the internet and interact with it. Examples: Google Chrome, Mozilla Firefox, Safari, Microsoft Edge.` },
             { t: `Email client — send, receive and manage emails. Examples: Gmail, Microsoft Outlook.` },
             { t: `Instant messaging application — send, receive and manage instant messages. Examples: WhatsApp, LINE, WeChat, Instagram DM.` },
             { t: `Web conferencing software — host real-time meetings to connect multiple participants remotely. Examples: Zoom Cloud Meetings, Microsoft Teams, Google Meet.` },
 
-            { t: `Multimedia development software`, h: 3 },
+            { t: `Multimedia development software`, h: 3, ico: "🎬" },
             { t: `Multimedia development software is used to create or edit multimedia files.` },
             { t: `Image editing software — Paint.NET, Adobe Photoshop, Adobe Illustrator.` },
             { t: `Audio editing software — Audacity, Adobe Audition.` },
@@ -2049,17 +2236,58 @@ const CONFIG = {
             {
               try: {
                 type: "sort",
-                tag: "system or application?",
-                q: "Sort each program into the correct type of software.",
-                bins: ["System software", "Application software"],
+                big: true,
+                tag: "software sorting challenge",
+                q: "Eight programs, two boxes. Tap a card, then tap the box it belongs to.",
+                bins: ["🧩 System software", "📱 Application software"],
                 items: [
-                  { t: "Windows 11", bin: 0 },
-                  { t: "Printer driver", bin: 0 },
-                  { t: "Task Manager", bin: 0 },
-                  { t: "Microsoft Word", bin: 1 },
-                  { t: "Google Chrome", bin: 1 },
-                  { t: "Adobe Photoshop", bin: 1 }
+                  { t: "Windows 11", ico: "🪟", bin: 0 },
+                  { t: "macOS", ico: "🍎", bin: 0 },
+                  { t: "Printer driver", ico: "🖨️", bin: 0 },
+                  { t: "Anti-virus", ico: "🛡️", bin: 0 },
+                  { t: "MS Word", ico: "📝", bin: 1 },
+                  { t: "Chrome", ico: "🌐", bin: 1 },
+                  { t: "Photoshop", ico: "🎨", bin: 1 },
+                  { t: "Netflix", ico: "🎬", bin: 1 }
                 ]
+              }
+            },
+            {
+              pair: {
+                tag: "icon match — system software",
+                q: "Match each system software example with the type it belongs to.",
+                left: [
+                  { t: "Windows 11", sub: "runs the whole computer", ico: "🪟", type: "Operating system" },
+                  { t: "Printer driver", sub: "makes one device work", ico: "🖨️", type: "Driver program" },
+                  { t: "Virus scanner", sub: "keeps the PC healthy", ico: "🛡️", type: "Utility program" },
+                  { t: "Task Manager", sub: "watches CPU and memory", ico: "📊", type: "Utility program" }
+                ],
+                right: [
+                  { t: "Operating system" },
+                  { t: "Driver program" },
+                  { t: "Utility program" },
+                  { t: "Utility program" }
+                ]
+              }
+            },
+            {
+              try: {
+                type: "pick",
+                tag: "everyday situation",
+                q: "You want to write a letter and print it. Which software do you need?",
+                options: ["An operating system", "A word processor", "A driver program"],
+                answer: 1,
+                explain: "A word processor (application software) is for writing and formatting documents. The operating system only manages the computer, and a driver only lets the computer talk to the printer."
+              }
+            },
+            {
+              try: {
+                type: "pick",
+                tag: "everyday situation",
+                q: "You plug in a new printer, but the computer does not recognise it. What is missing?",
+                options: ["A spreadsheet", "A web browser", "A driver program for that printer"],
+                answer: 2,
+                explain: "A driver program tells the operating system how to control a specific peripheral device. Without it, the printer cannot be used — even though the hardware is connected."
               }
             },
 
@@ -2863,12 +3091,13 @@ function renderIctTry(spec) {
   if (spec.type === "sort") {
     const bins = spec.bins || [];
     const items = spec.items || [];
-    return `<div class="ict-try ict-sort" data-ictsort>
+    return `<div class="ict-try ict-sort${spec.big ? " ict-sort--big" : ""}" data-ictsort>
       <div class="ict-try__head">🎯 Try it — ${escapeHTML(spec.tag || "sort it out")}</div>
       <p class="ict-try__q">${escapeHTML(spec.q || "")}</p>
       <p class="try-sort__hint">Tap a card, then tap a box. Tap a placed card to take it back.</p>
       <div class="try-sort__tray" data-tray>
-        ${items.map((it, i) => `<button class="try-chip" type="button" data-ans="${it.bin}" data-i="${i}">${escapeHTML(it.t)}</button>`).join("")}
+        ${items.map((it, i) => `<button class="try-chip${it.ico ? " try-chip--ico" : ""}" type="button" data-ans="${it.bin}" data-i="${i}">
+          ${it.ico ? `<span class="chip-ico" aria-hidden="true">${it.ico}</span>` : ""}<span class="chip-t">${escapeHTML(it.t)}</span></button>`).join("")}
       </div>
       <div class="try-bins">
         ${bins.map((b, i) => `<div class="try-bin" data-bin="${i}">
@@ -2997,6 +3226,135 @@ function renumberOrder(list) {
   });
 }
 
+/* ---------- ICT 笔记：双卡片对比（RAM vs ROM） ---------- */
+function renderIctVs(spec) {
+  const side = (c) => {
+    c = c || {};
+    return `<div class="vs2__card vs2__card--${escapeHTML(c.tone || "a")}">
+      <div class="vs2__head">
+        <span class="vs2__ico" aria-hidden="true">${c.ico || ""}</span>
+        <span class="vs2__title">${escapeHTML(c.title || "")}</span>
+      </div>
+      ${c.tagline ? `<p class="vs2__tag">${escapeHTML(c.tagline)}</p>` : ""}
+      <ul class="vs2__rows">
+        ${(c.rows || []).map(([k, v]) => `<li><b>${escapeHTML(k)}</b><span>${escapeHTML(v)}</span></li>`).join("")}
+      </ul>
+    </div>`;
+  };
+  return `<div class="ict-try ict-vs">
+    <div class="ict-try__head">⚖️ ${escapeHTML(spec.tag || "compare")}</div>
+    ${spec.q ? `<p class="ict-try__q">${escapeHTML(spec.q)}</p>` : ""}
+    <div class="vs2">
+      ${side(spec.left)}
+      <div class="vs2__mid" aria-hidden="true">VS</div>
+      ${side(spec.right)}
+    </div>
+  </div>`;
+}
+
+/* ---------- ICT 笔记：存储金字塔（点击查看速度/容量/价格） ---------- */
+function renderIctPyramid(spec) {
+  const levels = spec.levels || [];
+  return `<div class="ict-try pyr" data-pyr data-json="${escapeHTML(JSON.stringify(levels))}">
+    <div class="ict-try__head">🔺 ${escapeHTML(spec.tag || "pyramid")}</div>
+    <p class="pyr__hint">Tap a layer to compare speed, capacity and price.</p>
+    <div class="pyr__stack">
+      ${levels.map((l, i) => `<button class="pyr__lv" type="button" data-i="${i}" style="--w:${l.w || 100}%" aria-pressed="false">
+        <span class="pyr__ico" aria-hidden="true">${l.ico || ""}</span>
+        <span class="pyr__t">${escapeHTML(l.t)}</span>
+      </button>`).join("")}
+    </div>
+    <div class="pyr__panel" data-pyrpanel><span class="pyr__empty">Pick a layer above ↑</span></div>
+    ${spec.note ? `<p class="pyr__note">${escapeHTML(spec.note)}</p>` : ""}
+  </div>`;
+}
+
+/* ---------- ICT 笔记：容量换算工具 ---------- */
+const CONV_UNITS = ["B", "KB", "MB", "GB", "TB"];
+
+function fmtNum(n) {
+  if (!isFinite(n)) return "—";
+  if (n >= 1000) return Math.round(n).toLocaleString("en-US");
+  if (n >= 1) return (Math.round(n * 100) / 100).toLocaleString("en-US");
+  return (Math.round(n * 1000) / 1000).toString();
+}
+
+function renderIctConv(spec) {
+  return `<div class="ict-try conv" data-conv>
+    <div class="ict-try__head">🔁 ${escapeHTML(spec.tag || "converter")}</div>
+    <p class="ict-try__q">${escapeHTML(spec.q || "")}</p>
+    <div class="conv__row">
+      <input class="conv__in" type="number" inputmode="decimal" min="0" step="any" value="1"
+             data-convval aria-label="Storage amount">
+      <select class="conv__sel" data-convunit aria-label="Unit">
+        ${CONV_UNITS.map((u) => `<option value="${u}"${u === "GB" ? " selected" : ""}>${u}</option>`).join("")}
+      </select>
+    </div>
+    <div class="conv__out" data-convout></div>
+    <p class="conv__hint">1 KB = 1024 B · 1 MB = 1024 KB · 1 GB = 1024 MB · 1 TB = 1024 GB</p>
+  </div>`;
+}
+
+function updateConv(wrap) {
+  const input = wrap.querySelector("[data-convval]");
+  const sel = wrap.querySelector("[data-convunit]");
+  const out = wrap.querySelector("[data-convout]");
+  if (!input || !sel || !out) return;
+  const val = parseFloat(input.value);
+  const unit = sel.value;
+  if (!isFinite(val) || val < 0) {
+    out.innerHTML = `<span class="conv__warn">Enter a number to convert.</span>`;
+    return;
+  }
+  const i = CONV_UNITS.indexOf(unit);
+  const rows = [];
+  for (let k = i; k >= 0; k--) {
+    const v = val * Math.pow(1024, i - k);
+    rows.push(`<div class="conv__line${k === i ? " is-same" : ""}">
+      <span class="conv__num">${fmtNum(v)}</span>
+      <span class="conv__u">${CONV_UNITS[k]}</span>
+    </div>`);
+  }
+  out.innerHTML = `<div class="conv__eq">${fmtNum(val)} ${unit} equals</div>${rows.join("")}`;
+}
+
+/* ---------- ICT 笔记：图标配对 ---------- */
+function renderIctPair(spec) {
+  const left = spec.left || [];
+  const right = spec.right || [];
+  const order = right.map((_, i) => i);
+  for (let i = order.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [order[i], order[j]] = [order[j], order[i]];
+  }
+  return `<div class="ict-try pair" data-pair>
+    <div class="ict-try__head">🧩 ${escapeHTML(spec.tag || "match them")}</div>
+    <p class="ict-try__q">${escapeHTML(spec.q || "")}</p>
+    <p class="try-sort__hint">Tap an icon card, then tap the matching type.</p>
+    <div class="pair__grid">
+      <div class="pair__col">
+        ${left.map((l) => `<button class="pair__item" type="button" data-side="L" data-type="${escapeHTML(l.type || "")}">
+          <span class="pair__ico" aria-hidden="true">${l.ico || ""}</span>
+          <span class="pair__txt"><b>${escapeHTML(l.t || "")}</b>${l.sub ? `<small>${escapeHTML(l.sub)}</small>` : ""}</span>
+        </button>`).join("")}
+      </div>
+      <div class="pair__col">
+        ${order.map((j) => {
+          const r = right[j] || {};
+          return `<button class="pair__item pair__item--r" type="button" data-side="R" data-type="${escapeHTML(r.t || "")}">
+            <span class="pair__txt"><b>${escapeHTML(r.t || "")}</b>${r.sub ? `<small>${escapeHTML(r.sub)}</small>` : ""}</span>
+          </button>`;
+        }).join("")}
+      </div>
+    </div>
+    <div class="try-actions">
+      <button class="try-btn try-btn--ghost" type="button" data-pairreset>Reset</button>
+      <span class="try-score" data-pairscore></span>
+    </div>
+    <div class="try-fb" data-fb></div>
+  </div>`;
+}
+
 function renderIctTable(spec) {
   const head = spec.head || [];
   const rows = spec.rows || [];
@@ -3017,6 +3375,10 @@ function renderIctNote(item) {
   if (item.tbl) return renderIctTable(item.tbl);
   if (item.acc) return renderIctAccordion(item.acc);
   if (item.order) return renderIctOrder(item.order);
+  if (item.vs) return renderIctVs(item.vs);
+  if (item.pyr) return renderIctPyramid(item.pyr);
+  if (item.conv) return renderIctConv(item.conv);
+  if (item.pair) return renderIctPair(item.pair);
   if (item.sim === "clock") return renderClockSim();
   const t = (item.t || "").trim();
   const html = highlightTerms(escapeHTML(t));
@@ -4154,6 +4516,9 @@ function bindCommonEvents() {
   // ICT 时钟频率模拟器：初始化当前值 / 动画速度 / 热度
   document.querySelectorAll("#main [data-clocksim]").forEach(updateClockSim);
 
+  // ICT 容量换算：首屏就渲染一次结果
+  document.querySelectorAll("#main [data-conv]").forEach(updateConv);
+
   // Science 拖拽匹配游戏
   document.querySelectorAll("#main .match-game").forEach(initMatchGame);
 
@@ -4641,10 +5006,28 @@ function initQuizSet(root) {
    ========================================================================= */
 // 时钟频率滑杆：拖动时实时更新速度、数据流与热度
 document.addEventListener("input", (e) => {
-  const range = e.target.closest && e.target.closest("[data-range]");
-  if (!range) return;
-  const wrap = range.closest("[data-clocksim]");
-  if (wrap) updateClockSim(wrap);
+  if (!e.target || !e.target.closest) return;
+  const range = e.target.closest("[data-range]");
+  if (range) {
+    const wrap = range.closest("[data-clocksim]");
+    if (wrap) updateClockSim(wrap);
+    return;
+  }
+  const convVal = e.target.closest("[data-convval]");
+  if (convVal) {
+    const wrap = convVal.closest("[data-conv]");
+    if (wrap) updateConv(wrap);
+  }
+});
+
+// 容量换算：切换单位也要立刻重算
+document.addEventListener("change", (e) => {
+  if (!e.target || !e.target.closest) return;
+  const unit = e.target.closest("[data-convunit]");
+  if (unit) {
+    const wrap = unit.closest("[data-conv]");
+    if (wrap) updateConv(wrap);
+  }
 });
 
 document.addEventListener("click", (e) => {
@@ -4663,6 +5046,88 @@ document.addEventListener("click", (e) => {
         note.scrollIntoView({ block: "nearest" });
       }
     }
+    return;
+  }
+
+  /* 1.4) 存储金字塔：点层看速度 / 容量 / 价格 */
+  const pyrLv = e.target.closest(".pyr__lv");
+  if (pyrLv) {
+    const wrap = pyrLv.closest("[data-pyr]");
+    let levels = [];
+    try { levels = JSON.parse(wrap.getAttribute("data-json") || "[]"); } catch (err) { levels = []; }
+    const l = levels[Number(pyrLv.dataset.i)];
+    wrap.querySelectorAll(".pyr__lv").forEach((b) => b.setAttribute("aria-pressed", String(b === pyrLv)));
+    const panel = wrap.querySelector("[data-pyrpanel]");
+    if (panel && l) {
+      panel.innerHTML = `<div class="pyr__dt"><span aria-hidden="true">${l.ico || ""}</span><span>${escapeHTML(l.t)}</span></div>
+        <div class="pyr__grid">
+          <div class="pyr__cell"><b>Speed</b><span>${escapeHTML(l.speed || "—")}</span></div>
+          <div class="pyr__cell"><b>Capacity</b><span>${escapeHTML(l.cap || "—")}</span></div>
+          <div class="pyr__cell"><b>Price</b><span>${escapeHTML(l.price || "—")}</span></div>
+        </div>
+        ${l.vol ? `<p class="pyr__vol">${escapeHTML(l.vol)}</p>` : ""}`;
+    }
+    return;
+  }
+
+  /* 1.45) 图标配对 */
+  const pairItem = e.target.closest(".pair__item");
+  if (pairItem) {
+    const wrap = pairItem.closest("[data-pair]");
+    if (!wrap || pairItem.classList.contains("is-done")) return;
+    const fb = wrap.querySelector("[data-fb]");
+    if (pairItem.dataset.side === "L") {
+      wrap.querySelectorAll('.pair__item[data-side="L"]').forEach((b) => {
+        b.classList.toggle("is-sel", b === pairItem);
+      });
+      return;
+    }
+    const sel = wrap.querySelector('.pair__item[data-side="L"].is-sel');
+    if (!sel) {
+      if (fb) {
+        fb.className = "try-fb is-show no";
+        fb.innerHTML = "👆 Pick an icon card on the left first.";
+      }
+      return;
+    }
+    const ok = sel.dataset.type === pairItem.dataset.type;
+    pairItem.classList.remove("is-bad");
+    if (ok) {
+      sel.classList.remove("is-sel");
+      sel.classList.add("is-done");
+      pairItem.classList.add("is-done");
+      const total = wrap.querySelectorAll('.pair__item[data-side="L"]').length;
+      const done = wrap.querySelectorAll('.pair__item[data-side="L"].is-done').length;
+      const sc = wrap.querySelector("[data-pairscore]");
+      if (sc) sc.textContent = done + " / " + total + " matched";
+      if (fb) {
+        if (done === total) {
+          fb.className = "try-fb is-show ok";
+          fb.innerHTML = "🎉 <b>All matched!</b> You know the three types of system software.";
+        } else {
+          fb.className = "try-fb is-show ok";
+          fb.innerHTML = "✅ <b>Match!</b> " + escapeHTML(sel.dataset.type);
+        }
+      }
+    } else {
+      pairItem.classList.add("is-bad");
+      if (fb) {
+        fb.className = "try-fb is-show no";
+        fb.innerHTML = "❌ <b>Not this one.</b> Try another type.";
+      }
+      setTimeout(() => pairItem.classList.remove("is-bad"), 600);
+    }
+    return;
+  }
+
+  const pairReset = e.target.closest("[data-pairreset]");
+  if (pairReset) {
+    const wrap = pairReset.closest("[data-pair]");
+    wrap.querySelectorAll(".pair__item").forEach((b) => b.classList.remove("is-done", "is-sel", "is-bad"));
+    const fb = wrap.querySelector("[data-fb]");
+    if (fb) { fb.className = "try-fb"; fb.innerHTML = ""; }
+    const sc = wrap.querySelector("[data-pairscore]");
+    if (sc) sc.textContent = "";
     return;
   }
 
