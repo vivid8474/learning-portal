@@ -352,10 +352,11 @@
   .try-opts{display:flex;flex-direction:column;gap:8px}
   .try-opt{
     display:flex;align-items:center;gap:10px;width:100%;
-    min-height:44px;padding:10px 12px;text-align:left;
+    min-height:44px;padding:10px 34px 10px 12px;text-align:left;
     border:1.5px solid #dfe8f6;border-radius:10px;background:#fbfdff;
     font:inherit;font-size:13.8px;line-height:1.5;color:#1f2937;
-    cursor:pointer;transition:border-color .15s,background .15s;
+    cursor:pointer;transition:border-color .15s,background .15s,opacity .15s;
+    position:relative;
   }
   .try-opt:hover{border-color:#b9cff5;background:#f4f9ff}
   .try-opt__k{
@@ -367,6 +368,21 @@
   .try-opt.is-right .try-opt__k{background:#16a34a;color:#fff}
   .try-opt.is-wrong{border-color:#dc2626;background:#fef2f2}
   .try-opt.is-wrong .try-opt__k{background:#dc2626;color:#fff}
+  .try-opt.is-dim{opacity:.55}
+  .try-opt.is-right::after{
+    content:"✓";position:absolute;right:12px;top:50%;transform:translateY(-50%);
+    font-size:14px;font-weight:900;color:#16a34a;
+    animation:markpop .22s ease;
+  }
+  .try-opt.is-wrong::after{
+    content:"✗";position:absolute;right:12px;top:50%;transform:translateY(-50%);
+    font-size:14px;font-weight:900;color:#dc2626;
+    animation:markpop .22s ease;
+  }
+  @keyframes markpop{
+    from{opacity:0;transform:translateY(-50%) scale(.5)}
+    to{opacity:1;transform:translateY(-50%) scale(1)}
+  }
   .try-fb{
     display:none;margin-top:10px;padding:9px 11px;border-radius:9px;
     font-size:13px;line-height:1.7;
@@ -398,12 +414,158 @@
   .try-bin.is-bad{border-color:#dc2626;background:#fff8f8}
   .try-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
   .try-btn{
-    min-height:40px;padding:8px 14px;border-radius:9px;border:1.5px solid #2f6bff;
+    min-height:44px;padding:9px 16px;border-radius:9px;border:1.5px solid #2f6bff;
     background:#2f6bff;color:#fff;font:inherit;font-size:13.2px;font-weight:700;
     cursor:pointer;
   }
   .try-btn--ghost{background:#fff;color:#2f6bff}
   .try-score{font-size:12.8px;color:#5b6f88}
+
+  /* 标题 + 图标（用 flex 对齐，手机端不杂乱） */
+  .text-sub--ico,.text-sub3--ico{display:flex;align-items:flex-start;gap:7px}
+  .text-sub--ico::before,.text-sub3--ico::before{content:none}
+  .hd-ico{
+    flex:0 0 auto;width:22px;height:22px;border-radius:6px;margin-top:1px;
+    background:#eef4ff;border:1px solid #dbe7fb;
+    display:inline-flex;align-items:center;justify-content:center;
+    font-size:12.5px;line-height:1;box-shadow:0 1px 2px rgba(30,58,138,.06);
+  }
+  .hd-txt{flex:1 1 auto;min-width:0}
+
+  /* 折叠面板 */
+  .ict-acc{
+    margin:10px 0 16px;border:1px solid #dbe7fb;border-radius:14px;
+    background:#fff;overflow:hidden;
+  }
+  .ict-acc__sum{
+    display:flex;align-items:center;gap:8px;min-height:50px;padding:12px 14px;
+    list-style:none;cursor:pointer;
+    font-size:13.6px;font-weight:800;color:#1e3a8a;
+    background:linear-gradient(180deg,#f8fbff,#eef5ff);
+  }
+  .ict-acc__sum::-webkit-details-marker{display:none}
+  .ict-acc__sum:focus-visible{outline:3px solid #2f6bff;outline-offset:-3px}
+  .ict-acc__label{
+    display:flex;align-items:center;gap:5px;flex:1 1 auto;min-width:0;
+    flex-wrap:wrap;
+  }
+  .ict-acc__br{color:#93b4e8;font-weight:700;flex:0 0 auto}
+  .ict-acc__ico{font-size:15px;line-height:1;flex:0 0 auto}
+  .ict-acc__t{flex:0 1 auto;min-width:0}
+  .ict-acc__chev{
+    flex:0 0 auto;color:#5b6f88;font-size:11px;line-height:1;
+    transition:transform .2s ease;
+  }
+  .ict-acc[open] .ict-acc__chev{transform:rotate(180deg)}
+  .ict-acc__body{padding:13px 14px 15px;border-top:1px solid #e6eefb}
+  .ict-acc__lead{margin:0 0 12px;font-size:13.4px;line-height:1.74;color:#374151}
+  .cmp2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .cmp2__card{
+    border:1.5px solid #dbe7fb;border-radius:12px;
+    padding:11px 12px;background:#fbfdff;
+  }
+  .cmp2__card--cloud{border-color:#cfe3f8;background:#f6fbff}
+  .cmp2__head{
+    display:flex;align-items:center;gap:6px;margin-bottom:8px;
+    font-size:13px;font-weight:800;color:#1e3a8a;
+  }
+  .cmp2__ico{font-size:14px;line-height:1}
+  .cmp2__list{margin:0;padding-left:16px}
+  .cmp2__list li{
+    font-size:12.5px;line-height:1.62;color:#374151;margin-bottom:5px;
+  }
+  .cmp2__list li:last-child{margin-bottom:0}
+  .ict-acc__note{
+    margin:12px 0 0;padding:10px 12px;border-radius:10px;
+    font-size:12.7px;line-height:1.7;color:#334155;
+    background:#f2f7ff;border-left:3px solid #2f6bff;
+  }
+  @media (max-width:520px){
+    .cmp2{grid-template-columns:1fr}
+  }
+
+  /* 时钟频率模拟器 */
+  .clock-sim__read{font-size:13.6px;font-weight:700;color:#1e3a8a;margin-bottom:2px}
+  .clock-sim__read b{font-size:19px;font-weight:900;color:#2f6bff}
+  .clock-sim__range{
+    -webkit-appearance:none;appearance:none;
+    width:100%;height:44px;margin:0;background:transparent;cursor:pointer;
+  }
+  .clock-sim__range::-webkit-slider-runnable-track{
+    height:8px;border-radius:999px;
+    background:linear-gradient(90deg,#dbeafe,#93c5fd,#2f6bff);
+  }
+  .clock-sim__range::-webkit-slider-thumb{
+    -webkit-appearance:none;width:26px;height:26px;margin-top:-9px;
+    border-radius:50%;background:#fff;border:3px solid #2f6bff;
+    box-shadow:0 2px 7px rgba(47,107,255,.4);
+  }
+  .clock-sim__range::-moz-range-track{
+    height:8px;border-radius:999px;
+    background:linear-gradient(90deg,#dbeafe,#93c5fd,#2f6bff);
+  }
+  .clock-sim__range::-moz-range-thumb{
+    width:20px;height:20px;border-radius:50%;background:#fff;
+    border:3px solid #2f6bff;box-shadow:0 2px 7px rgba(47,107,255,.4);
+  }
+  .clock-sim__scale{
+    display:flex;justify-content:space-between;
+    font-size:10.6px;color:#8595ab;margin:-4px 2px 9px;
+  }
+  .clock-sim__track{
+    position:relative;height:13px;border-radius:999px;overflow:hidden;
+    background:#eaf1fb;box-shadow:inset 0 1px 2px rgba(30,58,138,.08);
+  }
+  .clock-sim__flow{
+    position:absolute;top:0;left:0;height:100%;width:34%;border-radius:999px;
+    background:linear-gradient(90deg,#93c5fd,#2f6bff);
+    animation:clockflow var(--dur,2.4s) linear infinite;
+  }
+  @keyframes clockflow{
+    from{transform:translateX(-100%)}
+    to{transform:translateX(300%)}
+  }
+  .clock-sim__meta{
+    display:flex;justify-content:space-between;align-items:center;gap:8px;
+    margin:7px 1px 0;font-size:11.8px;color:#5b6f88;
+  }
+  .clock-sim__heatrow{display:flex;align-items:center;gap:8px;margin-top:9px}
+  .clock-sim__heatlbl{flex:0 0 auto;font-size:11.6px;font-weight:700;color:#b45309}
+  .heat-bar{flex:1 1 auto;height:9px;border-radius:999px;background:#eef1f6;overflow:hidden}
+  .heat-bar span{
+    display:block;height:100%;width:25%;border-radius:999px;
+    background:linear-gradient(90deg,#fbbf24,#ef4444);
+    transition:width .18s ease;
+  }
+  .clock-sim__tip{
+    margin:10px 0 0;font-size:12.3px;line-height:1.62;color:#7c4a03;
+    background:#fffbeb;border:1px solid #fde68a;border-radius:9px;padding:8px 10px;
+  }
+
+  /* 排序题 */
+  .order-list{display:flex;flex-direction:column;gap:8px;margin:2px 0 12px}
+  .order-card{
+    display:flex;align-items:center;gap:10px;width:100%;min-height:46px;
+    padding:9px 12px;text-align:left;
+    border:1.5px solid #dfe8f6;border-radius:10px;background:#fff;
+    font:inherit;font-size:13.6px;font-weight:650;color:#1f2937;
+    cursor:pointer;transition:border-color .15s,background .15s,box-shadow .15s;
+  }
+  .order-card.is-sel{
+    border-color:#2f6bff;background:#eaf2ff;
+    box-shadow:0 0 0 3px rgba(47,107,255,.13);
+  }
+  .order-card.is-right{border-color:#16a34a;background:#f0fdf4}
+  .order-card.is-wrong{border-color:#dc2626;background:#fef2f2}
+  .order-num{
+    flex:0 0 auto;width:22px;height:22px;border-radius:50%;
+    background:#eef4ff;color:#2f6bff;
+    font-size:12px;font-weight:800;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .order-card.is-right .order-num{background:#16a34a;color:#fff}
+  .order-card.is-wrong .order-num{background:#dc2626;color:#fff}
+  .order-txt{flex:1 1 auto;min-width:0}
 
   /* 对比卡片（窄屏也不会横向溢出） */
   .ict-cmp{display:flex;flex-direction:column;gap:10px;margin:4px 0 16px}
@@ -1530,15 +1692,15 @@ const CONFIG = {
             { t: `The CPU has three main internal components:` },
             { fig: "cpu", cap: "Fig 4.1 Inside the CPU — tap a block to see what it does." },
 
-            { t: `Arithmetic and Logic Unit (ALU)`, h: 3 },
+            { t: `Arithmetic and Logic Unit (ALU)`, h: 3, ico: "🧮" },
             { t: `Carries out arithmetic operations: addition (+), subtraction (−), multiplication (×), division (÷).` },
             { t: `Carries out logical operations: comparison (=, ≠, <, >, ≤, ≥), AND, OR, NOT.` },
 
-            { t: `Control Unit (CU)`, h: 3 },
+            { t: `Control Unit (CU)`, h: 3, ico: "🚦" },
             { t: `Controls how the ALU and other hardware respond to instructions.` },
             { t: `Controls the flow of data between the CPU, other components and devices.` },
 
-            { t: `Registers`, h: 3 },
+            { t: `Registers`, h: 3, ico: "📥" },
             { t: `Stores data and addresses that the ALU or CU is currently processing.` },
             { t: `Data can be read very quickly.` },
             { t: `Has a small storage capacity.` },
@@ -1558,21 +1720,30 @@ const CONFIG = {
                 ]
               }
             },
+            {
+              order: {
+                tag: "the CPU instruction cycle",
+                q: "Put these four steps in the order the CPU actually carries them out.",
+                items: ["Fetch", "Decode", "Execute", "Store"],
+                explain: "The CPU fetches the instruction from memory, decodes what it means, executes the operation, then stores the result back in a register or memory."
+              }
+            },
 
             { t: `4.2 Processing Power`, h: 2 },
             { t: `Three factors decide CPU processing power:` },
 
-            { t: `1. Number of cores`, h: 3 },
+            { t: `1. Number of cores`, h: 3, ico: "👥" },
             { t: `A CPU core is an independent processing unit inside the CPU.` },
             { t: `More cores allow more tasks to run at the same time.` },
             { t: `Multi-core CPUs are generally better at handling parallel processing.` },
 
-            { t: `2. Clock rate`, h: 3 },
+            { t: `2. Clock rate`, h: 3, ico: "⏱️" },
             { t: `Clock rate describes the processing speed of the CPU.` },
             { t: `Units: megahertz (MHz) or gigahertz (GHz).` },
             { t: `A higher clock rate means faster processing, but it also consumes more power.` },
+            { sim: "clock" },
 
-            { t: `3. Word length`, h: 3 },
+            { t: `3. Word length`, h: 3, ico: "📏" },
             { t: `Word length is the amount of data the CPU can process in one operation, measured in bits.` },
             { t: `Common for personal computers: 32 bits or 64 bits.` },
             { t: `A longer word length generally means faster processing.` },
@@ -1602,10 +1773,37 @@ const CONFIG = {
             { t: `Higher clock rate → higher processing speed.` },
             { t: `Longer word length → higher processing speed.` },
 
-            { t: `Broader Perspective — Cloud Computing`, h: 2 },
-            { t: `Cloud computing allows users to access servers, and the software and databases they contain, via the internet.` },
-            { t: `Users can easily run applications in the cloud without having to own or manage servers themselves.` },
-            { t: `Cloud computing plays an important role in generative AI by providing high-performance GPUs, vast amounts of storage space and computing power to run and train generative AI models.` }
+            { t: `Broader Perspective`, h: 2, ico: "☁️" },
+            {
+              acc: {
+                ico: "🌐",
+                title: "Explore: Cloud Computing",
+                lead: "Cloud computing allows users to access servers — and the software and databases they contain — via the internet.",
+                cols: [
+                  {
+                    tone: "local", ico: "💻", title: "Local Computing",
+                    points: [
+                      "Programs and files are stored on your own device.",
+                      "You buy the hardware once and own it.",
+                      "Works without an internet connection.",
+                      "Speed depends on your own CPU, RAM and storage.",
+                      "You handle updates, backups and repairs."
+                    ]
+                  },
+                  {
+                    tone: "cloud", ico: "☁️", title: "Cloud Computing",
+                    points: [
+                      "Programs and files are stored on servers in a data centre.",
+                      "You rent computing power and pay as you go.",
+                      "Needs an internet connection to reach the servers.",
+                      "Speed depends on your connection and the provider's servers.",
+                      "The provider handles updates, backups and repairs."
+                    ]
+                  }
+                ],
+                note: "You can run applications in the cloud without owning or managing servers yourself. Cloud computing also powers generative AI: it supplies the high-performance GPUs, vast storage space and computing power needed to train and run AI models."
+              }
+            }
           ]
         },
         {
@@ -2698,6 +2896,107 @@ function renderIctTry(spec) {
   </div>`;
 }
 
+/* ---------- ICT 笔记：折叠面板（默认收起） ---------- */
+function renderIctAccordion(spec) {
+  const cols = spec.cols || [];
+  return `<details class="ict-acc">
+    <summary class="ict-acc__sum">
+      <span class="ict-acc__label">
+        <span class="ict-acc__br" aria-hidden="true">[</span>
+        <span class="ict-acc__ico" aria-hidden="true">${spec.ico || "🌐"}</span>
+        <span class="ict-acc__t">${escapeHTML(spec.title || "Explore")}</span>
+        <span class="ict-acc__br" aria-hidden="true">]</span>
+      </span>
+      <span class="ict-acc__chev" aria-hidden="true">▾</span>
+    </summary>
+    <div class="ict-acc__body">
+      ${spec.lead ? `<p class="ict-acc__lead">${escapeHTML(spec.lead)}</p>` : ""}
+      <div class="cmp2">
+        ${cols.map((c) => `<div class="cmp2__card cmp2__card--${escapeHTML(c.tone || "local")}">
+          <div class="cmp2__head"><span class="cmp2__ico" aria-hidden="true">${c.ico || ""}</span><span>${escapeHTML(c.title || "")}</span></div>
+          <ul class="cmp2__list">${(c.points || []).map((p) => `<li>${escapeHTML(p)}</li>`).join("")}</ul>
+        </div>`).join("")}
+      </div>
+      ${spec.note ? `<p class="ict-acc__note">${escapeHTML(spec.note)}</p>` : ""}
+    </div>
+  </details>`;
+}
+
+/* ---------- ICT 笔记：时钟频率模拟器 ---------- */
+function renderClockSim() {
+  return `<div class="ict-try clock-sim" data-clocksim>
+    <div class="ict-try__head">⏱️ Clock rate simulator</div>
+    <div class="clock-sim__read">Current: <b data-ghz>3.5</b> GHz</div>
+    <input class="clock-sim__range" type="range" min="1" max="5" step="0.1" value="3.5"
+           data-range aria-label="Clock rate in gigahertz" aria-valuemin="1" aria-valuemax="5">
+    <div class="clock-sim__scale"><span>1.0 GHz</span><span>3.0</span><span>5.0 GHz</span></div>
+    <div class="clock-sim__track"><span class="clock-sim__flow"></span></div>
+    <div class="clock-sim__meta"><span data-flowtxt>Data flowing steadily</span><span data-ratio>1.0×</span></div>
+    <div class="clock-sim__heatrow">
+      <span class="clock-sim__heatlbl">🔥 Heat</span>
+      <div class="heat-bar"><span data-heat></span></div>
+    </div>
+    <p class="clock-sim__tip">Higher clock rate = faster processing, but generates more heat!</p>
+  </div>`;
+}
+
+function updateClockSim(wrap) {
+  const range = wrap.querySelector("[data-range]");
+  if (!range) return;
+  const ghz = Math.min(5, Math.max(1, parseFloat(range.value) || 3.5));
+  const out = wrap.querySelector("[data-ghz]");
+  if (out) out.textContent = ghz.toFixed(1);
+  const track = wrap.querySelector(".clock-sim__track");
+  if (track) track.style.setProperty("--dur", (2.6 / ghz).toFixed(2) + "s");
+  const ratio = wrap.querySelector("[data-ratio]");
+  if (ratio) ratio.textContent = ghz.toFixed(1) + "× base speed";
+  const heat = wrap.querySelector("[data-heat]");
+  if (heat) heat.style.width = Math.round(8 + ((ghz - 1) / 4) * 92) + "%";
+  const txt = wrap.querySelector("[data-flowtxt]");
+  if (txt) {
+    txt.textContent = ghz >= 4.2 ? "Data streaming — fast, but hot"
+      : ghz <= 1.6 ? "Data trickling slowly"
+      : "Data flowing steadily";
+  }
+}
+
+/* ---------- ICT 笔记：排序题（点击选中 → 点击目标交换） ---------- */
+function renderIctOrder(spec) {
+  const items = spec.items || [];
+  const keys = items.map((_, i) => i);
+  for (let i = keys.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [keys[i], keys[j]] = [keys[j], keys[i]];
+  }
+  if (items.length > 1 && keys.every((k, i) => k === i)) {
+    [keys[0], keys[1]] = [keys[1], keys[0]];
+  }
+  return `<div class="ict-try ict-order" data-ictorder data-init="${keys.join(",")}" data-explain="${escapeHTML(spec.explain || "")}">
+    <div class="ict-try__head">🔀 Put it in order — ${escapeHTML(spec.tag || "order the steps")}</div>
+    <p class="ict-try__q">${escapeHTML(spec.q || "")}</p>
+    <p class="try-sort__hint">Tap a card, then tap another card to swap them.</p>
+    <div class="order-list" data-orderlist>
+      ${keys.map((k, pos) => `<button class="order-card" type="button" data-key="${k}">
+        <span class="order-num">${pos + 1}</span>
+        <span class="order-txt">${escapeHTML(items[k])}</span>
+      </button>`).join("")}
+    </div>
+    <div class="try-actions">
+      <button class="try-btn" type="button" data-ordercheck>Check order</button>
+      <button class="try-btn try-btn--ghost" type="button" data-orderreset>Reset</button>
+      <span class="try-score" data-orderscore></span>
+    </div>
+    <div class="try-fb" data-fb></div>
+  </div>`;
+}
+
+function renumberOrder(list) {
+  [...list.querySelectorAll(".order-card")].forEach((c, i) => {
+    const n = c.querySelector(".order-num");
+    if (n) n.textContent = i + 1;
+  });
+}
+
 function renderIctTable(spec) {
   const head = spec.head || [];
   const rows = spec.rows || [];
@@ -2716,9 +3015,18 @@ function renderIctNote(item) {
   if (item.fig) return renderIctFig(item.fig, item.cap);
   if (item.try) return renderIctTry(item.try);
   if (item.tbl) return renderIctTable(item.tbl);
+  if (item.acc) return renderIctAccordion(item.acc);
+  if (item.order) return renderIctOrder(item.order);
+  if (item.sim === "clock") return renderClockSim();
   const t = (item.t || "").trim();
   const html = highlightTerms(escapeHTML(t));
   if (item.h === 1) return `<div class="text-h">${html}</div>`;
+  if ((item.h === 2 || item.h === 3) && item.ico) {
+    const cls = item.h === 2 ? "text-sub" : "text-sub3";
+    return `<div class="${cls} ${cls}--ico">
+      <span class="hd-ico" aria-hidden="true">${item.ico}</span><span class="hd-txt">${html}</span>
+    </div>`;
+  }
   if (item.h === 2) return `<div class="text-sub">${html}</div>`;
   if (item.h === 3) return `<div class="text-sub3">${html}</div>`;
   return `<p class="text-para">${html}</p>`;
@@ -3843,6 +4151,9 @@ function bindCommonEvents() {
   // Science 温度滑块
   document.querySelectorAll("#main .temp-slider").forEach(initTempSlider);
 
+  // ICT 时钟频率模拟器：初始化当前值 / 动画速度 / 热度
+  document.querySelectorAll("#main [data-clocksim]").forEach(updateClockSim);
+
   // Science 拖拽匹配游戏
   document.querySelectorAll("#main .match-game").forEach(initMatchGame);
 
@@ -4328,6 +4639,14 @@ function initQuizSet(root) {
 /* =========================================================================
    ICT 笔记：图示点选 + 小练习（事件委托，避免逐元素绑定）
    ========================================================================= */
+// 时钟频率滑杆：拖动时实时更新速度、数据流与热度
+document.addEventListener("input", (e) => {
+  const range = e.target.closest && e.target.closest("[data-range]");
+  if (!range) return;
+  const wrap = range.closest("[data-clocksim]");
+  if (wrap) updateClockSim(wrap);
+});
+
 document.addEventListener("click", (e) => {
   /* 1) 图示热区 */
   const hot = e.target.closest(".ict-hot");
@@ -4347,6 +4666,84 @@ document.addEventListener("click", (e) => {
     return;
   }
 
+  /* 1.5) 排序题：点卡片选中 → 点另一张卡片交换位置 */
+  const oCard = e.target.closest(".order-card");
+  if (oCard) {
+    const wrap = oCard.closest("[data-ictorder]");
+    const list = wrap && wrap.querySelector("[data-orderlist]");
+    if (list) {
+      // 任何一次手动调整都清掉上一次的判定结果
+      list.querySelectorAll(".order-card").forEach((c) => c.classList.remove("is-right", "is-wrong"));
+      const fb0 = wrap.querySelector("[data-fb]");
+      if (fb0) fb0.className = "try-fb";
+      const sc0 = wrap.querySelector("[data-orderscore]");
+      if (sc0) sc0.textContent = "";
+
+      if (oCard.classList.contains("is-sel")) {
+        oCard.classList.remove("is-sel");
+      } else {
+        const sel = list.querySelector(".order-card.is-sel");
+        if (!sel) {
+          oCard.classList.add("is-sel");
+        } else {
+          // 用一个占位节点完成两张卡的位置互换
+          const mark = document.createElement("span");
+          sel.parentNode.insertBefore(mark, sel);
+          oCard.parentNode.insertBefore(sel, oCard);
+          mark.parentNode.insertBefore(oCard, mark);
+          mark.remove();
+          sel.classList.remove("is-sel");
+          renumberOrder(list);
+        }
+      }
+    }
+    return;
+  }
+
+  const oCheck = e.target.closest("[data-ordercheck]");
+  if (oCheck) {
+    const wrap = oCheck.closest("[data-ictorder]");
+    const cards = [...wrap.querySelectorAll(".order-card")];
+    let right = 0;
+    cards.forEach((c, i) => {
+      const ok = Number(c.dataset.key) === i;
+      c.classList.remove("is-sel");
+      c.classList.toggle("is-right", ok);
+      c.classList.toggle("is-wrong", !ok);
+      if (ok) right++;
+    });
+    const fb = wrap.querySelector("[data-fb]");
+    const sc = wrap.querySelector("[data-orderscore]");
+    if (sc) sc.textContent = right + " / " + cards.length + " in the right place";
+    if (fb) {
+      const done = right === cards.length;
+      fb.className = "try-fb is-show " + (done ? "ok" : "no");
+      fb.innerHTML = (done ? "✅ <b>Perfect order.</b> " : "❌ <b>Not quite yet.</b> ") +
+        escapeHTML(wrap.getAttribute("data-explain") || "");
+      fb.scrollIntoView({ block: "nearest" });
+    }
+    return;
+  }
+
+  const oReset = e.target.closest("[data-orderreset]");
+  if (oReset) {
+    const wrap = oReset.closest("[data-ictorder]");
+    const list = wrap.querySelector("[data-orderlist]");
+    const init = (wrap.dataset.init || "").split(",").map(Number);
+    const map = new Map([...list.querySelectorAll(".order-card")].map((c) => [Number(c.dataset.key), c]));
+    list.innerHTML = "";
+    init.forEach((k) => {
+      const c = map.get(k);
+      if (c) { c.className = "order-card"; list.appendChild(c); }
+    });
+    renumberOrder(list);
+    const fb = wrap.querySelector("[data-fb]");
+    if (fb) { fb.className = "try-fb"; fb.innerHTML = ""; }
+    const sc = wrap.querySelector("[data-orderscore]");
+    if (sc) sc.textContent = "";
+    return;
+  }
+
   /* 2) 单选题：点一次即判定 */
   const opt = e.target.closest(".try-opt");
   if (opt) {
@@ -4359,6 +4756,12 @@ document.addEventListener("click", (e) => {
         const correct = wrap.querySelector('.try-opt[data-ans="1"]');
         if (correct) correct.classList.add("is-right");
       }
+      // 其余选项淡化，突出对错对比
+      wrap.querySelectorAll(".try-opt").forEach((o) => {
+        if (!o.classList.contains("is-right") && !o.classList.contains("is-wrong")) {
+          o.classList.add("is-dim");
+        }
+      });
       const fb = wrap.querySelector("[data-fb]");
       const explain = wrap.getAttribute("data-explain") || "";
       if (fb) {
