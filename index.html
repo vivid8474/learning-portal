@@ -980,17 +980,26 @@
   .mindmap-wrap{
     border:1px solid #e2e8f0;border-radius:16px;
     background:linear-gradient(180deg,#f9fafb 0%,#f1f5f9 100%);
-    padding:16px 18px;max-height:72vh;overflow:auto;
+    padding:16px 18px;
     box-shadow:0 3px 14px rgba(15,23,42,.06);
   }
-  .tree-legend{display:flex;gap:10px;flex-wrap:wrap;margin:0 0 8px}
+  .tree-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin:0 0 8px}
+  .tree-legend{display:flex;gap:10px;flex-wrap:wrap;margin:0}
   .tree-legend span{
     display:inline-flex;align-items:center;gap:6px;
     background:#fff;border:1px solid #e2e8f0;border-radius:999px;
     padding:3px 10px;font-size:12.5px;color:#475569;font-weight:700;
   }
   .tree-legend i{width:12px;height:12px;border-radius:4px;display:inline-block}
+  .tree-expand{
+    border:1px solid #cbd5e1;background:#fff;color:#334155;
+    font:inherit;font-size:12px;font-weight:750;cursor:pointer;
+    padding:4px 10px;border-radius:999px;min-height:32px;white-space:nowrap;
+    margin-left:auto;transition:background .15s,border-color .15s;
+  }
+  .tree-expand:hover{background:#eef2f7;border-color:#94a3b8}
   .t-hint{font-size:11.5px;color:#94a3b8;margin:0 0 12px}
+  .tree-game{margin-top:18px;padding-top:16px;border-top:2px dashed #d9e3f3}
   .tree,.tree ul{list-style:none;margin:0;padding:0}
   .tree ul{margin-left:18px;padding-left:15px;border-left:2px solid #d9e3f3}
   .tree li{margin:3px 0}
@@ -3615,8 +3624,8 @@ function renderTreeList(node) {
   if (!node.children.length) {
     return `<li data-branch="${branch}"${topAttr}><span class="t-leaf" style="${style}"><span class="t-ico">${icon}</span>${escapeHTML(node.label)}</span></li>`;
   }
-  const open = node.depth <= 2 ? " open" : "";
-  const focusAttr = node.depth === 1 ? ` data-focus="${branch}" title="Tap to focus this branch; tap again to show all"` : "";
+  const open = node.depth === 0 ? " open" : "";
+  const focusAttr = node.depth === 1 ? ` data-focus="${branch}" title="Tap to open and focus this branch"` : "";
   const main = node.depth === 1 ? (TREE_BRANCH[branch] || TREE_ROOT).main : "";
   const badge = node.depth === 1 ? `<span class="t-badge" style="background:${main}">${node.children.length}</span>` : "";
   const kids = node.children.map(renderTreeList).join("");
@@ -3625,31 +3634,72 @@ function renderTreeList(node) {
 
 function buildConceptTree(wrap) {
   const root = parseMmdTree(ICT_MINDMAP);
-  const legend = `<div class="tree-legend">
-    <span><i style="background:${TREE_BRANCH.hw.main}"></i>Hardware</span>
-    <span><i style="background:${TREE_BRANCH.sw.main}"></i>Software</span>
-  </div><p class="t-hint">Tap <b>Hardware</b> or <b>Software</b> to focus one branch; tap it again to show all. Tap any other node to fold it.</p>`;
-  wrap.innerHTML = legend + `<ul class="tree"><li>${renderTreeList(root)}</li></ul>`;
-  // 聚焦交互：捕获阶段拦截顶层分类点击，阻止折叠，改为高亮/变暗
+  const legend = `<div class="tree-bar">
+    <div class="tree-legend">
+      <span><i style="background:${TREE_BRANCH.hw.main}"></i>Hardware</span>
+      <span><i style="background:${TREE_BRANCH.sw.main}"></i>Software</span>
+    </div>
+    <button class="tree-expand" type="button" data-expandall aria-expanded="false">➕ Expand All</button>
+  </div>
+  <p class="t-hint">Tap <b>Hardware</b> or <b>Software</b> to open and focus a branch. Tap any other node to fold it.</p>`;
+  const game = `<div class="tree-game">${renderIctTry({
+    type: "sort",
+    tag: "Hardware or Software?",
+    q: "Sort these 8 items into the right box.",
+    bins: ["Hardware", "Software"],
+    items: [
+      { t: "🧠 CPU", bin: 0 },
+      { t: "⌨️ Keyboard", bin: 0 },
+      { t: "🖥️ Monitor", bin: 0 },
+      { t: "💾 SSD", bin: 0 },
+      { t: "🪟 Windows", bin: 1 },
+      { t: "📝 Word", bin: 1 },
+      { t: "🌐 Chrome", bin: 1 },
+      { t: "🎨 Photoshop", bin: 1 }
+    ]
+  })}</div>`;
+  wrap.innerHTML = legend + `<ul class="tree"><li>${renderTreeList(root)}</li></ul>` + game;
+
+  // 展开 / 收起全部
+  const expandBtn = wrap.querySelector("[data-expandall]");
+  if (expandBtn) {
+    expandBtn.addEventListener("click", () => {
+      const tree = wrap.querySelector("ul.tree");
+      const rootDetails = tree.querySelector(":scope > li > details");
+      const allOpen = [...tree.querySelectorAll("details")].every((d) => d.open);
+      if (allOpen) {
+        tree.querySelectorAll("details").forEach((d) => { d.open = false; });
+        if (rootDetails) rootDetails.open = true;
+      } else {
+        tree.querySelectorAll("details").forEach((d) => { d.open = true; });
+      }
+      tree.removeAttribute("data-focus");
+      tree.querySelectorAll(".node-focus,.node-dim").forEach((li) => li.classList.remove("node-focus", "node-dim"));
+      expandBtn.textContent = allOpen ? "➕ Expand All" : "➖ Collapse All";
+      expandBtn.setAttribute("aria-expanded", String(!allOpen));
+    });
+  }
+
+  // 顶层分类：点击正常开合，并根据开合状态联动聚焦高亮
   wrap.addEventListener("click", (e) => {
     const sum = e.target.closest("summary[data-focus]");
     if (!sum || !wrap.contains(sum)) return;
-    e.preventDefault();
-    e.stopPropagation();
     const key = sum.getAttribute("data-focus");
     const tree = wrap.querySelector("ul.tree");
-    if (tree.getAttribute("data-focus") === key) {
-      tree.removeAttribute("data-focus");
-      tree.querySelectorAll(".node-focus,.node-dim").forEach((li) => li.classList.remove("node-focus", "node-dim"));
-    } else {
-      tree.setAttribute("data-focus", key);
-      tree.querySelectorAll("li[data-top-branch]").forEach((li) => {
-        const on = li.getAttribute("data-top-branch") === key;
-        li.classList.toggle("node-focus", on);
-        li.classList.toggle("node-dim", !on);
-      });
-    }
-  }, true);
+    requestAnimationFrame(() => {
+      if (!sum.closest("details").open) {
+        tree.removeAttribute("data-focus");
+        tree.querySelectorAll(".node-focus,.node-dim").forEach((li) => li.classList.remove("node-focus", "node-dim"));
+      } else {
+        tree.setAttribute("data-focus", key);
+        tree.querySelectorAll("li[data-top-branch]").forEach((li) => {
+          const on = li.getAttribute("data-top-branch") === key;
+          li.classList.toggle("node-focus", on);
+          li.classList.toggle("node-dim", !on);
+        });
+      }
+    });
+  });
 }
 
 function toggleMindmap(btn) {
