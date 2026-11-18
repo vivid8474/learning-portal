@@ -2284,6 +2284,7 @@ function renderGrades() {
       renderGrades();
       renderNav();
       renderMain();
+      if (typeof syncRoute === "function") syncRoute();
       closeDrawer();
     });
     wrap.appendChild(btn);
@@ -2319,6 +2320,7 @@ function renderNav() {
         localStorage.setItem("activeSubject", item.id);
         renderNav();
         renderMain();
+        if (typeof syncRoute === "function") syncRoute();
         closeDrawer();
         window.scrollTo({ top: 0, behavior: "smooth" });
       });
@@ -4499,9 +4501,54 @@ window.addEventListener("resize", () => { if (window.innerWidth > 900) closeDraw
   if (!CONFIG.grades.includes(state.grade)) state.grade = CONFIG.defaultGrade;
   if (!findSubject(state.grade, state.subject)) state.subject = defaultSubjectFor(state.grade);
 })();
+
+/* —— 地址直达：#ict / #S1/ict / ?subject=ict&grade=S1 —— */
+function parseRoute() {
+  const hash = decodeURIComponent(location.hash.replace(/^#/, "")).trim();
+  if (hash) {
+    const parts = hash.split("/").filter(Boolean);
+    if (parts.length === 2) return { grade: parts[0], subject: parts[1] };
+    if (parts.length === 1) return { subject: parts[0] };
+  }
+  const q = new URLSearchParams(location.search);
+  const s = q.get("subject");
+  if (s) return { grade: q.get("grade") || "", subject: s };
+  return null;
+}
+
+function applyRoute() {
+  const r = parseRoute();
+  if (!r) return false;
+  const g = CONFIG.grades.includes((r.grade || "").toUpperCase())
+    ? r.grade.toUpperCase()
+    : state.grade;
+  const s = (r.subject || "").toLowerCase();
+  if (!findSubject(g, s)) return false;
+  const changed = state.grade !== g || state.subject !== s;
+  state.grade = g;
+  state.subject = s;
+  localStorage.setItem("activeGrade", g);
+  localStorage.setItem("activeSubject", s);
+  if (changed) {
+    renderGrades();
+    renderNav();
+    renderMain();
+    window.scrollTo({ top: 0 });
+  }
+  return true;
+}
+
+function syncRoute() {
+  const next = `#${state.grade}/${state.subject}`;
+  if (location.hash === next) return;
+  try { history.replaceState(null, "", next); } catch (e) { /* file:// 下忽略 */ }
+}
+
 renderGrades();
 renderNav();
 renderMain();
+applyRoute();
+window.addEventListener("hashchange", () => { applyRoute(); });
 $("#backdrop").hidden = true;
 </script>
 </body>
