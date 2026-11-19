@@ -1437,6 +1437,9 @@
     font-size:13.5px;
   }
   .btn--ghost:hover{background:#eaf2ff;border-color:#c9dcfb}
+  .btn--checkpoint{background:#eefaf3;border-color:#c6ebd6;color:#166534}
+  .btn--checkpoint:hover{background:#dcf5e7;border-color:#9ad9b6}
+  .text-body--checkpoint{border-color:#cbead9;background:#f6fdf9}
   .btn--block{width:100%}
 
   /* 批改区 */
@@ -2358,8 +2361,10 @@ const CONFIG = {
             {
               id: "gd-ch1",
               title: "Chapter 1 · Cloud & Google Drive",
-              expand: "📖 Expand Chapter 1 Notes",
+              expand: "📖 Chapter 1 Notes",
               collapse: "📖 Collapse Chapter 1 Notes",
+              checkpointExpand: "✅ Chapter 1 Checkpoint",
+              checkpointCollapse: "✅ Collapse Chapter 1 Checkpoint",
               notes: [
                 { t: `Part 1 · Knowledge Notes`, h: 1 },
 
@@ -2489,8 +2494,9 @@ const CONFIG = {
                     { t: "Online surveys", sub: "collect responses" },
                     { t: "Online presentations", sub: "slides" }
                   ]
-                } },
-
+                } }
+              ],
+              checkpoint: [
                 { t: `Checkpoint 1`, h: 2, ico: "✅" },
                 { t: `1. Google Drive is: (1) a storage platform (2) a platform where resources can be shared (3) a platform that requires the Internet to work collaboratively.` },
                 { try: {
@@ -2525,8 +2531,10 @@ const CONFIG = {
             {
               id: "gd-ch2",
               title: "Chapter 2 · Start Using Google Drive",
-              expand: "📖 Expand Chapter 2 Notes",
+              expand: "📖 Chapter 2 Notes",
               collapse: "📖 Collapse Chapter 2 Notes",
+              checkpointExpand: "✅ Chapter 2 Checkpoint",
+              checkpointCollapse: "✅ Collapse Chapter 2 Checkpoint",
               notes: [
                 { t: `Part 1 · Knowledge Notes`, h: 1 },
 
@@ -2577,16 +2585,6 @@ const CONFIG = {
                   options: ["OCR", "USB", "Drag and drop", "Revision history"],
                   answer: 0,
                   explain: "Optical Character Recognition (OCR) detects characters in an image and converts them into editable/searchable text."
-                } },
-                { t: `Checkpoint 2`, h: 2, ico: "✅" },
-                { t: `Which formats can be opened with Google Docs editors? (1) JPG (2) PDF (3) DOC (4) XLS.` },
-                { try: {
-                  type: "pick",
-                  tag: "Checkpoint 2",
-                  q: "Which combination is correct?",
-                  options: ["(1) and (2)", "(2) and (3)", "(1), (2) and (3)", "All of the above"],
-                  answer: 2,
-                  explain: "Google Docs editors can open JPG (as images), PDF and DOC, so (1), (2) and (3) are correct."
                 } },
 
                 { t: `2.4 Organising Files`, h: 2, ico: "🗂️" },
@@ -2657,6 +2655,18 @@ const CONFIG = {
                     ] }
                   ],
                   note: "Question: What is IFTTT and how does it work? Try explaining a trigger and an action to a classmate."
+                } }
+              ],
+              checkpoint: [
+                { t: `Checkpoint 2`, h: 2, ico: "✅" },
+                { t: `Which formats can be opened with Google Docs editors? (1) JPG (2) PDF (3) DOC (4) XLS.` },
+                { try: {
+                  type: "pick",
+                  tag: "Checkpoint 2",
+                  q: "Which combination is correct?",
+                  options: ["(1) and (2)", "(2) and (3)", "(1), (2) and (3)", "All of the above"],
+                  answer: 2,
+                  explain: "Google Docs editors can open JPG (as images), PDF and DOC, so (1), (2) and (3) are correct."
                 } }
               ]
             }
@@ -4778,6 +4788,7 @@ function renderIct(ict, name) {
       const key = ch.id || `ch${i + 1}`;
       const hasNotes = Array.isArray(ch.notes) && ch.notes.length > 0;
       const showNotes = !!ch.expand || hasNotes;
+      const hasCheckpoint = Array.isArray(ch.checkpoint) && ch.checkpoint.length > 0;
 
       const notesBlock = showNotes
         ? `
@@ -4789,6 +4800,19 @@ function renderIct(ict, name) {
         </button>
         <div class="text-body" id="ict-${key}" hidden>
           ${hasNotes ? ch.notes.map(renderIctNote).join("") : `<p class="chapter-empty">Notes content coming soon.</p>`}
+        </div>`
+        : "";
+
+      const checkpointBlock = hasCheckpoint
+        ? `
+        <button class="btn btn--ghost btn--toggle-text btn--checkpoint" type="button"
+                data-toggle="ict-${key}-checkpoint" aria-expanded="false"
+                data-expand="${escapeHTML(ch.checkpointExpand || `✅ ${ch.title} Checkpoint`)}"
+                data-collapse="${escapeHTML(ch.checkpointCollapse || `✅ Collapse ${ch.title} Checkpoint`)}">
+          ${escapeHTML(ch.checkpointExpand || `✅ ${ch.title} Checkpoint`)}
+        </button>
+        <div class="text-body text-body--checkpoint" id="ict-${key}-checkpoint" hidden>
+          ${ch.checkpoint.map(renderIctNote).join("")}
         </div>`
         : "";
 
@@ -4804,7 +4828,7 @@ function renderIct(ict, name) {
         </div>`
         : "";
 
-      const emptyNote = !showNotes && !ch.quiz
+      const emptyNote = !showNotes && !hasCheckpoint && !ch.quiz
         ? `<p class="chapter-empty">${escapeHTML(ch.title)} notes coming soon.</p>`
         : "";
 
@@ -4815,6 +4839,7 @@ function renderIct(ict, name) {
           <h3 class="chapter-title">${escapeHTML(ch.title)}</h3>
         </div>
         ${notesBlock}
+        ${checkpointBlock}
         ${quizBlock}
         ${emptyNote}
       </div>`;
