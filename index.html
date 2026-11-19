@@ -256,6 +256,35 @@
   .practice .btn{align-self:flex-start}
 
   /* ICT 章节卡片 */
+  /* ICT 教材切换标签 */
+  .book-tabs{
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+    gap:12px;margin:0 0 18px;
+  }
+  .book-tab{
+    display:flex;align-items:center;gap:12px;text-align:left;
+    min-height:72px;padding:12px 14px;
+    border:1.5px solid #dbe4f2;border-radius:14px;background:#fff;
+    font:inherit;cursor:pointer;transition:border-color .15s,background .15s,box-shadow .15s;
+  }
+  .book-tab:hover{border-color:#9db8e6;background:#f7faff}
+  .book-tab.is-active{
+    border-color:#2f6bff;background:linear-gradient(180deg,#f4f8ff,#eaf2ff);
+    box-shadow:0 2px 10px rgba(47,107,255,.12);
+  }
+  .book-tab__ico{
+    flex:0 0 auto;width:42px;height:42px;border-radius:11px;
+    background:#eef4ff;display:flex;align-items:center;justify-content:center;font-size:22px;
+  }
+  .book-tab.is-active .book-tab__ico{background:#dbe8ff}
+  .book-tab__txt{display:flex;flex-direction:column;gap:3px;min-width:0}
+  .book-tab__txt b{font-size:15px;color:#1e3a8a;line-height:1.25}
+  .book-tab__txt small{font-size:11.8px;color:#64748b;line-height:1.45}
+  @media(max-width:480px){
+    .book-tabs{grid-template-columns:1fr;gap:10px}
+    .book-tab{min-height:66px}
+  }
+
   .chapters{display:flex;flex-direction:column;gap:14px}
   .chapter-card{
     border:1px solid var(--line);border-radius:14px;
@@ -1812,7 +1841,17 @@ const CONFIG = {
   ictByGrade: {
     S1: {
       title: "ICT Exam Revision (S1)",
-      chapters: [
+      // 教材层级：一个年级可有多本课本，每本课本下再分章节
+      books: [
+        {
+          id: "exam-revision",
+          name: "ICT Exam Revision",
+          short: "Exam Revision",
+          icon: "📘",
+          tone: "bookA",
+          mindmap: true,
+          desc: "Computer systems, memory, storage and software — exam-focused revision notes.",
+          chapters: [
         {
           id: "ch4",
           title: "Chapter 4",
@@ -2300,7 +2339,330 @@ const CONFIG = {
             { t: `Layered structure (from top to bottom): User → Application software → System software → Hardware.` }
           ]
         }
-      ]
+          ] // end chapters of book: exam-revision
+        }, // end book: exam-revision
+
+        /* ============================================================
+           第二本教材：The New Era of ICT — Google Drive for Project Learning
+           来源：The New Era of ICT (2026 Edition) · Chapter 1–2
+           ============================================================ */
+        {
+          id: "new-era",
+          name: "The New Era of ICT",
+          short: "New Era · Google Drive",
+          icon: "☁️",
+          tone: "bookB",
+          mindmap: false,
+          desc: "Cloud storage, collaboration and Google Drive — Google Drive for Project Learning (2026 Edition).",
+          chapters: [
+            {
+              id: "gd-ch1",
+              title: "Chapter 1 · Cloud & Google Drive",
+              expand: "📖 Expand Chapter 1 Notes",
+              collapse: "📖 Collapse Chapter 1 Notes",
+              notes: [
+                { t: `Part 1 · Knowledge Notes`, h: 1 },
+
+                { t: `Learning Objectives`, h: 2 },
+                { t: `Recognise cloud storage and cloud collaboration.` },
+                { t: `Understand how Google Drive helps in project management as a cloud collaboration tool.` },
+                { t: `Identify Google Drive and Google Docs editors.` },
+                { t: `Describe the differences between traditional and web-based applications.` },
+
+                { t: `Activity 1.1 — Ken loses his digital documents`, h: 2, ico: "⚠️" },
+                { t: `Ken is doing homework with a word-processing software. Suddenly, his computer crashes, but he has not saved the file. He tries to recover it, but the autosave file has been damaged.` },
+                { t: `Discuss with your classmates: give Ken some suggestions to avoid data loss.` },
+                {
+                  try: {
+                    type: "pick",
+                    tag: "avoid data loss",
+                    q: "Which suggestion best protects Ken's work from a sudden computer crash?",
+                    options: [
+                      "Rename the file every hour",
+                      "Save a backup copy on cloud storage such as Google Drive",
+                      "Make the monitor brighter",
+                      "Close all other programs"
+                    ],
+                    answer: 1,
+                    explain: "Cloud storage keeps a copy of the file on remote servers and syncs it automatically, so a local crash will not lose the work. Renaming files or changing the monitor does not create a backup."
+                  }
+                },
+
+                { t: `1.1 Cloud Storage`, h: 2, ico: "☁️" },
+                { t: `Cloud storage refers to the storage of data on multiple virtual servers hosted by a third party. Users can access, manage and share data on the Internet anytime and anywhere.` },
+                { tbl: {
+                  head: ["", "Cloud storage"],
+                  rows: [
+                    ["Accessibility", "Data can be accessed anywhere and anytime via the Internet."],
+                    ["Maintenance", "Easier to maintain — users do not install applications on every computer; the provider handles maintenance."],
+                    ["Multi-tenancy", "Resources can be shared among many users."]
+                  ]
+                } },
+                { t: `Cloud storage services include Google Drive, Dropbox, MEGA and Microsoft OneDrive.` },
+                { try: {
+                  type: "pick",
+                  tag: "cloud storage characteristics",
+                  q: "Which is NOT a key characteristic of cloud storage?",
+                  options: [
+                    "Data can be accessed anywhere via the Internet",
+                    "Users must install the application on every computer",
+                    "Resources can be shared (multi-tenancy)",
+                    "Maintenance is handled by the provider"
+                  ],
+                  answer: 1,
+                  explain: "Cloud storage runs on the provider's servers, so users do NOT need to install the application on every computer — that is exactly one of its advantages."
+                } },
+                { acc: {
+                  ico: "🌐",
+                  title: "Explore: Cloud Computing",
+                  lead: "Cloud storage is built on cloud computing. Read on to see how the two relate.",
+                  cols: [
+                    { tone: "local", ico: "🖥️", title: "Traditional / local", points: [
+                      "Files stored on your own device",
+                      "Software installed on each computer",
+                      "Access only from that device",
+                      "You handle maintenance and backups"
+                    ] },
+                    { tone: "cloud", ico: "☁️", title: "Cloud computing", points: [
+                      "Data stored on virtual servers of a third party",
+                      "Accessed anytime, anywhere via the Internet",
+                      "Resources shared (multi-tenancy)",
+                      "Provider maintains the service"
+                    ] }
+                  ],
+                  note: "Cloud computing powers services such as Google Drive — you use the storage without owning the servers."
+                } },
+
+                { t: `1.2 Cloud Collaboration`, h: 2, ico: "🤝" },
+                { t: `Cloud collaboration is a way of sharing and co-authoring computer files through the cloud. Documents are uploaded to a central cloud for storage, which others can then access.` },
+                { t: `Activity 1.2 — Project Collaboration`, h: 3, ico: "👥" },
+                { t: `A group of students are working on a project. They suggest sharing work by passing a USB drive, or emailing documents back and forth. Discuss the advantages and disadvantages, then think of a better way.` },
+                { try: {
+                  type: "sort",
+                  big: false,
+                  tag: "better way to collaborate?",
+                  q: "Sort each method by whether it supports real-time cloud collaboration.",
+                  bins: ["☁️ Cloud collaboration", "📁 Traditional sharing"],
+                  items: [
+                    { t: "Edit one shared doc together", ico: "📝", bin: 0 },
+                    { t: "Files on a central cloud", ico: "☁️", bin: 0 },
+                    { t: "Pass a USB drive around", ico: "💾", bin: 1 },
+                    { t: "Email files to each other", ico: "📧", bin: 1 }
+                  ]
+                } },
+
+                { t: `1.3 Google Drive and Google Docs Editors`, h: 2, ico: "📁" },
+                { t: `Google Drive is a cloud storage service that lets users store files in the cloud, synchronise files across devices and share files with others.` },
+                { t: `Google Docs editors include Google Docs, Google Sheets, Google Forms, Google Slides and Google Drawings. Together they form an office suite that can be integrated with Google Drive, letting users create and edit files with others online.` },
+                { vs: {
+                  tag: "Microsoft Office vs Google Docs editors",
+                  q: "How does a web-based office suite compare with installed software?",
+                  left: { tone: "a", ico: "🖥️", title: "Microsoft Office 2013", tagline: "Installed software", rows: [
+                    ["Where", "Restricted to local storage"],
+                    ["Editing", "Cannot edit data at the same time"],
+                    ["Revision history", "Limited"],
+                    ["Add-ins", "Functional add-ins can be installed"],
+                    ["Storage", "Depends on local storage"],
+                    ["Cost", "Expensive"]
+                  ] },
+                  right: { tone: "b", ico: "🌐", title: "Google Docs editors", tagline: "Web-based", rows: [
+                    ["Where", "Anywhere (phones, tablets, computers)"],
+                    ["Editing", "Multiple users can edit together"],
+                    ["Revision history", "Can check revision history"],
+                    ["Add-ins", "Functional add-ons can be installed"],
+                    ["Storage", "15 GB free online storage"],
+                    ["Cost", "Free / paid plans"]
+                  ] }
+                } },
+                { pair: {
+                  tag: "match the editor to its job",
+                  q: "Match each Google Docs editor with what it is mainly used for.",
+                  left: [
+                    { type: "Reports & proposals", ico: "📄", t: "Google Docs", sub: "documents" },
+                    { type: "Accounting & statistics", ico: "📊", t: "Google Sheets", sub: "spreadsheets" },
+                    { type: "Online surveys", ico: "📋", t: "Google Forms", sub: "surveys" },
+                    { type: "Online presentations", ico: "🖼️", t: "Google Slides", sub: "presentations" }
+                  ],
+                  right: [
+                    { t: "Reports & proposals", sub: "write documents" },
+                    { t: "Accounting & statistics", sub: "charts & data" },
+                    { t: "Online surveys", sub: "collect responses" },
+                    { t: "Online presentations", sub: "slides" }
+                  ]
+                } },
+
+                { t: `Checkpoint 1`, h: 2, ico: "✅" },
+                { t: `1. Google Drive is: (1) a storage platform (2) a platform where resources can be shared (3) a platform that requires the Internet to work collaboratively.` },
+                { try: {
+                  type: "pick",
+                  tag: "Checkpoint 1 · Q1",
+                  q: "Which combination is correct for Google Drive?",
+                  options: ["(1) and (2)", "(1) and (3)", "(2) and (3)", "All of the above"],
+                  answer: 3,
+                  explain: "Google Drive is all three: it stores files, lets people share resources, and needs the Internet for online collaboration. So the answer is 'All of the above'."
+                } },
+                { t: `2. What is/are the advantage(s) of Google Drive? (1) accessible anywhere (2) unlimited free storage for every user (3) autosave can prevent data loss (4) works with other apps for project collaboration.` },
+                { try: {
+                  type: "pick",
+                  tag: "Checkpoint 1 · Q2",
+                  q: "Which combination lists the correct advantages?",
+                  options: ["(1) and (2)", "(3) and (4)", "(1), (2) and (4)", "(1), (3) and (4)"],
+                  answer: 3,
+                  explain: "Google Drive is accessible anywhere (1), autosave prevents data loss (3), and supports project collaboration (4). Storage is NOT unlimited — only 15 GB is free — so statement (2) is false."
+                } },
+                { t: `3. Which statements are true? (1) Google Docs editors is an office suite usable alongside Google Drive (2) Google Docs editors are software installed on computers (3) functional add-ins can be installed.` },
+                { try: {
+                  type: "pick",
+                  tag: "Checkpoint 1 · Q3",
+                  q: "Which combination of statements is true?",
+                  options: ["(1) and (2)", "(1) and (3)", "(2) and (3)", "All of the above"],
+                  answer: 1,
+                  explain: "Google Docs editors are web-based (not installed on computers) and add-ins can be installed, so (1) and (3) are true while (2) is false."
+                } }
+              ]
+            },
+
+            {
+              id: "gd-ch2",
+              title: "Chapter 2 · Start Using Google Drive",
+              expand: "📖 Expand Chapter 2 Notes",
+              collapse: "📖 Collapse Chapter 2 Notes",
+              notes: [
+                { t: `Part 1 · Knowledge Notes`, h: 1 },
+
+                { t: `Learning Objectives`, h: 2 },
+                { t: `Create a Google account.` },
+                { t: `Describe the basic functions of Google Drive.` },
+                { t: `Distinguish add-ons and extensions.` },
+                { t: `Apply Optical Character Recognition (OCR).` },
+
+                { t: `Three ways to use Google Drive`, h: 2, ico: "🚀" },
+                { t: `1. Use a browser and go to drive.google.com.` },
+                { t: `2. Install the app for Android or iPhone/iPad.` },
+                { t: `3. Install the desktop app to automatically sync the computer with Google Drive online.` },
+                { t: `Any changes made to files in the Google Drive app on your computer are synchronised to My Drive on the cloud — share, move, edit or remove a file locally, and the changes appear on My Drive at the next sync.` },
+
+                { t: `2.1 Creating a Google Account`, h: 2, ico: "👤" },
+                { t: `To use Google Drive, create a Google account first: open a new tab in Google Chrome, go to the "Create your Google Account" page, and enter your name and other details.` },
+
+                { t: `2.2 Creating Files`, h: 2, ico: "➕" },
+                { t: `Click New, then choose Google Docs / Google Sheets / Google Slides / Google Forms to create a new file. Click "Untitled document" to rename it (e.g. "Group Project Report").` },
+                { t: `Offline Access`, h: 3, ico: "📴" },
+                { t: `Scenario: your travelling time is 1 hour and you want to work on your homework without an Internet connection. Follow the steps in the video to make the "Group Project Report" file available offline.` },
+                { try: {
+                  type: "pick",
+                  tag: "offline access",
+                  q: "What must you do first to edit a Google Doc during a 1-hour trip with no Internet?",
+                  options: [
+                    "Print the document before leaving",
+                    "Turn on offline access for that file beforehand",
+                    "Rename the file",
+                    "Share the file with a classmate"
+                  ],
+                  answer: 1,
+                  explain: "Offline access must be enabled while you are still online, so the file is cached on your device for editing without a connection."
+                } },
+
+                { t: `2.3 Uploading Files and Folders`, h: 2, ico: "⬆️" },
+                { t: `Go to Google Drive, open the target folder, then click New → File upload. You may upload more than one file at a time. You can also upload files or folders by dragging them into Google Drive.` },
+                { t: `Convert Office Files to Google Files`, h: 3, ico: "🔄" },
+                { t: `Drive can convert Microsoft Office files into Google Docs, Sheets or Slides. Right-click the file → Open with → Google Docs. For example, convert "Proposal Guidelines.doc" into a Google Docs file.` },
+                { t: `Optical Character Recognition (OCR)`, h: 3, ico: "🔍" },
+                { t: `PDF files and images are often difficult to edit directly. OCR is a technology that converts scanned documents and images into editable or searchable text. When an image is scanned, OCR recognises the text or characters in it.` },
+                { t: `Activity 2.3 — Install the Google Drive app and scan a printed text with your phone camera, then convert it to a Google Docs file. (This feature is only available in the mobile app on Android and iOS; the web version does not provide scanning.)` },
+                { try: {
+                  type: "pick",
+                  tag: "OCR",
+                  q: "You have a scanned photo of a printed page. Which technology turns the picture into editable text?",
+                  options: ["OCR", "USB", "Drag and drop", "Revision history"],
+                  answer: 0,
+                  explain: "Optical Character Recognition (OCR) detects characters in an image and converts them into editable/searchable text."
+                } },
+                { t: `Checkpoint 2`, h: 2, ico: "✅" },
+                { t: `Which formats can be opened with Google Docs editors? (1) JPG (2) PDF (3) DOC (4) XLS.` },
+                { try: {
+                  type: "pick",
+                  tag: "Checkpoint 2",
+                  q: "Which combination is correct?",
+                  options: ["(1) and (2)", "(2) and (3)", "(1), (2) and (3)", "All of the above"],
+                  answer: 2,
+                  explain: "Google Docs editors can open JPG (as images), PDF and DOC, so (1), (2) and (3) are correct."
+                } },
+
+                { t: `2.4 Organising Files`, h: 2, ico: "🗂️" },
+                { t: `Rename a file: right-click → Rename → enter a new name → OK.` },
+                { t: `Create a folder: click New → New folder → enter a name → Create.` },
+                { t: `Move a file or folder: right-click → Organise → Move → choose or create a folder → Move here. You can also drag an item into another folder.` },
+                { t: `Delete a file or folder: right-click → Move to bin.` },
+                { t: `Add important items to Starred: right-click → Organise → Add to Starred, then find them under Starred.` },
+                { t: `Activity 2.4 — File Manager`, h: 3, ico: "🤖" },
+                { t: `As your Drive fills up, ask Gemini to find files for you: set it to Thinking mode, then type @Google Drive and describe the file you are looking for.` },
+
+                { t: `2.5 Sharing Files`, h: 2, ico: "🔗" },
+                { t: `When you share a file, choose the sharing permission:` },
+                { tbl: {
+                  head: ["Role", "What they can do"],
+                  rows: [
+                    ["Viewer", "Open the file but cannot change or comment."],
+                    ["Commenter", "View and comment, but cannot make changes."],
+                    ["Editor", "Make changes and share with others (default for sharing with specific people)."]
+                  ]
+                } },
+                { t: `Two ways to share: Share with specific people (type their email, choose a role, send) or get a shareable link (copy link, set general access to Restricted or Anyone with the link, and choose Viewer / Commenter / Editor).` },
+                { pair: {
+                  tag: "match the permission",
+                  q: "Match each permission to what the person is allowed to do.",
+                  left: [
+                    { type: "Can view only", ico: "👁️", t: "Viewer", sub: "see only" },
+                    { type: "Can view and comment", ico: "💬", t: "Commenter", sub: "view + comment" },
+                    { type: "Can edit and share", ico: "✏️", t: "Editor", sub: "full access" }
+                  ],
+                  right: [
+                    { t: "Can edit and share", sub: "most access" },
+                    { t: "Can view only", sub: "least access" },
+                    { t: "Can view and comment", sub: "no edits" }
+                  ]
+                } },
+                { try: {
+                  type: "pick",
+                  tag: "sharing decision",
+                  q: "Eric wants to share many files with one classmate quickly. Which method is best?",
+                  options: [
+                    "Select the files and share with specific people one by one",
+                    "Put the files in a folder and share the folder's link",
+                    "Print the files and hand them over",
+                    "Rename every file"
+                  ],
+                  answer: 1,
+                  explain: "Sharing a folder (or a shareable link) gives access to all files inside at once — much quicker than sharing each file individually."
+                } },
+
+                { t: `2.6 Add-ons and Extensions`, h: 2, ico: "🧩" },
+                { t: `Add-ons are tools built by third parties using Google Apps Script. Install them to add more functions to Google Docs, Sheets, Forms and Slides — for example, adding menus, sidebars, editing by programming, or connecting to other Google services. Add-ons are not available on Google Drawings.` },
+                { t: `Google Chrome Extensions are small programs that modify and enhance Chrome's functionality, giving Google Drive more features (e.g. create an instant poll, remotely control Google Slides).` },
+                { acc: {
+                  ico: "🔌",
+                  title: "Explore: Using IFTTT with Google Drive",
+                  lead: "IFTTT (If This, Then That) is a website and app that connects different services to automate repetitive tasks.",
+                  cols: [
+                    { tone: "local", ico: "⚡", title: "How it works", points: [
+                      "Applets combine a trigger and an action",
+                      "Example: auto-save a tagged Facebook photo to Drive",
+                      "Many ready-made combinations"
+                    ] },
+                    { tone: "cloud", ico: "☁️", title: "Why it matters", points: [
+                      "Connects your favourite websites and apps",
+                      "Completes repetitive tasks automatically",
+                      "Works together with cloud storage like Drive"
+                    ] }
+                  ],
+                  note: "Question: What is IFTTT and how does it work? Try explaining a trigger and an action to a classmate."
+                } }
+              ]
+            }
+          ] // end chapters of book: new-era
+        } // end book: new-era
+      ] // end books
     }
   },
 
@@ -2615,7 +2977,8 @@ const PROMPT_TEMPLATE = {
    ========================================================================= */
 const state = {
   grade: localStorage.getItem("activeGrade") || CONFIG.defaultGrade,
-  subject: localStorage.getItem("activeSubject") || "chinese"
+  subject: localStorage.getItem("activeSubject") || "chinese",
+  ictBook: localStorage.getItem("activeIctBook") || "" // 当前 ICT 教材 id，空表示默认第一本
 };
 
 const $  = (sel, root = document) => root.querySelector(sel);
@@ -4393,7 +4756,24 @@ function toggleMindmap(btn) {
 
 /* ---------- ICT 科页面 ---------- */
 function renderIct(ict, name) {
-  const chapters = (ict.chapters || [])
+  // —— 教材层级：从 books 中挑选当前教材 ——
+  const books = Array.isArray(ict.books) && ict.books.length
+    ? ict.books
+    : [{ id: "default", name: ict.title, icon: "📘", chapters: ict.chapters || [] }];
+  let book = books.find((b) => b.id === state.ictBook) || books[0];
+  if (!state.ictBook) state.ictBook = book.id;
+
+  const bookTabs = books.length > 1
+    ? `<div class="book-tabs" role="tablist" aria-label="Choose a textbook">
+        ${books.map((b) => `<button class="book-tab${b.id === book.id ? " is-active" : ""}" type="button"
+            role="tab" aria-selected="${b.id === book.id}" data-book="${escapeHTML(b.id)}">
+            <span class="book-tab__ico" aria-hidden="true">${b.icon || "📘"}</span>
+            <span class="book-tab__txt"><b>${escapeHTML(b.short || b.name)}</b><small>${escapeHTML(b.desc || "")}</small></span>
+          </button>`).join("")}
+      </div>`
+    : "";
+
+  const chapters = (book.chapters || [])
     .map((ch, i) => {
       const key = ch.id || `ch${i + 1}`;
       const hasNotes = Array.isArray(ch.notes) && ch.notes.length > 0;
@@ -4443,32 +4823,34 @@ function renderIct(ict, name) {
 
   return `
   <div class="page-head">
-    <div class="crumb">${escapeHTML(state.grade)} <span aria-hidden="true">/</span> <b>${escapeHTML(name)}</b></div>
-    <h1 class="page-title">${escapeHTML(ict.title)}</h1>
-    <p class="page-desc">Interactive revision notes · quizzes · exam practice</p>
+    <div class="crumb">${escapeHTML(state.grade)} <span aria-hidden="true">/</span> <b>${escapeHTML(name)}</b> <span aria-hidden="true">/</span> <b>${escapeHTML(book.name)}</b></div>
+    <h1 class="page-title">${escapeHTML(book.name)}</h1>
+    <p class="page-desc">${escapeHTML(book.desc || "Interactive revision notes · quizzes · exam practice")}</p>
     <div class="page-actions">
       <a class="btn btn--primary" href="s1-ict-quiz.html" data-keep-share target="_blank" rel="noopener noreferrer">
         🚀 Start S1 ICT Chapter Quiz <span class="btn__arrow">↗</span>
       </a>
     </div>
   </div>
+  ${bookTabs}
   <div class="cards">
     <section class="card card--wide">
       <div class="card__head">
-        <div class="card__icon">💻</div>
+        <div class="card__icon">${book.icon || "💻"}</div>
         <div class="card__titles">
-          <h2 class="card__title">${escapeHTML(ict.title)}</h2>
+          <h2 class="card__title">${escapeHTML(book.name)}</h2>
           <p class="card__sub">Revision notes & interactive quizzes</p>
         </div>
       </div>
       <div class="card__body">
+        ${book.mindmap !== false ? `
         <div class="mindmap-block">
           <button class="btn btn--ghost btn--mindmap" type="button"
                   data-mindmap="ict-mindmap" aria-expanded="false">
             🗺️ Show Concept Map
           </button>
           <div class="mindmap-wrap" id="ict-mindmap" hidden></div>
-        </div>
+        </div>` : ""}
         <div class="chapters">${chapters}</div>
       </div>
     </section>
@@ -4476,6 +4858,19 @@ function renderIct(ict, name) {
 }
 
 function bindCommonEvents() {
+  // ICT 教材切换：保存选择 → 重渲染 → 同步路由
+  document.querySelectorAll("#main [data-book]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const id = btn.getAttribute("data-book");
+      if (!id || id === state.ictBook) return;
+      state.ictBook = id;
+      localStorage.setItem("activeIctBook", id);
+      renderMain();
+      if (typeof syncRoute === "function") syncRoute();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+  });
+
   document.querySelectorAll("#main [data-copy]").forEach((btn) => {
     bindCopy(btn, btn.getAttribute("data-copy"), "已复制 ✓");
   });
@@ -5375,12 +5770,13 @@ function parseRoute() {
   const hash = decodeURIComponent(location.hash.replace(/^#/, "")).trim();
   if (hash) {
     const parts = hash.split("/").filter(Boolean);
+    if (parts.length === 3) return { grade: parts[0], subject: parts[1], book: parts[2] };
     if (parts.length === 2) return { grade: parts[0], subject: parts[1] };
     if (parts.length === 1) return { subject: parts[0] };
   }
   const q = new URLSearchParams(location.search);
   const s = q.get("subject");
-  if (s) return { grade: q.get("grade") || "", subject: s };
+  if (s) return { grade: q.get("grade") || "", subject: s, book: q.get("book") || "" };
   return null;
 }
 
@@ -5397,7 +5793,20 @@ function applyRoute() {
     if (!alt) return false;
     g = alt;
   }
-  const changed = state.grade !== g || state.subject !== s;
+  // 教材段：仅当路由明确给出且该教材存在时才切换，兼容旧的 #S1/ict 两段链接
+  let bookChanged = false;
+  if (s === "ict" && r.book) {
+    const ictData = CONFIG.ictByGrade[g];
+    const valid = ictData && (Array.isArray(ictData.books)
+      ? ictData.books.some((b) => b.id === r.book)
+      : false);
+    if (valid && state.ictBook !== r.book) {
+      state.ictBook = r.book;
+      localStorage.setItem("activeIctBook", r.book);
+      bookChanged = true;
+    }
+  }
+  const changed = state.grade !== g || state.subject !== s || bookChanged;
   state.grade = g;
   state.subject = s;
   localStorage.setItem("activeGrade", g);
@@ -5413,7 +5822,8 @@ function applyRoute() {
 }
 
 function syncRoute() {
-  const next = `#${state.grade}/${state.subject}`;
+  let next = `#${state.grade}/${state.subject}`;
+  if (state.subject === "ict" && state.ictBook) next += `/${state.ictBook}`;
   if (location.hash === next) return;
   try { history.replaceState(null, "", next); } catch (e) { /* file:// 下忽略 */ }
 }
