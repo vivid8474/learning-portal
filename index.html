@@ -2743,6 +2743,8 @@ const CONFIG = {
     S1: {
       title: "Western History (S1)",
       book: "Journey Through History · Topic 2 — The Development of European Civilisation",
+      bankFile: "s1-history-question-bank.html",
+      bankDesc: "104 questions · 40 knowledge points · random papers, online answering and auto-grading",
       guiding: [
         "How do historians divide Ancient Times and Medieval Times in European history?",
         "When did Classical Civilisation emerge in Europe? What were its key features?",
@@ -5247,7 +5249,10 @@ function renderHistory(hist, name) {
       </div>`;
   }).join("");
 
-  const view = state.histView === "bank" ? "bank" : "notes";
+  // 题库文件由年级数据决定；未配置题库的年级自动隐藏 Question Bank 标签
+  const hasBank = !!hist.bankFile;
+  const view = (state.histView === "bank" && hasBank) ? "bank" : "notes";
+  const bankSrc = escapeHTML(hist.bankFile || "");
   return `
   <div class="page-head">
     <div class="crumb">${escapeHTML(state.grade)} <span aria-hidden="true">/</span> <b>${escapeHTML(name)}</b></div>
@@ -5258,8 +5263,8 @@ function renderHistory(hist, name) {
   <div class="hist-tabs" role="tablist" aria-label="Western History sections">
     <button class="hist-tab${view === "notes" ? " is-active" : ""}" type="button" role="tab"
             aria-selected="${view === "notes"}" data-hist-view="notes">📖 Notes</button>
-    <button class="hist-tab${view === "bank" ? " is-active" : ""}" type="button" role="tab"
-            aria-selected="${view === "bank"}" data-hist-view="bank">🎲 Question Bank</button>
+    ${hasBank ? `<button class="hist-tab${view === "bank" ? " is-active" : ""}" type="button" role="tab"
+            aria-selected="${view === "bank"}" data-hist-view="bank">🎲 Question Bank</button>` : ""}
   </div>
 
   <div class="hist-view" id="histViewNotes" ${view === "notes" ? "" : "hidden"}>
@@ -5280,23 +5285,23 @@ function renderHistory(hist, name) {
     </div>
   </div>
 
-  <div class="hist-view" id="histViewBank" ${view === "bank" ? "" : "hidden"}>
+  ${hasBank ? `<div class="hist-view" id="histViewBank" ${view === "bank" ? "" : "hidden"}>
     <section class="card card--wide hist-bank-card">
       <div class="card__body">
         <div class="hist-bank-bar">
           <div>
             <h2 class="hist-bank-title">🎲 Question Bank</h2>
-            <p class="hist-bank-sub">104 questions · 40 knowledge points · random papers, online answering and auto-grading</p>
+            <p class="hist-bank-sub">${escapeHTML(hist.bankDesc || "")}</p>
           </div>
-          <a class="btn btn--ghost hist-bank-open" href="history_question_bank.html" target="_blank" rel="noopener">↗ Open in new tab</a>
+          <a class="btn btn--ghost hist-bank-open" href="${bankSrc}" target="_blank" rel="noopener">↗ Open in new tab</a>
         </div>
         <div class="hist-bank-frame-wrap">
-          <iframe class="hist-bank-frame" id="histBankFrame" src="history_question_bank.html"
-                  title="Western History Question Bank" loading="lazy"></iframe>
+          <iframe class="hist-bank-frame" id="histBankFrame" src="${bankSrc}"
+                  title="${escapeHTML(hist.title || "Western History")} Question Bank" loading="lazy"></iframe>
         </div>
       </div>
     </section>
-  </div>`;
+  </div>` : ""}`;
 }
 
 function renderIct(ict, name) {
