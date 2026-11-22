@@ -5230,7 +5230,7 @@ function renderHistory(hist, name) {
       : "";
 
     const empty = !hasNotes && !hasCp
-      ? `<p class="chapter-empty">📕 ${escapeHTML(ch.pages || "")} · Notes coming soon — 该章节图片未提供，内容待补充</p>`
+      ? `<p class="chapter-empty">📕 ${escapeHTML(ch.pages || "")} · Notes coming soon — no textbook pages available for this chapter yet</p>`
       : "";
 
     const num = String(ch.title || "").match(/\d+/)?.[0] || (i + 1);
