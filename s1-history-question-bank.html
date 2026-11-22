@@ -399,7 +399,7 @@ function gradePaper(){
 
 // ---------- Browse by chapter ----------
 let bState={ch:new Set(DATA.chapters.map(c=>c.id)),lv:new Set(['easy','core','hard'])};
-makeChips(document.getElementById('bChChips'),DATA.chapters.map(c=>({key:c.id,label:c.ch})),null,s=>{bState.ch=new Set(s);renderBrowse();});
+makeChips(document.getElementById('bChChips'),DATA.chapters.map(c=>({key:c.id,label:c.ch})),{actions:true},s=>{bState.ch=new Set(s);renderBrowse();});
 makeLvChips(document.getElementById('bLvChips'),s=>{bState.lv=new Set(s);renderBrowse();});
 function renderBrowse(){
   const list=ALLQ.filter(q=>bState.ch.has(q.chId)&&bState.lv.has(q.lv));
