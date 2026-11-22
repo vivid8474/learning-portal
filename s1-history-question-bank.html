@@ -24,6 +24,9 @@ header.hero .wrap{padding-bottom:0}
 .chip{cursor:pointer;border:1px solid var(--line);background:#fff;border-radius:20px;padding:6px 13px;font-size:13px;user-select:none;white-space:nowrap}
 .chip:hover{border-color:var(--brand)}
 .chip.on{background:#e7efff;border-color:var(--brand);color:var(--brand);font-weight:600}
+.chip.chip-act{border-style:dashed;color:var(--mut)}
+.chip.chip-act:hover{border-color:var(--brand);color:var(--brand)}
+.chip-sep{color:var(--line);user-select:none;padding:0 2px}
 #chChips,#lvChips,#bChChips,#bLvChips{display:flex;flex-wrap:wrap;gap:8px;flex-basis:100%}
 .btn{cursor:pointer;border:none;border-radius:10px;padding:10px 20px;font-size:14px;font-weight:600;color:#fff;background:var(--brand)}
 .btn:hover{filter:brightness(1.05)}
@@ -168,8 +171,15 @@ const printBtn=document.getElementById('printBtn2');
 if(printBtn)printBtn.addEventListener('click',()=>window.print());
 
 // ---------- chip groups ----------
-function makeChips(container, items, allKey, onChange){
-  const state = new Set(items.map(i=>i.key));
+// opts: { initial:[keys], minOne:bool, actions:bool }
+//   initial  — 默认选中的 key（不传=全选）
+//   minOne   — 是否至少保留一个（章节可清空，故传 false）
+//   actions  — 是否显示 All / Reset 快捷按钮
+function makeChips(container, items, opts, onChange){
+  opts = opts || {};
+  const allKeys = items.map(i=>i.key);
+  const state = new Set(opts.initial !== undefined ? opts.initial : allKeys);
+  const minOne = opts.minOne !== false;
   function render(){
     container.innerHTML='';
     items.forEach(it=>{
@@ -177,18 +187,29 @@ function makeChips(container, items, allKey, onChange){
       b.className='chip'+(state.has(it.key)?' on':'');
       b.textContent=it.label;
       b.addEventListener('click',()=>{
-        if(state.has(it.key)){ if(state.size>1) state.delete(it.key); }
+        if(state.has(it.key)){ if(!minOne || state.size>1) state.delete(it.key); }
         else state.add(it.key);
         render(); onChange([...state]);
       });
       container.appendChild(b);
     });
+    if(opts.actions){
+      const sep=document.createElement('span'); sep.className='chip-sep'; sep.textContent='|'; container.appendChild(sep);
+      const all=document.createElement('span'); all.className='chip chip-act'; all.textContent='All Chapters';
+      all.title='Select every chapter';
+      all.addEventListener('click',()=>{ allKeys.forEach(k=>state.add(k)); render(); onChange([...state]); });
+      container.appendChild(all);
+      const rst=document.createElement('span'); rst.className='chip chip-act'; rst.textContent='Reset';
+      rst.title='Clear all selected chapters';
+      rst.addEventListener('click',()=>{ state.clear(); render(); onChange([...state]); });
+      container.appendChild(rst);
+    }
   }
   render();
   return state;
 }
-function makeLvChips(container,onChange){
-  const state=new Set(['easy','core','hard']);
+function makeLvChips(container,onChange,initial){
+  const state=new Set(initial || ['easy','core','hard']);
   function render(){
     container.innerHTML='';
     [['easy','🌱 Basic'],['core','📘 Core'],['hard','🏔️ Challenge']].forEach(([k,l])=>{
@@ -206,11 +227,17 @@ function makeLvChips(container,onChange){
 }
 
 // ---------- Random paper generation ----------
-let genState={ch:new Set(DATA.chapters.map(c=>c.id)),lv:new Set(['easy','core','hard'])};
-const chChips=makeChips(document.getElementById('chChips'),DATA.chapters.map(c=>({key:c.id,label:c.ch})),null,s=>{genState.ch=new Set(s);updPool();});
-const lvChips=makeLvChips(document.getElementById('lvChips'),s=>{genState.lv=new Set(s);updPool();});
+// 章节默认一个都不选（用户需点选或 All Chapters）；难度默认只选 Basic
+let genState={ch:new Set(),lv:new Set(['easy'])};
+const chChips=makeChips(document.getElementById('chChips'),DATA.chapters.map(c=>({key:c.id,label:c.ch})),
+  {initial:[], minOne:false, actions:true}, s=>{genState.ch=new Set(s);updPool();});
+const lvChips=makeLvChips(document.getElementById('lvChips'),s=>{genState.lv=new Set(s);updPool();},['easy']);
 function pool(){return ALLQ.filter(q=>genState.ch.has(q.chId)&&genState.lv.has(q.lv));}
-function updPool(){document.getElementById('poolStat').textContent='Questions available: '+pool().length;}
+function updPool(){
+  const el=document.getElementById('poolStat');
+  if(!genState.ch.size){ el.textContent='No chapters selected — choose one or press All Chapters'; return; }
+  el.textContent='Questions available: '+pool().length;
+}
 updPool();
 
 function shuffle(a){a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
@@ -273,7 +300,13 @@ function renderPaperQuestion(q,idx){
 
 function genPaper(){
   const chosen=pickQuestions();
-  if(!chosen.length){document.getElementById('paper').innerHTML='<div class="panel empty">No questions match the current filters. Please broaden the criteria.</div>';return;}
+  if(!chosen.length){
+    const msg = !genState.ch.size
+      ? 'No chapters selected. Please choose at least one chapter above, or press <b>All Chapters</b>.'
+      : 'No questions match the current filters. Please broaden the criteria.';
+    document.getElementById('paper').innerHTML='<div class="panel empty">'+msg+'</div>';
+    return;
+  }
   const now=new Date();
   const html=`<div class="panel" id="paperHead"><div class="paper-head">
      <div><h2>Western History · Random Quiz</h2><div class="stat">${chosen.length} questions · generated on ${now.toLocaleString('en-GB')}</div></div>
