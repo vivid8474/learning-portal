@@ -212,7 +212,7 @@ function makeLvChips(container,onChange,initial){
   const state=new Set(initial || ['easy','core','hard']);
   function render(){
     container.innerHTML='';
-    [['easy','🌱 Basic'],['core','📘 Core'],['hard','🏔️ Challenge']].forEach(([k,l])=>{
+    [['easy','🌱 基本'],['core','📘 核心'],['hard','🏔️ 挑戰']].forEach(([k,l])=>{
       const b=document.createElement('span');
       b.className='chip'+(state.has(k)?' on':'');
       b.textContent=l;
@@ -227,7 +227,7 @@ function makeLvChips(container,onChange,initial){
 }
 
 // ---------- Random paper generation ----------
-// 章节默认一个都不选（用户需点选或 全部章節）；难度默认只选 Basic
+// 章節預設一個都不選（使用者需點選或按「全部章節」）；難度預設只選「基本」
 let genState={ch:new Set(),lv:new Set(['easy'])};
 const chChips=makeChips(document.getElementById('chChips'),DATA.chapters.map(c=>({key:c.id,label:c.ch})),
   {initial:[], minOne:false, actions:true}, s=>{genState.ch=new Set(s);updPool();});
@@ -235,8 +235,8 @@ const lvChips=makeLvChips(document.getElementById('lvChips'),s=>{genState.lv=new
 function pool(){return ALLQ.filter(q=>genState.ch.has(q.chId)&&genState.lv.has(q.lv));}
 function updPool(){
   const el=document.getElementById('poolStat');
-  if(!genState.ch.size){ el.textContent='No chapters selected — choose one or press 全部章節'; return; }
-  el.textContent='Questions available: '+pool().length;
+  if(!genState.ch.size){ el.textContent='尚未選擇章節 — 請點選章節或按「全部章節」'; return; }
+  el.textContent='可用題數：'+pool().length;
 }
 updPool();
 
@@ -302,7 +302,7 @@ function genPaper(){
   const chosen=pickQuestions();
   if(!chosen.length){
     const msg = !genState.ch.size
-      ? 'No chapters selected. Please choose at least one chapter above, or press <b>全部章節</b>.'
+      ? '尚未選擇章節。請在上方點選至少一個章節，或按 <b>全部章節</b>。'
       : '沒有符合目前條件的題目，請放寬篩選條件。';
     document.getElementById('paper').innerHTML='<div class="panel empty">'+msg+'</div>';
     return;
@@ -367,7 +367,7 @@ function gradePaper(){
         else if(i===got)op.classList.add('mk-wrong');
       });
       const L='ABCDEFGH';
-      msg=`Correct answer: ${L[q.ans]}. ${esc(q.opts[q.ans])}`;
+      msg=`正確答案：${L[q.ans]}. ${esc(q.opts[q.ans])}`;
     }else if(ty==='match'){
       total++;
       const sels=[...pq.querySelectorAll('.matchsel')];
